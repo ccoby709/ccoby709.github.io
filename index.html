@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐾 Nyaaastore | Robux & Nitro 专卖店</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Quicksand:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF6B8B;
+            --secondary: #7B68EE;
+            --accent: #FFD166;
+            --dark: #1A1A2E;
+            --light: #F8F9FA;
+            --success: #4ECDC4;
+            --gradient: linear-gradient(135deg, #FF6B8B 0%, #7B68EE 100%);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            color: var(--light);
+            min-height: 100vh;
+            background-attachment: fixed;
+        }
+        
+        /* 装饰性元素 */
+        .nyan-cat {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 3rem;
+            opacity: 0.3;
+            z-index: -1;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .paw-print {
+            position: absolute;
+            font-size: 1.5rem;
+            opacity: 0.1;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* 顶部导航 */
+        .header {
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 2px solid var(--primary);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--light);
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            font-size: 2rem;
+            color: var(--primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: var(--light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            background: var(--gradient);
+            transform: translateY(-2px);
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+            font-family: 'Quicksand', sans-serif;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            margin-top: 2rem;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* 产品卡片 */
+        .products-grid {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .product-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 2rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            border-color: var(--primary);
+        }
+        
+        .product-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--gradient);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .product-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--accent);
+        }
+        
+        .product-title {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--light);
+        }
+        
+        .product-description {
+            opacity: 0.8;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .product-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--success);
+            margin: 1.5rem 0;
+        }
+        
+        .price-old {
+            text-decoration: line-through;
+            opacity: 0.5;
+            font-size: 1.2rem;
+            margin-right: 0.5rem;
+        }
+        
+        /* 数量选择器 */
+        .quantity-selector {
+            margin: 1.5rem 0;
+        }
+        
+        .selector-label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+        
+        .quantity-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .qty-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            color: var(--light);
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .qty-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--primary);
+        }
+        
+        .qty-btn.selected {
+            background: var(--gradient);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+        
+        /* 付款方式 */
+        .payment-methods {
+            margin: 1.5rem 0;
+        }
+        
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+        }
+        
+        .payment-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--secondary);
+        }
+        
+        .payment-option.selected {
+            background: var(--gradient);
+            border-color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+        
+        .payment-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 购买按钮 */
+        .buy-btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 1.2rem 2rem;
+            border-radius: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+        
+        .buy-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 107, 139, 0.3);
+        }
+        
+        .buy-btn:active {
+            transform: translateY(-1px);
+        }
+        
+        /* WhatsApp浮动按钮 */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+            z-index: 1000;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .whatsapp-float:hover {
+            background: #128C7E;
+            transform: scale(1.1) rotate(10deg);
+        }
+        
+        /* 订单确认弹窗 */
+        .order-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .order-content {
+            background: rgba(26, 26, 46, 0.95);
+            border-radius: 20px;
+            padding: 2.5rem;
+            max-width: 500px;
+            width: 90%;
+            border: 2px solid var(--primary);
+            animation: fadeIn 0.3s ease-out;
+            position: relative;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+        
+        /* 页脚 */
+        .footer {
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 4rem;
+            background: rgba(26, 26, 46, 0.8);
+            border-top: 2px solid var(--primary);
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 0.8rem 1.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            opacity: 0.6;
+            margin-top: 2rem;
+            font-size: 0.9rem;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .products-grid { grid-template-columns: 1fr; padding: 0 1rem; }
+            .stats { flex-direction: column; gap: 1.5rem; }
+            .nav-links { display: none; }
+            .whatsapp-float { bottom: 20px; right: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 装饰性元素 -->
+    <div class="nyan-cat">🐈</div>
+    
+    <!-- WhatsApp浮动按钮 -->
+    <a href="https://wa.me/601162430710?text=你好Nyaaastore！我想购买Robux/Nitro" 
+       class="whatsapp-float" 
+       target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="#" class="logo">
+                <span class="logo-icon">🐾</span>
+                <span>Nyaaastore</span>
+            </a>
+            <div class="nav-links">
+                <a href="#" class="nav-link">首页</a>
+                <a href="#" class="nav-link">产品</a>
+                <a href="#" class="nav-link">关于我们</a>
+                <a href="#" class="nav-link">联系客服</a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <h1>🐾 Nyaaastore</h1>
+        <p class="hero-subtitle">专业数字商品供应商 | 即时发货 | 100%安全保证</p>
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">2,500+</div>
+                <div class="stat-label">满意客户</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">99.8%</div>
+                <div class="stat-label">正面评价</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">5分钟</div>
+                <div class="stat-label">平均发货时间</div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 产品区域 -->
+    <div class="products-grid">
+        <!-- Robux产品 -->
+        <div class="product-card">
+            <div class="product-badge">最受欢迎</div>
+            <div class="product-icon">🎮</div>
+            <h2 class="product-title">Robux 套餐</h2>
+            <p class="product-description">官方Robux，即时到账，支持所有Roblox游戏。100%安全，自动发货。</p>
+            
+            <div class="quantity-selector">
+                <label class="selector-label">选择套餐：</label>
+                <div class="quantity-options">
+                    <button class="qty-btn" data-price="9.99" data-product="800 Robux">800 Robux</button>
+                    <button class="qty-btn" data-price="19.99" data-product="1700 Robux">1700 Robux</button>
+                    <button class="qty-btn" data-price="49.99" data-product="4500 Robux">4500 Robux</button>
+                    <button class="qty-btn" data-price="99.99" data-product="10000 Robux">10000 Robux</button>
+                </div>
+            </div>
+            
+            <div class="product-price">
+                <span class="price-old">$12.99</span>
+                <span>$9.99 USD</span>
+            </div>
+            
+            <div class="payment-methods">
+                <label class="selector-label">选择付款方式：</label>
+                <div class="payment-options">
+                    <div class="payment-option" data-method="tng">
+                        <div class="payment-icon">📱</div>
+                        <div>TNG</div>
+                    </div>
+                    <div class="payment-option" data-method="ltc">
+                        <div class="payment-icon"><i class="fab fa-bitcoin"></i></div>
+                        <div>Litecoin</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="buy-btn" onclick="showOrderConfirmation('robux')">
+                <i class="fas fa-bolt"></i> 立即购买
+            </button>
+        </div>
+        
+        <!-- Nitro产品 -->
+        <div class="product-card">
+            <div class="product-badge">限时优惠</div>
+            <div class="product-icon">⚡</div>
+            <h2 class="product-title">Discord Nitro</h2>
+            <p class="product-description">官方Nitro礼品码，增强你的Discord体验。全球激活，支持续费。</p>
+            
+            <div class="quantity-selector">
+                <label class="selector-label">选择时长：</label>
+                <div class="quantity-options">
+                    <button class="qty-btn" data-price="8.99" data-product="Nitro Basic 1月">Basic 1月</button>
+                    <button class="qty-btn" data-price="9.99" data-product="Nitro 1月">Nitro 1月</button>
+                    <button class="qty-btn" data-price="29.99" data-product="Nitro 3月">Nitro 3月</button>
+                    <button class="qty-btn" data-price="99.99" data-product="Nitro 1年">Nitro 1年</button>
+                </div>
+            </div>
+            
+            <div class="product-price">
+                <span class="price-old">$11.99</span>
+                <span>$8.99 USD</span>
+            </div>
+            
+            <div class="payment-methods">
+                <label class="selector-label">选择付款方式：</label>
+                <div class="payment-options">
+                    <div class="payment-option" data-method="tng">
+                        <div class="payment-icon">📱</div>
+                        <div>TNG</div>
+                    </div>
+                    <div class="payment-option" data-method="ltc">
+                        <div class="payment-icon"><i class="fab fa-bitcoin"></i></div>
+                        <div>Litecoin</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="buy-btn" onclick="showOrderConfirmation('nitro')">
+                <i class="fas fa-gift"></i> 立即购买
+            </button>
+        </div>
+    </div>
+    
+    <!-- 页脚 -->
+    <footer class="footer">
+        <h3 style="margin-bottom: 1rem; color: var(--accent);">📞 24/7 客服支持</h3>
+        <div class="contact-info">
+            <a href="https://wa.me/601162430710" class="contact-item" target="_blank">
+                <i class="fab fa-whatsapp" style="color: #25D366;"></i>
+                <span>WhatsApp: +60 11-6243 0710</span>
+            </a>
+            <div class="contact-item">
+                <i class="fas fa-mobile-alt" style="color: #7B68EE;"></i>
+                <span>TNG: +60 11-6243 0710</span>
+            </div>
+            <div class="contact-item">
+                <i class="fab fa-bitcoin" style="color: #FFD166;"></i>
+                <span>LTC: ltc1qq7ra3uh...kk0xvw</span>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>© 2023 Nyaaastore. 所有商品均为数字礼品码形式发送。</p>
+            <p style="margin-top: 0.5rem;">⚠️ 购买后请检查邮箱(包括垃圾邮件)，或通过WhatsApp联系我们</p>
+            <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.5;">🐾 每一笔订单都为我们的小猫粮碗添一份粮！</p>
+        </div>
+    </footer>
+    
+    <!-- 订单确认弹窗 -->
+    <div class="order-modal" id="orderModal">
+        <div class="order-content">
+            <button class="close-modal" onclick="closeOrderModal()">&times;</button>
+            <h2 style="color: var(--accent); margin-bottom: 1.5rem;">
+                <i class="fas fa-shopping-cart"></i> 确认订单
+            </h2>
+            <div id="orderDetails" style="
+                background: rgba(255,255,255,0.05);
+                padding: 1.5rem;
+                border-radius: 10px;
+                margin: 1.5rem 0;
+            ">
+                <!-- 动态内容 -->
+            </div>
+            <div id="paymentInstructions">
+                <!-- 动态支付说明 -->
+            </div>
+            <button class="buy-btn" onclick="completePayment()" style="margin-top: 1.5rem;">
+                <i class="fas fa-check-circle"></i> 确认并前往支付
+            </button>
+            <button onclick="closeOrderModal()" style="
+                background: rgba(255,255,255,0.1);
+                width: 100%;
+                margin-top: 1rem;
+                padding: 0.8rem;
+                border-radius: 10px;
+                border: none;
+                color: white;
+                cursor: pointer;
+                transition: all 0.3s ease;
+            " onmouseover="this.style.background='rgba(255,255,255,0.2)'" 
+            onmouseout="this.style.background='rgba(255,255,255,0.1)'">
+                取消订单
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 配置信息
+        const config = {
+            whatsapp: "601162430710",
+            tng: "+60 11-6243 0710",
+            ltcWallet: "ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw",
+            storeName: "Nyaaastore"
+        };
+        
+        let currentOrder = null;
+        
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', function() {
+            // 设置默认选择
+            initProduct('#robux-product');
+            initProduct('#nitro-product');
+            
+            // 添加爪子印装饰
+            addPawPrints();
+        });
+        
+        function initProduct(productClass) {
+            const productElement = document.querySelector(productClass);
+            if (!productElement) return;
+            
+            // 设置默认选中第一个选项
+            const firstQtyBtn = productElement.querySelector('.qty-btn');
+            const firstPayment = productElement.querySelector('.payment-option');
+            
+            if (firstQtyBtn) firstQtyBtn.classList.add('selected');
+            if (firstPayment) firstPayment.classList.add('selected');
+            
+            // 绑定数量选择事件
+            productElement.querySelectorAll('.qty-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    productElement.querySelectorAll('.qty-btn').forEach(b => {
+                        b.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    
+                    // 更新价格显示
+                    const priceElement = productElement.querySelector('.product-price span:last-child');
+                    if (priceElement) {
+                        priceElement.textContent = `$${this.dataset.price} USD`;
+                    }
+                });
+            });
+            
+            // 绑定付款方式事件
+            productElement.querySelectorAll('.payment-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    productElement.querySelectorAll('.payment-option').forEach(o => {
+                        o.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                });
+            });
+        }
+        
+        function getSelectedOption(productType) {
+            const productElement = productType === 'robux' ? 
+                document.querySelector('.product-card:first-child') : 
+                document.querySelector('.product-card:last-child');
+            
+            const selectedQty = productElement.querySelector('.qty-btn.selected');
+            const selectedPayment = productElement.querySelector('.payment-option.selected');
+            
+            return {
+                type: productType,
+                product: selectedQty.dataset.product,
+                price: parseFloat(selectedQty.dataset.price),
+                paymentMethod: selectedPayment.dataset.method
+            };
+        }
+        
+        function showOrderConfirmation(productType) {
+            currentOrder = getSelectedOption(productType);
+            
+            // 更新订单详情
+            document.getElementById('orderDetails').innerHTML = `
+                <div style="display: grid; gap: 10px;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="opacity: 0.8;">产品：</span>
+                        <span style="font-weight: 600; color: var(--accent);">${currentOrder.product}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="opacity: 0.8;">价格：</span>
+                        <span style="font-weight: 700; color: var(--success);">$${currentOrder.price.toFixed(2)} USD</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="opacity: 0.8;">付款方式：</span>
+                        <span style="font-weight: 600;">${getPaymentMethodName(currentOrder.paymentMethod)}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="opacity: 0.8;">发货方式：</span>
+                        <span style="color: #4ECDC4;">付款后5分钟内自动发货</span>
+                    </div>
+                </div>
+            `;
+            
+            // 更新支付说明
+            document.getElementById('paymentInstructions').innerHTML = 
+                getPaymentInstructions(currentOrder.paymentMethod, currentOrder.price);
+            
+            // 显示弹窗
+            document.getElementById('orderModal').style.display = 'flex';
+        }
+        
+        function closeOrderModal() {
+            document.getElementById('orderModal').style.display = 'none';
+        }
+        
+        function getPaymentMethodName(method) {
+            return method === 'tng' ? "Touch 'n Go" : "Litecoin (LTC)";
+        }
+        
+        function getPaymentInstructions(method, amount) {
+            const amountMYR = (amount * 4.5).toFixed(2);
+            
+            if (method === 'tng') {
+                return `
+                    <div style="
+                        background: linear-gradient(135deg, rgba(123, 104, 238, 0.2) 0%, rgba(255, 107, 139, 0.2) 100%);
+                        padding: 1.5rem;
+                        border-radius: 10px;
+                        margin: 1.5rem 0;
+                        border-left: 4px solid var(--secondary);
+                    ">
+                        <h4 style="color: var(--accent); margin-bottom: 1rem;">
+                            <i class="fas fa-mobile-alt"></i> Touch 'n Go 支付步骤：
+                        </h4>
+                        <ol style="padding-left: 1.5rem; line-height: 1.8;">
+                            <li>转账到 TNG 号码：<strong style="color: var(--light);">${config.tng}</strong></li>
+                            <li>金额：<strong style="color: var(--success);">RM ${amountMYR}</strong> (约 $${amount})</li>
+                            <li>转账时备注：<strong style="color: var(--accent);">${currentOrder.product}</strong></li>
+                            <li>转账完成后，截图发送到 WhatsApp</li>
+                        </ol>
+                    </div>
+                `;
+            } else if (method === 'ltc') {
+                return `
+                    <div style="
+                        background: linear-gradient(135deg, rgba(255, 209, 102, 0.2) 0%, rgba(78, 205, 196, 0.2) 100%);
+                        padding: 1.5rem;
+                        border-radius: 10px;
+                        margin: 1.5rem 0;
+                        border-left: 4px solid var(--accent);
+                    ">
+                        <h4 style="color: var(--accent); margin-bottom: 1rem;">
+                            <i class="fab fa-bitcoin"></i> Litecoin 支付步骤：
+                        </h4>
+                        <p style="margin-bottom: 1rem;">发送 LTC 到以下钱包地址：</p>
+                        <div style="
+                            background: rgba(0,0,0,0.3);
+                            padding: 1rem;
+                            border-radius: 8px;
+                            font-family: monospace;
+                            word-break: break-all;
+                            margin: 1rem 0;
+                            border: 1px solid var(--accent);
+                        ">
+                            ${config.ltcWallet}
+                        </div>
+                        <p>金额：<strong style="color: var(--success);">$${amount.toFixed(2)} USD</strong> 等值 LTC</p>
+                        <p style="margin-top: 0.5rem; opacity: 0.8;">
+                            <i class="fas fa-info-circle"></i> 网络确认后自动发货（约10-30分钟）
+                        </p>
+                    </div>
+                `;
+            }
+            
+            return '';
+        }
+        
+        function completePayment() {
+            closeOrderModal();
+            
+            if (currentOrder.paymentMethod === 'tng') {
+                // 打开WhatsApp
+                const message = `Nyaaastore订单确认：\n产品：${currentOrder.product}\n价格：$${currentOrder.price.toFixed(2)}\n付款方式：Touch 'n Go\n我已转账，请发货。`;
+                const whatsappUrl = `https://wa.me/${config.whatsapp}?text=${encodeURIComponent(message)}`;
+                window.open(whatsappUrl, '_blank');
+                
+                // 显示提示
+                showNotification(`请通过Touch 'n Go转账RM ${(currentOrder.price * 4.5).toFixed(2)}到 ${config.tng}\n转账后通过WhatsApp发送截图给我们。`);
+                
+            } else if (currentOrder.paymentMethod === 'ltc') {
+                // 复制LTC地址
+                navigator.clipboard.writeText(config.ltcWallet).then(() => {
+                    showNotification(`LTC钱包地址已复制到剪贴板！\n\n请发送 $${currentOrder.price.toFixed(2)} 等值LTC到：\n${config.ltcWallet}\n\n转账后交易确认会自动发货。`);
+                });
+            }
+            
+            // 记录订单
+            console.log(`${config.storeName}订单：`, currentOrder);
+        }
+        
+        function showNotification(message) {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--gradient);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                z-index: 3000;
+                animation: fadeIn 0.3s ease-out;
+                max-width: 400px;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            `;
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-info-circle"></i>
+                    <div>${message.replace(/\n/g, '<br>')}</div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // 3秒后移除
+            setTimeout(() => {
+                notification.style.animation = 'fadeIn 0.3s ease-out reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+        
+        function addPawPrints() {
+            const pawCount = 8;
+            for (let i = 0; i < pawCount; i++) {
+                const paw = document.createElement('div');
+                paw.className = 'paw-print';
+                paw.innerHTML = '🐾';
+                paw.style.left = `${Math.random() * 100}%`;
+                paw.style.top = `${Math.random() * 100}%`;
+                paw.style.transform = `rotate(${Math.random() * 360}deg)`;
+                document.body.appendChild(paw);
+            }
+        }
+    </script>
+</body>
+</html>
