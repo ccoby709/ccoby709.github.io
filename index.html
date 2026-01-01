@@ -27,85 +27,14 @@
             background-attachment: fixed;
         }
         
-        /* 购物车浮动按钮 */
-        .cart-float {
-            position: fixed;
-            bottom: 100px;
-            right: 30px;
-            background: var(--gradient);
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 25px;
-            box-shadow: 0 4px 20px rgba(255, 107, 139, 0.3);
-            z-index: 999;
-            text-decoration: none;
-            transition: all 0.3s ease;
+        /* 页面容器 */
+        .page-container {
+            display: none;
+            animation: fadeIn 0.5s ease;
         }
         
-        .cart-float:hover {
-            transform: scale(1.1) rotate(10deg);
-        }
-        
-        .cart-count {
-            position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #FF3B30;
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-        
-        /* WhatsApp浮动按钮 */
-        .whatsapp-float {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: #25D366;
-            color: white;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 30px;
-            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
-            z-index: 1000;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-        
-        .whatsapp-float:hover {
-            background: #128C7E;
-            transform: scale(1.1) rotate(10deg);
-        }
-        
-        /* 装饰性元素 */
-        .nyan-cat {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            font-size: 3rem;
-            opacity: 0.3;
-            z-index: -1;
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
+        .page-container.active {
+            display: block;
         }
         
         @keyframes fadeIn {
@@ -117,6 +46,72 @@
             0% { transform: scale(1); }
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
+        }
+        
+        /* 进度条 */
+        .progress-bar {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .progress-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+        }
+        
+        .progress-steps::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        
+        .progress-track {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 3px;
+            background: var(--gradient);
+            transform: translateY(-50%);
+            z-index: 2;
+            transition: width 0.3s ease;
+        }
+        
+        .step {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 3;
+            transition: all 0.3s ease;
+        }
+        
+        .step.active {
+            background: var(--gradient);
+            transform: scale(1.1);
+        }
+        
+        .step.completed {
+            background: var(--success);
+        }
+        
+        .step-label {
+            position: absolute;
+            top: 45px;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            opacity: 0.8;
         }
         
         /* 顶部导航 */
@@ -155,33 +150,12 @@
             color: var(--primary);
         }
         
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-        
-        .nav-link {
-            color: var(--light);
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 25px;
-            transition: all 0.3s ease;
-        }
-        
-        .nav-link:hover {
-            background: var(--gradient);
-            transform: translateY(-2px);
-        }
-        
         /* 英雄区域 */
         .hero {
             text-align: center;
-            padding: 4rem 2rem;
+            padding: 3rem 2rem;
             max-width: 800px;
             margin: 0 auto;
-            animation: fadeIn 1s ease-out;
         }
         
         .hero h1 {
@@ -199,34 +173,35 @@
             margin-bottom: 2rem;
         }
         
-        .stats {
+        /* WhatsApp浮动按钮 */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #25D366;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
             display: flex;
+            align-items: center;
             justify-content: center;
-            gap: 3rem;
-            margin-top: 2rem;
+            font-size: 30px;
+            box-shadow: 0 4px 20px rgba(37, 211, 102, 0.3);
+            z-index: 1000;
+            text-decoration: none;
+            transition: all 0.3s ease;
         }
         
-        .stat-item {
-            text-align: center;
-        }
-        
-        .stat-number {
-            font-size: 2.5rem;
-            font-weight: 700;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .stat-label {
-            font-size: 0.9rem;
-            opacity: 0.8;
+        .whatsapp-float:hover {
+            background: #128C7E;
+            transform: scale(1.1) rotate(10deg);
         }
         
         /* 产品卡片 */
         .products-grid {
             max-width: 1200px;
-            margin: 3rem auto;
+            margin: 2rem auto;
             padding: 0 2rem;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -303,18 +278,133 @@
             font-size: 1.2rem;
             margin-right: 0.5rem;
         }
+        
+        /* 数量选择器 */
+        .quantity-selector {
+            margin: 1.5rem 0;
+        }
+        
+        .selector-label {
+            display: block;
+            margin-bottom: 0.8rem;
+            color: var(--accent);
+            font-weight: 500;
+        }
+        
+        .quantity-options {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .qty-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            color: var(--light);
+            padding: 0.8rem 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .qty-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--primary);
+        }
+        
+        .qty-btn.selected {
+            background: var(--gradient);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+        
+        /* 付款方式 */
+        .payment-methods {
+            margin: 1.5rem 0;
+        }
+        
+        .payment-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+        }
+        
+        .payment-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            padding: 1rem;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: var(--secondary);
+        }
+        
+        .payment-option.selected {
+            background: var(--gradient);
+            border-color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+        
+        .payment-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 按钮样式 */
+        .btn {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 107, 139, 0.3);
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .products-grid { grid-template-columns: 1fr; padding: 0 1rem; }
+            .whatsapp-float { bottom: 20px; right: 20px; }
+            .progress-bar { padding: 0 1rem; }
+            .step-label { font-size: 0.8rem; }
+        }
     </style>
 </head>
 <body>
-    <!-- 装饰性元素 -->
-    <div class="nyan-cat">🐈</div>
-    
-    <!-- 购物车浮动按钮 -->
-    <div class="cart-float" onclick="showCart()">
-        <i class="fas fa-shopping-cart"></i>
-        <div class="cart-count" id="cartCount">0</div>
-    </div>
-    
     <!-- WhatsApp浮动按钮 -->
     <a href="https://wa.me/601162430710?text=你好Nyaaastore！我想购买Robux/Nitro" 
        class="whatsapp-float" 
@@ -325,258 +415,447 @@
     <!-- 顶部导航 -->
     <header class="header">
         <div class="nav-container">
-            <a href="#" class="logo">
+            <a href="#" class="logo" onclick="goToPage('home')">
                 <span class="logo-icon">🐾</span>
                 <span>Nyaaastore</span>
             </a>
-            <div class="nav-links">
-                <a href="#" class="nav-link">首页</a>
-                <a href="#" class="nav-link">产品</a>
-                <a href="#" class="nav-link">订单追踪</a>
-                <a href="#" class="nav-link">联系客服</a>
+            <div style="display: flex; gap: 1rem;">
+                <button class="btn-secondary" onclick="goToPage('home')" style="padding: 0.5rem 1rem;">
+                    <i class="fas fa-home"></i> 返回首页
+                </button>
             </div>
         </div>
     </header>
+<!-- 第一步：商品选择页面 -->
+<div id="page-home" class="page-container active">
+    <!-- 进度条 -->
+    <div class="progress-bar">
+        <div class="progress-steps">
+            <div class="progress-track" style="width: 0%"></div>
+            <div class="step active">
+                <span>1</span>
+                <div class="step-label">选择商品</div>
+            </div>
+            <div class="step">
+                <span>2</span>
+                <div class="step-label">付款信息</div>
+            </div>
+            <div class="step">
+                <span>3</span>
+                <div class="step-label">完成</div>
+            </div>
+        </div>
+    </div>
     
     <!-- 英雄区域 -->
     <section class="hero">
         <h1>🐾 Nyaaastore</h1>
         <p class="hero-subtitle">专业数字商品供应商 | 即时发货 | 100%安全保证</p>
-        <div class="stats">
-            <div class="stat-item">
-                <div class="stat-number">2,500+</div>
-                <div class="stat-label">满意客户</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">99.8%</div>
-                <div class="stat-label">正面评价</div>
-            </div>
-            <div class="stat-item">
-                <div class="stat-number">5分钟</div>
-                <div class="stat-label">平均发货时间</div>
-            </div>
-        </div>
     </section>
-    <!-- 产品区域 -->
-<div class="products-grid">
-    <!-- Robux产品 -->
-    <div class="product-card" id="robux-product">
-        <div class="product-badge">最受欢迎</div>
-        <div class="product-icon">🎮</div>
-        <h2 class="product-title">Robux 套餐</h2>
-        <p class="product-description">官方Robux，即时到账，支持所有Roblox游戏。100%安全，自动发货。</p>
-        
-        <style>
-            /* 数量选择器 */
-            .quantity-selector {
-                margin: 1.5rem 0;
-            }
-            
-            .selector-label {
-                display: block;
-                margin-bottom: 0.8rem;
-                color: var(--accent);
-                font-weight: 500;
-            }
-            
-            .quantity-options {
-                display: flex;
-                gap: 0.8rem;
-                flex-wrap: wrap;
-            }
-            
-            .qty-btn {
-                background: rgba(255, 255, 255, 0.1);
-                border: 2px solid transparent;
-                color: var(--light);
-                padding: 0.8rem 1.2rem;
-                border-radius: 10px;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                font-weight: 500;
-                flex: 1;
-                min-width: 100px;
-                text-align: center;
-            }
-            
-            .qty-btn:hover {
-                background: rgba(255, 255, 255, 0.2);
-                border-color: var(--primary);
-            }
-            
-            .qty-btn.selected {
-                background: var(--gradient);
-                border-color: var(--primary);
-                transform: scale(1.05);
-            }
-            
-            /* 付款方式 */
-            .payment-methods {
-                margin: 1.5rem 0;
-            }
-            
-            .payment-options {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-                gap: 0.8rem;
-                margin-top: 0.8rem;
-            }
-            
-            .payment-option {
-                background: rgba(255, 255, 255, 0.1);
-                border: 2px solid transparent;
-                padding: 1rem;
-                border-radius: 10px;
-                cursor: pointer;
-                text-align: center;
-                transition: all 0.3s ease;
-            }
-            
-            .payment-option:hover {
-                background: rgba(255, 255, 255, 0.2);
-                border-color: var(--secondary);
-            }
-            
-            .payment-option.selected {
-                background: var(--gradient);
-                border-color: var(--primary);
-                animation: pulse 2s infinite;
-            }
-            
-            .payment-icon {
-                font-size: 1.8rem;
-                margin-bottom: 0.5rem;
-            }
-            
-            /* 购买按钮 */
-            .buy-btn {
-                background: var(--gradient);
-                color: white;
-                border: none;
-                padding: 1.2rem 2rem;
-                border-radius: 15px;
-                font-size: 1.2rem;
-                font-weight: 600;
-                cursor: pointer;
-                width: 100%;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 10px;
-                margin-top: 1.5rem;
-            }
-            
-            .buy-btn:hover {
-                transform: translateY(-3px);
-                box-shadow: 0 10px 20px rgba(255, 107, 139, 0.3);
-            }
-            
-            .buy-btn:active {
-                transform: translateY(-1px);
-            }
-        </style>
-        
-        <div class="quantity-selector">
-            <label class="selector-label">选择套餐：</label>
-            <div class="quantity-options">
-                <button class="qty-btn" data-price="9.99" data-product="800 Robux">800 Robux</button>
-                <button class="qty-btn" data-price="19.99" data-product="1700 Robux">1700 Robux</button>
-                <button class="qty-btn" data-price="49.99" data-product="4500 Robux">4500 Robux</button>
-                <button class="qty-btn" data-price="99.99" data-product="10000 Robux">10000 Robux</button>
-            </div>
-        </div>
-        
-        <div class="product-price">
-            <span class="price-old">$12.99</span>
-            <span id="robux-price">$9.99 USD</span>
-        </div>
-        
-        <div class="payment-methods">
-            <label class="selector-label">选择付款方式：</label>
-            <div class="payment-options">
-                <div class="payment-option" data-method="tng">
-                    <div class="payment-icon">📱</div>
-                    <div>TNG</div>
-                </div>
-                <div class="payment-option" data-method="ltc">
-                    <div class="payment-icon"><i class="fab fa-bitcoin"></i></div>
-                    <div>Litecoin</div>
-                </div>
-            </div>
-        </div>
-        
-        <button class="buy-btn" onclick="addToCart('robux')">
-            <i class="fas fa-cart-plus"></i> 加入购物车
-        </button>
-        <button class="buy-btn" onclick="buyNow('robux')" style="margin-top: 10px; background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);">
-            <i class="fas fa-bolt"></i> 立即购买
-        </button>
-    </div>
     
-    <!-- Nitro产品 -->
-    <div class="product-card" id="nitro-product">
-        <div class="product-badge">限时优惠</div>
-        <div class="product-icon">⚡</div>
-        <h2 class="product-title">Discord Nitro</h2>
-        <p class="product-description">官方Nitro礼品码，增强你的Discord体验。全球激活，支持续费。</p>
-        
-        <div class="quantity-selector">
-            <label class="selector-label">选择时长：</label>
-            <div class="quantity-options">
-                <button class="qty-btn" data-price="8.99" data-product="Nitro Basic 1月">Basic 1月</button>
-                <button class="qty-btn" data-price="9.99" data-product="Nitro 1月">Nitro 1月</button>
-                <button class="qty-btn" data-price="29.99" data-product="Nitro 3月">Nitro 3月</button>
-                <button class="qty-btn" data-price="99.99" data-product="Nitro 1年">Nitro 1年</button>
-            </div>
-        </div>
-        
-        <div class="product-price">
-            <span class="price-old">$11.99</span>
-            <span id="nitro-price">$8.99 USD</span>
-        </div>
-        
-        <div class="payment-methods">
-            <label class="selector-label">选择付款方式：</label>
-            <div class="payment-options">
-                <div class="payment-option" data-method="tng">
-                    <div class="payment-icon">📱</div>
-                    <div>TNG</div>
-                </div>
-                <div class="payment-option" data-method="ltc">
-                    <div class="payment-icon"><i class="fab fa-bitcoin"></i></div>
-                    <div>Litecoin</div>
+    <!-- 产品区域 -->
+    <div class="products-grid">
+        <!-- Robux产品 -->
+        <div class="product-card" id="robux-product">
+            <div class="product-badge">最受欢迎</div>
+            <div class="product-icon">🎮</div>
+            <h2 class="product-title">Robux 套餐</h2>
+            <p class="product-description">官方Robux，即时到账，支持所有Roblox游戏。100%安全，自动发货。</p>
+            
+            <div class="quantity-selector">
+                <label class="selector-label">选择套餐：</label>
+                <div class="quantity-options">
+                    <button class="qty-btn" data-price="9.99" data-product="800 Robux">800 Robux</button>
+                    <button class="qty-btn" data-price="19.99" data-product="1700 Robux">1700 Robux</button>
+                    <button class="qty-btn" data-price="49.99" data-product="4500 Robux">4500 Robux</button>
+                    <button class="qty-btn" data-price="99.99" data-product="10000 Robux">10000 Robux</button>
                 </div>
             </div>
+            
+            <div class="product-price">
+                <span class="price-old">$12.99</span>
+                <span id="robux-price">$9.99 USD</span>
+            </div>
+            
+            <div class="payment-methods">
+                <label class="selector-label">选择付款方式：</label>
+                <div class="payment-options">
+                    <div class="payment-option" data-method="tng">
+                        <div class="payment-icon">📱</div>
+                        <div>Touch 'n Go</div>
+                    </div>
+                    <div class="payment-option" data-method="ltc">
+                        <div class="payment-icon"><i class="fab fa-bitcoin"></i></div>
+                        <div>Litecoin (LTC)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="selectProduct('robux')" style="width: 100%; margin-top: 1.5rem;">
+                <i class="fas fa-arrow-right"></i> 选择此商品
+            </button>
         </div>
         
-        <button class="buy-btn" onclick="addToCart('nitro')">
-            <i class="fas fa-cart-plus"></i> 加入购物车
-        </button>
-        <button class="buy-btn" onclick="buyNow('nitro')" style="margin-top: 10px; background: linear-gradient(135deg, #4ECDC4 0%, #44A08D 100%);">
-            <i class="fas fa-bolt"></i> 立即购买
-        </button>
+        <!-- Nitro产品 -->
+        <div class="product-card" id="nitro-product">
+            <div class="product-badge">限时优惠</div>
+            <div class="product-icon">⚡</div>
+            <h2 class="product-title">Discord Nitro</h2>
+            <p class="product-description">官方Nitro礼品码，增强你的Discord体验。全球激活，支持续费。</p>
+            
+            <div class="quantity-selector">
+                <label class="selector-label">选择时长：</label>
+                <div class="quantity-options">
+                    <button class="qty-btn" data-price="8.99" data-product="Nitro Basic 1月">Basic 1月</button>
+                    <button class="qty-btn" data-price="9.99" data-product="Nitro 1月">Nitro 1月</button>
+                    <button class="qty-btn" data-price="29.99" data-product="Nitro 3月">Nitro 3月</button>
+                    <button class="qty-btn" data-price="99.99" data-product="Nitro 1年">Nitro 1年</button>
+                </div>
+            </div>
+            
+            <div class="product-price">
+                <span class="price-old">$11.99</span>
+                <span id="nitro-price">$8.99 USD</span>
+            </div>
+            
+            <div class="payment-methods">
+                <label class="selector-label">选择付款方式：</label>
+                <div class="payment-options">
+                    <div class="payment-option" data-method="tng">
+                        <div class="payment-icon">📱</div>
+                        <div>Touch 'n Go</div>
+                    </div>
+                    <div class="payment-option" data-method="ltc">
+                        <div class="payment-icon"><i class="fab fa-bitcoin"></i></div>
+                        <div>Litecoin (LTC)</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="selectProduct('nitro')" style="width: 100%; margin-top: 1.5rem;">
+                <i class="fas fa-arrow-right"></i> 选择此商品
+            </button>
+        </div>
     </div>
 </div>
-<!-- 订单追踪按钮 -->
-<div style="text-align: center; margin: 2rem 0;">
-    <button onclick="trackOrder()" style="
-        background: linear-gradient(135deg, #FFD166 0%, #FFB347 100%);
-        color: #1A1A2E;
-        border: none;
-        padding: 1rem 2rem;
-        border-radius: 25px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s ease;
+<!-- 第二步：付款信息页面 -->
+<div id="page-payment" class="page-container">
+    <!-- 进度条 -->
+    <div class="progress-bar">
+        <div class="progress-steps">
+            <div class="progress-track" style="width: 50%"></div>
+            <div class="step completed">
+                <i class="fas fa-check"></i>
+                <div class="step-label">选择商品</div>
+            </div>
+            <div class="step active">
+                <span>2</span>
+                <div class="step-label">付款信息</div>
+            </div>
+            <div class="step">
+                <span>3</span>
+                <div class="step-label">完成</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="payment-container" style="
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 0 2rem;
     ">
-        <i class="fas fa-search"></i> 订单追踪
-    </button>
+        <div class="order-summary" style="
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--primary);
+        ">
+            <h2 style="color: var(--accent); margin-bottom: 1.5rem;">
+                <i class="fas fa-shopping-cart"></i> 订单摘要
+            </h2>
+            
+            <div id="orderSummary" style="
+                display: grid;
+                gap: 1rem;
+                margin-bottom: 1.5rem;
+            ">
+                <!-- 订单详情动态加载 -->
+            </div>
+            
+            <div style="
+                border-top: 2px solid rgba(255,255,255,0.1);
+                padding-top: 1.5rem;
+            ">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                    <span>商品总价：</span>
+                    <span id="orderSubtotal">$0.00</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold;">
+                    <span>总计：</span>
+                    <span style="color: var(--success);" id="orderTotal">$0.00 USD</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 付款信息表单 -->
+        <div class="payment-form" style="
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 2rem;
+        ">
+            <h2 style="color: var(--accent); margin-bottom: 1.5rem;">
+                <i class="fas fa-credit-card"></i> 付款信息
+            </h2>
+            
+            <div id="tngPayment" style="display: none;">
+                <div style="
+                    background: linear-gradient(135deg, rgba(123, 104, 238, 0.1) 0%, rgba(255, 107, 139, 0.1) 100%);
+                    padding: 1.5rem;
+                    border-radius: 15px;
+                    margin-bottom: 2rem;
+                ">
+                    <h3 style="color: var(--accent); margin-bottom: 1rem;">
+                        <i class="fas fa-mobile-alt"></i> Touch 'n Go 支付
+                    </h3>
+                    
+                    <div style="margin-bottom: 1rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--accent);">
+                            转账到 TNG 号码：
+                        </label>
+                        <div style="
+                            background: rgba(0,0,0,0.3);
+                            padding: 1rem;
+                            border-radius: 10px;
+                            font-family: monospace;
+                            font-size: 1.2rem;
+                            text-align: center;
+                            margin-bottom: 1rem;
+                            border: 2px solid var(--secondary);
+                        ">
+                            <strong id="tngNumber">+60 11-6243 0710</strong>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--accent);">
+                            转账金额：
+                        </label>
+                        <div style="
+                            background: rgba(78, 205, 196, 0.2);
+                            padding: 1rem;
+                            border-radius: 10px;
+                            font-size: 1.5rem;
+                            font-weight: bold;
+                            text-align: center;
+                            color: var(--success);
+                        ">
+                            RM <span id="tngAmount">0.00</span>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--accent);">
+                            付款备注（重要！）：
+                        </label>
+                        <input type="text" id="paymentNote" placeholder="输入你的邮箱或Discord用户名" style="
+                            width: 100%;
+                            padding: 1rem;
+                            border-radius: 10px;
+                            background: rgba(255,255,255,0.1);
+                            border: 2px solid rgba(255,255,255,0.2);
+                            color: white;
+                            font-size: 1rem;
+                        ">
+                        <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">
+                            请在转账时备注这个信息，以便我们识别你的订单
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="ltcPayment" style="display: none;">
+                <div style="
+                    background: linear-gradient(135deg, rgba(255, 209, 102, 0.1) 0%, rgba(78, 205, 196, 0.1) 100%);
+                    padding: 1.5rem;
+                    border-radius: 15px;
+                    margin-bottom: 2rem;
+                ">
+                    <h3 style="color: var(--accent); margin-bottom: 1rem;">
+                        <i class="fab fa-bitcoin"></i> Litecoin (LTC) 支付
+                    </h3>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--accent);">
+                            发送 LTC 到以下钱包地址：
+                        </label>
+                        <div style="
+                            background: rgba(0,0,0,0.3);
+                            padding: 1rem;
+                            border-radius: 10px;
+                            font-family: monospace;
+                            word-break: break-all;
+                            margin-bottom: 1rem;
+                            border: 2px solid var(--accent);
+                        ">
+                            <strong id="ltcAddress">ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw</strong>
+                        </div>
+                        <button onclick="copyLTCAddress()" style="
+                            width: 100%;
+                            padding: 0.8rem;
+                            background: rgba(255,209,102,0.2);
+                            color: var(--accent);
+                            border: 2px solid var(--accent);
+                            border-radius: 10px;
+                            cursor: pointer;
+                            font-weight: 600;
+                            margin-bottom: 1rem;
+                        ">
+                            <i class="fas fa-copy"></i> 复制钱包地址
+                        </button>
+                    </div>
+                    
+                    <div style="margin-bottom: 1.5rem;">
+                        <label style="display: block; margin-bottom: 0.5rem; color: var(--accent);">
+                            转账金额：
+                        </label>
+                        <div style="
+                            background: rgba(78, 205, 196, 0.2);
+                            padding: 1rem;
+                            border-radius: 10px;
+                            font-size: 1.5rem;
+                            font-weight: bold;
+                            text-align: center;
+                            color: var(--success);
+                        ">
+                            $<span id="ltcAmount">0.00</span> USD 等值 LTC
+                        </div>
+                        <p style="font-size: 0.9rem; opacity: 0.8; margin-top: 0.5rem;">
+                            ⚠️ 请确保发送准确的金额，网络确认后自动发货（约10-30分钟）
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button class="btn-secondary" onclick="goToPage('home')" style="flex: 1;">
+                    <i class="fas fa-arrow-left"></i> 返回修改
+                </button>
+                <button class="btn" onclick="completePayment()" style="flex: 2;" id="confirmPaymentBtn">
+                    <i class="fas fa-check-circle"></i> 确认并前往支付
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 第三步：支付完成页面 -->
+<div id="page-complete" class="page-container">
+    <!-- 进度条 -->
+    <div class="progress-bar">
+        <div class="progress-steps">
+            <div class="progress-track" style="width: 100%"></div>
+            <div class="step completed">
+                <i class="fas fa-check"></i>
+                <div class="step-label">选择商品</div>
+            </div>
+            <div class="step completed">
+                <i class="fas fa-check"></i>
+                <div class="step-label">付款信息</div>
+            </div>
+            <div class="step active">
+                <span>3</span>
+                <div class="step-label">完成</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="complete-container" style="
+        max-width: 600px;
+        margin: 4rem auto;
+        padding: 0 2rem;
+        text-align: center;
+    ">
+        <div style="
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 3rem 2rem;
+            border: 2px solid var(--success);
+        ">
+            <div style="font-size: 4rem; margin-bottom: 2rem; color: var(--success);">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            
+            <h2 style="color: var(--success); margin-bottom: 1rem; font-size: 2rem;">
+                订单创建成功！
+            </h2>
+            
+            <div id="orderCompleteDetails" style="
+                background: rgba(255,255,255,0.05);
+                border-radius: 15px;
+                padding: 1.5rem;
+                margin: 2rem 0;
+                text-align: left;
+            ">
+                <!-- 订单详情动态加载 -->
+            </div>
+            
+            <div id="paymentCompleteInstructions" style="
+                background: linear-gradient(135deg, rgba(255,107,139,0.1) 0%, rgba(123,104,238,0.1) 100%);
+                border-radius: 15px;
+                padding: 1.5rem;
+                margin: 2rem 0;
+            ">
+                <!-- 支付说明动态加载 -->
+            </div>
+                        <div style="margin: 2rem 0;">
+                <h3 style="color: var(--accent); margin-bottom: 1rem;">
+                    <i class="fas fa-headset"></i> 下一步操作
+                </h3>
+                <div style="
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                    gap: 1rem;
+                    margin-top: 1.5rem;
+                ">
+                    <button class="btn" onclick="openWhatsApp()" style="background: #25D366;">
+                        <i class="fab fa-whatsapp"></i> WhatsApp联系客服
+                    </button>
+                    <button class="btn-secondary" onclick="createNewOrder()">
+                        <i class="fas fa-plus"></i> 创建新订单
+                    </button>
+                    <button class="btn-secondary" onclick="saveOrderDetails()">
+                        <i class="fas fa-download"></i> 保存订单详情
+                    </button>
+                </div>
+            </div>
+            
+            <div style="margin-top: 3rem; padding-top: 1.5rem; border-top: 2px solid rgba(255,255,255,0.1);">
+                <p style="opacity: 0.8; margin-bottom: 0.5rem;">
+                    <i class="fas fa-info-circle"></i> 发货时间：
+                </p>
+                <div style="
+                    display: flex;
+                    justify-content: center;
+                    gap: 2rem;
+                    margin-top: 1rem;
+                    flex-wrap: wrap;
+                ">
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; color: var(--accent);">💰 TNG支付</div>
+                        <div>5分钟内发货</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 1.5rem; color: var(--accent);">🔗 LTC支付</div>
+                        <div>网络确认后发货</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- 页脚 -->
-<footer class="footer" style="
+<footer style="
     text-align: center;
     padding: 3rem 2rem;
     margin-top: 4rem;
@@ -584,14 +863,14 @@
     border-top: 2px solid var(--primary);
 ">
     <h3 style="margin-bottom: 1rem; color: var(--accent);">📞 24/7 客服支持</h3>
-    <div class="contact-info" style="
+    <div style="
         display: flex;
         justify-content: center;
         gap: 2rem;
         margin: 2rem 0;
         flex-wrap: wrap;
     ">
-        <a href="https://wa.me/601162430710" class="contact-item" target="_blank" style="
+        <a href="https://wa.me/601162430710" style="
             display: flex;
             align-items: center;
             gap: 10px;
@@ -601,11 +880,11 @@
             transition: all 0.3s ease;
             color: white;
             text-decoration: none;
-        ">
+        " target="_blank">
             <i class="fab fa-whatsapp" style="color: #25D366;"></i>
             <span>WhatsApp: +60 11-6243 0710</span>
         </a>
-        <div class="contact-item" style="
+        <div style="
             display: flex;
             align-items: center;
             gap: 10px;
@@ -617,7 +896,7 @@
             <i class="fas fa-mobile-alt" style="color: #7B68EE;"></i>
             <span>TNG: +60 11-6243 0710</span>
         </div>
-        <div class="contact-item" style="
+        <div style="
             display: flex;
             align-items: center;
             gap: 10px;
@@ -630,596 +909,465 @@
             <span>LTC: ltc1qq7ra3uh...kk0xvw</span>
         </div>
     </div>
-    <div class="copyright" style="opacity: 0.6; margin-top: 2rem; font-size: 0.9rem;">
+    <div style="opacity: 0.6; margin-top: 2rem; font-size: 0.9rem;">
         <p>© 2023 Nyaaastore. 所有商品均为数字礼品码形式发送。</p>
         <p style="margin-top: 0.5rem;">⚠️ 购买后请检查邮箱(包括垃圾邮件)，或通过WhatsApp联系我们</p>
         <p style="margin-top: 0.5rem; font-size: 0.8rem; opacity: 0.5;">🐾 每一笔订单都为我们的小猫粮碗添一份粮！</p>
     </div>
 </footer>
-
-<!-- 购物车弹窗 -->
-<div class="cart-modal" id="cartModal" style="
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(5px);
-    z-index: 2000;
-    align-items: center;
-    justify-content: center;
-">
-    <div class="cart-content" style="
-        background: rgba(26, 26, 46, 0.95);
-        border-radius: 20px;
-        padding: 2.5rem;
-        max-width: 600px;
-        width: 90%;
-        max-height: 80vh;
-        overflow-y: auto;
-        border: 2px solid var(--primary);
-        animation: fadeIn 0.3s ease-out;
-        position: relative;
-    ">
-        <button class="close-modal" onclick="closeCart()" style="
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: rgba(255, 255, 255, 0.1);
-            border: none;
-            color: white;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.2rem;
-        ">&times;</button>
+<script>
+    // ========== 配置信息 ==========
+    const config = {
+        whatsapp: "601162430710",
+        tng: "+60 11-6243 0710",
+        ltcWallet: "ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw",
+        storeName: "Nyaaastore",
+        exchangeRate: 4.5 // 1 USD = 4.5 MYR
+    };
+    
+    // ========== 全局变量 ==========
+    let currentOrder = null;
+    
+    // ========== 初始化函数 ==========
+    document.addEventListener('DOMContentLoaded', function() {
+        // 初始化商品选择按钮
+        initProductButtons();
         
-        <h2 style="color: var(--accent); margin-bottom: 1.5rem;">
-            <i class="fas fa-shopping-cart"></i> 购物车
-        </h2>
-        
-        <div id="cartItems" style="margin-bottom: 2rem;">
-            <!-- 购物车商品动态加载 -->
-            <div id="emptyCart" style="text-align: center; padding: 3rem 0; opacity: 0.7;">
-                <i class="fas fa-shopping-cart" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                <p>购物车是空的</p>
-            </div>
-        </div>
-        
-        <div style="border-top: 2px solid rgba(255,255,255,0.1); padding-top: 1.5rem;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                <span>商品总价：</span>
-                <span id="cartSubtotal">$0.00</span>
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-bottom: 1.5rem;">
-                <span>总计：</span>
-                <span style="font-size: 1.5rem; font-weight: bold; color: var(--success);" id="cartTotal">$0.00</span>
-            </div>
+        // 设置默认选择
+        setTimeout(() => {
+            const firstRobuxBtn = document.querySelector('#robux-product .qty-btn');
+            const firstRobuxPayment = document.querySelector('#robux-product .payment-option');
+            const firstNitroBtn = document.querySelector('#nitro-product .qty-btn');
+            const firstNitroPayment = document.querySelector('#nitro-product .payment-option');
             
-            <button class="buy-btn" onclick="checkoutCart()" style="margin-bottom: 1rem;">
-                <i class="fas fa-credit-card"></i> 去结算
-            </button>
-            <button onclick="closeCart()" style="
-                background: rgba(255, 255, 255, 0.1);
-                width: 100%;
-                padding: 0.8rem;
-                border-radius: 10px;
-                border: none;
-                color: white;
-                cursor: pointer;
-                transition: all 0.3s ease;
-            " onmouseover="this.style.background='rgba(255,255,255,0.2)'" 
-            onmouseout="this.style.background='rgba(255,255,255,0.1)'">
-                继续购物
-            </button>
-        </div>
-    </div>
-</div>
-    <!-- 订单确认弹窗 -->
-    <div class="order-modal" id="orderModal" style="
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(5px);
-        z-index: 2001;
-        align-items: center;
-        justify-content: center;
-    ">
-        <div class="order-content" style="
-            background: rgba(26, 26, 46, 0.95);
-            border-radius: 20px;
-            padding: 2.5rem;
-            max-width: 500px;
-            width: 90%;
-            border: 2px solid var(--primary);
-            animation: fadeIn 0.3s ease-out;
-            position: relative;
-        ">
-            <button class="close-modal" onclick="closeOrderModal()" style="
-                position: absolute;
-                top: 15px;
-                right: 15px;
-                background: rgba(255, 255, 255, 0.1);
-                border: none;
-                color: white;
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                cursor: pointer;
-                font-size: 1.2rem;
-            ">&times;</button>
-            
-            <h2 style="color: var(--accent); margin-bottom: 1.5rem;">
-                <i class="fas fa-shopping-cart"></i> 确认订单
-            </h2>
-            
-            <div id="orderDetails" style="
-                background: rgba(255,255,255,0.05);
-                padding: 1.5rem;
-                border-radius: 10px;
-                margin: 1.5rem 0;
-            ">
-                <!-- 动态内容 -->
-            </div>
-            
-            <div id="paymentInstructions">
-                <!-- 动态支付说明 -->
-            </div>
-            
-            <button class="buy-btn" onclick="completePayment()" style="margin-top: 1.5rem;">
-                <i class="fas fa-check-circle"></i> 确认并前往支付
-            </button>
-            <button onclick="closeOrderModal()" style="
-                background: rgba(255,255,255,0.1);
-                width: 100%;
-                margin-top: 1rem;
-                padding: 0.8rem;
-                border-radius: 10px;
-                border: none;
-                color: white;
-                cursor: pointer;
-                transition: all 0.3s ease;
-            " onmouseover="this.style.background='rgba(255,255,255,0.2)'" 
-            onmouseout="this.style.background='rgba(255,255,255,0.1)'">
-                取消订单
-            </button>
-        </div>
-    </div>
-
-    <!-- 订单追踪弹窗 -->
-    <div class="track-modal" id="trackModal" style="
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        backdrop-filter: blur(5px);
-        z-index: 2002;
-        align-items: center;
-        justify-content: center;
-    ">
-        <div style="
-            background: rgba(26, 26, 46, 0.95);
-            border-radius: 20px;
-            padding: 2.5rem;
-            max-width: 500px;
-            width: 90%;
-            border: 2px solid var(--accent);
-            animation: fadeIn 0.3s ease-out;
-            position: relative;
-        ">
-            <button class="close-modal" onclick="closeTrackModal()" style="
-                position: absolute;
-                top: 15px;
-                right: 15px;
-                background: rgba(255, 255, 255, 0.1);
-                border: none;
-                color: white;
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                cursor: pointer;
-                font-size: 1.2rem;
-            ">&times;</button>
-            
-            <h2 style="color: var(--accent); margin-bottom: 1.5rem;">
-                <i class="fas fa-search"></i> 订单追踪
-            </h2>
-            
-            <div style="margin-bottom: 2rem;">
-                <input type="text" id="orderIdInput" placeholder="输入订单号或WhatsApp号码" style="
-                    width: 100%;
-                    padding: 1rem;
-                    border-radius: 10px;
-                    background: rgba(255,255,255,0.1);
-                    border: 2px solid rgba(255,255,255,0.2);
-                    color: white;
-                    font-size: 1rem;
-                ">
-                <button onclick="searchOrder()" style="
-                    width: 100%;
-                    margin-top: 1rem;
-                    padding: 1rem;
-                    background: var(--gradient);
-                    color: white;
-                    border: none;
-                    border-radius: 10px;
-                    font-size: 1rem;
-                    font-weight: 600;
-                    cursor: pointer;
-                ">
-                    <i class="fas fa-search"></i> 查询订单
-                </button>
-            </div>
-            
-            <div id="orderStatus" style="
-                background: rgba(255,255,255,0.05);
-                padding: 1.5rem;
-                border-radius: 10px;
-                text-align: center;
-                min-height: 100px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            ">
-                <p style="opacity: 0.7;">输入订单号查询状态</p>
-            </div>
-            
-            <div style="margin-top: 2rem; padding: 1rem; background: rgba(255,209,102,0.1); border-radius: 10px;">
-                <p style="font-size: 0.9rem; opacity: 0.9;">
-                    <i class="fas fa-info-circle"></i> 
-                    订单号可在付款后的WhatsApp消息中找到，或联系客服查询
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // ========== 配置信息 ==========
-        const config = {
-            whatsapp: "601162430710",
-            tng: "+60 11-6243 0710",
-            ltcWallet: "ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw",
-            storeName: "Nyaaastore"
-        };
-        
-        // ========== 全局变量 ==========
-        let cart = JSON.parse(localStorage.getItem('nyaaastore_cart')) || [];
-        let currentOrder = null;
-        
-        // ========== 初始化函数 ==========
-        document.addEventListener('DOMContentLoaded', function() {
-            updateCartCount();
-            initProductButtons();
-            loadCartItems();
+            if (firstRobuxBtn) firstRobuxBtn.classList.add('selected');
+            if (firstRobuxPayment) firstRobuxPayment.classList.add('selected');
+            if (firstNitroBtn) firstNitroBtn.classList.add('selected');
+            if (firstNitroPayment) firstNitroPayment.classList.add('selected');
+        }, 100);
+    });
+    
+    // ========== 初始化产品按钮 ==========
+    function initProductButtons() {
+        // 绑定Robux数量选择事件
+        document.querySelectorAll('#robux-product .qty-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('#robux-product .qty-btn').forEach(b => {
+                    b.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                
+                // 更新价格显示
+                document.getElementById('robux-price').textContent = `$${this.dataset.price} USD`;
+            });
         });
         
-        // ========== 初始化产品按钮 ==========
-        function initProductButtons() {
-            // 初始化Robux产品
-            initProductSection('robux-product');
-            initProductSection('nitro-product');
-        }
-        
-        function initProductSection(productId) {
-            const productElement = document.getElementById(productId);
-            
-            // 设置默认选中第一个选项
-            const firstQtyBtn = productElement.querySelector('.qty-btn');
-            const firstPayment = productElement.querySelector('.payment-option');
-            
-            if (firstQtyBtn) firstQtyBtn.classList.add('selected');
-            if (firstPayment) firstPayment.classList.add('selected');
-            
-            // 绑定数量选择事件
-            productElement.querySelectorAll('.qty-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    productElement.querySelectorAll('.qty-btn').forEach(b => {
-                        b.classList.remove('selected');
-                    });
-                    this.classList.add('selected');
-                    
-                    // 更新价格显示
-                    const priceElement = productElement.querySelector('.product-price span:last-child');
-                    if (priceElement) {
-                        priceElement.textContent = `$${this.dataset.price} USD`;
-                    }
+        // 绑定Robux付款方式事件
+        document.querySelectorAll('#robux-product .payment-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('#robux-product .payment-option').forEach(o => {
+                    o.classList.remove('selected');
                 });
+                this.classList.add('selected');
             });
-            
-            // 绑定付款方式事件
-            productElement.querySelectorAll('.payment-option').forEach(option => {
-                option.addEventListener('click', function() {
-                    productElement.querySelectorAll('.payment-option').forEach(o => {
-                        o.classList.remove('selected');
-                    });
-                    this.classList.add('selected');
+        });
+        
+        // 绑定Nitro数量选择事件
+        document.querySelectorAll('#nitro-product .qty-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('#nitro-product .qty-btn').forEach(b => {
+                    b.classList.remove('selected');
                 });
-            });
-        }
-        
-        // ========== 获取选中产品信息 ==========
-        function getSelectedProduct(productId) {
-            const productElement = document.getElementById(productId);
-            
-            const selectedQty = productElement.querySelector('.qty-btn.selected');
-            const selectedPayment = productElement.querySelector('.payment-option.selected');
-            
-            return {
-                id: productId,
-                name: selectedQty.dataset.product,
-                price: parseFloat(selectedQty.dataset.price),
-                paymentMethod: selectedPayment.dataset.method,
-                type: productId === 'robux-product' ? 'robux' : 'nitro'
-            };
-        }
-        
-        // ========== 购物车功能 ==========
-        function addToCart(productId) {
-            const product = getSelectedProduct(productId);
-            const cartItem = {
-                ...product,
-                quantity: 1,
-                timestamp: Date.now()
-            };
-            
-            cart.push(cartItem);
-            saveCart();
-            updateCartCount();
-            loadCartItems();
-            
-            showNotification(`✅ ${product.name} 已加入购物车`);
-        }
-        
-        function updateCartCount() {
-            document.getElementById('cartCount').textContent = cart.length;
-        }
-        
-        function loadCartItems() {
-            const cartItemsElement = document.getElementById('cartItems');
-            const emptyCartElement = document.getElementById('emptyCart');
-            
-            if (cart.length === 0) {
-                emptyCartElement.style.display = 'block';
-                cartItemsElement.innerHTML = '';
-                document.getElementById('cartSubtotal').textContent = '$0.00';
-                document.getElementById('cartTotal').textContent = '$0.00';
-                return;
-            }
-            
-            emptyCartElement.style.display = 'none';
-            
-            let html = '';
-            let subtotal = 0;
-            
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.quantity;
-                subtotal += itemTotal;
+                this.classList.add('selected');
                 
-                html += `
-                    <div style="
-                        display: flex;
-                        align-items: center;
-                        justify-content: space-between;
-                        padding: 1rem;
-                        background: rgba(255,255,255,0.05);
-                        border-radius: 10px;
-                        margin-bottom: 1rem;
-                    ">
-                        <div>
-                            <div style="font-weight: 600;">${item.name}</div>
-                            <div style="font-size: 0.9rem; opacity: 0.8;">${item.paymentMethod === 'tng' ? 'TNG支付' : 'LTC支付'}</div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div style="color: var(--success); font-weight: 600;">$${item.price.toFixed(2)}</div>
-                            <div style="display: flex; align-items: center; gap: 10px; margin-top: 0.5rem;">
-                                <button onclick="updateQuantity(${index}, -1)" style="
-                                    background: rgba(255,255,255,0.1);
-                                    border: none;
-                                    color: white;
-                                    width: 25px;
-                                    height: 25px;
-                                    border-radius: 50%;
-                                    cursor: pointer;
-                                ">-</button>
-                                <span>${item.quantity}</span>
-                                <button onclick="updateQuantity(${index}, 1)" style="
-                                    background: rgba(255,255,255,0.1);
-                                    border: none;
-                                    color: white;
-                                    width: 25px;
-                                    height: 25px;
-                                    border-radius: 50%;
-                                    cursor: pointer;
-                                ">+</button>
-                                <button onclick="removeFromCart(${index})" style="
-                                    background: rgba(255,107,139,0.2);
-                                    border: none;
-                                    color: var(--primary);
-                                    padding: 0.3rem 0.8rem;
-                                    border-radius: 5px;
-                                    margin-left: 10px;
-                                    cursor: pointer;
-                                    font-size: 0.8rem;
-                                ">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                // 更新价格显示
+                document.getElementById('nitro-price').textContent = `$${this.dataset.price} USD`;
+            });
+        });
+        
+        // 绑定Nitro付款方式事件
+        document.querySelectorAll('#nitro-product .payment-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('#nitro-product .payment-option').forEach(o => {
+                    o.classList.remove('selected');
+                });
+                this.classList.add('selected');
+            });
+        });
+    }
+    
+    // ========== 页面导航 ==========
+    function goToPage(pageId) {
+        // 隐藏所有页面
+        document.querySelectorAll('.page-container').forEach(page => {
+            page.classList.remove('active');
+        });
+        
+        // 显示目标页面
+        document.getElementById(`page-${pageId}`).classList.add('active');
+        
+        // 更新进度条
+        updateProgressBar(pageId);
+    }
+    
+    function updateProgressBar(pageId) {
+        const progressTrack = document.querySelector('.progress-track');
+        const steps = document.querySelectorAll('.step');
+        
+        switch(pageId) {
+            case 'home':
+                progressTrack.style.width = '0%';
+                steps[0].className = 'step active';
+                steps[1].className = 'step';
+                steps[2].className = 'step';
+                break;
+            case 'payment':
+                progressTrack.style.width = '50%';
+                steps[0].className = 'step completed';
+                steps[1].className = 'step active';
+                steps[2].className = 'step';
+                break;
+            case 'complete':
+                progressTrack.style.width = '100%';
+                steps[0].className = 'step completed';
+                steps[1].className = 'step completed';
+                steps[2].className = 'step active';
+                break;
+        }
+    }
+    
+    // ========== 商品选择功能 ==========
+    function selectProduct(productType) {
+        const productElement = document.getElementById(`${productType}-product`);
+        
+        const selectedQty = productElement.querySelector('.qty-btn.selected');
+        const selectedPayment = productElement.querySelector('.payment-option.selected');
+        
+        // 创建订单对象
+        currentOrder = {
+            type: productType,
+            product: selectedQty.dataset.product,
+            price: parseFloat(selectedQty.dataset.price),
+            paymentMethod: selectedPayment.dataset.method,
+            timestamp: Date.now(),
+            orderId: generateOrderId()
+        };
+        
+        // 更新订单摘要
+        updateOrderSummary();
+        
+        // 显示付款方式对应的表单
+        showPaymentForm(currentOrder.paymentMethod);
+        
+        // 转到付款页面
+        goToPage('payment');
+    }
+    
+    function generateOrderId() {
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        let orderId = 'NYA-';
+        for (let i = 0; i < 6; i++) {
+            orderId += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        return orderId;
+    }
+    // ========== 更新订单摘要 ==========
+function updateOrderSummary() {
+    if (!currentOrder) return;
+    
+    const summaryElement = document.getElementById('orderSummary');
+    const subtotalElement = document.getElementById('orderSubtotal');
+    const totalElement = document.getElementById('orderTotal');
+    
+    const myrAmount = (currentOrder.price * config.exchangeRate).toFixed(2);
+    
+    summaryElement.innerHTML = `
+        <div style="display: flex; justify-content: space-between;">
+            <span style="opacity: 0.8;">商品：</span>
+            <span style="font-weight: 600;">${currentOrder.product}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <span style="opacity: 0.8;">订单号：</span>
+            <span style="color: var(--accent); font-family: monospace;">${currentOrder.orderId}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <span style="opacity: 0.8;">付款方式：</span>
+            <span>${currentOrder.paymentMethod === 'tng' ? "Touch 'n Go" : "Litecoin (LTC)"}</span>
+        </div>
+        <div style="display: flex; justify-content: space-between;">
+            <span style="opacity: 0.8;">汇率：</span>
+            <span>1 USD = RM ${config.exchangeRate}</span>
+        </div>
+    `;
+    
+    subtotalElement.textContent = `$${currentOrder.price.toFixed(2)}`;
+    totalElement.textContent = `$${currentOrder.price.toFixed(2)} USD`;
+    
+    // 更新付款页面金额
+    if (currentOrder.paymentMethod === 'tng') {
+        document.getElementById('tngAmount').textContent = myrAmount;
+        document.getElementById('tngNumber').textContent = config.tng;
+    } else if (currentOrder.paymentMethod === 'ltc') {
+        document.getElementById('ltcAmount').textContent = currentOrder.price.toFixed(2);
+        document.getElementById('ltcAddress').textContent = config.ltcWallet;
+    }
+}
+
+// ========== 显示付款表单 ==========
+function showPaymentForm(paymentMethod) {
+    const tngForm = document.getElementById('tngPayment');
+    const ltcForm = document.getElementById('ltcPayment');
+    const confirmBtn = document.getElementById('confirmPaymentBtn');
+    
+    if (paymentMethod === 'tng') {
+        tngForm.style.display = 'block';
+        ltcForm.style.display = 'none';
+        confirmBtn.innerHTML = '<i class="fab fa-whatsapp"></i> 我已转账，联系客服';
+    } else if (paymentMethod === 'ltc') {
+        tngForm.style.display = 'none';
+        ltcForm.style.display = 'block';
+        confirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> 我已转账，等待确认';
+    }
+}
+
+// ========== 复制LTC地址 ==========
+function copyLTCAddress() {
+    navigator.clipboard.writeText(config.ltcWallet).then(() => {
+        showNotification('✅ LTC钱包地址已复制到剪贴板！');
+    }).catch(err => {
+        console.error('复制失败:', err);
+    });
+}
+
+// ========== 完成支付 ==========
+function completePayment() {
+    if (!currentOrder) return;
+    
+    const paymentNote = document.getElementById('paymentNote').value;
+    
+    // 如果是TNG支付，需要付款备注
+    if (currentOrder.paymentMethod === 'tng' && !paymentNote.trim()) {
+        showNotification('⚠️ 请输入付款备注（邮箱或Discord用户名）');
+        document.getElementById('paymentNote').focus();
+        return;
+    }
+    
+    // 保存付款备注
+    currentOrder.paymentNote = paymentNote;
+    
+    // 更新完成页面信息
+    updateCompletePage();
+    
+    // 转到完成页面
+    goToPage('complete');
+    
+    // 自动打开WhatsApp（仅TNG支付）
+    if (currentOrder.paymentMethod === 'tng') {
+        setTimeout(() => {
+            openWhatsApp();
+        }, 1000);
+    }
+}
+            // ========== 更新完成页面 ==========
+        function updateCompletePage() {
+            if (!currentOrder) return;
+            
+            const orderDetails = document.getElementById('orderCompleteDetails');
+            const paymentInstructions = document.getElementById('paymentCompleteInstructions');
+            
+            const myrAmount = (currentOrder.price * config.exchangeRate).toFixed(2);
+            const now = new Date();
+            const formattedDate = now.toLocaleDateString('zh-CN') + ' ' + now.toLocaleTimeString('zh-CN', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
             });
             
-            cartItemsElement.innerHTML = html;
-            document.getElementById('cartSubtotal').textContent = `$${subtotal.toFixed(2)}`;
-            document.getElementById('cartTotal').textContent = `$${subtotal.toFixed(2)}`;
-        }
-        
-        function updateQuantity(index, change) {
-            cart[index].quantity += change;
-            
-            if (cart[index].quantity < 1) {
-                cart[index].quantity = 1;
-            }
-            
-            saveCart();
-            loadCartItems();
-            updateCartCount();
-        }
-        
-        function removeFromCart(index) {
-            cart.splice(index, 1);
-            saveCart();
-            loadCartItems();
-            updateCartCount();
-            
-            showNotification('❌ 商品已从购物车移除');
-        }
-        
-        function saveCart() {
-            localStorage.setItem('nyaaastore_cart', JSON.stringify(cart));
-        }
-        
-        // ========== 购买功能 ==========
-        function buyNow(productId) {
-            const product = getSelectedProduct(productId);
-            currentOrder = {
-                items: [{
-                    ...product,
-                    quantity: 1
-                }],
-                total: product.price,
-                paymentMethod: product.paymentMethod
-            };
-            
-            showOrderConfirmation();
-        }
-        
-        function checkoutCart() {
-            if (cart.length === 0) {
-                showNotification('⚠️ 购物车是空的');
-                return;
-            }
-            
-            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const paymentMethod = cart[0].paymentMethod; // 使用第一个商品的支付方式
-            
-            currentOrder = {
-                items: [...cart],
-                total: total,
-                paymentMethod: paymentMethod
-            };
-            
-            closeCart();
-            showOrderConfirmation();
-        }
-        
-        // ========== 弹窗控制 ==========
-        function showCart() {
-            document.getElementById('cartModal').style.display = 'flex';
-        }
-        
-        function closeCart() {
-            document.getElementById('cartModal').style.display = 'none';
-        }
-        
-        function showOrderConfirmation() {
             // 更新订单详情
-            document.getElementById('orderDetails').innerHTML = `
-                <div style="display: grid; gap: 10px;">
+            orderDetails.innerHTML = `
+                <div style="display: grid; gap: 0.8rem;">
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="opacity: 0.8;">订单号：</span>
+                        <span style="color: var(--accent); font-weight: 600; font-family: monospace;">${currentOrder.orderId}</span>
+                    </div>
                     <div style="display: flex; justify-content: space-between;">
                         <span style="opacity: 0.8;">商品：</span>
-                        <span style="font-weight: 600; color: var(--accent);">
-                            ${currentOrder.items.map(item => `${item.name} x${item.quantity}`).join(', ')}
-                        </span>
+                        <span style="font-weight: 600;">${currentOrder.product}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between;">
-                        <span style="opacity: 0.8;">总价：</span>
-                        <span style="font-weight: 700; color: var(--success);">$${currentOrder.total.toFixed(2)} USD</span>
+                        <span style="opacity: 0.8;">金额：</span>
+                        <span style="color: var(--success); font-weight: 700;">$${currentOrder.price.toFixed(2)} USD</span>
                     </div>
                     <div style="display: flex; justify-content: space-between;">
                         <span style="opacity: 0.8;">付款方式：</span>
-                        <span style="font-weight: 600;">${getPaymentMethodName(currentOrder.paymentMethod)}</span>
+                        <span>${currentOrder.paymentMethod === 'tng' ? "Touch 'n Go" : "Litecoin (LTC)"}</span>
                     </div>
                     <div style="display: flex; justify-content: space-between;">
-                        <span style="opacity: 0.8;">发货方式：</span>
-                        <span style="color: #4ECDC4;">付款后5分钟内自动发货</span>
+                        <span style="opacity: 0.8;">下单时间：</span>
+                        <span>${formattedDate}</span>
                     </div>
+                    ${currentOrder.paymentNote ? `
+                    <div style="display: flex; justify-content: space-between;">
+                        <span style="opacity: 0.8;">付款备注：</span>
+                        <span style="color: var(--accent);">${currentOrder.paymentNote}</span>
+                    </div>
+                    ` : ''}
                 </div>
             `;
             
             // 更新支付说明
-            document.getElementById('paymentInstructions').innerHTML = 
-                getPaymentInstructions(currentOrder.paymentMethod, currentOrder.total);
-            
-            // 显示弹窗
-            document.getElementById('orderModal').style.display = 'flex';
-        }
-        
-        function closeOrderModal() {
-            document.getElementById('orderModal').style.display = 'none';
-        }
-        
-        function trackOrder() {
-            document.getElementById('trackModal').style.display = 'flex';
-        }
-        
-        function closeTrackModal() {
-            document.getElementById('trackModal').style.display = 'none';
-        }
-        
-        // ========== 支付功能 ==========
-        function getPaymentMethodName(method) {
-            return method === 'tng' ? "Touch 'n Go" : "Litecoin (LTC)";
-        }
-        
-        function getPaymentInstructions(method, amount) {
-            const amountMYR = (amount * 4.5).toFixed(2);
-            
-            if (method === 'tng') {
-                return `
-                    <div style="
-                        background: linear-gradient(135deg, rgba(123, 104, 238, 0.2) 0%, rgba(255, 107, 139, 0.2) 100%);
-                        padding: 1.5rem;
-                        border-radius: 10px;
-                        margin: 1.5rem 0;
-                        border-left: 4px solid var(--secondary);
-                    ">
-                        <h4 style="color: var(--accent); margin-bottom: 1rem;">
-                            <i class="fas fa-mobile-alt"></i> Touch 'n Go 支付步骤：
-                        </h4>
-                        <ol style="padding-left: 1.5rem; line-height: 1.8;">
-                            <li>转账到 TNG 号码：<strong style="color: var(--light);">${config.tng}</strong></li>
-                            <li>金额：<strong style="color: var(--success);">RM ${amountMYR}</strong> (约 $${amount})</li>
-                            <li>转账时备注：<strong style="color: var(--accent);">${config.storeName}</strong></li>
-                            <li>转账完成后，截图发送到 WhatsApp</li>
-                        </ol>
+            if (currentOrder.paymentMethod === 'tng') {
+                paymentInstructions.innerHTML = `
+                    <h3 style="color: var(--accent); margin-bottom: 1rem;">
+                        <i class="fas fa-mobile-alt"></i> Touch 'n Go 支付说明
+                    </h3>
+                    <ol style="padding-left: 1.5rem; line-height: 1.8;">
+                        <li>转账到：<strong>${config.tng}</strong></li>
+                        <li>金额：<strong>RM ${myrAmount}</strong></li>
+                        <li>备注：<strong>${currentOrder.paymentNote || currentOrder.orderId}</strong></li>
+                        <li>转账后等待客服确认（通常5分钟内）</li>
+                    </ol>
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(37, 211, 102, 0.1); border-radius: 10px;">
+                        <i class="fab fa-whatsapp"></i> WhatsApp会自动打开，请发送转账截图给客服
                     </div>
                 `;
-            } else if (method === 'ltc') {
-                return `
-                    <div style="
-                        background: linear-gradient(135deg, rgba(255, 209, 102, 0.2) 0%, rgba(78, 205, 196, 0.2) 100%);
-                        padding: 1.5rem;
-                        border-radius: 10px;
-                        margin: 1.5rem 0;
-                        border-left: 4px solid var(--accent);
-                    ">
-                        <h4 style="color: var(--accent); margin-bottom: 1rem;">
-                            <i class="fab fa-bitcoin"></i> Litecoin 支付步骤：
-                        </h4>
-                        <p style="margin-bottom: 1rem;">发送 LTC 到以下钱包地址：</p>
-                        <div style="
-                            background: rgba(0,0,0,0.3);
-                            padding: 1rem;
-                            border-radius: 8px;
-                            font-f
+            } else if (currentOrder.paymentMethod === 'ltc') {
+                paymentInstructions.innerHTML = `
+                    <h3 style="color: var(--accent); margin-bottom: 1rem;">
+                        <i class="fab fa-bitcoin"></i> Litecoin 支付说明
+                    </h3>
+                    <ol style="padding-left: 1.5rem; line-height: 1.8;">
+                        <li>发送 LTC 到：<strong style="font-family: monospace;">${config.ltcWallet}</strong></li>
+                        <li>金额：<strong>$${currentOrder.price.toFixed(2)} USD 等值 LTC</strong></li>
+                        <li>订单号：<strong>${currentOrder.orderId}</strong></li>
+                        <li>网络确认后自动发货（约10-30分钟）</li>
+                    </ol>
+                    <div style="margin-top: 1rem; padding: 1rem; background: rgba(255, 209, 102, 0.1); border-radius: 10px;">
+                        <i class="fas fa-info-circle"></i> 区块链确认需要时间，请耐心等待
+                    </div>
+                `;
+            }
+            
+            // 保存订单到本地存储
+            saveOrderToStorage();
+        }
+        
+        // ========== WhatsApp联系 ==========
+        function openWhatsApp() {
+            if (!currentOrder) return;
+            
+            const myrAmount = (currentOrder.price * config.exchangeRate).toFixed(2);
+            let message = '';
+            
+            if (currentOrder.paymentMethod === 'tng') {
+                message = `Nyaaastore订单确认\n订单号：${currentOrder.orderId}\n商品：${currentOrder.product}\n金额：RM ${myrAmount}\n付款备注：${currentOrder.paymentNote}\n我已转账，请确认发货。`;
+            } else {
+                message = `Nyaaastore订单确认\n订单号：${currentOrder.orderId}\n商品：${currentOrder.product}\n金额：$${currentOrder.price.toFixed(2)} USD\n付款方式：LTC\n我已转账，请确认发货。`;
+            }
+            
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/${config.whatsapp}?text=${encodedMessage}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+        
+        // ========== 创建新订单 ==========
+        function createNewOrder() {
+            // 重置表单
+            document.getElementById('paymentNote').value = '';
+            
+            // 重置当前订单
+            currentOrder = null;
+            
+            // 返回首页
+            goToPage('home');
+        }
+        
+        // ========== 保存订单详情 ==========
+        function saveOrderDetails() {
+            if (!currentOrder) return;
+            
+            const orderText = `
+订单详情 - Nyaaastore
+====================
+订单号：${currentOrder.orderId}
+商品：${currentOrder.product}
+金额：$${currentOrder.price.toFixed(2)} USD
+付款方式：${currentOrder.paymentMethod === 'tng' ? "Touch 'n Go" : "Litecoin (LTC)"}
+下单时间：${new Date(currentOrder.timestamp).toLocaleString('zh-CN')}
+付款备注：${currentOrder.paymentNote || '无'}
+                
+客服信息：
+WhatsApp: +60 11-6243 0710
+TNG号码: +60 11-6243 0710
+LTC钱包: ${config.ltcWallet}
+                
+请保存此信息以便查询订单状态。
+            `.trim();
+            
+            // 创建下载
+            const blob = new Blob([orderText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `Nyaaastore订单-${currentOrder.orderId}.txt`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showNotification('✅ 订单详情已保存为文本文件');
+        }
+        
+        // ========== 保存订单到本地存储 ==========
+        function saveOrderToStorage() {
+            if (!currentOrder) return;
+            
+            // 获取现有订单
+            const orders = JSON.parse(localStorage.getItem('nyaaastore_orders') || '[]');
+            
+            // 添加新订单
+            orders.push({
+                ...currentOrder,
+                status: 'pending',
+                date: new Date().toISOString()
+            });
+            
+            // 保存到本地存储
+            localStorage.setItem('nyaaastore_orders', JSON.stringify(orders));
+        }
+        
+        // ========== 显示通知 ==========
+        function showNotification(message) {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: var(--gradient);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: 10px;
+                z-index: 3000;
+                animation: fadeIn 0.3s ease-out;
+                max-width: 400px;
+                box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            `;
+            notification.innerHTML = `
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-info-circle"></i>
+                    <div>${message.replace(/\n/g, '<br>')}</div>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // 3秒后移除
+            setTimeout(() => {
+                notification.style.animation = 'fadeIn 0.3s ease-out reverse';
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
