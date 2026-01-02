@@ -3,1047 +3,600 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>虚拟商店</title>
+    <title>✨ 虚拟商店</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* 全局样式 - 移动端优化 */
+        /* 基础重置 - 现代设计 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'PingFang SC', 'Microsoft YaHei', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
 
         :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4cc9f0;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --success: #4ade80;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --gray: #6c757d;
-            --gray-light: #e2e8f0;
-            --gray-dark: #495057;
-            --border-radius: 16px;
-            --border-radius-sm: 12px;
-            --border-radius-xs: 8px;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.12);
-            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --primary: #7B68EE;
+            --primary-light: #9370DB;
+            --primary-gradient: linear-gradient(135deg, #7B68EE 0%, #9370DB 100%);
+            --secondary: #FF6B8B;
+            --accent: #00D4FF;
+            --success: #00E5A8;
+            --warning: #FFC107;
+            --danger: #FF4757;
+            --dark: #1A1A2E;
+            --darker: #16213E;
+            --light: #F8F9FF;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            --shadow-light: 0 10px 40px rgba(123, 104, 238, 0.2);
+            --radius: 24px;
+            --radius-lg: 32px;
+            --radius-sm: 16px;
+            --radius-xs: 12px;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
         }
 
         body {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: var(--dark);
+            background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
+            color: var(--light);
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
             min-height: 100vh;
-            line-height: 1.5;
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
-        }
-
-        /* 移动端安全区域 */
-        .safe-area {
-            max-width: 100%;
             overflow-x: hidden;
+            line-height: 1.6;
         }
 
-        /* 状态栏模拟 */
-        .status-bar {
-            background: rgba(0, 0, 0, 0.2);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 12px 16px 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: white;
-            font-size: 14px;
-            font-weight: 600;
-            position: fixed;
+        /* 霓虹发光效果 */
+        .neon-glow {
+            position: relative;
+            z-index: 1;
+        }
+
+        .neon-glow::before {
+            content: '';
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1000;
-            height: 44px;
+            bottom: 0;
+            background: var(--primary-gradient);
+            border-radius: inherit;
+            filter: blur(20px);
+            opacity: 0.3;
+            z-index: -1;
+            animation: glowPulse 3s infinite alternate;
         }
 
-        .status-time {
-            font-weight: 700;
-        }
-
-        .status-icons {
-            display: flex;
-            gap: 6px;
-            align-items: center;
+        @keyframes glowPulse {
+            0% { opacity: 0.2; }
+            100% { opacity: 0.4; }
         }
 
         /* 主容器 */
-        .main-container {
-            margin-top: 44px;
-            min-height: calc(100vh - 44px - 60px);
-            padding-bottom: 20px;
+        .app-container {
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 星空背景 */
+        .star-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle var(--duration) infinite alternate;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* 页面标题区 */
+        .page-header {
+            padding: 40px 24px 24px;
+            text-align: center;
+            position: relative;
+        }
+
+        .page-title {
+            font-size: 36px;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: var(--primary-gradient);
+            border-radius: 2px;
+        }
+
+        .page-subtitle {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 300;
+            max-width: 280px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+
+        /* 玻璃态卡片 */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 28px;
+            margin: 0 24px 24px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-light);
         }
 
         /* 页面容器 */
-        .page-container {
+        .page {
             display: none;
-            padding: 16px;
-            animation: fadeIn 0.4s ease;
+            animation: pageSlideIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1);
         }
 
-        .page-container.active {
+        .page.active {
             display: block;
         }
 
-        @keyframes fadeIn {
+        @keyframes pageSlideIn {
             from {
                 opacity: 0;
-                transform: translateY(10px);
+                transform: translateY(30px);
             }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-
-        /* 卡片样式 */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin-bottom: 16px;
-            box-shadow: var(--shadow);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        /* 标题样式 */
-        .page-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .page-subtitle {
-            font-size: 14px;
-            color: var(--gray);
-            margin-bottom: 24px;
-            line-height: 1.4;
-        }
-
-        /* 分割线 */
-        .divider {
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(67, 97, 238, 0.3), transparent);
-            margin: 24px 0;
-        }
     </style>
 </head>
 <body>
-    <!-- 状态栏 -->
-    <div class="status-bar">
-        <div class="status-time">12:08</div>
-        <div class="status-icons">
-            <i class="fas fa-signal"></i>
-            <i class="fas fa-wifi"></i>
-            <i class="fas fa-battery-three-quarters"></i>
-        </div>
-    </div>
+    <!-- 星空背景 -->
+    <div class="star-background" id="stars"></div>
 
     <!-- 主容器 -->
-    <div class="main-container safe-area">
+    <div class="app-container">
         <!-- 首页 -->
-        <div class="page-container active" id="home-page">
-            <div class="glass-card" style="text-align: center; padding: 40px 20px;">
-                <div style="width: 80px; height: 80px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
-                    <i class="fas fa-shopping-bag" style="font-size: 36px; color: white;"></i>
+        <div class="page active" id="home-page">
+            <div class="page-header">
+                <h1 class="page-title neon-glow">虚拟商店</h1>
+                <p class="page-subtitle">购买 Discord Nitro · Robux · Spotify · Canva Pro</p>
+            </div>
+
+            <div class="glass-card" style="text-align: center; padding: 40px 28px;">
+                <div class="hero-icon">
+                    <i class="fas fa-shopping-bag"></i>
                 </div>
-                <h1 class="page-title" style="margin-bottom: 12px;">虚拟商店</h1>
-                <p class="page-subtitle" style="margin-bottom: 32px; max-width: 300px; margin-left: auto; margin-right: auto;">
-                    购买Discord Nitro、Robux、Spotify Premium和Canva Pro
+                <h2 style="font-size: 28px; margin: 24px 0 16px; font-weight: 700;">欢迎来到未来商店</h2>
+                <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 32px; line-height: 1.6;">
+                    购买您最爱的虚拟商品，5分钟内自动发货，100%安全交易
                 </p>
-                <button class="btn-primary" onclick="showPage('products')" style="width: 100%; max-width: 200px; margin: 0 auto;">
-                    <i class="fas fa-store"></i>
-                    开始购物
+                <button class="btn-glow" onclick="showPage('products')">
+                    <span>开始购物</span>
+                    <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
 
-            <div class="glass-card">
-                <h3 style="margin-bottom: 16px; color: var(--dark); font-size: 18px;">特色服务</h3>
+            <!-- 特色服务 -->
+            <div style="padding: 0 24px;">
+                <h3 style="font-size: 20px; margin-bottom: 20px; font-weight: 600; display: flex; align-items: center; gap: 12px;">
+                    <i class="fas fa-star" style="color: var(--accent);"></i>
+                    为什么选择我们？
+                </h3>
+                
                 <div class="features-grid">
-                    <div class="feature-item">
-                        <div class="feature-icon" style="background: linear-gradient(135deg, var(--primary), var(--accent));">
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background: linear-gradient(135deg, #FF6B8B, #FF8E53);">
                             <i class="fas fa-bolt"></i>
                         </div>
-                        <div>
-                            <h4>快速发货</h4>
-                            <p>5分钟内自动发货</p>
-                        </div>
-                    </div>
-                    <div class="feature-item">
-                        <div class="feature-icon" style="background: linear-gradient(135deg, var(--primary), var(--accent));">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <div>
-                            <h4>安全可靠</h4>
-                            <p>100%安全交易</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-/* 按钮样式 */
-.btn {
-    padding: 14px 20px;
-    border-radius: var(--border-radius-sm);
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: var(--transition);
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    width: 100%;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.btn-primary {
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: white;
-    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.4);
-}
-
-.btn-primary:active {
-    transform: scale(0.98);
-    box-shadow: 0 2px 8px rgba(67, 97, 238, 0.3);
-}
-
-.btn-secondary {
-    background: rgba(255, 255, 255, 0.9);
-    color: var(--primary);
-    border: 1px solid rgba(67, 97, 238, 0.2);
-}
-
-.btn-secondary:active {
-    background: rgba(67, 97, 238, 0.1);
-}
-
-.btn-small {
-    padding: 10px 16px;
-    font-size: 14px;
-    border-radius: var(--border-radius-xs);
-}
-
-/* 商品页面 */
-#products-page .products-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.product-card {
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: var(--border-radius);
-    padding: 20px;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    transition: var(--transition);
-}
-
-.product-card:active {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-hover);
-}
-
-.product-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 16px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.product-icon {
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 24px;
-}
-
-.product-info {
-    flex: 1;
-}
-
-.product-name {
-    font-size: 18px;
-    font-weight: 700;
-    margin-bottom: 4px;
-    color: var(--dark);
-}
-
-.product-desc {
-    font-size: 13px;
-    color: var(--gray);
-    line-height: 1.4;
-}
-
-.product-options {
-    margin-bottom: 16px;
-}
-
-.option-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 12px 16px;
-    margin-bottom: 8px;
-    background: rgba(248, 249, 250, 0.8);
-    border-radius: var(--border-radius-xs);
-    border: 1px solid transparent;
-    transition: var(--transition);
-}
-
-.option-item:active {
-    border-color: var(--primary);
-    background: rgba(67, 97, 238, 0.05);
-}
-
-.option-name {
-    font-weight: 500;
-    color: var(--dark);
-    font-size: 15px;
-}
-
-.option-price {
-    font-weight: 700;
-    font-size: 16px;
-    color: var(--primary);
-}
-
-.option-action {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: white;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition);
-    margin-left: 12px;
-}
-
-.option-action:active {
-    transform: scale(0.95);
-}
-
-.product-action {
-    margin-top: 8px;
-}
-
-/* 特色服务 */
-.features-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.feature-item {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px;
-    background: rgba(248, 249, 250, 0.8);
-    border-radius: var(--border-radius-sm);
-}
-
-.feature-icon {
-    width: 50px;
-    height: 50px;
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 20px;
-}
-
-.feature-item h4 {
-    font-size: 16px;
-    margin-bottom: 4px;
-    color: var(--dark);
-}
-
-.feature-item p {
-    font-size: 13px;
-    color: var(--gray);
-}
-
-<!-- 商品页面 -->
-<div class="page-container" id="products-page">
-    <div class="glass-card">
-        <h1 class="page-title">精选商品</h1>
-        <p class="page-subtitle">选择您需要的商品添加到购物车</p>
-        
-        <div class="divider"></div>
-        
-        <div class="products-grid" id="products-container">
-            <!-- 商品将通过JavaScript动态生成 -->
-        </div>
-    </div>
-</div>
-<!-- 购物车页面 -->
-<div class="page-container" id="cart-page">
-    <div class="glass-card">
-        <h1 class="page-title">购物车</h1>
-        <p class="page-subtitle">查看并管理您的购物车</p>
-        
-        <div class="divider"></div>
-        
-        <div id="cart-items-container">
-            <!-- 购物车项目将通过JavaScript动态生成 -->
-            <div id="empty-cart" style="text-align: center; padding: 40px 20px; color: var(--gray);">
-                <div style="width: 80px; height: 80px; background: rgba(0, 0, 0, 0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                    <i class="fas fa-shopping-cart" style="font-size: 36px; color: var(--gray);"></i>
-                </div>
-                <h3 style="margin-bottom: 8px; color: var(--dark); font-size: 18px;">购物车是空的</h3>
-                <p style="margin-bottom: 24px; font-size: 14px;">去商品页面添加一些商品吧！</p>
-                <button class="btn-primary btn-small" onclick="showPage('products')" style="max-width: 200px; margin: 0 auto;">
-                    <i class="fas fa-store"></i>
-                    浏览商品
-                </button>
-            </div>
-        </div>
-        
-        <div id="cart-summary-section" style="display: none;">
-            <div class="divider"></div>
-            
-            <div style="margin-bottom: 20px;">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
-                    <span style="color: var(--gray); font-size: 14px;">小计</span>
-                    <span id="cart-subtotal" style="font-weight: 600; font-size: 16px;">$0.00</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
-                    <span style="color: var(--gray); font-size: 14px;">手续费</span>
-                    <span id="cart-fee" style="font-weight: 600; font-size: 16px;">$0.00</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; padding-top: 16px; border-top: 2px solid rgba(0, 0, 0, 0.05);">
-                    <span style="font-weight: 700; font-size: 18px; color: var(--dark);">总计</span>
-                    <span id="cart-total" style="font-weight: 700; font-size: 20px; color: var(--primary);">$0.00</span>
-                </div>
-            </div>
-            
-            <button class="btn-primary" id="proceed-checkout" onclick="showPage('checkout')">
-                <i class="fas fa-credit-card"></i>
-                前往付款
-            </button>
-        </div>
-    </div>
-</div>
-
-/* 购物车项目样式 */
-.cart-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px;
-    margin-bottom: 12px;
-    background: rgba(248, 249, 250, 0.8);
-    border-radius: var(--border-radius-sm);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.cart-item-info {
-    flex: 1;
-}
-
-.cart-item-name {
-    font-weight: 600;
-    margin-bottom: 4px;
-    color: var(--dark);
-    font-size: 16px;
-}
-
-.cart-item-option {
-    font-size: 13px;
-    color: var(--gray);
-}
-
-.cart-item-price {
-    font-weight: 700;
-    color: var(--primary);
-    margin-left: 16px;
-    font-size: 16px;
-    min-width: 60px;
-    text-align: right;
-}
-
-.cart-item-actions {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-left: 16px;
-}
-
-.quantity-control {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    background: white;
-    border-radius: 20px;
-    padding: 4px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-}
-
-.quantity-btn {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: white;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    color: var(--gray);
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    transition: var(--transition);
-}
-
-.quantity-btn:active {
-    background: var(--primary);
-    color: white;
-    border-color: var(--primary);
-}
-
-.quantity {
-    min-width: 28px;
-    text-align: center;
-    font-weight: 600;
-    color: var(--dark);
-}
-
-.remove-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: rgba(239, 68, 68, 0.1);
-    color: var(--danger);
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.remove-btn:active {
-    background: var(--danger);
-    color: white;
-}
-<!-- 付款页面 -->
-<div class="page-container" id="checkout-page">
-    <div class="glass-card">
-        <h1 class="page-title">付款</h1>
-        <p class="page-subtitle">选择付款方式完成购买</p>
-        
-        <div class="divider"></div>
-        
-        <div style="margin-bottom: 24px;">
-            <h3 style="margin-bottom: 16px; color: var(--dark); font-size: 18px;">订单详情</h3>
-            <div id="checkout-items">
-                <!-- 订单项目将通过JavaScript动态生成 -->
-            </div>
-            <div style="display: flex; justify-content: space-between; padding-top: 16px; border-top: 2px solid rgba(0, 0, 0, 0.05); margin-top: 16px;">
-                <span style="font-weight: 700; font-size: 18px; color: var(--dark);">总计</span>
-                <span id="checkout-total" style="font-weight: 700; font-size: 20px; color: var(--primary);">$0.00</span>
-            </div>
-        </div>
-        
-        <div class="divider"></div>
-        
-        <div style="margin-bottom: 24px;">
-            <h3 style="margin-bottom: 16px; color: var(--dark); font-size: 18px;">选择付款方式</h3>
-            <div class="payment-methods">
-                <div class="payment-method active" onclick="selectPaymentMethod('tng')">
-                    <div class="payment-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <div class="payment-info">
-                        <h4>TNG eWallet</h4>
-                        <p>使用Touch 'n Go电子钱包付款</p>
-                    </div>
-                    <i class="fas fa-check-circle"></i>
-                </div>
-                
-                <div class="payment-method" onclick="selectPaymentMethod('ltc')">
-                    <div class="payment-icon">
-                        <i class="fab fa-bitcoin"></i>
-                    </div>
-                    <div class="payment-info">
-                        <h4>Litecoin (LTC)</h4>
-                        <p>使用加密货币付款</p>
-                    </div>
-                    <i class="fas fa-check-circle"></i>
-                </div>
-            </div>
-        </div>
-        
-        <div id="tng-details">
-            <h3 style="margin-bottom: 16px; color: var(--dark); font-size: 18px;">TNG付款说明</h3>
-            <div class="payment-steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>打开TNG应用</h4>
-                        <p>在手机上打开Touch 'n Go电子钱包应用</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>扫描QR码</h4>
-                        <p>扫描下面的QR码或使用手机号码付款</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h4>确认付款</h4>
-                        <p>付款后点击"确认付款"按钮</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="qr-section">
-                <div class="qr-container">
-                    <img src="https://i.ibb.co/mFC45kFx/IMG-20251215-184553-1.jpg" alt="TNG QR Code">
-                </div>
-                <div class="payment-info">
-                    <p><i class="fas fa-phone"></i> <strong>手机号码:</strong> +60 11-6243 0710</p>
-                    <p><i class="fab fa-whatsapp"></i> <strong>WhatsApp:</strong> +60 11-6243 0710</p>
-                </div>
-            </div>
-        </div>
-        
-        <div id="ltc-details" style="display: none;">
-            <h3 style="margin-bottom: 16px; color: var(--dark); font-size: 18px;">LTC付款说明</h3>
-            <div class="payment-steps">
-                <div class="step">
-                    <div class="step-number">1</div>
-                    <div class="step-content">
-                        <h4>打开钱包</h4>
-                        <p>打开您的加密货币钱包应用</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">2</div>
-                    <div class="step-content">
-                        <h4>发送LTC</h4>
-                        <p>发送LTC到以下地址或扫描QR码</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">3</div>
-                    <div class="step-content">
-                        <h4>确认付款</h4>
-                        <p>付款后点击"确认付款"按钮</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="qr-section">
-                <div class="qr-container">
-                    <img src="https://i.ibb.co/JjqdbnSn/IMG-20260102-WA0000.jpg" alt="LTC QR Code">
-                </div>
-                <div class="payment-info">
-                    <p><i class="fas fa-wallet"></i> <strong>LTC地址:</strong></p>
-                    <div class="address-box">ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw</div>
-                    <p><i class="fab fa-whatsapp"></i> <strong>付款后请WhatsApp截图确认</strong></p>
-                </div>
-            </div>
-        </div>
-        
-        <div class="payment-actions">
-            <button class="btn-secondary" onclick="showPage('cart')">
-                <i class="fas fa-arrow-left"></i>
-                返回购物车
-            </button>
-            <button class="btn-primary" onclick="completePayment()">
-                <i class="fas fa-check-circle"></i>
-                确认付款
-            </button>
-        </div>
-    </div>
-</div>
-
-/* 付款方式样式 */
-.payment-methods {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-bottom: 24px;
-}
-
-.payment-method {
-    display: flex;
-    align-items: center;
-    padding: 16px;
-    background: rgba(248, 249, 250, 0.8);
-    border-radius: var(--border-radius-sm);
-    border: 2px solid transparent;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.payment-method:active {
-    transform: scale(0.98);
-}
-
-.payment-method.active {
-    border-color: var(--primary);
-    background: rgba(67, 97, 238, 0.05);
-}
-
-.payment-icon {
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    font-size: 24px;
-    margin-right: 16px;
-}
-
-.payment-info {
-    flex: 1;
-}
-
-.payment-info h4 {
-    font-size: 16px;
-    margin-bottom: 4px;
-    color: var(--dark);
-}
-
-.payment-info p {
-    font-size: 13px;
-    color: var(--gray);
-}
-
-.payment-method .fa-check-circle {
-    color: var(--primary);
-    font-size: 20px;
-    display: none;
-}
-
-.payment-method.active .fa-check-circle {
-    display: block;
-}
-
-/* 付款步骤 */
-.payment-steps {
-    margin-bottom: 24px;
-}
-
-.step {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 16px;
-}
-
-.step-number {
-    width: 32px;
-    height: 32px;
-    background: linear-gradient(135deg, var(--primary), var(--accent));
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 14px;
-    flex-shrink: 0;
-}
-
-.step-content h4 {
-    font-size: 15px;
-    margin-bottom: 4px;
-    color: var(--dark);
-}
-
-.step-content p {
-    font-size: 13px;
-    color: var(--gray);
-    line-height: 1.4;
-}
-
-/* QR码区域 */
-.qr-section {
-    text-align: center;
-    margin-bottom: 24px;
-}
-
-.qr-container {
-    width: 200px;
-    height: 200px;
-    margin: 0 auto 16px;
-    background: white;
-    border-radius: var(--border-radius-sm);
-    padding: 12px;
-    box-shadow: var(--shadow);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.qr-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    border-radius: 8px;
-}
-
-.payment-info p {
-    margin-bottom: 8px;
-    font-size: 14px;
-    color: var(--dark);
-}
-
-.address-box {
-    background: rgba(248, 249, 250, 0.8);
-    padding: 12px;
-    border-radius: var(--border-radius-xs);
-    font-family: monospace;
-    font-size: 13px;
-    word-break: break-all;
-    margin: 8px 0 16px;
-    border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-/* 付款操作按钮 */
-.payment-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 24px;
-}
-
-.payment-actions .btn {
-    flex: 1;
-}
-    <!-- 完成页面 -->
-    <div class="page-container" id="complete-page">
-        <div class="glass-card" style="text-align: center; padding: 40px 20px;">
-            <div class="success-icon">
-                <i class="fas fa-check-circle"></i>
-            </div>
-            <h1 class="page-title" style="margin-bottom: 12px;">付款成功！</h1>
-            <p class="page-subtitle" style="margin-bottom: 32px;">
-                感谢您的购买！您的订单已确认，商品将很快发送到您的电子邮件。
-            </p>
-            
-            <div class="contact-section">
-                <h3 style="margin-bottom: 16px; color: var(--dark); font-size: 18px;">重要提醒</h3>
-                <p style="margin-bottom: 20px; color: var(--gray); font-size: 14px;">
-                    付款后请务必通过以下方式联系我们确认付款：
-                </p>
-                
-                <div class="contact-options">
-                    <div class="contact-option" onclick="openWhatsApp()">
-                        <div class="contact-icon" style="background: #25D366;">
-                            <i class="fab fa-whatsapp"></i>
-                        </div>
-                        <div class="contact-info">
-                            <h4>WhatsApp</h4>
-                            <p>+60 11-6243 0710</p>
-                        </div>
+                        <h4>极速发货</h4>
+                        <p>5分钟内自动发货</p>
                     </div>
                     
-                    <div class="contact-option" onclick="openDiscord()">
-                        <div class="contact-icon" style="background: #5865F2;">
-                            <i class="fab fa-discord"></i>
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background: linear-gradient(135deg, #00E5A8, #00D4FF);">
+                            <i class="fas fa-shield-alt"></i>
                         </div>
-                        <div class="contact-info">
-                            <h4>Discord</h4>
-                            <p>https://discord.gg/3BRcSV5Jvf</p>
-                        </div>
+                        <h4>安全可靠</h4>
+                        <p>100%安全交易保障</p>
                     </div>
                 </div>
             </div>
-            
-            <div class="complete-actions">
-                <button class="btn-secondary" onclick="showPage('home')">
-                    <i class="fas fa-home"></i>
-                    返回首页
-                </button>
-                <button class="btn-primary" onclick="showPage('products')">
-                    <i class="fas fa-shopping-cart"></i>
-                    继续购物
-                </button>
+        </div>
+
+        <!-- 商品页面 -->
+        <div class="page" id="products-page">
+            <div class="page-header">
+                <h1 class="page-title neon-glow">精选商品</h1>
+                <p class="page-subtitle">选择商品，开启您的虚拟世界之旅</p>
             </div>
+
+            <div id="products-container">
+                <!-- 商品将通过JS动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* 按钮样式 - 发光效果 */
+        .btn-glow {
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            padding: 18px 32px;
+            border-radius: var(--radius-sm);
+            font-size: 16px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(123, 104, 238, 0.4);
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(123, 104, 238, 0.6);
+        }
+
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .btn-glow:hover::before {
+            left: 100%;
+        }
+
+        /* 英雄图标 */
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 36px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(123, 104, 238, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* 特色网格 */
+        .features-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+        }
+
+        .feature-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: white;
+            font-size: 22px;
+        }
+
+        .feature-card h4 {
+            font-size: 16px;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .feature-card p {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* 商品卡片 */
+        .product-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: var(--radius);
+            padding: 0;
+            margin: 0 24px 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .product-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-light);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .product-header {
+            padding: 24px;
+            background: rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .product-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--primary-gradient);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 8px 20px rgba(123, 104, 238, 0.3);
+        }
+
+        .product-info h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            background: linear-gradient(90deg, #fff, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .product-info p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.4;
+        }
+
+        .product-options {
+            padding: 20px 24px;
+        }
+
+        .option-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            margin-bottom: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: var(--radius-xs);
+            border: 1px solid transparent;
+            transition: var(--transition);
+        }
+
+        .option-row:hover {
+            background: rgba(255, 255, 255, 0.07);
+            border-color: var(--primary-light);
+        }
+
+        .option-info {
+            flex: 1;
+        }
+
+        .option-name {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .option-desc {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .option-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--success);
+            margin-right: 16px;
+        }
+
+        .add-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: var(--primary-gradient);
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 6px 15px rgba(123, 104, 238, 0.3);
+        }
+
+        .add-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            box-shadow: 0 10px 20px rgba(123, 104, 238, 0.5);
+        }
+
+        .product-footer {
+            padding: 0 24px 24px;
+        }
+
+        .add-all-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--secondary), #FF8E53);
+            border: none;
+            border-radius: var(--radius-sm);
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(255, 107, 139, 0.3);
+        }
+
+        .add-all-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(255, 107, 139, 0.5);
+        }
+    </style>
+<!-- 底部导航 -->
+<nav class="bottom-nav">
+    <div class="nav-item active" onclick="showPage('home')">
+        <div class="nav-icon">
+            <i class="fas fa-home"></i>
+        </div>
+        <span class="nav-label">首页</span>
+    </div>
+    
+    <div class="nav-item" onclick="showPage('products')">
+        <div class="nav-icon">
+            <i class="fas fa-store"></i>
+        </div>
+        <span class="nav-label">商品</span>
+    </div>
+    
+    <div class="nav-item" onclick="showPage('cart')">
+        <div class="nav-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="cart-badge" id="cart-badge">0</span>
+        </div>
+        <span class="nav-label">购物车</span>
+    </div>
+    
+    <div class="nav-item" onclick="showPage('checkout')">
+        <div class="nav-icon">
+            <i class="fas fa-credit-card"></i>
+        </div>
+        <span class="nav-label">付款</span>
+    </div>
+</nav>
+
+<!-- 音乐播放器 -->
+<div class="music-player" id="musicPlayer">
+    <div class="player-glass">
+        <div class="player-info">
+            <div class="song-cover">
+                <i class="fas fa-music"></i>
+            </div>
+            <div class="song-info">
+                <div class="song-title">Chill Vibes - YouTube</div>
+                <div class="song-artist">正在播放</div>
+            </div>
+        </div>
+        <div class="player-controls">
+            <button class="control-btn" onclick="prevSong()">
+                <i class="fas fa-step-backward"></i>
+            </button>
+            <button class="control-btn play-btn" onclick="togglePlayPause()">
+                <i class="fas fa-play" id="playIcon"></i>
+            </button>
+            <button class="control-btn" onclick="nextSong()">
+                <i class="fas fa-step-forward"></i>
+            </button>
         </div>
     </div>
 </div>
 
-<!-- 底部导航栏 -->
-<div class="bottom-nav">
-    <div class="nav-item active" onclick="showPage('home')">
-        <i class="fas fa-home"></i>
-        <span>首页</span>
-    </div>
-    <div class="nav-item" onclick="showPage('products')">
-        <i class="fas fa-store"></i>
-        <span>商品</span>
-    </div>
-    <div class="nav-item" onclick="showPage('cart')">
-        <i class="fas fa-shopping-cart"></i>
-        <span>购物车</span>
-        <span class="cart-badge" id="cart-badge">0</span>
-    </div>
-    <div class="nav-item" onclick="showPage('checkout')">
-        <i class="fas fa-credit-card"></i>
-        <span>付款</span>
-    </div>
-</div>
-
-<!-- 音乐播放器 -->
-<div class="music-player">
-    <div class="music-info">
-        <div class="now-playing">Now Playing: YouTube Music</div>
-    </div>
-    <div class="music-controls">
-        <button class="music-btn" onclick="prevSong()">
-            <i class="fas fa-step-backward"></i>
-        </button>
-        <button class="music-btn" onclick="togglePlayPause()">
-            <i class="fas fa-play" id="play-icon"></i>
-        </button>
-        <button class="music-btn" onclick="nextSong()">
-            <i class="fas fa-step-forward"></i>
-        </button>
-    </div>
-</div>
-
-<!-- YouTube音乐iframe -->
-<div id="youtube-player" style="display: none;">
-    <iframe width="0" height="0" src="https://www.youtube.com/embed/J4ANQfaf_gc?autoplay=1&controls=0&enablejsapi=1" 
-            frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+<!-- YouTube播放器 -->
+<div style="display: none;">
+    <iframe id="youtubeFrame" width="0" height="0" 
+            src="https://www.youtube.com/embed/J4ANQfaf_gc?enablejsapi=1&controls=0&modestbranding=1&rel=0"
+            frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen></iframe>
 </div>
 
 <style>
-    /* 完成页面样式 */
-    .success-icon {
-        font-size: 64px;
-        color: var(--success);
-        margin-bottom: 24px;
-        animation: bounce 1s ease infinite alternate;
-    }
-
-    @keyframes bounce {
-        from {
-            transform: translateY(0);
-        }
-        to {
-            transform: translateY(-10px);
-        }
-    }
-
-    .contact-section {
-        background: rgba(248, 249, 250, 0.8);
-        border-radius: var(--border-radius-sm);
-        padding: 20px;
-        margin-bottom: 32px;
-    }
-
-    .contact-options {
-        display: flex;
-        flex-direction: column;
-        gap: 12px;
-    }
-
-    .contact-option {
-        display: flex;
-        align-items: center;
-        gap: 12px;
-        padding: 16px;
-        background: white;
-        border-radius: var(--border-radius-xs);
-        border: 1px solid rgba(0, 0, 0, 0.05);
-        cursor: pointer;
-        transition: var(--transition);
-    }
-
-    .contact-option:active {
-        transform: scale(0.98);
-        border-color: var(--primary);
-    }
-
-    .contact-icon {
-        width: 44px;
-        height: 44px;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-size: 20px;
-    }
-
-    .contact-info h4 {
-        font-size: 15px;
-        margin-bottom: 2px;
-        color: var(--dark);
-    }
-
-    .contact-info p {
-        font-size: 13px;
-        color: var(--gray);
-    }
-
-    .complete-actions {
-        display: flex;
-        gap: 12px;
-    }
-
-    .complete-actions .btn {
-        flex: 1;
-    }
-
-    /* 底部导航栏 */
+    /* 底部导航 - 高级设计 */
     .bottom-nav {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
+        background: rgba(26, 26, 46, 0.8);
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 12px 24px;
         display: flex;
-        justify-content: space-around;
-        padding: 12px 16px;
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
-        box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.1);
+        justify-content: space-between;
+        align-items: center;
         z-index: 1000;
     }
 
@@ -1051,93 +604,194 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 4px;
-        color: var(--gray);
-        font-size: 12px;
+        gap: 6px;
         cursor: pointer;
         transition: var(--transition);
         position: relative;
-        padding: 8px 12px;
-        border-radius: var(--border-radius-xs);
+        padding: 8px;
+        border-radius: var(--radius-sm);
     }
 
-    .nav-item:active {
-        background: rgba(67, 97, 238, 0.1);
+    .nav-item::before {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0);
+        width: 60px;
+        height: 60px;
+        background: var(--primary-gradient);
+        border-radius: 50%;
+        opacity: 0.1;
+        transition: var(--transition);
+    }
+
+    .nav-item:hover::before {
+        transform: translate(-50%, -50%) scale(1);
     }
 
     .nav-item.active {
-        color: var(--primary);
+        transform: translateY(-5px);
     }
 
-    .nav-item i {
+    .nav-item.active .nav-icon {
+        background: var(--primary-gradient);
+        box-shadow: 0 8px 20px rgba(123, 104, 238, 0.4);
+    }
+
+    .nav-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 16px;
+        background: rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: var(--transition);
+        position: relative;
+    }
+
+    .nav-icon i {
         font-size: 20px;
+        color: white;
+        transition: var(--transition);
+    }
+
+    .nav-item.active .nav-icon i {
+        color: white;
     }
 
     .cart-badge {
         position: absolute;
-        top: -2px;
-        right: 0;
-        background: var(--danger);
+        top: -5px;
+        right: -5px;
+        background: var(--secondary);
         color: white;
-        font-size: 10px;
-        width: 18px;
-        height: 18px;
+        font-size: 11px;
+        font-weight: 700;
+        width: 22px;
+        height: 22px;
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
+        box-shadow: 0 4px 10px rgba(255, 107, 139, 0.4);
+        animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.1); }
+    }
+
+    .nav-label {
+        font-size: 12px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.6);
+        transition: var(--transition);
+    }
+
+    .nav-item.active .nav-label {
+        color: var(--primary-light);
         font-weight: 600;
     }
 
     /* 音乐播放器 */
     .music-player {
         position: fixed;
-        bottom: 70px;
-        right: 16px;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(20px);
-        -webkit-backdrop-filter: blur(20px);
-        border-radius: 25px;
-        padding: 10px 16px;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        box-shadow: var(--shadow);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        bottom: 90px;
+        right: 24px;
         z-index: 999;
-        transform: translateY(0);
         transition: var(--transition);
+        opacity: 1;
+        transform: translateY(0);
     }
 
     .music-player.hidden {
+        opacity: 0;
         transform: translateY(100px);
     }
 
-    .music-info {
-        font-size: 12px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 120px;
+    .player-glass {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(40px);
+        -webkit-backdrop-filter: blur(40px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        padding: 16px;
+        width: 300px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        animation: slideInUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1);
     }
 
-    .now-playing {
-        font-weight: 600;
-        color: var(--primary);
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px) scale(0.9);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
     }
 
-    .music-controls {
+    .player-info {
         display: flex;
-        gap: 8px;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 20px;
     }
 
-    .music-btn {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, var(--primary), var(--accent));
+    .song-cover {
+        width: 60px;
+        height: 60px;
+        background: linear-gradient(135deg, #7B68EE, #00D4FF);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
         color: white;
-        border: none;
+        box-shadow: 0 8px 20px rgba(123, 104, 238, 0.4);
+        animation: rotate 20s linear infinite;
+    }
+
+    @keyframes rotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+    }
+
+    .song-info {
+        flex: 1;
+    }
+
+    .song-title {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 4px;
+        background: linear-gradient(90deg, #fff, var(--accent));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .song-artist {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .player-controls {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+    }
+
+    .control-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -1145,541 +799,919 @@
         transition: var(--transition);
     }
 
-    .music-btn:active {
-        transform: scale(0.95);
+    .control-btn:hover {
+        background: var(--primary-gradient);
+        transform: scale(1.1);
+        box-shadow: 0 10px 20px rgba(123, 104, 238, 0.4);
     }
 
-    /* 响应式调整 */
-    @media (max-width: 360px) {
-        .page-title {
-            font-size: 22px;
-        }
-        
-        .product-icon {
-            width: 44px;
-            height: 44px;
-            font-size: 20px;
-        }
-        
-        .product-name {
-            font-size: 16px;
-        }
-        
-        .btn {
-            padding: 12px 16px;
-            font-size: 15px;
-        }
-        
-        .qr-container {
-            width: 180px;
-            height: 180px;
-        }
-        
-        .music-player {
-            bottom: 60px;
-            right: 12px;
-            padding: 8px 12px;
-        }
+    .play-btn {
+        width: 60px;
+        height: 60px;
+        background: var(--primary-gradient);
+        box-shadow: 0 10px 30px rgba(123, 104, 238, 0.4);
     }
 
-    /* 通知 */
-    .notification {
-        position: fixed;
-        top: 60px;
-        left: 50%;
-        transform: translateX(-50%);
-        background: linear-gradient(135deg, var(--primary), var(--accent));
-        color: white;
-        padding: 12px 24px;
-        border-radius: 25px;
-        box-shadow: var(--shadow);
-        z-index: 2000;
+    .play-btn:hover {
+        transform: scale(1.15);
+    }
+</style>
+    <!-- 购物车页面 -->
+    <div class="page" id="cart-page">
+        <div class="page-header">
+            <h1 class="page-title neon-glow">购物车</h1>
+            <p class="page-subtitle">管理您的购物清单</p>
+        </div>
+
+        <div id="cart-container">
+            <div class="glass-card" style="text-align: center; padding: 60px 28px;" id="empty-cart">
+                <div class="empty-state">
+                    <div class="empty-icon">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <h3 style="font-size: 24px; margin: 24px 0 12px; font-weight: 700;">购物车空空如也</h3>
+                    <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 32px;">
+                        快去挑选心仪的商品吧！
+                    </p>
+                    <button class="btn-glow" onclick="showPage('products')">
+                        <i class="fas fa-store"></i>
+                        去逛逛
+                    </button>
+                </div>
+            </div>
+
+            <div id="cart-content" style="display: none;">
+                <!-- 购物车项目将通过JS生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 付款页面 -->
+    <div class="page" id="checkout-page">
+        <div class="page-header">
+            <h1 class="page-title neon-glow">付款</h1>
+            <p class="page-subtitle">选择付款方式，完成购买</p>
+        </div>
+
+        <div class="glass-card">
+            <!-- 订单摘要 -->
+            <div class="order-summary">
+                <h3 style="font-size: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                    <i class="fas fa-receipt" style="color: var(--accent);"></i>
+                    订单摘要
+                </h3>
+                
+                <div id="order-items">
+                    <!-- 订单项目将通过JS生成 -->
+                </div>
+                
+                <div class="order-total">
+                    <div class="total-row">
+                        <span>总计</span>
+                        <span id="order-total" class="total-amount">$0.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 付款方式 -->
+            <div style="margin-top: 32px;">
+                <h3 style="font-size: 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                    <i class="fas fa-credit-card" style="color: var(--success);"></i>
+                    选择付款方式
+                </h3>
+                
+                <div class="payment-methods">
+                    <div class="payment-method active" data-method="tng" onclick="selectPayment('tng')">
+                        <div class="payment-icon" style="background: linear-gradient(135deg, #25D366, #128C7E);">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <div class="payment-info">
+                            <h4>TNG eWallet</h4>
+                            <p>扫码或手机号支付</p>
+                        </div>
+                        <div class="payment-check">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-method" data-method="ltc" onclick="selectPayment('ltc')">
+                        <div class="payment-icon" style="background: linear-gradient(135deg, #BF5AF2, #8A2BE2);">
+                            <i class="fab fa-bitcoin"></i>
+                        </div>
+                        <div class="payment-info">
+                            <h4>Litecoin</h4>
+                            <p>加密货币支付</p>
+                        </div>
+                        <div class="payment-check">
+                            <i class="fas fa-check"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 付款详情 -->
+            <div id="payment-details">
+                <!-- 付款详情将通过JS生成 -->
+            </div>
+
+            <!-- 操作按钮 -->
+            <div class="checkout-actions">
+                <button class="btn-secondary" onclick="showPage('cart')">
+                    <i class="fas fa-arrow-left"></i>
+                    返回购物车
+                </button>
+                <button class="btn-glow" onclick="completePayment()">
+                    <i class="fas fa-lock"></i>
+                    确认付款
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 完成页面 -->
+    <div class="page" id="complete-page">
+        <div class="page-header">
+            <h1 class="page-title neon-glow">完成！</h1>
+            <p class="page-subtitle">感谢您的购买</p>
+        </div>
+
+        <div class="glass-card" style="text-align: center; padding: 40px 28px;">
+            <div class="success-animation">
+                <div class="success-icon">
+                    <i class="fas fa-check"></i>
+                </div>
+                <div class="confetti"></div>
+            </div>
+            
+            <h2 style="font-size: 28px; margin: 32px 0 16px; font-weight: 700;">付款成功！</h2>
+            <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 32px; line-height: 1.6;">
+                订单已确认，商品将很快发送到您的邮箱。<br>
+                如有任何问题，请立即联系我们。
+            </p>
+            
+            <div class="contact-info">
+                <div class="contact-item" onclick="openWhatsApp()">
+                    <div class="contact-icon" style="background: #25D366;">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div>
+                        <h4>WhatsApp客服</h4>
+                        <p>+60 11-6243 0710</p>
+                    </div>
+                </div>
+                
+                <div class="contact-item" onclick="openDiscord()">
+                    <div class="contact-icon" style="background: #5865F2;">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <div>
+                        <h4>Discord社区</h4>
+                        <p>discord.gg/3BRcSV5Jvf</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="complete-actions">
+                <button class="btn-glow" onclick="showPage('home')">
+                    <i class="fas fa-home"></i>
+                    返回首页
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* 购物车样式 */
+    .cart-item {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius-sm);
+        padding: 20px;
+        margin-bottom: 16px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        transition: var(--transition);
+    }
+
+    .cart-item:hover {
+        background: rgba(255, 255, 255, 0.08);
+        transform: translateX(5px);
+    }
+
+    .cart-item-info {
+        flex: 1;
+    }
+
+    .cart-item-name {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .cart-item-desc {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 8px;
+    }
+
+    .cart-item-price {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--success);
+    }
+
+    .cart-item-controls {
         display: flex;
         align-items: center;
         gap: 12px;
-        animation: slideDown 0.3s ease, slideUp 0.3s ease 2.7s forwards;
-        max-width: 90%;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 
-    @keyframes slideDown {
-        from {
-            opacity: 0;
-            transform: translate(-50%, -20px);
-        }
-        to {
-            opacity: 1;
-            transform: translate(-50%, 0);
-        }
+    .quantity-control {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 6px;
     }
 
-    @keyframes slideUp {
-        from {
-            opacity: 1;
-            transform: translate(-50%, 0);
-        }
-        to {
-            opacity: 0;
-            transform: translate(-50%, -20px);
-        }
+    .qty-btn {
+        width: 30px;
+        height: 30px;
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .qty-btn:hover {
+        background: var(--primary-light);
+        transform: scale(1.1);
+    }
+
+    .qty-value {
+        min-width: 30px;
+        text-align: center;
+        font-weight: 600;
+        font-size: 16px;
+    }
+
+    .remove-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: rgba(255, 71, 87, 0.2);
+        border: 1px solid rgba(255, 71, 87, 0.3);
+        color: var(--danger);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .remove-btn:hover {
+        background: var(--danger);
+        color: white;
+        transform: rotate(90deg);
+    }
+
+    /* 订单摘要 */
+    .order-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .order-item:last-child {
+        border-bottom: none;
+    }
+
+    .order-total {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .total-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .total-amount {
+        font-size: 32px;
+        font-weight: 800;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    /* 付款方式 */
+    .payment-methods {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .payment-method {
+        background: rgba(255, 255, 255, 0.05);
+        border: 2px solid transparent;
+        border-radius: var(--radius-sm);
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .payment-method:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateX(5px);
+    }
+
+    .payment-method.active {
+        border-color: var(--primary-light);
+        background: rgba(123, 104, 238, 0.1);
+    }
+
+    .payment-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 24px;
+    }
+
+    .payment-info {
+        flex: 1;
+    }
+
+    .payment-info h4 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .payment-info p {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.6);
+    }
+
+    .payment-check {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--success);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 14px;
+        opacity: 0;
+        transition: var(--transition);
+    }
+
+    .payment-method.active .payment-check {
+        opacity: 1;
+        animation: bounceIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    }
+
+    @keyframes bounceIn {
+        0% { transform: scale(0); }
+        50% { transform: scale(1.2); }
+        100% { transform: scale(1); }
+    }
+
+    /* 付款详情 */
+    .payment-detail {
+        margin-top: 32px;
+        padding-top: 32px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+
+    .qr-code-container {
+        text-align: center;
+        margin: 32px 0;
+    }
+
+    .qr-code {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 16px;
+        padding: 16px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+
+    .qr-code img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        border-radius: 8px;
+    }
+
+    .payment-instructions {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius-sm);
+        padding: 20px;
+        margin-bottom: 24px;
+    }
+
+    .instruction-step {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .instruction-step:last-child {
+        margin-bottom: 0;
+    }
+
+    .step-number {
+        width: 32px;
+        height: 32px;
+        background: var(--primary-gradient);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 14px;
+        flex-shrink: 0;
+    }
+
+    .step-content h4 {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .step-content p {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.6);
+        line-height: 1.4;
+    }
+
+    /* 操作按钮 */
+    .checkout-actions {
+        display: flex;
+        gap: 16px;
+        margin-top: 32px;
+    }
+
+    .btn-secondary {
+        flex: 1;
+        padding: 18px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: var(--radius-sm);
+        color: white;
+        font-size: 15px;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-2px);
+    }
+
+    /* 完成页面样式 */
+    .success-animation {
+        position: relative;
+        display: inline-block;
+    }
+
+    .success-icon {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, var(--success), var(--accent));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 48px;
+        color: white;
+        margin: 0 auto;
+        box-shadow: 0 20px 60px rgba(0, 229, 168, 0.4);
+        animation: successPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes successPulse {
+        0%, 100% { transform: scale(1); box-shadow: 0 20px 60px rgba(0, 229, 168, 0.4); }
+        50% { transform: scale(1.05); box-shadow: 0 30px 80px rgba(0, 229, 168, 0.6); }
+    }
+
+    .confetti {
+        position: absolute;
+        top: -20px;
+        left: -20px;
+        right: -20px;
+        bottom: -20px;
+        pointer-events: none;
+    }
+
+    .confetti::before,
+    .confetti::after {
+        content: '✨';
+        position: absolute;
+        animation: confettiFloat 3s ease-in-out infinite;
+    }
+
+    .confetti::before {
+        top: 10px;
+        left: 20px;
+        animation-delay: 0s;
+    }
+
+    .confetti::after {
+        top: 20px;
+        right: 20px;
+        animation-delay: 0.5s;
+    }
+
+    @keyframes confettiFloat {
+        0%, 100% { transform: translateY(0) rotate(0deg); opacity: 0.8; }
+        50% { transform: translateY(-20px) rotate(180deg); opacity: 1; }
+    }
+
+    .contact-info {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius-sm);
+        padding: 20px;
+        margin: 32px 0;
+    }
+
+    .contact-item {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: var(--radius-xs);
+        margin-bottom: 12px;
+        cursor: pointer;
+        transition: var(--transition);
+    }
+
+    .contact-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .contact-item:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateX(5px);
+    }
+
+    .contact-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+    }
+
+    .contact-item h4 {
+        font-size: 15px;
+        font-weight: 600;
+        margin-bottom: 2px;
+    }
+
+    .contact-item p {
+        font-size: 13px;
+        color: rgba(255, 255, 255, 0.6);
     }
 </style>
 <script>
+    // 创建星空背景
+    function createStars() {
+        const starsContainer = document.getElementById('stars');
+        const starsCount = 100;
+        
+        for (let i = 0; i < starsCount; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            
+            // 随机大小
+            const size = Math.random() * 3 + 1;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            
+            // 随机位置
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            
+            // 随机闪烁时间
+            star.style.setProperty('--duration', `${Math.random() * 3 + 2}s`);
+            
+            starsContainer.appendChild(star);
+        }
+    }
+
     // 数据
-    let currentLanguage = 'zh';
     let cart = [];
     let currentPaymentMethod = 'tng';
     let isPlaying = false;
     let youtubePlayer = null;
-    
-    // 翻译数据
-    const translations = {
-        zh: {
-            homeTitle: "虚拟商店",
-            homeSubtitle: "购买Discord Nitro、Robux、Spotify Premium和Canva Pro",
-            startShopping: "开始购物",
-            productsTitle: "精选商品",
-            productsSubtitle: "选择您需要的商品添加到购物车",
-            cartTitle: "购物车",
-            cartSubtitle: "查看并管理您的购物车",
-            checkoutTitle: "付款",
-            checkoutSubtitle: "选择付款方式完成购买",
-            emptyCart: "购物车是空的",
-            browseProducts: "浏览商品",
-            subtotal: "小计",
-            fee: "手续费",
-            total: "总计",
-            proceedCheckout: "前往付款",
-            nitroName: "Discord Nitro",
-            nitroDesc: "增强您的Discord体验",
-            nitroLinkOption: "链接激活",
-            nitroLoginOption: "账号登入",
-            robuxName: "Robux",
-            robuxDesc: "Roblox游戏货币",
-            robuxTaxOption: "包税 (500 Robux)",
-            robuxNoTaxOption: "不包税 (450 Robux)",
-            robuxGiftOption: "代送服务",
-            spotifyName: "Spotify Premium",
-            spotifyDesc: "无广告音乐体验",
-            spotify4Option: "4个月",
-            spotify8Option: "8个月",
-            spotify12Option: "12个月",
-            canvaName: "Canva Pro",
-            canvaDesc: "专业设计工具",
-            canvaOption: "1年订阅",
-            addToCart: "加入购物车",
-            paymentSuccess: "付款成功！",
-            paymentMessage: "感谢您的购买！您的订单已确认，商品将很快发送到您的电子邮件。",
-            importantReminder: "重要提醒",
-            contactNote: "付款后请务必通过以下方式联系我们确认付款：",
-            returnHome: "返回首页",
-            continueShopping: "继续购物"
-        },
-        en: {
-            homeTitle: "Virtual Store",
-            homeSubtitle: "Purchase Discord Nitro, Robux, Spotify Premium and Canva Pro",
-            startShopping: "Start Shopping",
-            productsTitle: "Products",
-            productsSubtitle: "Select products and add to cart",
-            cartTitle: "Shopping Cart",
-            cartSubtitle: "View and manage your cart",
-            checkoutTitle: "Checkout",
-            checkoutSubtitle: "Select payment method",
-            emptyCart: "Your cart is empty",
-            browseProducts: "Browse Products",
-            subtotal: "Subtotal",
-            fee: "Service Fee",
-            total: "Total",
-            proceedCheckout: "Proceed to Checkout",
-            nitroName: "Discord Nitro",
-            nitroDesc: "Enhance your Discord experience",
-            nitroLinkOption: "Link Activation",
-            nitroLoginOption: "Account Login",
-            robuxName: "Robux",
-            robuxDesc: "Roblox game currency",
-            robuxTaxOption: "With Tax (500 Robux)",
-            robuxNoTaxOption: "No Tax (450 Robux)",
-            robuxGiftOption: "Gifting Service",
-            spotifyName: "Spotify Premium",
-            spotifyDesc: "Ad-free music experience",
-            spotify4Option: "4 Months",
-            spotify8Option: "8 Months",
-            spotify12Option: "12 Months",
-            canvaName: "Canva Pro",
-            canvaDesc: "Professional design tool",
-            canvaOption: "1 Year Subscription",
-            addToCart: "Add to Cart",
-            paymentSuccess: "Payment Successful!",
-            paymentMessage: "Thank you for your purchase! Your order has been confirmed.",
-            importantReminder: "Important Reminder",
-            contactNote: "Please contact us after payment to confirm:",
-            returnHome: "Return Home",
-            continueShopping: "Continue Shopping"
-        }
-    };
 
     // 商品数据
     const products = [
         {
             id: 1,
-            nameKey: "nitroName",
-            descKey: "nitroDesc",
-            icon: "fas fa-gamepad",
+            name: "Discord Nitro",
+            description: "增强您的Discord体验",
+            icon: "fab fa-discord",
+            gradient: "linear-gradient(135deg, #5865F2, #7289DA)",
             options: [
-                { nameKey: "nitroLinkOption", priceUSD: 9.99 },
-                { nameKey: "nitroLoginOption", priceUSD: 8.99 }
+                { name: "链接激活", price: 9.99 },
+                { name: "账号登入", price: 8.99 }
             ]
         },
         {
             id: 2,
-            nameKey: "robuxName",
-            descKey: "robuxDesc",
+            name: "Robux",
+            description: "Roblox游戏货币",
             icon: "fas fa-gem",
+            gradient: "linear-gradient(135deg, #FF6B8B, #FF8E53)",
             options: [
-                { nameKey: "robuxTaxOption", priceUSD: 5.99 },
-                { nameKey: "robuxNoTaxOption", priceUSD: 5.49 },
-                { nameKey: "robuxGiftOption", priceUSD: 6.49 }
+                { name: "包税 (500 Robux)", price: 5.99 },
+                { name: "不包税 (450 Robux)", price: 5.49 },
+                { name: "代送服务", price: 6.49 }
             ]
         },
         {
             id: 3,
-            nameKey: "spotifyName",
-            descKey: "spotifyDesc",
+            name: "Spotify Premium",
+            description: "无广告音乐体验",
             icon: "fab fa-spotify",
+            gradient: "linear-gradient(135deg, #1DB954, #1ED760)",
             options: [
-                { nameKey: "spotify4Option", priceUSD: 15.99 },
-                { nameKey: "spotify8Option", priceUSD: 29.99 },
-                { nameKey: "spotify12Option", priceUSD: 39.99 }
+                { name: "4个月", price: 15.99 },
+                { name: "8个月", price: 29.99 },
+                { name: "12个月", price: 39.99 }
             ]
         },
         {
             id: 4,
-            nameKey: "canvaName",
-            descKey: "canvaDesc",
+            name: "Canva Pro",
+            description: "专业设计工具",
             icon: "fas fa-palette",
+            gradient: "linear-gradient(135deg, #00C4CC, #7C4DFF)",
             options: [
-                { nameKey: "canvaOption", priceUSD: 119.99 }
+                { name: "1年订阅", price: 119.99 }
             ]
         }
     ];
 
     // 页面初始化
     document.addEventListener('DOMContentLoaded', function() {
-        updateLanguage();
+        createStars();
         renderProducts();
         updateCartDisplay();
+        renderPaymentDetails();
         
         // 初始化YouTube播放器
-        initYouTubePlayer();
-        
-        // 添加音乐播放器点击事件
-        document.querySelector('.music-player').addEventListener('click', function(e) {
-            if (!e.target.closest('.music-btn')) {
-                toggleMusicPlayer();
-            }
-        });
-    });
-
-    // 初始化YouTube播放器
-    function initYouTubePlayer() {
         const tag = document.createElement('script');
         tag.src = "https://www.youtube.com/iframe_api";
         const firstScriptTag = document.getElementsByTagName('script')[0];
         firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-    }
+    });
 
     // YouTube API准备就绪
-    function onYouTubeIframeAPIReady() {
-        youtubePlayer = new YT.Player('youtube-player', {
+    window.onYouTubeIframeAPIReady = function() {
+        youtubePlayer = new YT.Player('youtubeFrame', {
             events: {
                 'onReady': onPlayerReady,
                 'onStateChange': onPlayerStateChange
             }
         });
-    }
+    };
 
     function onPlayerReady(event) {
-        // 播放器准备就绪
         console.log('YouTube播放器准备就绪');
     }
 
     function onPlayerStateChange(event) {
-        // 播放状态变化
+        const playIcon = document.getElementById('playIcon');
         if (event.data === YT.PlayerState.PLAYING) {
-            document.getElementById('play-icon').className = 'fas fa-pause';
-            document.querySelector('.now-playing').textContent = 
-                currentLanguage === 'zh' ? '正在播放: YouTube音乐' : 'Now Playing: YouTube Music';
+            playIcon.className = 'fas fa-pause';
+            document.querySelector('.song-title').textContent = 'Now Playing - YouTube';
+            isPlaying = true;
         } else if (event.data === YT.PlayerState.PAUSED) {
-            document.getElementById('play-icon').className = 'fas fa-play';
-            document.querySelector('.now-playing').textContent = 
-                currentLanguage === 'zh' ? '已暂停' : 'Paused';
+            playIcon.className = 'fas fa-play';
+            isPlaying = false;
         }
     }
 
     // 切换页面
     function showPage(pageId) {
         // 隐藏所有页面
-        document.querySelectorAll('.page-container').forEach(page => {
+        document.querySelectorAll('.page').forEach(page => {
             page.classList.remove('active');
         });
         
         // 显示目标页面
         document.getElementById(`${pageId}-page`).classList.add('active');
         
-        // 更新底部导航活动状态
+        // 更新导航状态
         document.querySelectorAll('.nav-item').forEach(item => {
             item.classList.remove('active');
         });
         
-        const activeItem = document.querySelector(`.nav-item[onclick*="${pageId}"]`);
-        if (activeItem) {
-            activeItem.classList.add('active');
+        const navItem = document.querySelector(`.nav-item[onclick*="'${pageId}'"]`);
+        if (navItem) {
+            navItem.classList.add('active');
         }
         
-        // 如果是商品页面，确保已渲染
-        if (pageId === 'products') {
-            renderProducts();
-        }
-        // 如果是购物车页面，更新显示
-        else if (pageId === 'cart') {
+        // 更新页面内容
+        if (pageId === 'cart') {
             updateCartDisplay();
+        } else if (pageId === 'checkout') {
+            updateCheckoutDisplay();
         }
     }
 
-    // 设置语言
-    function setLanguage(lang) {
-        currentLanguage = lang;
-        updateLanguage();
-        renderProducts();
-        updateCartDisplay();
-    }
-// 更新语言
-function updateLanguage() {
-    // 更新页面标题和副标题
-    const pages = ['home', 'products', 'cart', 'checkout', 'complete'];
-    pages.forEach(page => {
-        const pageEl = document.getElementById(`${page}-page`);
-        if (pageEl) {
-            const title = pageEl.querySelector('.page-title');
-            const subtitle = pageEl.querySelector('.page-subtitle');
+    // 渲染商品
+    function renderProducts() {
+        const container = document.getElementById('products-container');
+        container.innerHTML = '';
+        
+        products.forEach(product => {
+            const productHTML = `
+                <div class="product-item">
+                    <div class="product-header">
+                        <div class="product-icon" style="background: ${product.gradient};">
+                            <i class="${product.icon}"></i>
+                        </div>
+                        <div class="product-info">
+                            <h3>${product.name}</h3>
+                            <p>${product.description}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="product-options">
+                        ${product.options.map((option, index) => `
+                            <div class="option-row">
+                                <div class="option-info">
+                                    <div class="option-name">${option.name}</div>
+                                    <div class="option-desc">快速发货 · 安全可靠</div>
+                                </div>
+                                <div class="option-price">$${option.price}</div>
+                                <button class="add-btn" onclick="addToCart(${product.id}, ${index})">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    
+                    <div class="product-footer">
+                        <button class="add-all-btn" onclick="addToCart(${product.id}, 0)">
+                            <i class="fas fa-cart-plus"></i>
+                            加入购物车
+                        </button>
+                    </div>
+                </div>
+            `;
             
-            if (title && translations[currentLanguage][`${page}Title`]) {
-                title.textContent = translations[currentLanguage][`${page}Title`];
-            }
-            if (subtitle && translations[currentLanguage][`${page}Subtitle`]) {
-                subtitle.textContent = translations[currentLanguage][`${page}Subtitle`];
-            }
-        }
-    });
-    
-    // 更新完成页面内容
-    const completePage = document.getElementById('complete-page');
-    if (completePage) {
-        const message = completePage.querySelector('.page-subtitle');
-        if (message) {
-            message.textContent = translations[currentLanguage].paymentMessage;
-        }
-        
-        const reminderTitle = completePage.querySelector('h3');
-        if (reminderTitle) {
-            reminderTitle.textContent = translations[currentLanguage].importantReminder;
-        }
-        
-        const contactNote = completePage.querySelector('p');
-        if (contactNote && contactNote.textContent.includes('付款后')) {
-            contactNote.textContent = translations[currentLanguage].contactNote;
-        }
-        
-        const buttons = completePage.querySelectorAll('.btn');
-        if (buttons[0]) {
-            buttons[0].innerHTML = `<i class="fas fa-home"></i> ${translations[currentLanguage].returnHome}`;
-        }
-        if (buttons[1]) {
-            buttons[1].innerHTML = `<i class="fas fa-shopping-cart"></i> ${translations[currentLanguage].continueShopping}`;
-        }
+            container.innerHTML += productHTML;
+        });
     }
-    
-    // 更新按钮文本
-    document.querySelectorAll('.btn-primary').forEach(btn => {
-        if (btn.textContent.includes('开始购物')) {
-            btn.innerHTML = `<i class="fas fa-store"></i> ${translations[currentLanguage].startShopping}`;
-        } else if (btn.textContent.includes('浏览商品')) {
-            btn.innerHTML = `<i class="fas fa-store"></i> ${translations[currentLanguage].browseProducts}`;
-        } else if (btn.textContent.includes('前往付款')) {
-            btn.innerHTML = `<i class="fas fa-credit-card"></i> ${translations[currentLanguage].proceedCheckout}`;
-        }
-    });
-}
 
-// 渲染商品
-function renderProducts() {
-    const container = document.getElementById('products-container');
-    if (!container) return;
-    
-    container.innerHTML = '';
-    
-    products.forEach(product => {
-        const productCard = document.createElement('div');
-        productCard.className = 'product-card';
+    // 添加到购物车
+    function addToCart(productId, optionIndex) {
+        const product = products.find(p => p.id === productId);
+        const option = product.options[optionIndex];
         
-        let optionsHTML = '';
-        product.options.forEach((option, index) => {
-            optionsHTML += `
-                <div class="option-item">
-                    <div class="option-name">${translations[currentLanguage][option.nameKey]}</div>
-                    <div class="option-price">$${option.priceUSD}</div>
-                    <button class="option-action" onclick="addToCart(${product.id}, ${index})">
-                        <i class="fas fa-cart-plus"></i>
+        // 检查是否已存在相同商品和选项
+        const existingIndex = cart.findIndex(item => 
+            item.productId === productId && item.optionIndex === optionIndex
+        );
+        
+        if (existingIndex > -1) {
+            cart[existingIndex].quantity += 1;
+        } else {
+            cart.push({
+                id: Date.now(),
+                productId: productId,
+                optionIndex: optionIndex,
+                name: product.name,
+                optionName: option.name,
+                price: option.price,
+                quantity: 1
+            });
+        }
+        
+        updateCartDisplay();
+        showNotification(`🎉 ${product.name} 已添加到购物车`);
+    }
+
+    // 更新购物车显示
+    function updateCartDisplay() {
+        // 更新徽章
+        const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+        document.getElementById('cart-badge').textContent = totalItems;
+        
+        // 更新购物车页面
+        const container = document.getElementById('cart-container');
+        const content = document.getElementById('cart-content');
+        const empty = document.getElementById('empty-cart');
+        
+        if (cart.length === 0) {
+            empty.style.display = 'block';
+            content.style.display = 'none';
+        } else {
+            empty.style.display = 'none';
+            content.style.display = 'block';
+            
+            let itemsHTML = '';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                itemsHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <div class="cart-item-name">${item.name}</div>
+                            <div class="cart-item-desc">${item.optionName}</div>
+                            <div class="cart-item-price">$${itemTotal.toFixed(2)}</div>
+                        </div>
+                        <div class="cart-item-controls">
+                            <div class="quantity-control">
+                                <button class="qty-btn" onclick="updateQuantity(${index}, -1)">
+                                    <i class="fas fa-minus"></i>
+                                </button>
+                                <span class="qty-value">${item.quantity}</span>
+                                <button class="qty-btn" onclick="updateQuantity(${index}, 1)">
+                                    <i class="fas fa-plus"></i>
+                                </button>
+                            </div>
+                            <button class="remove-btn" onclick="removeFromCart(${index})">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            // 添加总结
+            itemsHTML += `
+                <div class="glass-card" style="margin-top: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 16px;">
+                        <span>小计</span>
+                        <span style="font-weight: 600;">$${total.toFixed(2)}</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 24px;">
+                        <span>手续费</span>
+                        <span style="color: var(--accent);">$0.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding-top: 20px; border-top: 2px solid rgba(255, 255, 255, 0.1);">
+                        <span style="font-size: 20px; font-weight: 700;">总计</span>
+                        <span style="font-size: 24px; font-weight: 800; background: var(--primary-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                            $${total.toFixed(2)}
+                        </span>
+                    </div>
+                    <button class="btn-glow" onclick="showPage('checkout')" style="width: 100%; margin-top: 24px;">
+                        <i class="fas fa-credit-card"></i>
+                        前往付款
                     </button>
                 </div>
             `;
-        });
-        
-        productCard.innerHTML = `
-            <div class="product-header">
-                <div class="product-icon">
-                    <i class="${product.icon}"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-name">${translations[currentLanguage][product.nameKey]}</div>
-                    <div class="product-desc">${translations[currentLanguage][product.descKey]}</div>
-                </div>
-            </div>
-            <div class="product-options">
-                ${optionsHTML}
-            </div>
-            <div class="product-action">
-                <button class="btn-primary btn-small" onclick="addToCart(${product.id}, 0)">
-                    <i class="fas fa-cart-plus"></i>
-                    ${translations[currentLanguage].addToCart}
-                </button>
-            </div>
-        `;
-        
-        container.appendChild(productCard);
-    });
-}
-
-// 添加到购物车
-function addToCart(productId, optionIndex) {
-    const product = products.find(p => p.id === productId);
-    const option = product.options[optionIndex];
-    
-    // 检查是否已存在相同商品和选项
-    const existingItemIndex = cart.findIndex(item => 
-        item.productId === productId && item.optionIndex === optionIndex
-    );
-    
-    if (existingItemIndex > -1) {
-        // 增加数量
-        cart[existingItemIndex].quantity += 1;
-    } else {
-        // 添加新项目
-        cart.push({
-            id: Date.now(),
-            productId: productId,
-            optionIndex: optionIndex,
-            name: translations[currentLanguage][product.nameKey],
-            optionName: translations[currentLanguage][option.nameKey],
-            priceUSD: option.priceUSD,
-            quantity: 1
-        });
+            
+            content.innerHTML = itemsHTML;
+        }
     }
-    
-    updateCartDisplay();
-    showNotification(
-        currentLanguage === 'zh' 
-            ? `${translations[currentLanguage][product.nameKey]} 已添加到购物车`
-            : `${translations[currentLanguage][product.nameKey]} added to cart`
-    );
-}
-
-// 更新购物车显示
-function updateCartDisplay() {
-    // 更新购物车徽章
-    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-    document.getElementById('cart-badge').textContent = totalItems;
-    
-    // 更新购物车页面
-    updateCartPage();
-}
-
-// 更新购物车页面
-function updateCartPage() {
-    const container = document.getElementById('cart-items-container');
-    const summarySection = document.getElementById('cart-summary-section');
-    
-    if (!container) return;
-    
-    if (cart.length === 0) {
-        container.innerHTML = `
-            <div id="empty-cart" style="text-align: center; padding: 40px 20px; color: var(--gray);">
-                <div style="width: 80px; height: 80px; background: rgba(0, 0, 0, 0.05); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                    <i class="fas fa-shopping-cart" style="font-size: 36px; color: var(--gray);"></i>
-                </div>
-                <h3 style="margin-bottom: 8px; color: var(--dark); font-size: 18px;">${translations[currentLanguage].emptyCart}</h3>
-                <p style="margin-bottom: 24px; font-size: 14px;">${currentLanguage === 'zh' ? '去商品页面添加一些商品吧！' : 'Go to products page to add some items!'}</p>
-                <button class="btn-primary btn-small" onclick="showPage('products')" style="max-width: 200px; margin: 0 auto;">
-                    <i class="fas fa-store"></i>
-                    ${translations[currentLanguage].browseProducts}
-                </button>
-            </div>
-        `;
-        
-        summarySection.style.display = 'none';
-        return;
-    }
-    
-    // 计算总价
-    let subtotalUSD = 0;
-    
-    // 生成购物车项目HTML
-    let itemsHTML = '';
-    cart.forEach((item, index) => {
-        const itemTotalUSD = item.priceUSD * item.quantity;
-        subtotalUSD += itemTotalUSD;
-        
-        itemsHTML += `
-            <div class="cart-item">
-                <div class="cart-item-info">
-                    <div class="cart-item-name">${item.name}</div>
-                    <div class="cart-item-option">${item.optionName}</div>
-                </div>
-                <div class="cart-item-price">$${itemTotalUSD.toFixed(2)}</div>
-                <div class="cart-item-actions">
-                    <div class="quantity-control">
-                        <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">
-                            <i class="fas fa-minus"></i>
-                        </button>
-                        <span class="quantity">${item.quantity}</span>
-                        <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">
-                            <i class="fas fa-plus"></i>
-                        </button>
-                    </div>
-                    <button class="remove-btn" onclick="removeFromCart(${index})">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-    });
-    
-    const feeUSD = subtotalUSD * 0.02; // 2%手续费
-    const totalUSD = subtotalUSD + feeUSD;
-    
-    container.innerHTML = itemsHTML;
-    summarySection.style.display = 'block';
-    
-    // 更新价格
-    document.getElementById('cart-subtotal').textContent = `$${subtotalUSD.toFixed(2)}`;
-    document.getElementById('cart-fee').textContent = `$${feeUSD.toFixed(2)}`;
-    document.getElementById('cart-total').textContent = `$${totalUSD.toFixed(2)}`;
-    
-    // 更新付款页面订单
-    updateCheckoutOrder();
-}
         // 更新商品数量
         function updateQuantity(index, change) {
             const newQuantity = cart[index].quantity + change;
@@ -1697,79 +1729,182 @@ function updateCartPage() {
         function removeFromCart(index) {
             cart.splice(index, 1);
             updateCartDisplay();
-            showNotification(
-                currentLanguage === 'zh' 
-                    ? '商品已从购物车移除'
-                    : 'Item removed from cart'
-            );
+            showNotification('🗑️ 商品已移除');
         }
 
-        // 更新付款页面订单
-        function updateCheckoutOrder() {
-            const container = document.getElementById('checkout-items');
-            if (!container) return;
+        // 更新付款页面显示
+        function updateCheckoutDisplay() {
+            const container = document.getElementById('order-items');
+            let total = 0;
             
             if (cart.length === 0) {
-                container.innerHTML = '<p style="color: var(--gray); text-align: center; padding: 20px;">购物车是空的</p>';
-                document.getElementById('checkout-total').textContent = '$0.00';
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 40px 20px; color: rgba(255, 255, 255, 0.6);">
+                        <i class="fas fa-shopping-cart" style="font-size: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                        <p>购物车是空的</p>
+                    </div>
+                `;
+                document.getElementById('order-total').textContent = '$0.00';
                 return;
             }
             
             let itemsHTML = '';
-            let totalUSD = 0;
             
             cart.forEach(item => {
-                const itemTotalUSD = item.priceUSD * item.quantity;
-                totalUSD += itemTotalUSD;
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
                 
                 itemsHTML += `
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 12px;">
+                    <div class="order-item">
                         <div>
-                            <div style="font-weight: 500; color: var(--dark);">${item.name} × ${item.quantity}</div>
-                            <div style="font-size: 12px; color: var(--gray);">${item.optionName}</div>
+                            <div style="font-weight: 600;">${item.name}</div>
+                            <div style="font-size: 13px; color: rgba(255, 255, 255, 0.6);">${item.optionName} × ${item.quantity}</div>
                         </div>
-                        <div style="font-weight: 600; color: var(--primary);">$${itemTotalUSD.toFixed(2)}</div>
+                        <div style="font-weight: 700; color: var(--success);">$${itemTotal.toFixed(2)}</div>
                     </div>
                 `;
             });
             
-            const feeUSD = totalUSD * 0.02;
-            const grandTotalUSD = totalUSD + feeUSD;
+            // 添加手续费和总计
+            const fee = 0;
+            const grandTotal = total + fee;
+            
+            itemsHTML += `
+                <div class="order-item">
+                    <div style="color: rgba(255, 255, 255, 0.7);">手续费</div>
+                    <div style="color: var(--accent);">$${fee.toFixed(2)}</div>
+                </div>
+            `;
             
             container.innerHTML = itemsHTML;
-            document.getElementById('checkout-total').textContent = `$${grandTotalUSD.toFixed(2)}`;
+            document.getElementById('order-total').textContent = `$${grandTotal.toFixed(2)}`;
+        }
+
+        // 渲染付款详情
+        function renderPaymentDetails() {
+            const container = document.getElementById('payment-details');
+            
+            const tngDetails = `
+                <div class="payment-detail" id="tng-detail">
+                    <h4 style="font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                        <i class="fas fa-qrcode" style="color: var(--accent);"></i>
+                        TNG付款指南
+                    </h4>
+                    
+                    <div class="payment-instructions">
+                        <div class="instruction-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>打开TNG应用</h4>
+                                <p>在手机上打开Touch 'n Go电子钱包</p>
+                            </div>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>扫描QR码付款</h4>
+                                <p>扫描下面的QR码或使用手机号码支付</p>
+                            </div>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>确认付款</h4>
+                                <p>付款后点击"确认付款"按钮</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="qr-code-container">
+                        <div class="qr-code">
+                            <img src="https://i.ibb.co/mFC45kFx/IMG-20251215-184553-1.jpg" alt="TNG QR Code">
+                        </div>
+                        <div style="margin-top: 24px;">
+                            <p style="margin-bottom: 8px;"><i class="fas fa-phone-alt"></i> <strong>手机号码:</strong> +60 11-6243 0710</p>
+                            <p><i class="fab fa-whatsapp"></i> <strong>WhatsApp:</strong> +60 11-6243 0710</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            const ltcDetails = `
+                <div class="payment-detail" id="ltc-detail" style="display: none;">
+                    <h4 style="font-size: 18px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px;">
+                        <i class="fab fa-bitcoin" style="color: var(--accent);"></i>
+                        Litecoin付款指南
+                    </h4>
+                    
+                    <div class="payment-instructions">
+                        <div class="instruction-step">
+                            <div class="step-number">1</div>
+                            <div class="step-content">
+                                <h4>打开钱包应用</h4>
+                                <p>打开您的加密货币钱包</p>
+                            </div>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-number">2</div>
+                            <div class="step-content">
+                                <h4>发送LTC</h4>
+                                <p>发送LTC到以下地址或扫描QR码</p>
+                            </div>
+                        </div>
+                        <div class="instruction-step">
+                            <div class="step-number">3</div>
+                            <div class="step-content">
+                                <h4>确认付款</h4>
+                                <p>付款后通过WhatsApp联系我们确认</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="qr-code-container">
+                        <div class="qr-code">
+                            <img src="https://i.ibb.co/JjqdbnSn/IMG-20260102-WA0000.jpg" alt="LTC QR Code">
+                        </div>
+                        <div style="margin-top: 24px;">
+                            <p style="margin-bottom: 12px;"><i class="fas fa-wallet"></i> <strong>LTC地址:</strong></p>
+                            <div style="background: rgba(255, 255, 255, 0.05); padding: 16px; border-radius: 12px; font-family: monospace; font-size: 13px; word-break: break-all; margin-bottom: 16px;">
+                                ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw
+                            </div>
+                            <p><i class="fab fa-whatsapp"></i> <strong>付款后请WhatsApp截图确认</strong></p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = tngDetails + ltcDetails;
         }
 
         // 选择付款方式
-        function selectPaymentMethod(method) {
+        function selectPayment(method) {
             currentPaymentMethod = method;
             
             // 更新UI
-            document.querySelectorAll('.payment-method').forEach(option => {
-                option.classList.remove('active');
+            document.querySelectorAll('.payment-method').forEach(pm => {
+                pm.classList.remove('active');
             });
             
-            if (method === 'tng') {
-                document.querySelectorAll('.payment-method')[0].classList.add('active');
-                document.getElementById('tng-details').style.display = 'block';
-                document.getElementById('ltc-details').style.display = 'none';
-            } else {
-                document.querySelectorAll('.payment-method')[1].classList.add('active');
-                document.getElementById('tng-details').style.display = 'none';
-                document.getElementById('ltc-details').style.display = 'block';
-            }
+            document.querySelector(`.payment-method[data-method="${method}"]`).classList.add('active');
+            
+            // 显示对应的付款详情
+            document.getElementById('tng-detail').style.display = method === 'tng' ? 'block' : 'none';
+            document.getElementById('ltc-detail').style.display = method === 'ltc' ? 'block' : 'none';
         }
 
         // 完成付款
         function completePayment() {
             if (cart.length === 0) {
-                showNotification(
-                    currentLanguage === 'zh' 
-                        ? '购物车是空的'
-                        : 'Your cart is empty'
-                );
+                showNotification('🛒 购物车是空的');
                 return;
             }
+            
+            // 创建订单号
+            const orderId = 'ORD-' + Date.now().toString().slice(-8);
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            // 显示成功动画
+            showNotification('✨ 付款成功！');
             
             // 清空购物车
             cart = [];
@@ -1778,20 +1913,54 @@ function updateCartPage() {
             // 显示完成页面
             showPage('complete');
             
-            // 显示成功通知
-            showNotification(
-                currentLanguage === 'zh' 
-                    ? '付款成功！请通过WhatsApp联系我们确认'
-                    : 'Payment successful! Please contact us via WhatsApp to confirm'
-            );
+            // 播放成功音效
+            playSuccessSound();
+        }
+
+        // 播放成功音效
+        function playSuccessSound() {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // C5
+            oscillator.frequency.setValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+            oscillator.frequency.setValueAtTime(783.99, audioContext.currentTime + 0.2); // G5
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.5);
+        }
+
+        // 音乐控制
+        function togglePlayPause() {
+            if (!youtubePlayer) return;
+            
+            if (isPlaying) {
+                youtubePlayer.pauseVideo();
+            } else {
+                youtubePlayer.playVideo();
+            }
+            isPlaying = !isPlaying;
+        }
+
+        function prevSong() {
+            showNotification('⏮️ 上一首');
+        }
+
+        function nextSong() {
+            showNotification('⏭️ 下一首');
         }
 
         // 打开WhatsApp
         function openWhatsApp() {
             const phone = '+601162430710';
-            const message = currentLanguage === 'zh' 
-                ? '你好，我已经完成付款，订单详情如下：' 
-                : 'Hello, I have completed the payment. Order details:';
+            const message = '你好，我已经完成付款，订单详情如下：';
             window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
         }
 
@@ -1802,11 +1971,37 @@ function updateCartPage() {
 
         // 显示通知
         function showNotification(message) {
+            // 创建通知元素
             const notification = document.createElement('div');
             notification.className = 'notification';
             notification.innerHTML = `
-                <i class="fas fa-check-circle"></i>
+                <i class="fas fa-bell"></i>
                 <span>${message}</span>
+            `;
+            
+            notification.style.cssText = `
+                position: fixed;
+                top: 80px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: var(--primary-gradient);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 50px;
+                box-shadow: var(--shadow);
+                z-index: 2000;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                animation: notificationSlide 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1), 
+                         notificationFade 0.4s ease 2.6s forwards;
+                font-weight: 500;
+                max-width: 90%;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                backdrop-filter: blur(20px);
+                border: 1px solid rgba(255, 255, 255, 0.2);
             `;
             
             document.body.appendChild(notification);
@@ -1816,42 +2011,32 @@ function updateCartPage() {
             }, 3000);
         }
 
-        // 音乐控制
-        function togglePlayPause() {
-            if (youtubePlayer) {
-                if (isPlaying) {
-                    youtubePlayer.pauseVideo();
-                } else {
-                    youtubePlayer.playVideo();
+        // 定义通知动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes notificationSlide {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -20px);
                 }
-                isPlaying = !isPlaying;
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, 0);
+                }
             }
-        }
-
-        function prevSong() {
-            showNotification(
-                currentLanguage === 'zh' 
-                    ? '上一首歌曲'
-                    : 'Previous Song'
-            );
-        }
-
-        function nextSong() {
-            showNotification(
-                currentLanguage === 'zh' 
-                    ? '下一首歌曲'
-                    : 'Next Song'
-            );
-        }
-
-        // 切换音乐播放器显示
-        function toggleMusicPlayer() {
-            const player = document.querySelector('.music-player');
-            player.classList.toggle('hidden');
-        }
-
-        // 确保YouTube API函数全局可用
-        window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
+            
+            @keyframes notificationFade {
+                from {
+                    opacity: 1;
+                    transform: translate(-50%, 0);
+                }
+                to {
+                    opacity: 0;
+                    transform: translate(-50%, -20px);
+                }
+            }
+        `;
+        document.head.appendChild(style);
     </script>
 </body>
 </html>
