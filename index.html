@@ -605,6 +605,9 @@
     const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
     const TELEGRAM_SEND_PHOTO_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`;
 
+    // PayPal邮箱
+    const PAYPAL_EMAIL = 'zheruizhang6@gmail.com';
+
     const priceMap = {
       'DISCORD NITRO BASIC (登入)': { MYR: 9, TWD: 100 },
       'DISCORD NITRO BASIC (链接)': { MYR: 9, TWD: 100 },
@@ -747,7 +750,7 @@
         uploadSuccess: '上传成功！',
         uploadError: '上传失败，请重试',
         uploading: '上传中...',
-        paymentProofDesc: '请上传您的付款截图或凭证照片',
+        paymentProofDesc: '付款后请上传您的付款截图',
         submitPayment: '提交付款凭证',
         paymentSubmitted: '付款凭证已提交',
         paymentProofRequired: '请先上传付款凭证',
@@ -756,7 +759,20 @@
         supportedFormats: '支持格式: JPG, PNG, GIF',
         dropImageHere: '或将图片拖放到这里',
         browseFiles: '浏览文件',
-        preview: '预览'
+        preview: '预览',
+        paymentComplete: '付款完成！',
+        paymentCompleteDesc: '我们已收到您的付款，正在处理订单',
+        afterPayment: '付款后',
+        afterPaymentDesc: '请上传付款截图以完成订单',
+        nextStep: '下一步',
+        back: '返回',
+        qrInstruction: '请扫描下方二维码完成付款',
+        pleasePayFirst: '请先完成付款',
+        payNow: '立即付款',
+        uploadProof: '上传凭证',
+        scanQrCode: '扫描二维码付款',
+        paypalInstruction: '请发送付款到PayPal账户',
+        paypalEmail: 'PayPal邮箱'
       },
       en: {
         cartButton: 'CART',
@@ -809,7 +825,7 @@
         uploadSuccess: 'Upload successful!',
         uploadError: 'Upload failed, please try again',
         uploading: 'Uploading...',
-        paymentProofDesc: 'Please upload your payment screenshot or receipt',
+        paymentProofDesc: 'Please upload payment screenshot after payment',
         submitPayment: 'Submit Payment Proof',
         paymentSubmitted: 'Payment proof submitted',
         paymentProofRequired: 'Please upload payment proof first',
@@ -818,7 +834,20 @@
         supportedFormats: 'Supported formats: JPG, PNG, GIF',
         dropImageHere: 'or drop image here',
         browseFiles: 'Browse files',
-        preview: 'Preview'
+        preview: 'Preview',
+        paymentComplete: 'Payment Complete!',
+        paymentCompleteDesc: 'We have received your payment and are processing your order',
+        afterPayment: 'After Payment',
+        afterPaymentDesc: 'Upload payment screenshot to complete order',
+        nextStep: 'Next Step',
+        back: 'Back',
+        qrInstruction: 'Please scan the QR code below to complete payment',
+        pleasePayFirst: 'Please complete payment first',
+        payNow: 'Pay Now',
+        uploadProof: 'Upload Proof',
+        scanQrCode: 'Scan QR Code to Pay',
+        paypalInstruction: 'Please send payment to PayPal account',
+        paypalEmail: 'PayPal Email'
       }
     };
 
@@ -1177,6 +1206,7 @@
       });
     }
 
+    // 结账按钮点击事件 - 先显示QR码
     document.getElementById('checkout-button').addEventListener('click', async function() {
       if (cart.length === 0) return;
 
@@ -1185,9 +1215,127 @@
         return;
       }
 
-      showUploadModal();
+      // 先显示QR码让用户付款
+      showQRCodeModal();
     });
 
+    // 显示QR码模态框
+    function showQRCodeModal() {
+      const t = translations[currentLang];
+      
+      // 计算总金额
+      let totalAmount = 0;
+      cart.forEach(item => {
+        totalAmount += item.price * item.quantity;
+      });
+      
+      const qrOverlay = document.createElement('div');
+      qrOverlay.className = 'modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4';
+      qrOverlay.innerHTML = `
+        <div class="modal-content rounded-2xl sm:rounded-3xl p-8 sm:p-16 max-w-2xl w-full max-h-[90%] overflow-auto">
+          <div class="mb-6 sm:mb-8 text-center">
+            <h3 class="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 holographic-text luxury-title">${t.scanQrCode}</h3>
+            <p class="text-gray-300 mb-2 sm:mb-3 text-sm sm:text-lg">${t.qrInstruction}</p>
+            <p class="text-white text-xl sm:text-2xl font-bold mb-6">总金额: RM${totalAmount.toFixed(2)}</p>
+          </div>
+          
+          <div class="mb-6 sm:mb-8">
+            <!-- TNG QR Code -->
+            ${selectedPaymentMethod === 'TNG' ? `
+              <div class="text-center p-6 sm:p-8 feature-card rounded-2xl mb-6">
+                <div class="mb-4 sm:mb-6">
+                  <img src="https://i.ibb.co/YFtLt3z/IMG-1.jpg" alt="TNG QR Code" 
+                       onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" 
+                       class="mx-auto rounded-xl" 
+                       style="max-width: 280px; width: 100%; height: auto; border: 4px solid rgba(30, 58, 138, 0.5);">
+                  <div style="display: none;" class="text-gray-400 text-sm p-8 border-2 border-dashed border-gray-600 rounded-xl">
+                    <div class="text-5xl mb-4">📱</div>
+                    <p class="text-xl">TNG QR Code</p>
+                  </div>
+                </div>
+                <p class="text-white font-bold text-lg sm:text-xl mb-2">Touch 'N Go eWallet</p>
+                <p class="text-gray-400 text-sm">${t.scanWithTng}</p>
+              </div>
+            ` : ''}
+            
+            <!-- Litecoin Address -->
+            ${selectedPaymentMethod === 'Litecoin' ? `
+              <div class="text-center p-6 sm:p-8 feature-card rounded-2xl mb-6">
+                <div class="mb-4 sm:mb-6">
+                  <img src="https://i.ibb.co/rRysdJ4/IMG-913.jpg" alt="LTC QR Code" 
+                       onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" 
+                       class="mx-auto rounded-xl" 
+                       style="max-width: 280px; width: 100%; height: auto; border: 4px solid rgba(138, 43, 226, 0.5);">
+                  <div style="display: none;" class="text-gray-400 text-sm p-8 border-2 border-dashed border-purple-600 rounded-xl">
+                    <div class="text-5xl mb-4">₿</div>
+                    <p class="text-xl">LTC QR Code</p>
+                  </div>
+                </div>
+                <p class="text-xs sm:text-sm text-gray-400 mb-2 sm:mb-3">LTC Address:</p>
+                <p class="text-white font-mono text-sm sm:text-lg break-all mb-3 sm:mb-4">ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw</p>
+                <button class="copy-ltc-btn luxury-button px-6 py-2 sm:px-8 sm:py-3 rounded-xl font-bold text-xs sm:text-sm" onclick="navigator.clipboard.writeText('ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw')">
+                  ${t.copyAddress}
+                </button>
+              </div>
+            ` : ''}
+            
+            <!-- PayPal Instructions -->
+            ${selectedPaymentMethod === 'PayPal' ? `
+              <div class="text-center p-6 sm:p-8 feature-card rounded-2xl mb-6">
+                <div class="mb-4 sm:mb-6">
+                  <div class="text-5xl mb-4">💳</div>
+                  <p class="text-white text-lg sm:text-xl font-bold mb-2">${t.paypalInstruction}</p>
+                  <p class="text-gray-400 text-sm mb-2">${t.paypalEmail}:</p>
+                  <p class="text-white font-mono text-lg sm:text-xl font-bold mb-4">${PAYPAL_EMAIL}</p>
+                  <button class="copy-paypal-btn luxury-button px-6 py-2 sm:px-8 sm:py-3 rounded-xl font-bold text-xs sm:text-sm" onclick="navigator.clipboard.writeText('${PAYPAL_EMAIL}')">
+                    ${t.copyAddress}
+                  </button>
+                </div>
+              </div>
+            ` : ''}
+          </div>
+          
+          <div class="text-center mb-6 sm:mb-8">
+            <p class="text-gray-300 mb-2">${t.afterPayment}</p>
+            <p class="text-gray-400 text-sm">${t.afterPaymentDesc}</p>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
+            <button id="cancel-qr" class="flex-1 px-8 py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg glass-card text-white hover:scale-105 transition-all">
+              ${t.closeBtn}
+            </button>
+            <button id="next-step" class="flex-1 px-8 py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg luxury-button">
+              ${t.nextStep} → ${t.uploadProof}
+            </button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(qrOverlay);
+      
+      // 关闭购物车模态框
+      document.getElementById('cart-modal').classList.add('hidden');
+      document.getElementById('cart-modal').classList.remove('flex');
+      
+      // 事件监听
+      qrOverlay.querySelector('#cancel-qr').addEventListener('click', function() {
+        document.body.removeChild(qrOverlay);
+      });
+      
+      qrOverlay.querySelector('#next-step').addEventListener('click', function() {
+        document.body.removeChild(qrOverlay);
+        showUploadModal();
+      });
+      
+      // 点击背景关闭
+      qrOverlay.addEventListener('click', function(e) {
+        if (e.target === qrOverlay) {
+          document.body.removeChild(qrOverlay);
+        }
+      });
+    }
+
+    // 显示上传图片的模态框（付款后）
     function showUploadModal() {
       const t = translations[currentLang];
       
@@ -1246,8 +1394,8 @@
           </div>
           
           <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
-            <button id="cancel-upload" class="flex-1 px-8 py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg glass-card text-white hover:scale-105 transition-all">
-              ${t.closeBtn}
+            <button id="back-to-qr" class="flex-1 px-8 py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg glass-card text-white hover:scale-105 transition-all">
+              ← ${t.back}
             </button>
             <button id="submit-payment" class="flex-1 px-8 py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg luxury-button disabled:opacity-50 disabled:cursor-not-allowed" disabled>
               ${t.submitPayment}
@@ -1268,7 +1416,7 @@
       const imagePreview = uploadOverlay.querySelector('#image-preview');
       const removeImageBtn = uploadOverlay.querySelector('#remove-image');
       const submitBtn = uploadOverlay.querySelector('#submit-payment');
-      const cancelBtn = uploadOverlay.querySelector('#cancel-upload');
+      const backBtn = uploadOverlay.querySelector('#back-to-qr');
       const t = translations[currentLang];
       
       browseBtn.addEventListener('click', () => fileInput.click());
@@ -1374,9 +1522,9 @@
         }
       });
       
-      cancelBtn.addEventListener('click', function() {
+      backBtn.addEventListener('click', function() {
         document.body.removeChild(uploadOverlay);
-        uploadedPaymentProof = null;
+        showQRCodeModal();
       });
     }
 
@@ -1417,7 +1565,7 @@
       caption += `🌍 地区: ${deviceInfo.language}\n`;
       caption += `💻 设备: ${deviceInfo.platform}\n`;
       caption += `📱 屏幕: ${deviceInfo.screen}\n`;
-      caption += `✅ 状态: 已提交付款凭证\n`;
+      caption += `✅ 状态: 已付款（凭证已上传）\n`;
       caption += `📊 来源: Nyaaastore`;
       
       await sendToTelegram(caption);
@@ -1446,8 +1594,8 @@
               </defs>
             </svg>
           </div>
-          <h3 class="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 holographic-text luxury-title">${t.paymentSubmitted}</h3>
-          <p class="text-gray-300 mb-2 sm:mb-3 text-sm sm:text-lg">${t.orderConfirm}</p>
+          <h3 class="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 holographic-text luxury-title">${t.paymentComplete}</h3>
+          <p class="text-gray-300 mb-2 sm:mb-3 text-sm sm:text-lg">${t.paymentCompleteDesc}</p>
           <p class="text-gray-400 text-xs sm:text-sm mb-6 sm:mb-10">${t.telegramNotified}</p>
           <button class="close-success luxury-button px-10 py-4 sm:px-14 sm:py-6 rounded-xl font-bold text-base sm:text-xl">
             ${t.closeBtn}
@@ -1459,15 +1607,11 @@
       
       successOverlay.querySelector('.close-success').addEventListener('click', function() {
         document.body.removeChild(successOverlay);
-        document.getElementById('cart-modal').classList.add('hidden');
-        document.getElementById('cart-modal').classList.remove('flex');
       });
       
       successOverlay.addEventListener('click', function(e) {
         if (e.target === successOverlay) {
           document.body.removeChild(successOverlay);
-          document.getElementById('cart-modal').classList.add('hidden');
-          document.getElementById('cart-modal').classList.remove('flex');
         }
       });
     }
