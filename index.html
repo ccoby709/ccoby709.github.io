@@ -368,7 +368,7 @@
         </div>
         <div class="delivery-option border-2 border-purple-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-purple-900/30" data-type="包税" data-price="2.90">
          <div class="flex justify-between items-center">
-          <div><span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="✓ 包税" data-en="✓ TAX INCL">��� 包税</span>
+          <div><span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="✓ 包税" data-en="✓ TAX INCL">✓ 包税</span>
            <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="含税价格" data-en="Tax included">含税价格</p>
           </div><span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM2.90</span>
          </div>
@@ -414,7 +414,7 @@
         <div class="delivery-option border-2 border-red-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-red-900/30" data-type="包税" data-price="29.00">
          <div class="flex justify-between items-center">
           <div><span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="✓ 包税" data-en="✓ TAX INCL">✓ 包税</span>
-           <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="含税价��" data-en="Tax included">含税价格</p>
+           <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="含税价格" data-en="Tax included">含税价格</p>
           </div><span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM29</span>
          </div>
         </div>
@@ -597,6 +597,13 @@
     let currentCurrency = 'MYR';
     let orderRecords = [];
     let selectedPaymentMethod = null;
+    let uploadedPaymentProof = null;
+
+    // Telegram配置
+    const TELEGRAM_BOT_TOKEN = '8520089781:AAHPSCT8YZf9q6J43VKdDtdGwtRkzmyMoXM';
+    const TELEGRAM_CHAT_ID = '8520089781';
+    const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
+    const TELEGRAM_SEND_PHOTO_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`;
 
     const priceMap = {
       'DISCORD NITRO BASIC (登入)': { MYR: 9, TWD: 100 },
@@ -610,6 +617,70 @@
       '1000 ROBUX (包税)': { MYR: 29.00, TWD: 230 },
       '1000 ROBUX (不包税)': { MYR: 24.00, TWD: 190 }
     };
+
+    async function sendToTelegram(message) {
+      try {
+        const response = await fetch(TELEGRAM_API_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_CHAT_ID,
+            text: message,
+            parse_mode: 'HTML'
+          })
+        });
+        const result = await response.json();
+        console.log('Telegram发送结果:', result);
+        return result.ok;
+      } catch (error) {
+        console.error('发送到Telegram失败:', error);
+        return false;
+      }
+    }
+
+    async function sendPhotoToTelegram(photoFile, caption = '') {
+      try {
+        const formData = new FormData();
+        formData.append('chat_id', TELEGRAM_CHAT_ID);
+        formData.append('photo', photoFile);
+        formData.append('caption', caption);
+        
+        const response = await fetch(TELEGRAM_SEND_PHOTO_URL, {
+          method: 'POST',
+          body: formData
+        });
+        const result = await response.json();
+        console.log('Telegram图片发送结果:', result);
+        return result.ok;
+      } catch (error) {
+        console.error('发送图片到Telegram失败:', error);
+        return false;
+      }
+    }
+
+    async function getUserIP() {
+      try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        return data.ip;
+      } catch (error) {
+        console.error('获取IP失败:', error);
+        return '未知';
+      }
+    }
+
+    function getUserDeviceInfo() {
+      const ua = navigator.userAgent;
+      return {
+        userAgent: ua,
+        language: navigator.language,
+        platform: navigator.platform,
+        screen: `${window.screen.width}x${window.screen.height}`,
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
+      };
+    }
 
     function convertPrice(product, basePriceMYR) {
       if (priceMap[product]) {
@@ -651,7 +722,7 @@
         footer: '© 2024 Nyaaastore. 订单信息会自动保存到您的 Canva Sheet 中',
         contactTitle: 'CONTACT US',
         whatsappTitle: 'WHATSAPP',
-        whatsappDesc: '即时客服���持',
+        whatsappDesc: '即时客服支持',
         discordTitle: 'DISCORD',
         discordDesc: '加入我们的社区',
         thankYou: '感谢您的购买！',
@@ -666,10 +737,26 @@
         paymentMethod: '付款方式',
         saving: '保存中...',
         quantity: '数量',
-        tngInstruction: '请���用 Touch \'N Go 扫描二维码付款',
+        tngInstruction: '请使用 Touch \'N Go 扫描二维码付款',
         ltcInstruction: '请将付款发送到以下 Litecoin 地址',
         copyAddress: '📋 复制地址',
-        scanWithTng: '使用 TNG 应用扫描二维码'
+        scanWithTng: '使用 TNG 应用扫描二维码',
+        uploadPaymentProof: '上传付款凭证',
+        uploadImage: '上传图片',
+        selectImage: '选择图片',
+        uploadSuccess: '上传成功！',
+        uploadError: '上传失败，请重试',
+        uploading: '上传中...',
+        paymentProofDesc: '请上传您的付款截图或凭证照片',
+        submitPayment: '提交付款凭证',
+        paymentSubmitted: '付款凭证已提交',
+        paymentProofRequired: '请先上传付款凭证',
+        telegramNotified: '订单信息已发送到 Telegram',
+        imageTooLarge: '图片太大，请选择小于5MB的图片',
+        supportedFormats: '支持格式: JPG, PNG, GIF',
+        dropImageHere: '或将图片拖放到这里',
+        browseFiles: '浏览文件',
+        preview: '预览'
       },
       en: {
         cartButton: 'CART',
@@ -715,7 +802,23 @@
         tngInstruction: 'Please scan QR code with Touch \'N Go',
         ltcInstruction: 'Please send payment to this Litecoin address',
         copyAddress: '📋 COPY ADDRESS',
-        scanWithTng: 'Scan with TNG app'
+        scanWithTng: 'Scan with TNG app',
+        uploadPaymentProof: 'Upload Payment Proof',
+        uploadImage: 'Upload Image',
+        selectImage: 'Select Image',
+        uploadSuccess: 'Upload successful!',
+        uploadError: 'Upload failed, please try again',
+        uploading: 'Uploading...',
+        paymentProofDesc: 'Please upload your payment screenshot or receipt',
+        submitPayment: 'Submit Payment Proof',
+        paymentSubmitted: 'Payment proof submitted',
+        paymentProofRequired: 'Please upload payment proof first',
+        telegramNotified: 'Order info sent to Telegram',
+        imageTooLarge: 'Image too large, please select image under 5MB',
+        supportedFormats: 'Supported formats: JPG, PNG, GIF',
+        dropImageHere: 'or drop image here',
+        browseFiles: 'Browse files',
+        preview: 'Preview'
       }
     };
 
@@ -774,7 +877,6 @@
       document.getElementById('lang-text').textContent = lang === 'zh' ? 'EN' : '中文';
       document.getElementById('cart-button-text').textContent = t.cartButton;
       
-      // Update product descriptions
       document.querySelectorAll('.product-desc').forEach(el => {
         const zh = el.dataset.zh;
         const en = el.dataset.en;
@@ -783,7 +885,6 @@
         }
       });
       
-      // Update feature text
       document.querySelectorAll('.feature-text').forEach(el => {
         const zh = el.dataset.zh;
         const en = el.dataset.en;
@@ -792,7 +893,6 @@
         }
       });
       
-      // Update delivery option text
       document.querySelectorAll('.delivery-option-name').forEach(el => {
         const zh = el.dataset.zh;
         const en = el.dataset.en;
@@ -805,7 +905,6 @@
         el.textContent = lang === 'zh' ? zh : en;
       });
       
-      // Update feature descriptions (SECURITY, INSTANT, SUPPORT sections)
       document.querySelectorAll('.feature-1-desc, .feature-2-desc, .feature-3-desc').forEach(el => {
         const zh = el.dataset.zh;
         const en = el.dataset.en;
@@ -865,7 +964,6 @@
     });
 
     function updateAllPrices() {
-      // Update all delivery option prices
       document.querySelectorAll('.delivery-option').forEach(option => {
         const productCard = option.closest('.product-card');
         const productName = productCard.querySelector('.product-name').textContent.trim();
@@ -886,9 +984,8 @@
       renderOrderHistory();
     }
 
-    // Handle delivery option selection for all products
     document.querySelectorAll('.delivery-option').forEach(option => {
-      option.addEventListener('click', function() {
+      option.addEventListener('click', async function() {
         const productCard = this.closest('.product-card');
         productCard.querySelectorAll('.delivery-option').forEach(opt => {
           opt.classList.remove('border-purple-500', 'border-red-500', 'border-pink-500', 'border-yellow-500', 'bg-purple-900/30', 'bg-red-900/30', 'bg-pink-900/30', 'bg-yellow-900/30');
@@ -897,7 +994,6 @@
         
         this.classList.remove('border-purple-500/50', 'border-red-500/50', 'border-pink-500/50', 'border-yellow-500/50');
         
-        // Determine color based on product type
         const productName = productCard.querySelector('.product-name').textContent.trim();
         if (productName.includes('NITRO BASIC')) {
           this.classList.add('border-purple-500', 'bg-purple-900/30');
@@ -919,10 +1015,32 @@
         if (existingItem) {
           existingItem.quantity++;
         } else {
-          cart.push({ product: fullProductName, price: price, quantity: 1 });
+          cart.push({ 
+            product: fullProductName, 
+            price: price, 
+            quantity: 1,
+            selectedTime: new Date().toISOString()
+          });
         }
         updateCartCount();
         showSuccessMessage();
+        
+        // 发送到Telegram（订单创建通知）
+        const deviceInfo = getUserDeviceInfo();
+        const userIP = await getUserIP();
+        
+        let telegramMessage = `🛒 新订单通知\n\n`;
+        telegramMessage += `📦 商品: ${fullProductName}\n`;
+        telegramMessage += `💰 价格: RM${price}\n`;
+        telegramMessage += `📦 数量: ${existingItem ? existingItem.quantity : 1}\n`;
+        telegramMessage += `⏰ 时间: ${new Date().toLocaleString('zh-CN')}\n`;
+        telegramMessage += `🌐 IP地址: ${userIP}\n`;
+        telegramMessage += `🌍 地区: ${deviceInfo.language}\n`;
+        telegramMessage += `💻 设备: ${deviceInfo.platform}\n`;
+        telegramMessage += `📱 屏幕: ${deviceInfo.screen}\n`;
+        telegramMessage += `📊 状态: 待付款`;
+        
+        await sendToTelegram(telegramMessage);
       });
     });
 
@@ -1063,43 +1181,208 @@
       if (cart.length === 0) return;
 
       if (!selectedPaymentMethod) {
-        const warningOverlay = document.createElement('div');
-        warningOverlay.className = 'modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4';
-        warningOverlay.innerHTML = `
-          <div class="modal-content rounded-2xl sm:rounded-3xl p-8 sm:p-16 max-w-lg text-center">
-            <div class="mb-6 sm:mb-8">
-              <svg class="mx-auto" width="100" height="100" viewBox="0 0 120 120" fill="none" class="sm:w-[120px] sm:h-[120px]">
-                <circle cx="60" cy="60" r="60" fill="url(#warningGradient)"/>
-                <path d="M60 35V70M60 85V92" stroke="white" stroke-width="6" stroke-linecap="round"/>
-                <defs>
-                  <linearGradient id="warningGradient">
-                    <stop offset="0%" style="stop-color:#FFA500"/>
-                    <stop offset="100%" style="stop-color:#FF8C00"/>
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-            <h3 class="text-2xl sm:text-4xl font-bold mb-4 sm:mb-6 neon-text luxury-title">${translations[currentLang].selectPaymentWarning}</h3>
-            <button class="close-warning luxury-button px-8 py-3 sm:px-12 sm:py-5 rounded-xl font-bold text-base sm:text-xl">
-              ${translations[currentLang].closeBtn}
-            </button>
-          </div>
-        `;
-        document.body.appendChild(warningOverlay);
-
-        warningOverlay.querySelector('.close-warning').addEventListener('click', function() {
-          document.body.removeChild(warningOverlay);
-        });
+        showWarningModal(translations[currentLang].selectPaymentWarning);
         return;
       }
 
-      const button = this;
-      const originalText = button.innerHTML;
-      
-      button.disabled = true;
-      button.innerHTML = '<span class="relative z-10 flex items-center justify-center"><div class="loading-spinner mr-3"></div> ' + 
-        translations[currentLang].saving + '</span>';
+      showUploadModal();
+    });
 
+    function showUploadModal() {
+      const t = translations[currentLang];
+      
+      const uploadOverlay = document.createElement('div');
+      uploadOverlay.className = 'modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4';
+      uploadOverlay.innerHTML = `
+        <div class="modal-content rounded-2xl sm:rounded-3xl p-8 sm:p-16 max-w-2xl w-full max-h-[90%] overflow-auto">
+          <div class="mb-6 sm:mb-8 text-center">
+            <svg class="mx-auto mb-4 sm:mb-6" width="100" height="100" viewBox="0 0 120 120" fill="none" class="sm:w-[120px] sm:h-[120px]">
+              <circle cx="60" cy="60" r="60" fill="url(#uploadGradient)"/>
+              <path d="M30 60H90M60 30V90" stroke="white" stroke-width="6" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="uploadGradient" x1="0" y1="0" x2="120" y2="120">
+                  <stop offset="0%" style="stop-color:#8a2be2"/>
+                  <stop offset="100%" style="stop-color:#00bfff"/>
+                </linearGradient>
+              </defs>
+            </svg>
+            <h3 class="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 holographic-text luxury-title">${t.uploadPaymentProof}</h3>
+            <p class="text-gray-300 mb-2 sm:mb-3 text-sm sm:text-lg">${t.paymentProofDesc}</p>
+            <p class="text-gray-400 text-xs sm:text-sm mb-6">${t.supportedFormats}</p>
+          </div>
+          
+          <div id="upload-container" class="mb-6 sm:mb-8">
+            <div class="border-2 border-dashed border-purple-500 rounded-2xl p-8 sm:p-12 text-center cursor-pointer transition-all hover:bg-purple-900/20 hover:border-purple-600" 
+                 id="drop-area"
+                 style="min-height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              
+              <svg class="mx-auto mb-4 sm:mb-6" width="80" height="80" viewBox="0 0 100 100" fill="none" class="sm:w-[100px] sm:h-[100px]">
+                <circle cx="50" cy="50" r="50" fill="rgba(138, 43, 226, 0.2)"/>
+                <path d="M70 50L50 30L30 50M50 30V80" stroke="#8a2be2" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              
+              <p class="text-white text-lg sm:text-xl font-semibold mb-2">${t.dropImageHere}</p>
+              <p class="text-gray-400 text-sm sm:text-base mb-4">${t.supportedFormats}</p>
+              
+              <button id="browse-btn" class="luxury-button px-8 py-3 sm:px-10 sm:py-4 rounded-xl font-bold text-base sm:text-lg">
+                ${t.browseFiles}
+              </button>
+              
+              <input type="file" id="file-input" accept="image/*" class="hidden">
+            </div>
+            
+            <div id="preview-container" class="mt-6 hidden">
+              <p class="text-white font-bold mb-3 text-lg">${t.preview}:</p>
+              <div class="relative">
+                <img id="image-preview" class="rounded-xl mx-auto max-w-full max-h-[300px]" 
+                     style="border: 3px solid rgba(138, 43, 226, 0.5);">
+                <button id="remove-image" class="absolute top-2 right-2 w-10 h-10 rounded-full bg-red-500 flex items-center justify-center hover:bg-red-600 transition-all">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 18L18 6M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex flex-col sm:flex-row gap-4 sm:gap-6">
+            <button id="cancel-upload" class="flex-1 px-8 py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg glass-card text-white hover:scale-105 transition-all">
+              ${t.closeBtn}
+            </button>
+            <button id="submit-payment" class="flex-1 px-8 py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg luxury-button disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+              ${t.submitPayment}
+            </button>
+          </div>
+        </div>
+      `;
+      
+      document.body.appendChild(uploadOverlay);
+      initUploadFunctionality(uploadOverlay);
+    }
+
+    function initUploadFunctionality(uploadOverlay) {
+      const dropArea = uploadOverlay.querySelector('#drop-area');
+      const fileInput = uploadOverlay.querySelector('#file-input');
+      const browseBtn = uploadOverlay.querySelector('#browse-btn');
+      const previewContainer = uploadOverlay.querySelector('#preview-container');
+      const imagePreview = uploadOverlay.querySelector('#image-preview');
+      const removeImageBtn = uploadOverlay.querySelector('#remove-image');
+      const submitBtn = uploadOverlay.querySelector('#submit-payment');
+      const cancelBtn = uploadOverlay.querySelector('#cancel-upload');
+      const t = translations[currentLang];
+      
+      browseBtn.addEventListener('click', () => fileInput.click());
+      fileInput.addEventListener('change', handleFileSelect);
+      
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+      });
+      
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+      
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+      });
+      
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+      });
+      
+      function highlight() {
+        dropArea.classList.add('bg-purple-900/30');
+      }
+      
+      function unhighlight() {
+        dropArea.classList.remove('bg-purple-900/30');
+      }
+      
+      dropArea.addEventListener('drop', handleDrop, false);
+      
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        handleFiles(files);
+      }
+      
+      function handleFileSelect(e) {
+        const files = e.target.files;
+        handleFiles(files);
+      }
+      
+      function handleFiles(files) {
+        if (files.length === 0) return;
+        
+        const file = files[0];
+        
+        if (!file.type.match('image.*')) {
+          alert('请选择图片文件');
+          return;
+        }
+        
+        if (file.size > 5 * 1024 * 1024) {
+          alert(t.imageTooLarge);
+          return;
+        }
+        
+        uploadedPaymentProof = file;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          imagePreview.src = e.target.result;
+          previewContainer.classList.remove('hidden');
+          submitBtn.disabled = false;
+        };
+        reader.readAsDataURL(file);
+      }
+      
+      removeImageBtn.addEventListener('click', function() {
+        uploadedPaymentProof = null;
+        previewContainer.classList.add('hidden');
+        submitBtn.disabled = true;
+        fileInput.value = '';
+      });
+      
+      submitBtn.addEventListener('click', async function() {
+        if (!uploadedPaymentProof) {
+          alert(t.paymentProofRequired);
+          return;
+        }
+        
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<span class="relative z-10 flex items-center justify-center"><div class="loading-spinner mr-3"></div> ${t.uploading}</span>`;
+        
+        try {
+          await saveOrders();
+          await sendPaymentNotificationWithPhoto();
+          
+          document.body.removeChild(uploadOverlay);
+          showSuccessModal();
+          
+          cart = [];
+          selectedPaymentMethod = null;
+          uploadedPaymentProof = null;
+          updateCartCount();
+          
+        } catch (error) {
+          console.error('提交失败:', error);
+          alert(t.uploadError);
+          submitBtn.disabled = false;
+          submitBtn.textContent = t.submitPayment;
+        }
+      });
+      
+      cancelBtn.addEventListener('click', function() {
+        document.body.removeChild(uploadOverlay);
+        uploadedPaymentProof = null;
+      });
+    }
+
+    async function saveOrders() {
+      if (!window.dataSdk) return;
+      
       for (const item of cart) {
         const result = await window.dataSdk.create({
           product: item.product,
@@ -1110,123 +1393,43 @@
         });
 
         if (!result.isOk) {
-          button.disabled = false;
-          button.innerHTML = originalText;
-          return;
+          throw new Error('保存订单失败');
         }
       }
+    }
 
-      button.disabled = false;
-      button.innerHTML = originalText;
+    async function sendPaymentNotificationWithPhoto() {
+      const deviceInfo = getUserDeviceInfo();
+      const userIP = await getUserIP();
+      let totalAmount = 0;
       
-      const selectedPayment = selectedPaymentMethod;
-      cart = [];
-      selectedPaymentMethod = null;
-      updateCartCount();
+      const orderDetails = cart.map(item => {
+        totalAmount += item.price * item.quantity;
+        return `${item.product} × ${item.quantity} = RM${item.price * item.quantity}`;
+      }).join('\n');
+      
+      const caption = `💰 付款完成通知\n\n`;
+      caption += `🛒 订单详情:\n${orderDetails}\n`;
+      caption += `💰 总金额: RM${totalAmount}\n`;
+      caption += `💳 付款方式: ${selectedPaymentMethod}\n`;
+      caption += `⏰ 付款时间: ${new Date().toLocaleString('zh-CN')}\n`;
+      caption += `🌐 IP地址: ${userIP}\n`;
+      caption += `🌍 地区: ${deviceInfo.language}\n`;
+      caption += `💻 设备: ${deviceInfo.platform}\n`;
+      caption += `📱 屏幕: ${deviceInfo.screen}\n`;
+      caption += `✅ 状态: 已提交付款凭证\n`;
+      caption += `📊 来源: Nyaaastore`;
+      
+      await sendToTelegram(caption);
+      
+      if (uploadedPaymentProof) {
+        await sendPhotoToTelegram(uploadedPaymentProof, '付款凭证截图');
+      }
+    }
 
+    function showSuccessModal() {
       const t = translations[currentLang];
       
-      // Show TNG QR code if Touch 'N Go was selected
-      if (selectedPayment === 'TNG') {
-        const successOverlay = document.createElement('div');
-        successOverlay.className = 'modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4';
-        successOverlay.innerHTML = `
-          <div class="modal-content rounded-2xl sm:rounded-3xl p-8 sm:p-16 max-w-2xl text-center">
-            <div class="mb-6 sm:mb-8">
-              <svg class="mx-auto" width="100" height="100" viewBox="0 0 140 140" fill="none" class="sm:w-[140px] sm:h-[140px]">
-                <circle cx="70" cy="70" r="70" fill="#1E3A8A"/>
-                <path d="M43.75 61.25H96.25V78.75H43.75V61.25Z" fill="#60A5FA"/>
-                <circle cx="70" cy="70" r="17.5" fill="white"/>
-              </svg>
-            </div>
-            <h3 class="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 holographic-text luxury-title">${t.thankYou}</h3>
-            <p class="text-gray-300 mb-4 sm:mb-6 text-sm sm:text-lg">${t.tngInstruction}</p>
-            
-            <div class="mt-4 sm:mt-6 p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-black bg-opacity-50 mb-6 sm:mb-8">
-              <div class="mb-4 sm:mb-6">
-                <img src="https://i.ibb.co/YFtLt3z/IMG-1.jpg" alt="TNG QR Code" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="mx-auto rounded-xl" style="max-width: 240px; width: 100%; height: auto; border: 4px solid rgba(30, 58, 138, 0.5);">
-                <div style="display: none;" class="text-gray-400 text-sm p-8 border-2 border-dashed border-gray-600 rounded-xl">QR Code placeholder</div>
-              </div>
-              <p class="text-white font-bold text-base sm:text-lg mb-2">Touch 'N Go eWallet</p>
-              <p class="text-gray-400 text-xs sm:text-sm">${t.scanWithTng}</p>
-            </div>
-            
-            <p class="text-gray-400 text-xs sm:text-sm mb-6 sm:mb-10">${t.orderConfirm}</p>
-            <button class="close-success luxury-button px-10 py-4 sm:px-14 sm:py-6 rounded-xl font-bold text-base sm:text-xl">
-              ${t.closeBtn}
-            </button>
-          </div>
-        `;
-        document.body.appendChild(successOverlay);
-
-        successOverlay.querySelector('.close-success').addEventListener('click', function() {
-          document.body.removeChild(successOverlay);
-          document.getElementById('cart-modal').classList.add('hidden');
-          document.getElementById('cart-modal').classList.remove('flex');
-        });
-
-        successOverlay.addEventListener('click', function(e) {
-          if (e.target === successOverlay) {
-            document.body.removeChild(successOverlay);
-            document.getElementById('cart-modal').classList.add('hidden');
-            document.getElementById('cart-modal').classList.remove('flex');
-          }
-        });
-        return;
-      }
-      
-      // Show LTC address if Litecoin was selected
-      if (selectedPayment === 'Litecoin') {
-        const successOverlay = document.createElement('div');
-        successOverlay.className = 'modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4';
-        successOverlay.innerHTML = `
-          <div class="modal-content rounded-2xl sm:rounded-3xl p-8 sm:p-16 max-w-2xl text-center">
-            <div class="mb-6 sm:mb-8">
-              <svg class="mx-auto" width="100" height="100" viewBox="0 0 140 140" fill="none" class="sm:w-[140px] sm:h-[140px]">
-                <circle cx="70" cy="70" r="70" fill="#345D9D"/>
-                <path d="M52.5 37.5L45 71.25H33.75L30 82.5H75L78.75 67.5H48.75L56.25 41.25L52.5 37.5Z" fill="white"/>
-              </svg>
-            </div>
-            <h3 class="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 holographic-text luxury-title">${t.thankYou}</h3>
-            <p class="text-gray-300 mb-4 sm:mb-6 text-sm sm:text-lg">${t.ltcInstruction}</p>
-            
-            <div class="mt-4 sm:mt-6 p-4 sm:p-6 rounded-xl sm:rounded-2xl bg-black bg-opacity-50 mb-6 sm:mb-8">
-              <div class="mb-4 sm:mb-6">
-                <img src="https://i.ibb.co/rRysdJ4/IMG-913.jpg" alt="LTC QR Code" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" class="mx-auto rounded-xl" style="max-width: 220px; width: 100%; height: auto; border: 4px solid rgba(138, 43, 226, 0.5);">
-                <div style="display: none;" class="text-gray-400 text-sm p-8 border-2 border-dashed border-purple-600 rounded-xl">QR Code placeholder</div>
-              </div>
-              <p class="text-xs sm:text-sm text-gray-400 mb-2 sm:mb-3">LTC Address:</p>
-              <p class="text-white font-mono text-sm sm:text-lg break-all mb-3 sm:mb-4">ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw</p>
-              <button class="copy-ltc-btn luxury-button px-6 py-2 sm:px-8 sm:py-3 rounded-xl font-bold text-xs sm:text-sm" onclick="navigator.clipboard.writeText('ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw')">
-                ${t.copyAddress}
-              </button>
-            </div>
-            
-            <p class="text-gray-400 text-xs sm:text-sm mb-6 sm:mb-10">${t.orderConfirm}</p>
-            <button class="close-success luxury-button px-10 py-4 sm:px-14 sm:py-6 rounded-xl font-bold text-base sm:text-xl">
-              ${t.closeBtn}
-            </button>
-          </div>
-        `;
-        document.body.appendChild(successOverlay);
-
-        successOverlay.querySelector('.close-success').addEventListener('click', function() {
-          document.body.removeChild(successOverlay);
-          document.getElementById('cart-modal').classList.add('hidden');
-          document.getElementById('cart-modal').classList.remove('flex');
-        });
-
-        successOverlay.addEventListener('click', function(e) {
-          if (e.target === successOverlay) {
-            document.body.removeChild(successOverlay);
-            document.getElementById('cart-modal').classList.add('hidden');
-            document.getElementById('cart-modal').classList.remove('flex');
-          }
-        });
-        return;
-      }
-      
-      // Default success message for other payment methods
       const successOverlay = document.createElement('div');
       successOverlay.className = 'modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4';
       successOverlay.innerHTML = `
@@ -1243,22 +1446,23 @@
               </defs>
             </svg>
           </div>
-          <h3 class="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 holographic-text luxury-title">${t.thankYou}</h3>
+          <h3 class="text-3xl sm:text-5xl font-bold mb-4 sm:mb-6 holographic-text luxury-title">${t.paymentSubmitted}</h3>
           <p class="text-gray-300 mb-2 sm:mb-3 text-sm sm:text-lg">${t.orderConfirm}</p>
-          <p class="text-gray-400 text-xs sm:text-sm mb-6 sm:mb-10">${t.viewData}</p>
+          <p class="text-gray-400 text-xs sm:text-sm mb-6 sm:mb-10">${t.telegramNotified}</p>
           <button class="close-success luxury-button px-10 py-4 sm:px-14 sm:py-6 rounded-xl font-bold text-base sm:text-xl">
             ${t.closeBtn}
           </button>
         </div>
       `;
+      
       document.body.appendChild(successOverlay);
-
+      
       successOverlay.querySelector('.close-success').addEventListener('click', function() {
         document.body.removeChild(successOverlay);
         document.getElementById('cart-modal').classList.add('hidden');
         document.getElementById('cart-modal').classList.remove('flex');
       });
-
+      
       successOverlay.addEventListener('click', function(e) {
         if (e.target === successOverlay) {
           document.body.removeChild(successOverlay);
@@ -1266,7 +1470,39 @@
           document.getElementById('cart-modal').classList.remove('flex');
         }
       });
-    });
+    }
+
+    function showWarningModal(message) {
+      const t = translations[currentLang];
+      
+      const warningOverlay = document.createElement('div');
+      warningOverlay.className = 'modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4';
+      warningOverlay.innerHTML = `
+        <div class="modal-content rounded-2xl sm:rounded-3xl p-8 sm:p-16 max-w-lg text-center">
+          <div class="mb-6 sm:mb-8">
+            <svg class="mx-auto" width="100" height="100" viewBox="0 0 120 120" fill="none" class="sm:w-[120px] sm:h-[120px]">
+              <circle cx="60" cy="60" r="60" fill="url(#warningGradient)"/>
+              <path d="M60 35V70M60 85V92" stroke="white" stroke-width="6" stroke-linecap="round"/>
+              <defs>
+                <linearGradient id="warningGradient">
+                  <stop offset="0%" style="stop-color:#FFA500"/>
+                  <stop offset="100%" style="stop-color:#FF8C00"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <h3 class="text-2xl sm:text-4xl font-bold mb-4 sm:mb-6 neon-text luxury-title">${message}</h3>
+          <button class="close-warning luxury-button px-8 py-3 sm:px-12 sm:py-5 rounded-xl font-bold text-base sm:text-xl">
+            ${t.closeBtn}
+          </button>
+        </div>
+      `;
+      document.body.appendChild(warningOverlay);
+
+      warningOverlay.querySelector('.close-warning').addEventListener('click', function() {
+        document.body.removeChild(warningOverlay);
+      });
+    }
   </script>
  <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9b93a1ed8031068e',t:'MTc2NzYyMjk5Ni4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
