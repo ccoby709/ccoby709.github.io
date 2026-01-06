@@ -214,6 +214,15 @@
     <!-- 添加星星背景 -->
     <div class="stars" id="stars"></div>
     
+    <!-- 音乐控制按钮 -->
+    <div class="fixed bottom-4 right-4 z-50">
+      <button id="music-toggle" class="luxury-button p-3 sm:p-4 rounded-full flex items-center justify-center hover:scale-110 transition-all">
+        <svg id="music-icon" width="24" height="24" viewBox="0 0 24 24" fill="white" class="sm:w-6 sm:h-6">
+          <path d="M12 3V19M8 6V16M16 8V18M20 4V20M4 4V20" stroke="white" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+    
     <!-- 头部 -->
     <header class="w-full luxury-header sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-8 relative">
@@ -723,6 +732,12 @@
     </div>
   </div>
   
+  <!-- 音频播放器 -->
+  <audio id="background-music" loop>
+    <source src="https://www.youtube.com/watch?v=aHLZrxyFAuk" type="audio/mpeg">
+    <source src="https://www.youtube.com/embed/aHLZrxyFAuk?autoplay=1&loop=1&playlist=aHLZrxyFAuk" type="audio/mpeg">
+  </audio>
+  
   <script>
     // 星星背景
     function createStars() {
@@ -738,6 +753,90 @@
         starsContainer.appendChild(star);
       }
     }
+
+    // 音乐控制
+    const backgroundMusic = document.getElementById('background-music');
+    const musicToggle = document.getElementById('music-toggle');
+    const musicIcon = document.getElementById('music-icon');
+    let isMusicPlaying = false;
+
+    // 初始化音乐
+    function initMusic() {
+      // 直接使用YouTube链接（需要用户交互后播放）
+      const audioUrl = 'https://www.youtube.com/watch?v=aHLZrxyFAuk';
+      
+      // 设置音频源
+      const audioSources = backgroundMusic.querySelectorAll('source');
+      audioSources.forEach(source => {
+        if (source.type === 'audio/mpeg') {
+          source.src = audioUrl;
+        }
+      });
+      
+      // 加载音频
+      backgroundMusic.load();
+      
+      // 设置音量
+      backgroundMusic.volume = 0.3; // 30% 音量
+      
+      // 添加音乐切换事件
+      musicToggle.addEventListener('click', toggleMusic);
+      
+      // 尝试自动播放（但浏览器通常需要用户交互）
+      setTimeout(() => {
+        if (!isMusicPlaying) {
+          backgroundMusic.play().then(() => {
+            isMusicPlaying = true;
+            updateMusicIcon();
+            console.log('🎵 音乐自动播放成功');
+          }).catch(error => {
+            console.log('🎵 需要用户交互才能播放音乐:', error);
+            // 显示提示让用户点击按钮
+            musicIcon.innerHTML = '<path d="M12 2L12 22M8 5L8 19M16 8L16 16M20 4L20 20M4 4L4 20" stroke="white" stroke-width="2" stroke-linecap="round"/>';
+          });
+        }
+      }, 1000);
+    }
+
+    function toggleMusic() {
+      if (isMusicPlaying) {
+        backgroundMusic.pause();
+        isMusicPlaying = false;
+      } else {
+        backgroundMusic.play().then(() => {
+          isMusicPlaying = true;
+        }).catch(error => {
+          console.log('播放失败:', error);
+          // 如果播放失败，提示用户点击其他地方
+          alert('请点击页面任意位置后，再点击音乐按钮播放音乐');
+        });
+      }
+      updateMusicIcon();
+    }
+
+    function updateMusicIcon() {
+      if (isMusicPlaying) {
+        // 播放图标
+        musicIcon.innerHTML = '<path d="M6 18L18 6M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>';
+      } else {
+        // 暂停图标
+        musicIcon.innerHTML = '<path d="M12 3V19M8 6V16M16 8V18M20 4V20M4 4V20" stroke="white" stroke-width="2" stroke-linecap="round"/>';
+      }
+    }
+
+    // 用户交互后自动播放音乐
+    document.addEventListener('click', function initAudioOnInteraction() {
+      if (!isMusicPlaying) {
+        backgroundMusic.play().then(() => {
+          isMusicPlaying = true;
+          updateMusicIcon();
+          console.log('🎵 用户交互后音乐播放成功');
+        }).catch(error => {
+          console.log('🎵 播放失败:', error);
+        });
+      }
+      document.removeEventListener('click', initAudioOnInteraction);
+    });
 
     const defaultConfig = {
       store_name: "Nyaaastore",
@@ -1785,12 +1884,14 @@ ${orderDetails}
 
     // 初始化
     createStars();
+    initMusic(); // 初始化音乐
     switchLanguage('zh');
     
     console.log('🎮 Nyaaastore 初始化完成');
     console.log('🤖 Telegram Bot Token:', TELEGRAM_BOT_TOKEN);
     console.log('👤 Telegram Chat ID:', TELEGRAM_CHAT_ID);
     console.log('📱 二维码图片:', QR_CODE_URLS);
+    console.log('🎵 音乐已准备就绪');
   </script>
 </body>
 </html>
