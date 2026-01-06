@@ -1,3121 +1,431 @@
-<!doctype html>
-<html lang="zh-CN" class="h-full">
+<!DOCTYPE html>
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nyaaastore - Luxury Digital Store</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-  
-  <style>
-    body {
-      box-sizing: border-box;
-    }
-    
-    @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=Montserrat:wght@100;200;300;400;500;600;700;800&display=swap');
-    
-    * {
-      font-family: 'Montserrat', sans-serif;
-    }
-    
-    .luxury-title {
-      font-family: 'Playfair Display', serif;
-    }
-    
-    .animated-bg {
-      background: linear-gradient(180deg, #0a0014 0%, #1a0a2e 50%, #000000 100%);
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .stars {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-    }
-    
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background: white;
-      border-radius: 50%;
-      animation: twinkle 3s infinite ease-in-out;
-    }
-    
-    @keyframes twinkle {
-      0%, 100% { opacity: 0.3; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.5); }
-    }
-    
-    .glass-card {
-      background: rgba(15, 15, 35, 0.7);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 
-        0 8px 32px 0 rgba(138, 43, 226, 0.2),
-        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
-    }
-    
-    .product-card {
-      background: linear-gradient(135deg, rgba(15, 15, 35, 0.95) 0%, rgba(25, 25, 60, 0.9) 100%);
-      backdrop-filter: blur(10px);
-      border: 2px solid rgba(138, 43, 226, 0.5);
-      position: relative;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      overflow: hidden;
-    }
-    
-    .product-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 20px 60px rgba(138, 43, 226, 0.4);
-    }
-    
-    .icon-container {
-      position: relative;
-    }
-    
-    .holographic-text {
-      background: linear-gradient(135deg, #d4af37, #ffd700, #d4af37);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-    }
-    
-    .neon-text {
-      color: #fff;
-      text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
-    }
-    
-    .luxury-button {
-      position: relative;
-      overflow: hidden;
-      background: linear-gradient(135deg, #8a2be2 0%, #00bfff 100%);
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      transition: all 0.3s ease;
-      box-shadow: 0 5px 20px rgba(138, 43, 226, 0.4);
-    }
-    
-    .luxury-button:hover {
-      transform: scale(1.05);
-      box-shadow: 0 10px 40px rgba(138, 43, 226, 0.7);
-    }
-    
-    .cart-badge {
-      background: linear-gradient(135deg, #ff1493, #ff6347);
-      box-shadow: 0 0 15px rgba(255, 20, 147, 0.6);
-    }
-    
-    .popular-badge {
-      background: linear-gradient(135deg, #ffd700, #ffA500);
-      box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
-    }
-
-    .modal-overlay {
-      backdrop-filter: blur(10px);
-      background: rgba(0, 0, 0, 0.8);
-    }
-    
-    .modal-content {
-      background: linear-gradient(135deg, rgba(15, 15, 35, 0.95) 0%, rgba(30, 30, 60, 0.95) 100%);
-      border: 2px solid rgba(138, 43, 226, 0.5);
-      box-shadow: 0 20px 60px rgba(138, 43, 226, 0.5);
-    }
-    
-    .success-toast {
-      background: linear-gradient(135deg, #00ff88, #00d4ff);
-      box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
-    }
-
-    .payment-option, .delivery-option {
-      transition: all 0.2s ease;
-      cursor: pointer;
-      border: 2px solid rgba(138, 43, 226, 0.3);
-      background: rgba(15, 15, 35, 0.6);
-      backdrop-filter: blur(10px);
-    }
-    
-    .payment-option:hover, .delivery-option:hover {
-      transform: translateY(-3px);
-      border-color: rgba(138, 43, 226, 0.6);
-    }
-    
-    .payment-option.selected {
-      border-color: #8a2be2;
-      background: linear-gradient(135deg, rgba(138, 43, 226, 0.3) 0%, rgba(0, 191, 255, 0.2) 100%);
-      transform: scale(1.03);
-    }
-    
-    .payment-icon {
-      transition: transform 0.2s ease;
-    }
-    
-    .payment-option:hover .payment-icon {
-      transform: scale(1.1);
-    }
-    
-    .feature-card {
-      background: rgba(15, 15, 35, 0.5);
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(138, 43, 226, 0.3);
-      transition: all 0.3s ease;
-    }
-    
-    .feature-card:hover {
-      transform: translateY(-5px);
-      border-color: rgba(138, 43, 226, 0.6);
-    }
-
-    .loading-spinner {
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-top: 3px solid white;
-      border-radius: 50%;
-      width: 20px;
-      height: 20px;
-      animation: spin 1s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    
-    .luxury-header {
-      background: linear-gradient(135deg, rgba(10, 10, 30, 0.98) 0%, rgba(20, 20, 50, 0.95) 100%);
-      backdrop-filter: blur(20px);
-      border-bottom: 2px solid rgba(138, 43, 226, 0.4);
-      box-shadow: 0 5px 30px rgba(138, 43, 226, 0.3);
-    }
-    
-    .premium-glow {
-      text-shadow: 
-        0 0 20px rgba(255, 255, 255, 0.8),
-        0 0 40px rgba(138, 43, 226, 0.6),
-        0 0 60px rgba(0, 191, 255, 0.4);
-    }
-    
-    .gold-accent {
-      color: #d4af37;
-      text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
-    }
-    
-    /* 搜索框样式 */
-    .search-container {
-      background: rgba(15, 15, 35, 0.8);
-      backdrop-filter: blur(15px);
-      border: 1px solid rgba(138, 43, 226, 0.5);
-      border-radius: 50px;
-      padding: 8px 20px;
-    }
-    
-    .search-input {
-      background: transparent;
-      border: none;
-      outline: none;
-      width: 100%;
-      color: white;
-    }
-    
-    .search-input::placeholder {
-      color: rgba(255, 255, 255, 0.5);
-    }
-    
-    /* 促销倒计时样式 */
-    .countdown-timer {
-      background: linear-gradient(135deg, #ff1493, #8a2be2);
-      border-radius: 15px;
-      padding: 15px;
-      text-align: center;
-      margin: 20px 0;
-    }
-    
-    .countdown-item {
-      display: inline-block;
-      margin: 0 10px;
-      background: rgba(0, 0, 0, 0.3);
-      padding: 10px 15px;
-      border-radius: 10px;
-      min-width: 60px;
-    }
-    
-    .countdown-number {
-      font-size: 2rem;
-      font-weight: bold;
-      color: white;
-    }
-    
-    .countdown-label {
-      font-size: 0.8rem;
-      color: rgba(255, 255, 255, 0.7);
-    }
-    
-    /* 产品比较表格样式 */
-    .comparison-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: rgba(15, 15, 35, 0.8);
-      backdrop-filter: blur(10px);
-      border-radius: 10px;
-      overflow: hidden;
-    }
-    
-    .comparison-table th {
-      background: linear-gradient(135deg, #8a2be2, #00bfff);
-      color: white;
-      padding: 15px;
-      text-align: left;
-    }
-    
-    .comparison-table td {
-      padding: 12px 15px;
-      border-bottom: 1px solid rgba(138, 43, 226, 0.2);
-      color: rgba(255, 255, 255, 0.9);
-    }
-    
-    .comparison-table tr:hover {
-      background: rgba(138, 43, 226, 0.1);
-    }
-    
-    /* 库存显示样式 */
-    .stock-badge {
-      position: absolute;
-      top: 15px;
-      left: 15px;
-      background: linear-gradient(135deg, #ff6347, #ff1493);
-      color: white;
-      padding: 5px 10px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: bold;
-      z-index: 10;
-    }
-    
-    /* 用户登录模态框样式 */
-    .auth-modal {
-      max-width: 400px;
-      margin: 0 auto;
-    }
-    
-    .auth-tab {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 30px;
-    }
-    
-    .auth-tab-btn {
-      padding: 10px 30px;
-      background: transparent;
-      border: none;
-      color: rgba(255, 255, 255, 0.6);
-      font-size: 1.1rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
-    }
-    
-    .auth-tab-btn.active {
-      color: white;
-    }
-    
-    .auth-tab-btn.active::after {
-      content: '';
-      position: absolute;
-      bottom: -5px;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background: linear-gradient(135deg, #8a2be2, #00bfff);
-      border-radius: 3px;
-    }
-    
-    .auth-form {
-      display: none;
-    }
-    
-    .auth-form.active {
-      display: block;
-      animation: fadeIn 0.5s ease;
-    }
-    
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    
-    .form-input {
-      width: 100%;
-      padding: 12px 15px;
-      margin-bottom: 20px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
-      color: white;
-      outline: none;
-      transition: all 0.3s ease;
-    }
-    
-    .form-input:focus {
-      border-color: #8a2be2;
-      background: rgba(138, 43, 226, 0.1);
-    }
-    
-    /* 心愿单样式 */
-    .wishlist-btn {
-      position: absolute;
-      top: 15px;
-      right: 15px;
-      background: rgba(0, 0, 0, 0.5);
-      border: none;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      z-index: 10;
-    }
-    
-    .wishlist-btn:hover {
-      background: rgba(255, 20, 147, 0.3);
-      transform: scale(1.1);
-    }
-    
-    .wishlist-btn.active {
-      background: rgba(255, 20, 147, 0.5);
-    }
-    
-    .wishlist-btn.active i {
-      color: #ff1493;
-    }
-    
-    /* 客服聊天机器人样式 */
-    .chatbot-container {
-      position: fixed;
-      bottom: 30px;
-      right: 30px;
-      z-index: 1000;
-    }
-    
-    .chatbot-toggle {
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #8a2be2, #00bfff);
-      border: none;
-      color: white;
-      font-size: 1.5rem;
-      cursor: pointer;
-      box-shadow: 0 5px 20px rgba(138, 43, 226, 0.5);
-      transition: all 0.3s ease;
-    }
-    
-    .chatbot-toggle:hover {
-      transform: scale(1.1);
-      box-shadow: 0 8px 30px rgba(138, 43, 226, 0.7);
-    }
-    
-    .chatbot-window {
-      position: absolute;
-      bottom: 80px;
-      right: 0;
-      width: 350px;
-      height: 500px;
-      background: linear-gradient(135deg, rgba(15, 15, 35, 0.95) 0%, rgba(30, 30, 60, 0.95) 100%);
-      border-radius: 20px;
-      border: 2px solid rgba(138, 43, 226, 0.5);
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-      display: none;
-      flex-direction: column;
-      overflow: hidden;
-    }
-    
-    .chatbot-window.active {
-      display: flex;
-    }
-    
-    .chatbot-header {
-      background: linear-gradient(135deg, #8a2be2 0%, #00bfff 100%);
-      padding: 15px;
-      color: white;
-      text-align: center;
-      font-weight: bold;
-    }
-    
-    .chatbot-messages {
-      flex: 1;
-      padding: 20px;
-      overflow-y: auto;
-    }
-    
-    .chat-message {
-      margin-bottom: 15px;
-      max-width: 80%;
-      padding: 10px 15px;
-      border-radius: 15px;
-    }
-    
-    .bot-message {
-      background: rgba(138, 43, 226, 0.2);
-      align-self: flex-start;
-      border-bottom-left-radius: 5px;
-    }
-    
-    .user-message {
-      background: rgba(0, 191, 255, 0.2);
-      align-self: flex-end;
-      margin-left: auto;
-      border-bottom-right-radius: 5px;
-    }
-    
-    .chatbot-input-container {
-      padding: 15px;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
-    }
-    
-    .chatbot-input {
-      width: 100%;
-      padding: 10px 15px;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 25px;
-      color: white;
-      outline: none;
-    }
-    
-    /* 多步结账流程样式 */
-    .checkout-steps {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 30px;
-      position: relative;
-    }
-    
-    .checkout-steps::before {
-      content: '';
-      position: absolute;
-      top: 15px;
-      left: 10%;
-      right: 10%;
-      height: 2px;
-      background: rgba(255, 255, 255, 0.2);
-      z-index: 1;
-    }
-    
-    .checkout-step {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      z-index: 2;
-      width: 25%;
-    }
-    
-    .step-circle {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      margin-bottom: 10px;
-      transition: all 0.3s ease;
-    }
-    
-    .checkout-step.active .step-circle {
-      background: linear-gradient(135deg, #8a2be2, #00bfff);
-      transform: scale(1.2);
-    }
-    
-    .step-label {
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.6);
-    }
-    
-    .checkout-step.active .step-label {
-      color: white;
-      font-weight: bold;
-    }
-    
-    /* 订单跟踪样式 */
-    .tracking-container {
-      background: rgba(15, 15, 35, 0.8);
-      backdrop-filter: blur(10px);
-      border-radius: 15px;
-      padding: 30px;
-      margin: 20px 0;
-    }
-    
-    .tracking-status {
-      display: flex;
-      justify-content: space-between;
-      position: relative;
-      margin-top: 30px;
-    }
-    
-    .status-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      flex: 1;
-    }
-    
-    .status-dot {
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.2);
-      margin-bottom: 10px;
-      transition: all 0.3s ease;
-    }
-    
-    .status-item.completed .status-dot {
-      background: linear-gradient(135deg, #00ff88, #00d4ff);
-      box-shadow: 0 0 15px rgba(0, 255, 136, 0.5);
-    }
-    
-    .status-item.current .status-dot {
-      background: linear-gradient(135deg, #ffd700, #ffa500);
-      box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
-      animation: pulse 1.5s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-    }
-    
-    .status-label {
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.7);
-      text-align: center;
-    }
-    
-    .status-item.completed .status-label {
-      color: #00ff88;
-    }
-    
-    .status-item.current .status-label {
-      color: #ffd700;
-      font-weight: bold;
-    }
-    
-    @media (max-width: 640px) {
-      .product-card:hover {
-        transform: none;
-      }
-      
-      .chatbot-window {
-        width: 90vw;
-        height: 70vh;
-        right: 5vw;
-      }
-      
-      .comparison-table {
-        font-size: 0.9rem;
-      }
-      
-      .checkout-steps {
-        flex-wrap: wrap;
-      }
-      
-      .checkout-step {
-        width: 50%;
-        margin-bottom: 20px;
-      }
-    }
-  </style>
-  <style>@view-transition { navigation: auto; }</style>
-</head>
-<body class="h-full">
-<div class="w-full h-full overflow-auto animated-bg">
-  <!-- 星星背景 -->
-  <div class="stars" id="stars"></div>
-  
-  <!-- 客服聊天机器人 -->
-  <div class="chatbot-container">
-    <button class="chatbot-toggle" id="chatbot-toggle">
-      <i class="fas fa-comment-dots"></i>
-    </button>
-    <div class="chatbot-window" id="chatbot-window">
-      <div class="chatbot-header">
-        <span class="chatbot-title">在线客服</span>
-        <button class="close-chatbot" id="close-chatbot" style="float: right; background: none; border: none; color: white; cursor: pointer;">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-      <div class="chatbot-messages" id="chatbot-messages">
-        <div class="chat-message bot-message">
-          您好！我是Nyaaastore的客服助手。有什么可以帮您？
-        </div>
-        <div class="chat-message bot-message">
-          您可以询问关于产品、订单、付款等问题。
-        </div>
-      </div>
-      <div class="chatbot-input-container">
-        <input type="text" class="chatbot-input" id="chatbot-input" placeholder="输入您的问题...">
-      </div>
-    </div>
-  </div>
-  
-  <!-- 头部 -->
-  <header class="w-full luxury-header sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-8 relative">
-      <div class="flex justify-between items-center relative z-10">
-        <div class="flex items-center space-x-2 sm:space-x-6">
-          <div class="relative">
-            <!-- Logo -->
-            <svg width="45" height="45" viewBox="0 0 70 70" fill="none" class="icon-container sm:w-[70px] sm:h-[70px]">
-              <defs>
-                <linearGradient id="logoGradient" x1="0" y1="0" x2="70" y2="70">
-                  <stop offset="0%" style="stop-color:#d4af37" />
-                  <stop offset="50%" style="stop-color:#ffd700" />
-                  <stop offset="100%" style="stop-color:#d4af37" />
-                </linearGradient>
-                <filter id="glow">
-                  <feGaussianBlur stdDeviation="4" result="coloredBlur" />
-                  <feMerge>
-                    <feMergeNode in="coloredBlur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-              <circle cx="35" cy="35" r="32" fill="url(#logoGradient)" filter="url(#glow)" opacity="0.9" />
-              <circle cx="35" cy="35" r="28" fill="rgba(0, 0, 0, 0.6)" />
-              <path d="M23 35L31 43L47 25" stroke="url(#logoGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)" />
-            </svg>
-          </div>
-          <div>
-            <h1 id="store-name" class="text-xl sm:text-5xl font-black text-white luxury-title tracking-wider sm:tracking-widest premium-glow" style="letter-spacing: 0.1em;">Nyaaastore</h1>
-            <p id="store-tagline" class="text-[0.45rem] sm:text-xs font-light gold-accent tracking-wider sm:tracking-widest mt-0.5 sm:mt-2 hidden sm:block" style="letter-spacing: 0.2em; opacity: 0.95;">LUXURY DIGITAL BOUTIQUE</p>
-          </div>
-        </div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DMS服务 | Discord Nitro & Robux 销售平台</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+        }
         
-        <!-- 搜索框 -->
-        <div class="hidden md:flex items-center mx-4 flex-1 max-w-md">
-          <div class="search-container w-full">
-            <div class="flex items-center">
-              <i class="fas fa-search text-gray-400 mr-3"></i>
-              <input type="text" id="search-input" class="search-input" placeholder="搜索商品...">
-            </div>
-          </div>
-        </div>
+        body {
+            background-color: #0f0f1a;
+            color: #e0e0ff;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
         
-        <!-- 用户操作按钮 -->
-        <div class="flex items-center space-x-1.5 sm:space-x-4">
-          <!-- 用户登录/注册按钮 -->
-          <button id="user-auth-button" class="px-2 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-base font-semibold transition-all glass-card hover:scale-105 text-white">
-            <i class="fas fa-user mr-2"></i>
-            <span id="user-auth-text" class="hidden sm:inline">登录</span>
-          </button>
-          
-          <!-- 订单跟踪按钮 -->
-          <button id="track-order-button" class="px-2 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-base font-semibold transition-all glass-card hover:scale-105 text-white">
-            <i class="fas fa-box mr-2"></i>
-            <span class="hidden sm:inline">订单跟踪</span>
-          </button>
-          
-          <!-- 心愿单按钮 -->
-          <button id="wishlist-button" class="px-2 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-base font-semibold transition-all glass-card hover:scale-105 text-white relative">
-            <i class="fas fa-heart mr-2"></i>
-            <span class="hidden sm:inline">心愿单</span>
-            <span id="wishlist-count" class="absolute -top-1 -right-1 cart-badge text-white text-[0.6rem] font-bold rounded-full w-5 h-5 flex items-center justify-center">0</span>
-          </button>
-          
-          <button id="currency-toggle" class="px-2 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-base font-semibold transition-all glass-card hover:scale-105 text-white">
-            <span id="currency-text" class="font-bold">💰 MYR</span>
-          </button>
-          <button id="lang-toggle" class="px-2 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-base font-semibold transition-all glass-card hover:scale-105 text-white">
-            <span id="lang-text" class="font-bold">EN</span>
-          </button>
-          <button id="cart-button" class="relative px-3 sm:px-8 py-2 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-base font-semibold luxury-button">
-            <span class="relative z-10 flex items-center font-bold">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="mr-1 sm:mr-2 sm:w-6 sm:h-6">
-                <path d="M9 2L7.17 4H3C1.9 4 1 4.9 1 6V18C1 19.1 1.9 20 3 20H21C22.1 20 23 19.1 23 18V6C23 4.9 22.1 4 21 4H16.83L15 2H9Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
-              <span id="cart-button-text" class="hidden sm:inline">购物车</span>
-            </span>
-            <span id="cart-count" class="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 cart-badge text-white text-[0.6rem] sm:text-xs font-bold rounded-full w-5 h-5 sm:w-8 sm:h-8 flex items-center justify-center">0</span>
-          </button>
-        </div>
-      </div>
-      
-      <!-- 移动端搜索框 -->
-      <div class="md:hidden mt-4">
-        <div class="search-container">
-          <div class="flex items-center">
-            <i class="fas fa-search text-gray-400 mr-3"></i>
-            <input type="text" id="mobile-search-input" class="search-input" placeholder="搜索商品...">
-          </div>
-        </div>
-      </div>
-    </div>
-  </header>
-<!-- 促销倒计时 -->
-<div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-6 sm:mt-8">
-  <div class="countdown-timer">
-    <h3 class="text-lg sm:text-xl font-bold text-white mb-4">🎉 限时促销结束倒计时 🎉</h3>
-    <div class="flex justify-center">
-      <div class="countdown-item">
-        <div id="countdown-days" class="countdown-number">00</div>
-        <div class="countdown-label">天</div>
-      </div>
-      <div class="countdown-item">
-        <div id="countdown-hours" class="countdown-number">00</div>
-        <div class="countdown-label">小时</div>
-      </div>
-      <div class="countdown-item">
-        <div id="countdown-minutes" class="countdown-number">00</div>
-        <div class="countdown-label">分钟</div>
-      </div>
-      <div class="countdown-item">
-        <div id="countdown-seconds" class="countdown-number">00</div>
-        <div class="countdown-label">秒</div>
-      </div>
-    </div>
-    <p class="text-white text-sm mt-4">🔥 所有商品享受9折优惠，赶快下单！</p>
-  </div>
-</div>
-
-<!-- 搜索结果显示区域 -->
-<div id="search-results" class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 mt-6 hidden">
-  <div class="glass-card rounded-2xl p-6">
-    <h3 class="text-xl font-bold text-white mb-4">搜索结果</h3>
-    <div id="search-results-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- 搜索结果将动态显示在这里 -->
-    </div>
-  </div>
-</div>
-
-<!-- 主内容 -->
-<main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-20 relative z-10">
-  <div class="text-center mb-12 sm:mb-24">
-    <h2 id="featured-title" class="text-3xl sm:text-7xl font-black neon-text mb-3 sm:mb-6 luxury-title" style="letter-spacing: 0.1em;">FEATURED COLLECTION</h2>
-    <p id="featured-subtitle" class="text-gray-300 text-sm sm:text-xl font-light tracking-widest gold-accent" style="letter-spacing: 0.2em;">AUTHENTIC · INSTANT · EXCLUSIVE</p>
-  </div>
-  
-  <!-- 产品比较区域 -->
-  <div id="product-comparison-section" class="mb-12 sm:mb-24 hidden">
-    <div class="glass-card rounded-2xl sm:rounded-3xl p-6 sm:p-8">
-      <div class="flex justify-between items-center mb-6">
-        <h3 class="text-2xl sm:text-3xl font-bold neon-text luxury-title">产品比较</h3>
-        <button id="clear-comparison" class="px-4 py-2 luxury-button rounded-lg hover:scale-105 transition-all text-sm">
-          清空比较
-        </button>
-      </div>
-      <div id="comparison-table-container">
-        <!-- 比较表格将动态显示在这里 -->
-      </div>
-    </div>
-  </div>
-  
-  <!-- 商品列表 -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-12">
-    <!-- 商品1: DISCORD NITRO BASIC -->
-    <div class="product-card rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl relative">
-      <!-- 库存显示 -->
-      <div class="stock-badge">
-        <i class="fas fa-box mr-1"></i>
-        <span class="stock-count">库存: 15</span>
-      </div>
-      
-      <!-- 心愿单按钮 -->
-      <button class="wishlist-btn" data-product-id="nitro-basic" data-product-name="DISCORD NITRO BASIC">
-        <i class="far fa-heart"></i>
-      </button>
-      
-      <!-- 比较复选框 -->
-      <div class="absolute top-4 left-4 z-10">
-        <input type="checkbox" class="compare-checkbox" data-product-id="nitro-basic" data-product-name="DISCORD NITRO BASIC">
-        <label class="text-white text-sm ml-1">比较</label>
-      </div>
-      
-      <div class="p-6 sm:p-10 relative" style="background: linear-gradient(135deg, #5865F2 0%, #3b49df 100%);">
-        <div class="icon-container mx-auto w-20 h-20 sm:w-32 sm:h-32 mb-4 sm:mb-6">
-          <!-- Discord Logo -->
-          <svg width="100%" height="100%" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="64" cy="64" r="60" fill="rgba(255,255,255,0.2)" />
-            <path d="M64 24C41.9 24 24 41.9 24 64C24 86.1 41.9 104 64 104C86.1 104 104 86.1 104 86C104 63.9 86.1 46 64 46V24Z" fill="white" />
-            <circle cx="64" cy="64" r="20" fill="#5865F2" />
-          </svg>
-        </div>
-        <h3 class="product-name text-xl sm:text-3xl font-bold text-white text-center luxury-title">DISCORD NITRO BASIC</h3>
-        <p class="product-desc text-white text-center mt-1 sm:mt-2 font-light text-xs sm:text-sm tracking-wide" data-zh="基础升级订阅" data-en="Basic Upgrade">基础升级订阅</p>
-      </div>
-      <div class="p-4 sm:p-8">
-        <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
-          <div class="flex items-center text-gray-300">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5">
-              <circle cx="10" cy="10" r="10" fill="#5865F2" />
-              <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
-            </svg>
-            <span class="feature-text text-xs sm:text-sm" data-zh="自定义表情符号" data-en="Custom Emojis">自定义表情符号</span>
-          </div>
-          <div class="flex items-center text-gray-300">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5">
-              <circle cx="10" cy="10" r="10" fill="#5865F2" />
-              <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
-            </svg>
-            <span class="feature-text text-xs sm:text-sm" data-zh="50MB 文件上传" data-en="50MB Upload">50MB 文件上传</span>
-          </div>
-          <div class="flex items-center text-gray-300">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5">
-              <circle cx="10" cy="10" r="10" fill="#5865F2" />
-              <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
-            </svg>
-            <span class="feature-text text-xs sm:text-sm" data-zh="高清视频通话" data-en="HD Video">高清视频通话</span>
-          </div>
-        </div>
-        <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
-          <div class="delivery-option border-2 border-purple-500 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-purple-900/30" data-type="登入" data-price="9">
-            <div class="flex justify-between items-center">
-              <div>
-                <span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="🔐 登入" data-en="🔐 LOGIN">🔐 登入</span>
-                <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="我们代为登录" data-en="We login for you">我们代为登录</p>
-              </div>
-              <span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM9</span>
-            </div>
-          </div>
-          <div class="delivery-option border-2 border-purple-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-purple-900/30" data-type="链接" data-price="9">
-            <div class="flex justify-between items-center">
-              <div>
-                <span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="🔗 链接" data-en="🔗 LINK">🔗 链接</span>
-                <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="购买链接" data-en="Purchase link">购买链接</p>
-              </div>
-              <span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM9</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 商品2: DISCORD NITRO PREMIUM -->
-    <div class="product-card rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl relative">
-      <!-- 库存显示 -->
-      <div class="stock-badge">
-        <i class="fas fa-box mr-1"></i>
-        <span class="stock-count">库存: 8</span>
-      </div>
-      
-      <!-- 心愿单按钮 -->
-      <button class="wishlist-btn" data-product-id="nitro-premium" data-product-name="DISCORD NITRO">
-        <i class="far fa-heart"></i>
-      </button>
-      
-      <!-- 比较复选框 -->
-      <div class="absolute top-4 left-4 z-10">
-        <input type="checkbox" class="compare-checkbox" data-product-id="nitro-premium" data-product-name="DISCORD NITRO">
-        <label class="text-white text-sm ml-1">比较</label>
-      </div>
-      
-      <div class="popular-badge absolute top-3 right-3 sm:top-4 sm:right-4 px-3 py-1 sm:px-5 sm:py-2 rounded-full text-xs sm:text-sm font-bold z-10" style="color: #333;">
-        <span class="hot-text">⭐ PREMIUM</span>
-      </div>
-      <div class="p-6 sm:p-10 relative" style="background: linear-gradient(135deg, #FF73FA 0%, #5865F2 100%);">
-        <div class="icon-container mx-auto w-20 h-20 sm:w-32 sm:h-32 mb-4 sm:mb-6">
-          <!-- Premium Logo -->
-          <svg width="100%" height="100%" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="64" cy="64" r="60" fill="rgba(255,255,255,0.2)" />
-            <path d="M64 20L75 48H105L81 65L91 93L64 75L37 93L47 65L23 48H53L64 20Z" fill="white" />
-            <circle cx="64" cy="64" r="15" fill="#FF73FA" />
-          </svg>
-        </div>
-        <h3 class="product-name text-xl sm:text-3xl font-bold text-white text-center luxury-title">DISCORD NITRO</h3>
-        <p class="product-desc text-white text-center mt-1 sm:mt-2 font-light text-xs sm:text-sm tracking-wide" data-zh="完整升级体验" data-en="Full Experience">完整升级体验</p>
-      </div>
-      <div class="p-4 sm:p-8">
-        <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
-          <div class="flex items-center text-gray-300">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5">
-              <circle cx="10" cy="10" r="10" fill="#FF73FA" />
-              <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
-            </svg>
-            <span class="feature-text text-xs sm:text-sm" data-zh="所有 Basic 功能" data-en="All Basic Features">所有 Basic 功能</span>
-          </div>
-          <div class="flex items-center text-gray-300">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5">
-              <circle cx="10" cy="10" r="10" fill="#FF73FA" />
-              <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
-            </svg>
-            <span class="feature-text text-xs sm:text-sm" data-zh="2 次服务器加成" data-en="2 Server Boosts">2 次服务器加成</span>
-          </div>
-          <div class="flex items-center text-gray-300">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5">
-              <circle cx="10" cy="10" r="10" fill="#FF73FA" />
-              <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
-            </svg>
-            <span class="feature-text text-xs sm:text-sm" data-zh="500MB 文件上传" data-en="500MB Upload">500MB 文件上传</span>
-          </div>
-        </div>
-        <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
-          <div class="delivery-option border-2 border-pink-500 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-pink-900/30" data-type="登入" data-price="21">
-            <div class="flex justify-between items-center">
-              <div>
-                <span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="🔐 登入" data-en="🔐 LOGIN">🔐 登入</span>
-                <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="我们代为登录" data-en="We login for you">我们代为登录</p>
-              </div>
-              <span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM21</span>
-            </div>
-          </div>
-          <div class="delivery-option border-2 border-pink-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-pink-900/30" data-type="链接" data-price="21">
-            <div class="flex justify-between items-center">
-              <div>
-                <span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="🔗 链接" data-en="🔗 LINK">🔗 链接</span>
-                <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="购买链接" data-en="Purchase link">购买链接</p>
-              </div>
-              <span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM21</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- 商品3: 100 ROBUX -->
-    <div class="product-card rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl relative">
-      <!-- 库存显示 -->
-      <div class="stock-badge">
-        <i class="fas fa-box mr-1"></i>
-        <span class="stock-count">库存: 50</span>
-      </div>
-      
-      <!-- 心愿单按钮 -->
-      <button class="wishlist-btn" data-product-id="robux-100" data-product-name="100 ROBUX">
-        <i class="far fa-heart"></i>
-      </button>
-      
-      <!-- 比较复选框 -->
-      <div class="absolute top-4 left-4 z-10">
-        <input type="checkbox" class="compare-checkbox" data-product-id="robux-100" data-product-name="100 ROBUX">
-        <label class="text-white text-sm ml-1">比较</label>
-      </div>
-      
-      <div class="p-6 sm:p-10 relative" style="background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);">
-        <div class="icon-container mx-auto w-20 h-20 sm:w-32 sm:h-32 mb-4 sm:mb-6">
-          <!-- Robux Logo -->
-          <svg width="100%" height="100%" viewBox="0 0 128 128" fill="none">
-            <rect x="39" y="39" width="50" height="50" rx="8" fill="rgba(255,255,255,0.2)" transform="rotate(45 64 64)" />
-            <rect x="47" y="47" width="34" height="34" rx="5" fill="white" transform="rotate(45 64 64)" />
-            <circle cx="64" cy="64" r="10" fill="#60A5FA" />
-          </svg>
-        </div>
-        <h3 class="product-name text-xl sm:text-3xl font-bold text-white text-center luxury-title">100 ROBUX</h3>
-        <p class="product-desc text-white text-center mt-1 sm:mt-2 font-light text-xs sm:text-sm tracking-wide" data-zh="入门级套餐" data-en="Starter Pack">入门级套餐</p>
-      </div>
-      <div class="p-4 sm:p-8">
-        <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
-          <div class="flex items-center text-gray-300">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5">
-              <circle cx="10" cy="10" r="10" fill="#60A5FA" />
-              <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
-            </svg>
-            <span class="feature-text text-xs sm:text-sm" data-zh="100 Robux 到账" data-en="100 Robux">100 Robux 到账</span>
-          </div>
-          <div class="flex items-center text-gray-300">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5">
-              <circle cx="10" cy="10" r="10" fill="#60A5FA" />
-              <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
-            </svg>
-            <span class="feature-text text-xs sm:text-sm" data-zh="5分钟内到账" data-en="5 Min Delivery">5分钟内到账</span>
-          </div>
-        </div>
-        <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
-          <div class="delivery-option border-2 border-purple-500 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-purple-900/30" data-type="代送" data-price="2.40">
-            <div class="flex justify-between items-center">
-              <div>
-                <span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="🚀 代送" data-en="🚀 DELIVERY">🚀 代送</span>
-                <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="我们代为充值" data-en="We deliver for you">我们代为充值</p>
-              </div>
-              <span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM2.40</span>
-            </div>
-          </div>
-          <div class="delivery-option border-2 border-purple-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-purple-900/30" data-type="包税" data-price="2.90">
-            <div class="flex justify-between items-center">
-              <div>
-                <span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="✓ 包税" data-en="✓ TAX INCL">✓ 包税</span>
-                <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="含税价格" data-en="Tax included">含税价格</p>
-              </div>
-              <span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM2.90</span>
-            </div>
-          </div>
-          <div class="delivery-option border-2 border-purple-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-purple-900/30" data-type="不包税" data-price="2.40">
-            <div class="flex justify-between items-center">
-              <div>
-                <span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="✗ 不包税" data-en="✗ NO TAX">✗ 不包税</span>
-                <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="需自付税费" data-en="Tax excluded">需自付税费</p>
-              </div>
-              <span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM2.40</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- 商品4: 1000 ROBUX -->
-    <div class="product-card rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl relative">
-      <!-- 库存显示 -->
-      <div class="stock-badge">
-        <i class="fas fa-box mr-1"></i>
-        <span class="stock-count">库存: 25</span>
-      </div>
-      
-      <!-- 心愿单按钮 -->
-      <button class="wishlist-btn" data-product-id="robux-1000" data-product-name="1000 ROBUX">
-        <i class="far fa-heart"></i>
-      </button>
-      
-      <!-- 比较复选框 -->
-      <div class="absolute top-4 left-4 z-10">
-        <input type="checkbox" class="compare-checkbox" data-product-id="robux-1000" data-product-name="1000 ROBUX">
-        <label class="text-white text-sm ml-1">比较</label>
-      </div>
-      
-      <div class="p-6 sm:p-10 relative" style="background: linear-gradient(135deg, #FF6B6B 0%, #CC5555 100%);">
-        <div class="icon-container mx-auto w-20 h-20 sm:w-32 sm:h-32 mb-4 sm:mb-6">
-          <!-- 1000 Robux Logo -->
-          <svg width="100%" height="100%" viewBox="0 0 128 128" fill="none">
-            <rect x="29" y="29" width="70" height="70" rx="12" fill="rgba(255,255,255,0.2)" transform="rotate(45 64 64)" />
-            <rect x="39" y="39" width="50" height="50" rx="8" fill="white" transform="rotate(45 64 64)" />
-            <circle cx="64" cy="64" r="15" fill="#FF6B6B" />
-          </svg>
-        </div>
-        <h3 class="product-name text-xl sm:text-3xl font-bold text-white text-center luxury-title">1000 ROBUX</h3>
-        <p class="product-desc text-white text-center mt-1 sm:mt-2 font-light text-xs sm:text-sm tracking-wide" data-zh="超值优惠套餐" data-en="Best Value">超值优惠套餐</p>
-      </div>
-      <div class="p-4 sm:p-8">
-        <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
-          <div class="flex items-center text-gray-300">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5">
-              <circle cx="10" cy="10" r="10" fill="#FF6B6B" />
-              <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
-            </svg>
-            <span class="feature-text text-xs sm:text-sm" data-zh="1000 Robux 到账" data-en="1000 Robux">1000 Robux 到账</span>
-          </div>
-          <div class="flex items-center text-gray-300">
-            <svg width="16" height="16" viewBox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5">
-              <circle cx="10" cy="10" r="10" fill="#FF6B6B" />
-              <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
-            </svg>
-            <span class="feature-text text-xs sm:text-sm" data-zh="性价比之选" data-en="Best Value">性价比之选</span>
-          </div>
-        </div>
-        <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
-          <div class="delivery-option border-2 border-red-500 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-red-900/30" data-type="代送" data-price="24.00">
-            <div class="flex justify-between items-center">
-              <div>
-                <span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="🚀 代送" data-en="🚀 DELIVERY">🚀 代送</span>
-                <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="我们代为充值" data-en="We deliver for you">我们代为充值</p>
-              </div>
-              <span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM24</span>
-            </div>
-          </div>
-          <div class="delivery-option border-2 border-red-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-red-900/30" data-type="包税" data-price="29.00">
-            <div class="flex justify-between items-center">
-              <div>
-                <span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="✓ 包税" data-en="✓ TAX INCL">✓ 包税</span>
-                <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="含税价格" data-en="Tax included">含税价格</p>
-              </div>
-              <span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM29</span>
-            </div>
-          </div>
-          <div class="delivery-option border-2 border-red-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-red-900/30" data-type="不包税" data-price="24.00">
-            <div class="flex justify-between items-center">
-              <div>
-                <span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="✗ 不包税" data-en="✗ NO TAX">✗ 不包税</span>
-                <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="需自付税费" data-en="Tax excluded">需自付税费</p>
-              </div>
-              <span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM24</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- 特色功能 -->
-  <div class="mt-20 sm:mt-40 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-12">
-    <div class="text-center p-6 sm:p-12 feature-card rounded-2xl sm:rounded-3xl">
-      <svg class="mx-auto mb-4 sm:mb-8" width="60" height="60" viewBox="0 0 90 90" fill="none">
-        <circle cx="45" cy="45" r="45" fill="url(#feature1Gradient)" opacity="0.3" />
-        <circle cx="45" cy="45" r="35" fill="url(#feature1Gradient)" />
-        <path d="M28 45L40 57L62 35" stroke="black" stroke-width="5" stroke-linecap="round" />
-        <defs>
-          <linearGradient id="feature1Gradient" x1="0" y1="0" x2="90" y2="90">
-            <stop offset="0%" style="stop-color:#d4af37" />
-            <stop offset="100%" style="stop-color:#ffd700" />
-          </linearGradient>
-        </defs>
-      </svg>
-      <h3 class="text-xl sm:text-3xl font-bold neon-text mb-2 sm:mb-4 luxury-title feature-1-title">AUTHENTICITY</h3>
-      <p class="text-gray-400 font-light text-sm sm:text-base feature-1-desc" data-zh="100% 正品保证，交易安全可靠" data-en="100% authentic, safe transactions">100% 正品保证，交易安全可靠</p>
-    </div>
-    <div class="text-center p-6 sm:p-12 feature-card rounded-2xl sm:rounded-3xl">
-      <svg class="mx-auto mb-4 sm:mb-8" width="60" height="60" viewBox="0 0 90 90" fill="none">
-        <circle cx="45" cy="45" r="45" fill="url(#feature2Gradient)" opacity="0.3" />
-        <circle cx="45" cy="45" r="35" fill="url(#feature2Gradient)" />
-        <path d="M45 23V45L62 62" stroke="black" stroke-width="5" stroke-linecap="round" />
-        <defs>
-          <linearGradient id="feature2Gradient" x1="0" y1="0" x2="90" y2="90">
-            <stop offset="0%" style="stop-color:#8a2be2" />
-            <stop offset="100%" style="stop-color:#00bfff" />
-          </linearGradient>
-        </defs>
-      </svg>
-      <h3 class="text-xl sm:text-3xl font-bold neon-text mb-2 sm:mb-4 luxury-title feature-2-title">INSTANT</h3>
-      <p class="text-gray-400 font-light text-sm sm:text-base feature-2-desc" data-zh="5分钟内到账，全天候服务" data-en="5-minute delivery, 24/7 service">5分钟内到账，全天候服务</p>
-    </div>
-    <div class="text-center p-6 sm:p-12 feature-card rounded-2xl sm:rounded-3xl">
-      <svg class="mx-auto mb-4 sm:mb-8" width="60" height="60" viewBox="0 0 90 90" fill="none">
-        <circle cx="45" cy="45" r="45" fill="url(#feature3Gradient)" opacity="0.3" />
-        <circle cx="45" cy="45" r="35" fill="url(#feature3Gradient)" />
-        <circle cx="45" cy="45" r="6" fill="black" />
-        <path d="M45 28C33 28 28 33 28 45C28 57 33 62 45 62C57 62 62 57 62 45" stroke="black" stroke-width="5" stroke-linecap="round" />
-        <defs>
-          <linearGradient id="feature3Gradient" x1="0" y1="0" x2="90" y2="90">
-            <stop offset="0%" style="stop-color:#ff1493" />
-            <stop offset="100%" style="stop-color:#d4af37" />
-          </linearGradient>
-        </defs>
-      </svg>
-      <h3 class="text-xl sm:text-3xl font-bold neon-text mb-2 sm:mb-4 luxury-title feature-3-title">SUPPORT 24/7</h3>
-      <p class="text-gray-400 font-light text-sm sm:text-base feature-3-desc" data-zh="专业客服团队随时为您服务" data-en="Professional team always ready">专业客服团队随时为您服务</p>
-    </div>
-  </div>
-  
-  <!-- 联系我们 -->
-  <div class="mt-20 sm:mt-40">
-    <h2 class="text-3xl sm:text-6xl font-black neon-text text-center mb-8 sm:mb-16 luxury-title contact-title tracking-wider">CONTACT US</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12 max-w-5xl mx-auto">
-      <a href="https://wa.me/601162430710" target="_blank" rel="noopener noreferrer" class="feature-card rounded-2xl sm:rounded-3xl p-6 sm:p-12 hover:scale-105 transition-all">
-        <div class="flex items-center space-x-4 sm:space-x-6">
-          <div class="flex-shrink-0">
-            <svg width="60" height="60" viewBox="0 0 90 90" fill="none" class="sm:w-[90px] sm:h-[90px]">
-              <circle cx="45" cy="45" r="45" fill="url(#whatsappGradient)" />
-              <path d="M45 22.5C31.5 22.5 22.5 31.5 22.5 45C22.5 48.9 23.6 52.6 25.6 55.7L22.8 65.3L33 62.5C36 64.4 39.6 65.6 43.6 65.6C57.1 65.6 66.1 56.6 66.1 43.1C66.1 29.6 57.1 20.6 43.6 20.6L45 22.5Z" fill="white" />
-              <path d="M45 61.9C41.6 61.9 38.3 60.8 35.5 58.9L34.7 58.6L27.8 60.5L29.7 54L29.3 53.1C27.2 50.1 26 46.6 26 42.9C26 34.3 33 27.3 41.6 27.3C50.2 27.3 57.2 34.3 57.2 42.9C57.2 51.5 50.2 58.5 41.6 58.5L45 61.9Z" fill="white" />
-              <defs>
-                <linearGradient id="whatsappGradient" x1="0" y1="0" x2="90" y2="90">
-                  <stop offset="0%" style="stop-color:#25D366" />
-                  <stop offset="100%" style="stop-color:#128C7E" />
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-          <div class="flex-1">
-            <h3 class="text-2xl sm:text-3xl font-bold neon-text mb-1 sm:mb-3 luxury-title whatsapp-title">WHATSAPP</h3>
-            <p class="text-gray-400 font-light text-xs sm:text-sm whatsapp-desc" data-zh="即时客服支持" data-en="Instant support">即时客服支持</p>
-            <p class="text-white font-mono mt-2 sm:mt-4 text-xs sm:text-sm">+60 11-6243 0710</p>
-          </div>
-          <svg width="25" height="25" viewBox="0 0 35 35" fill="none" class="flex-shrink-0 sm:w-[35px] sm:h-[35px]">
-            <path d="M13 8L23 17.5L13 27" stroke="url(#arrowGradient)" stroke-width="3" stroke-linecap="round" />
-            <defs>
-              <linearGradient id="arrowGradient">
-                <stop offset="0%" style="stop-color:#d4af37" />
-                <stop offset="100%" style="stop-color:#ffd700" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-      </a>
-      <a href="https://discord.gg/3BRcSV5Jvf" target="_blank" rel="noopener noreferrer" class="feature-card rounded-2xl sm:rounded-3xl p-6 sm:p-12 hover:scale-105 transition-all">
-        <div class="flex items-center space-x-4 sm:space-x-6">
-          <div class="flex-shrink-0">
-            <svg width="60" height="60" viewBox="0 0 90 90" fill="none" class="sm:w-[90px] sm:h-[90px]">
-              <circle cx="45" cy="45" r="45" fill="#5865F2" />
-              <path d="M60.8 27.6C57.4 26.1 53.8 25.1 50 24.8C49.6 25.5 49.1 26.6 48.8 27.5C44.8 26.9 40.9 26.9 37 27.5C36.7 26.6 36.2 25.5 35.8 24.8C32 25.1 28.4 26.1 25 27.6C17.4 37.4 15.3 46.9 16.3 56.4C21 60.1 25.5 62.3 30 63.8C31.1 62.3 32.1 60.7 32.9 59C31.4 58.4 30 57.7 28.7 56.9C29 56.7 29.4 56.4 29.7 56.1C38.7 60.5 48.6 60.5 57.5 56.1C57.8 56.4 58.2 56.7 58.5 56.9C57.2 57.7 55.8 58.4 54.3 59C55.1 60.7 56.1 62.3 57.2 63.8C61.7 62.3 66.2 60.1 70.9 56.4C72.1 45.5 69.1 36 60.8 27.6ZM35.2 50.2C32.6 50.2 30.4 47.7 30.4 44.7C30.4 41.7 32.6 39.2 35.2 39.2C37.8 39.2 40.1 41.7 40 44.7C40 47.7 37.8 50.2 35.2 50.2ZM51 50.2C48.4 50.2 46.2 47.7 46.2 44.7C46.2 41.7 48.4 39.2 51 39.2C53.6 39.2 55.9 41.7 55.8 44.7C55.8 47.7 53.6 50.2 51 50.2Z" fill="white" />
-            </svg>
-          </div>
-          <div class="flex-1">
-            <h3 class="text-2xl sm:text-3xl font-bold neon-text mb-1 sm:mb-3 luxury-title discord-title">DISCORD</h3>
-            <p class="text-gray-400 font-light text-xs sm:text-sm discord-desc" data-zh="加入我们的社区" data-en="Join our community">加入我们的社区</p>
-            <p class="text-white font-mono mt-2 sm:mt-4 text-xs sm:text-sm">discord.gg/3BRcSV5Jvf</p>
-          </div>
-          <svg width="25" height="25" viewBox="0 0 35 35" fill="none" class="flex-shrink-0 sm:w-[35px] sm:h-[35px]">
-            <path d="M13 8L23 17.5L13 27" stroke="url(#arrowGradient2)" stroke-width="3" stroke-linecap="round" />
-            <defs>
-              <linearGradient id="arrowGradient2">
-                <stop offset="0%" style="stop-color:#d4af37" />
-                <stop offset="100%" style="stop-color:#ffd700" />
-              </linearGradient>
-            </defs>
-          </svg>
-        </div>
-      </a>
-    </div>
-  </div>
-</main>
-  <!-- 页脚 -->
-  <footer class="w-full py-6 sm:py-12 mt-12 sm:mt-24 relative z-10" style="background: rgba(10, 10, 30, 0.9); backdrop-filter: blur(20px); border-top: 2px solid rgba(212, 175, 55, 0.3);">
-    <div class="max-w-7xl mx-auto px-4 text-center text-gray-400">
-      <p class="font-light footer-text text-xs sm:text-sm">© 2024 Nyaaastore. All rights reserved.</p>
-    </div>
-  </footer>
-  
-  <!-- 用户登录/注册模态框 -->
-  <div id="user-auth-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50 p-3 sm:p-4">
-    <div class="modal-content rounded-2xl sm:rounded-3xl shadow-2xl max-w-lg w-full max-h-[90%] overflow-auto">
-      <div class="p-6 sm:p-10 border-b relative overflow-hidden" style="background: linear-gradient(135deg, #8a2be2 0%, #00bfff 100%); border-bottom: 2px solid rgba(255, 255, 255, 0.2);">
-        <div class="flex justify-between items-center relative z-10">
-          <h2 class="text-2xl sm:text-4xl font-bold text-white luxury-title" id="auth-modal-title">用户登录</h2>
-          <button id="close-auth-modal" class="text-white hover:text-gray-200 text-4xl sm:text-5xl font-light transition-transform hover:rotate-90 hover:scale-110" style="transition: all 0.3s;">×</button>
-        </div>
-      </div>
-      <div class="p-6 sm:p-10">
-        <div class="auth-tab">
-          <button class="auth-tab-btn active" data-tab="login">登录</button>
-          <button class="auth-tab-btn" data-tab="register">注册</button>
-        </div>
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #2a2a4a;
+        }
         
-        <form id="login-form" class="auth-form active">
-          <input type="email" class="form-input" placeholder="邮箱地址" required>
-          <input type="password" class="form-input" placeholder="密码" required>
-          <button type="submit" class="w-full py-4 luxury-button rounded-xl font-bold text-lg hover:scale-105 transition-all">
-            登录
-          </button>
-        </form>
+        .logo {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #7289da;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
         
-        <form id="register-form" class="auth-form">
-          <input type="text" class="form-input" placeholder="用户名" required>
-          <input type="email" class="form-input" placeholder="邮箱地址" required>
-          <input type="password" class="form-input" placeholder="密码" required>
-          <input type="password" class="form-input" placeholder="确认密码" required>
-          <button type="submit" class="w-full py-4 luxury-button rounded-xl font-bold text-lg hover:scale-105 transition-all">
-            注册
-          </button>
-        </form>
-      </div>
-    </div>
-  </div>
-  
-  <!-- 订单跟踪模态框 -->
-  <div id="track-order-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50 p-3 sm:p-4">
-    <div class="modal-content rounded-2xl sm:rounded-3xl shadow-2xl max-w-2xl w-full max-h-[90%] overflow-auto">
-      <div class="p-6 sm:p-10 border-b relative overflow-hidden" style="background: linear-gradient(135deg, #8a2be2 0%, #00bfff 100%); border-bottom: 2px solid rgba(255, 255, 255, 0.2);">
-        <div class="flex justify-between items-center relative z-10">
-          <h2 class="text-2xl sm:text-4xl font-bold text-white luxury-title">订单跟踪</h2>
-          <button id="close-track-modal" class="text-white hover:text-gray-200 text-4xl sm:text-5xl font-light transition-transform hover:rotate-90 hover:scale-110" style="transition: all 0.3s;">×</button>
-        </div>
-      </div>
-      <div class="p-6 sm:p-10">
-        <div class="mb-6">
-          <input type="text" id="order-id-input" class="form-input" placeholder="请输入订单号">
-          <button id="track-order-btn" class="w-full py-4 luxury-button rounded-xl font-bold text-lg mt-4 hover:scale-105 transition-all">
-            查询订单状态
-          </button>
-        </div>
+        .slogan {
+            font-size: 1.2rem;
+            color: #b0b0ff;
+            margin-bottom: 20px;
+        }
         
-        <div id="tracking-results" class="hidden">
-          <h3 class="text-xl font-bold text-white mb-4">订单状态</h3>
-          <div class="tracking-container">
-            <div class="tracking-status">
-              <div class="status-item completed">
-                <div class="status-dot"></div>
-                <span class="status-label">订单已确认</span>
-              </div>
-              <div class="status-item completed">
-                <div class="status-dot"></div>
-                <span class="status-label">付款成功</span>
-              </div>
-              <div class="status-item current">
-                <div class="status-dot"></div>
-                <span class="status-label">处理中</span>
-              </div>
-              <div class="status-item">
-                <div class="status-dot"></div>
-                <span class="status-label">已完成</span>
-              </div>
-            </div>
+        .contact-bar {
+            background-color: #1a1a2e;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 15px;
+            background-color: #252545;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            background-color: #303060;
+            transform: translateY(-2px);
+        }
+        
+        .contact-icon {
+            color: #7289da;
+            font-size: 1.2rem;
+        }
+        
+        .contact-link {
+            color: #e0e0ff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .contact-link:hover {
+            color: #ffffff;
+            text-decoration: underline;
+        }
+        
+        .search-bar {
+            margin-bottom: 30px;
+        }
+        
+        .search-title {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            color: #a0a0ff;
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 12px 15px;
+            background-color: #1a1a2e;
+            border: 1px solid #3a3a6a;
+            border-radius: 8px;
+            color: #e0e0ff;
+            font-size: 1rem;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: #7289da;
+            box-shadow: 0 0 0 2px rgba(114, 137, 218, 0.2);
+        }
+        
+        .currency-selector {
+            margin-bottom: 30px;
+        }
+        
+        .section-title {
+            font-size: 1.3rem;
+            color: #7289da;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 4px solid #7289da;
+        }
+        
+        .currency-option {
+            display: inline-block;
+            padding: 8px 20px;
+            background-color: #252545;
+            border-radius: 8px;
+            margin-right: 10px;
+            font-weight: 500;
+            border: 1px solid #3a3a6a;
+        }
+        
+        .currency-option.active {
+            background-color: #303060;
+            border-color: #7289da;
+            color: #ffffff;
+        }
+        
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        
+        .category-card {
+            background-color: #1a1a2e;
+            border-radius: 10px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            border: 1px solid #2a2a4a;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-color: #3a3a6a;
+        }
+        
+        .category-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            color: #7289da;
+        }
+        
+        .category-icon {
+            font-size: 1.5rem;
+            margin-right: 10px;
+        }
+        
+        .category-name {
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        
+        .category-items {
+            list-style-type: none;
+        }
+        
+        .category-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #2a2a4a;
+            color: #c0c0ff;
+        }
+        
+        .category-item:last-child {
+            border-bottom: none;
+        }
+        
+        .category-item:hover {
+            color: #ffffff;
+            padding-left: 5px;
+        }
+        
+        .discord-color {
+            color: #7289da;
+        }
+        
+        .roblox-color {
+            color: #ff1b1b;
+        }
+        
+        .game-color {
+            color: #00b894;
+        }
+        
+        .service-color {
+            color: #fdcb6e;
+        }
+        
+        .automatic-color {
+            color: #6c5ce7;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #2a2a4a;
+            color: #a0a0ff;
+            font-size: 0.9rem;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #7289da;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .categories {
+                grid-template-columns: 1fr;
+            }
             
-            <div class="mt-8 p-4 bg-gray-800/30 rounded-lg">
-              <h4 class="text-lg font-bold text-white mb-2">订单详情</h4>
-              <p class="text-gray-300 mb-1">订单号: <span id="display-order-id" class="font-mono">NS-2024-00123</span></p>
-              <p class="text-gray-300 mb-1">商品: DISCORD NITRO BASIC</p>
-              <p class="text-gray-300 mb-1">总金额: RM9.00</p>
-              <p class="text-gray-300 mb-1">下单时间: 2024-12-01 15:30</p>
-              <p class="text-gray-300">预计完成: 2024-12-01 15:45</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- 心愿单模态框 -->
-  <div id="wishlist-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50 p-3 sm:p-4">
-    <div class="modal-content rounded-2xl sm:rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90%] overflow-auto">
-      <div class="p-6 sm:p-10 border-b relative overflow-hidden" style="background: linear-gradient(135deg, #ff1493 0%, #ff6347 100%); border-bottom: 2px solid rgba(255, 255, 255, 0.2);">
-        <div class="flex justify-between items-center relative z-10">
-          <h2 class="text-2xl sm:text-4xl font-bold text-white luxury-title">我的心愿单</h2>
-          <button id="close-wishlist-modal" class="text-white hover:text-gray-200 text-4xl sm:text-5xl font-light transition-transform hover:rotate-90 hover:scale-110" style="transition: all 0.3s;">×</button>
-        </div>
-      </div>
-      <div class="p-6 sm:p-10">
-        <div id="wishlist-items" class="space-y-4">
-          <!-- 心愿单内容将动态显示在这里 -->
-          <div class="text-center py-12">
-            <svg class="mx-auto mb-6" width="80" height="80" viewBox="0 0 100 100" fill="none">
-              <circle cx="50" cy="50" r="50" fill="rgba(255, 20, 147, 0.2)" />
-              <path d="M35 50L45 60L65 40" stroke="#ff1493" stroke-width="4" stroke-linecap="round" />
-              <path d="M50 35L55 45L65 35L55 55L50 65L45 55L35 45L45 35L50 35Z" stroke="#ff1493" stroke-width="3" fill="none" />
-            </svg>
-            <p class="text-gray-400 text-lg">心愿单是空的</p>
-            <p class="text-gray-500 text-sm mt-2">点击商品上的❤️按钮添加到心愿单</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- 多步结账模态框 -->
-  <div id="checkout-process-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50 p-3 sm:p-4">
-    <div class="modal-content rounded-2xl sm:rounded-3xl shadow-2xl max-w-3xl w-full max-h-[90%] overflow-auto">
-      <div class="p-6 sm:p-10 border-b relative overflow-hidden" style="background: linear-gradient(135deg, #8a2be2 0%, #00bfff 100%); border-bottom: 2px solid rgba(255, 255, 255, 0.2);">
-        <div class="flex justify-between items-center relative z-10">
-          <h2 class="text-2xl sm:text-4xl font-bold text-white luxury-title">结账流程</h2>
-          <button id="close-checkout-modal" class="text-white hover:text-gray-200 text-4xl sm:text-5xl font-light transition-transform hover:rotate-90 hover:scale-110" style="transition: all 0.3s;">×</button>
-        </div>
-      </div>
-      <div class="p-6 sm:p-10">
-        <div class="checkout-steps">
-          <div class="checkout-step active" data-step="1">
-            <div class="step-circle">1</div>
-            <span class="step-label">购物车</span>
-          </div>
-          <div class="checkout-step" data-step="2">
-            <div class="step-circle">2</div>
-            <span class="step-label">送货信息</span>
-          </div>
-          <div class="checkout-step" data-step="3">
-            <div class="step-circle">3</div>
-            <span class="step-label">支付方式</span>
-          </div>
-          <div class="checkout-step" data-step="4">
-            <div class="step-circle">4</div>
-            <span class="step-label">确认订单</span>
-          </div>
-        </div>
-        
-        <div id="checkout-step-1" class="checkout-step-content active">
-          <h3 class="text-xl font-bold text-white mb-4">购物车内容</h3>
-          <div id="checkout-cart-items" class="space-y-3">
-            <!-- 购物车内容将动态显示在这里 -->
-          </div>
-        </div>
-        
-        <div id="checkout-step-2" class="checkout-step-content">
-          <h3 class="text-xl font-bold text-white mb-4">送货信息</h3>
-          <input type="text" class="form-input mb-3" placeholder="收货人姓名">
-          <input type="email" class="form-input mb-3" placeholder="邮箱地址">
-          <input type="tel" class="form-input mb-3" placeholder="手机号码">
-          <textarea class="form-input mb-3" placeholder="送货地址" rows="3"></textarea>
-        </div>
-        
-        <div id="checkout-step-3" class="checkout-step-content">
-          <h3 class="text-xl font-bold text-white mb-4">支付方式</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div class="payment-option" data-method="TNG">
-              <div class="payment-icon mb-4 flex justify-center">
-                <i class="fas fa-mobile-alt text-4xl text-white"></i>
-              </div>
-              <h4 class="text-center font-bold text-white">Touch 'N Go</h4>
-            </div>
-            <div class="payment-option" data-method="Litecoin">
-              <div class="payment-icon mb-4 flex justify-center">
-                <i class="fab fa-bitcoin text-4xl text-white"></i>
-              </div>
-              <h4 class="text-center font-bold text-white">Litecoin</h4>
-            </div>
-            <div class="payment-option" data-method="PayPal">
-              <div class="payment-icon mb-4 flex justify-center">
-                <i class="fab fa-paypal text-4xl text-white"></i>
-              </div>
-              <h4 class="text-center font-bold text-white">PayPal</h4>
-            </div>
-          </div>
-        </div>
-        
-        <div id="checkout-step-4" class="checkout-step-content">
-          <h3 class="text-xl font-bold text-white mb-4">订单确认</h3>
-          <div class="bg-gray-800/30 p-4 rounded-lg mb-4">
-            <p class="text-gray-300">请确认您的订单信息是否正确</p>
-          </div>
-        </div>
-        
-        <div class="flex justify-between mt-8">
-          <button id="prev-step" class="px-6 py-3 glass-card rounded-lg text-white hover:scale-105 transition-all">
-            上一步
-          </button>
-          <button id="next-step" class="px-6 py-3 luxury-button rounded-lg hover:scale-105 transition-all">
-            下一步
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- 购物车模态框 -->
-  <div id="cart-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50 p-3 sm:p-4">
-    <div class="modal-content rounded-2xl sm:rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90%] overflow-auto">
-      <div class="p-6 sm:p-10 border-b relative overflow-hidden" style="background: linear-gradient(135deg, #8a2be2 0%, #00bfff 100%); border-bottom: 2px solid rgba(255, 255, 255, 0.2);">
-        <div class="flex justify-between items-center relative z-10">
-          <h2 class="text-3xl sm:text-5xl font-bold text-white cart-title luxury-title">MY CART</h2>
-          <button id="close-cart" class="text-white hover:text-gray-200 text-4xl sm:text-5xl font-light transition-transform hover:rotate-90 hover:scale-110" style="transition: all 0.3s;">×</button>
-        </div>
-      </div>
-      <div class="p-6 sm:p-10">
-        <div id="cart-items" class="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
-          <div class="text-center py-12 sm:py-16">
-            <svg class="mx-auto mb-4 sm:mb-6" width="80" height="80" viewBox="0 0 100 100" fill="none">
-              <circle cx="50" cy="50" r="50" fill="rgba(138, 43, 226, 0.2)" />
-              <circle cx="50" cy="50" r="35" fill="rgba(138, 43, 226, 0.3)" />
-              <path d="M35 50L45 60L65 40" stroke="#8a2be2" stroke-width="4" stroke-linecap="round" />
-            </svg>
-            <p class="text-gray-400 text-lg sm:text-xl empty-cart-text">购物车是空的</p>
-            <p class="text-gray-500 text-xs sm:text-sm mt-2 sm:mt-3 empty-cart-subtitle">快去挑选你喜欢的商品吧！</p>
-          </div>
-        </div>
-        <div id="payment-section" class="border-t pt-6 sm:pt-8 mb-6 sm:mb-8 hidden" style="border-color: rgba(138, 43, 226, 0.3);">
-          <h3 class="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 payment-method-title luxury-title">SELECT PAYMENT</h3>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-            <div class="payment-option rounded-xl sm:rounded-2xl p-6 sm:p-8" data-method="TNG">
-              <div class="payment-icon mb-4 sm:mb-6 flex justify-center">
-                <svg width="60" height="60" viewBox="0 0 80 80" fill="none" class="sm:w-[80px] sm:h-[80px]">
-                  <circle cx="40" cy="40" r="40" fill="#1E3A8A" />
-                  <path d="M25 35H55V45H25V35Z" fill="#60A5FA" />
-                  <circle cx="40" cy="40" r="10" fill="white" />
-                </svg>
-              </div>
-              <h4 class="text-center font-bold text-white mb-2 sm:mb-3 text-base sm:text-lg">TOUCH 'N GO</h4>
-              <p class="text-center text-xs sm:text-sm text-gray-400 tng-desc">马来西亚电子钱包</p>
-            </div>
-            <div class="payment-option rounded-xl sm:rounded-2xl p-6 sm:p-8" data-method="Litecoin">
-              <div class="payment-icon mb-4 sm:mb-6 flex justify-center">
-                <svg width="60" height="60" viewBox="0 0 80 80" fill="none" class="sm:w-[80px] sm:h-[80px]">
-                  <circle cx="40" cy="40" r="40" fill="#345D9D" />
-                  <path d="M35 25L30 47.5H22.5L20 55H50L52.5 45H32.5L37.5 27.5L35 25Z" fill="white" />
-                </svg>
-              </div>
-              <h4 class="text-center font-bold text-white mb-2 sm:mb-3 text-base sm:text-lg">LITECOIN</h4>
-              <p class="text-center text-xs sm:text-sm text-gray-400 ltc-desc">加密货币支付</p>
-            </div>
-            <div class="payment-option rounded-xl sm:rounded-2xl p-6 sm:p-8" data-method="PayPal">
-              <div class="payment-icon mb-4 sm:mb-6 flex justify-center">
-                <svg width="60" height="60" viewBox="0 0 80 80" fill="none" class="sm:w-[80px] sm:h-[80px]">
-                  <circle cx="40" cy="40" r="40" fill="#003087" />
-                  <path d="M35 22.5C35 22.5 47.5 22.5 50 31.25C52.5 40 45 47.5 40 47.5H35L32.5 57.5H27.5L35 22.5Z" fill="#009CDE" />
-                </svg>
-              </div>
-              <h4 class="text-center font-bold text-white mb-2 sm:mb-3 text-base sm:text-lg">PAYPAL</h4>
-              <p class="text-center text-xs sm:text-sm text-gray-400 paypal-desc">全球在线支付</p>
-            </div>
-          </div>
-        </div>
-        <div class="border-t pt-6 sm:pt-8" style="border-color: rgba(138, 43, 226, 0.3);">
-          <div class="flex justify-between items-center mb-6 sm:mb-8">
-            <span class="text-2xl sm:text-3xl font-bold text-white total-text luxury-title">TOTAL:</span>
-            <span id="cart-total" class="text-3xl sm:text-5xl font-bold holographic-text">RM0</span>
-          </div>
-          <button id="checkout-button" class="w-full py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg luxury-button">
-            <span id="checkout-btn-text" class="relative z-10">确认购买并保存</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- 成功提示 -->
-  <div id="success-message" class="success-toast fixed top-4 right-4 sm:top-10 sm:right-10 px-6 py-3 sm:px-10 sm:py-5 rounded-xl sm:rounded-2xl shadow-2xl hidden items-center z-50">
-    <svg width="24" height="24" viewBox="0 0 30 30" fill="none" class="mr-3 sm:mr-4 sm:w-[30px] sm:h-[30px]">
-      <circle cx="15" cy="15" r="15" fill="rgba(255, 255, 255, 0.3)" />
-      <path d="M9 15L13 19L21 11" stroke="white" stroke-width="3" stroke-linecap="round" />
-    </svg>
-    <span id="success-msg-text" class="font-semibold text-sm sm:text-lg">已添加到购物车！</span>
-  </div>
-</div>
-<script>
-// 全局变量
-let cart = [];
-let currentLang = 'zh';
-let currentCurrency = 'MYR';
-let selectedPaymentMethod = null;
-let uploadedPaymentProof = null;
-let wishlist = [];
-let comparingProducts = [];
-let currentUser = null;
-
-// 产品数据
-const products = [
-  {
-    id: 'nitro-basic',
-    name: 'DISCORD NITRO BASIC',
-    description: '基础升级订阅',
-    features: ['自定义表情符号', '50MB 文件上传', '高清视频通话'],
-    price: 9,
-    stock: 15,
-    category: 'discord'
-  },
-  {
-    id: 'nitro-premium',
-    name: 'DISCORD NITRO',
-    description: '完整升级体验',
-    features: ['所有 Basic 功能', '2 次服务器加成', '500MB 文件上传'],
-    price: 21,
-    stock: 8,
-    category: 'discord'
-  },
-  {
-    id: 'robux-100',
-    name: '100 ROBUX',
-    description: '入门级套餐',
-    features: ['100 Robux 到账', '5分钟内到账'],
-    price: 2.40,
-    stock: 50,
-    category: 'robux'
-  },
-  {
-    id: 'robux-1000',
-    name: '1000 ROBUX',
-    description: '超值优惠套餐',
-    features: ['1000 Robux 到账', '性价比之选'],
-    price: 24.00,
-    stock: 25,
-    category: 'robux'
-  }
-];
-
-// 价格映射
-const priceMap = {
-  'DISCORD NITRO BASIC (登入)': { MYR: 9, TWD: 100 },
-  'DISCORD NITRO BASIC (链接)': { MYR: 9, TWD: 100 },
-  'DISCORD NITRO (登入)': { MYR: 21, TWD: 200 },
-  'DISCORD NITRO (链接)': { MYR: 21, TWD: 200 },
-  '100 ROBUX (代送)': { MYR: 2.40, TWD: 19 },
-  '100 ROBUX (包税)': { MYR: 2.90, TWD: 23 },
-  '100 ROBUX (不包税)': { MYR: 2.40, TWD: 19 },
-  '1000 ROBUX (代送)': { MYR: 24.00, TWD: 190 },
-  '1000 ROBUX (包税)': { MYR: 29.00, TWD: 230 },
-  '1000 ROBUX (不包税)': { MYR: 24.00, TWD: 190 }
-};
-
-// Telegram配置
-const TELEGRAM_BOT_TOKEN = '8520089781:AAHPSCT8YZf9q6J43VKdDtdGwtRkzmyMoXM';
-const TELEGRAM_CHAT_ID = '8313770381';
-const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
-const TELEGRAM_SEND_PHOTO_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`;
-
-const PAYPAL_EMAIL = 'zheruizhang6@gmail.com';
-const QR_CODE_URLS = {
-  LTC: 'https://i.ibb.co/ccBPmk7G/IMG-20260105-235120-630.jpg',
-  TNG: 'https://i.ibb.co/WWdJQwRf/IMG-20251215-184553-1.jpg'
-};
-
-// 翻译文本
-const translations = {
-  zh: {
-    // ... 保持原有的翻译内容 ...
-    searchPlaceholder: '搜索商品...',
-    searchResults: '搜索结果',
-    noResults: '没有找到相关商品',
-    countdownTitle: '限时促销结束倒计时',
-    countdownEnded: '促销已结束',
-    compareProducts: '产品比较',
-    addToCompare: '添加到比较',
-    removeFromCompare: '从比较中移除',
-    clearComparison: '清空比较',
-    compareFeatures: '功能对比',
-    comparePrices: '价格对比',
-    login: '登录',
-    register: '注册',
-    logout: '登出',
-    welcome: '欢迎回来',
-    orderTracking: '订单跟踪',
-    enterOrderId: '请输入订单号',
-    trackOrder: '查询订单状态',
-    orderStatus: '订单状态',
-    orderDetails: '订单详情',
-    wishlist: '心愿单',
-    addToWishlist: '添加到心愿单',
-    removeFromWishlist: '从心愿单移除',
-    emptyWishlist: '心愿单是空的',
-    checkoutProcess: '结账流程',
-    step1: '购物车',
-    step2: '送货信息',
-    step3: '支付方式',
-    step4: '确认订单',
-    prevStep: '上一步',
-    nextStep: '下一步',
-    confirmOrder: '确认订单',
-    chatbotTitle: '在线客服',
-    chatbotPlaceholder: '输入您的问题...',
-    chatbotGreeting: '您好！我是Nyaaastore的客服助手。有什么可以帮您？',
-    chatbotHelp: '您可以询问关于产品、订单、付款等问题。',
-    stock: '库存',
-    lowStock: '库存紧张',
-    outOfStock: '缺货'
-  },
-  en: {
-    // ... 保持原有的翻译内容 ...
-    searchPlaceholder: 'Search products...',
-    searchResults: 'Search Results',
-    noResults: 'No products found',
-    countdownTitle: 'Limited Time Sale Countdown',
-    countdownEnded: 'Sale has ended',
-    compareProducts: 'Product Comparison',
-    addToCompare: 'Add to Compare',
-    removeFromCompare: 'Remove from Compare',
-    clearComparison: 'Clear Comparison',
-    compareFeatures: 'Feature Comparison',
-    comparePrices: 'Price Comparison',
-    login: 'Login',
-    register: 'Register',
-    logout: 'Logout',
-    welcome: 'Welcome back',
-    orderTracking: 'Order Tracking',
-    enterOrderId: 'Enter order ID',
-    trackOrder: 'Track Order',
-    orderStatus: 'Order Status',
-    orderDetails: 'Order Details',
-    wishlist: 'Wishlist',
-    addToWishlist: 'Add to Wishlist',
-    removeFromWishlist: 'Remove from Wishlist',
-    emptyWishlist: 'Wishlist is empty',
-    checkoutProcess: 'Checkout Process',
-    step1: 'Cart',
-    step2: 'Shipping Info',
-    step3: 'Payment Method',
-    step4: 'Order Confirmation',
-    prevStep: 'Previous',
-    nextStep: 'Next',
-    confirmOrder: 'Confirm Order',
-    chatbotTitle: 'Customer Support',
-    chatbotPlaceholder: 'Type your question...',
-    chatbotGreeting: 'Hello! I am the Nyaaastore customer support assistant. How can I help you?',
-    chatbotHelp: 'You can ask about products, orders, payments, etc.',
-    stock: 'Stock',
-    lowStock: 'Low Stock',
-    outOfStock: 'Out of Stock'
-  }
-};
-
-// 功能1: 产品搜索功能
-class ProductSearch {
-  constructor() {
-    this.searchInput = document.getElementById('search-input');
-    this.mobileSearchInput = document.getElementById('mobile-search-input');
-    this.searchResults = document.getElementById('search-results');
-    this.resultsContainer = document.getElementById('search-results-container');
-    this.init();
-  }
-
-  init() {
-    if (this.searchInput) {
-      this.searchInput.addEventListener('input', (e) => this.search(e.target.value));
-    }
-    if (this.mobileSearchInput) {
-      this.mobileSearchInput.addEventListener('input', (e) => this.search(e.target.value));
-    }
-  }
-
-  search(query) {
-    if (!query.trim()) {
-      this.searchResults.classList.add('hidden');
-      return;
-    }
-
-    const searchTerm = query.toLowerCase();
-    const filteredProducts = products.filter(product => 
-      product.name.toLowerCase().includes(searchTerm) ||
-      product.description.toLowerCase().includes(searchTerm) ||
-      product.features.some(feature => feature.toLowerCase().includes(searchTerm))
-    );
-
-    this.displayResults(filteredProducts, searchTerm);
-  }
-
-  displayResults(results, searchTerm) {
-    this.resultsContainer.innerHTML = '';
-    
-    if (results.length === 0) {
-      this.resultsContainer.innerHTML = `
-        <div class="col-span-full text-center py-12">
-          <i class="fas fa-search text-5xl text-gray-500 mb-4"></i>
-          <p class="text-gray-400 text-lg">${translations[currentLang].noResults}</p>
-          <p class="text-gray-500 text-sm mt-2">"${searchTerm}"</p>
-        </div>
-      `;
-    } else {
-      results.forEach(product => {
-        const productCard = this.createProductCard(product);
-        this.resultsContainer.appendChild(productCard);
-      });
-    }
-
-    this.searchResults.classList.remove('hidden');
-  }
-
-  createProductCard(product) {
-    const div = document.createElement('div');
-    div.className = 'product-card rounded-2xl overflow-hidden';
-    div.innerHTML = `
-      <div class="p-6 relative" style="background: linear-gradient(135deg, #5865F2 0%, #3b49df 100%);">
-        <h3 class="text-xl font-bold text-white text-center luxury-title">${product.name}</h3>
-        <p class="text-white text-center mt-2 font-light text-sm">${product.description}</p>
-      </div>
-      <div class="p-6">
-        <ul class="space-y-2 mb-4">
-          ${product.features.map(feature => `
-            <li class="flex items-center text-gray-300">
-              <i class="fas fa-check-circle text-green-400 mr-2"></i>
-              <span class="text-sm">${feature}</span>
-            </li>
-          `).join('')}
-        </ul>
-        <div class="flex justify-between items-center">
-          <span class="text-2xl font-bold holographic-text">RM${product.price}</span>
-          <button class="px-4 py-2 luxury-button rounded-lg text-sm hover:scale-105 transition-all add-to-cart-search" 
-                  data-product="${product.name}" data-price="${product.price}">
-            加入购物车
-          </button>
-        </div>
-      </div>
-    `;
-    return div;
-  }
-}
-
-// 功能2: 订单跟踪系统
-class OrderTracking {
-  constructor() {
-    this.trackingModal = document.getElementById('track-order-modal');
-    this.trackButton = document.getElementById('track-order-button');
-    this.trackBtn = document.getElementById('track-order-btn');
-    this.orderIdInput = document.getElementById('order-id-input');
-    this.trackingResults = document.getElementById('tracking-results');
-    this.displayOrderId = document.getElementById('display-order-id');
-    this.init();
-  }
-
-  init() {
-    this.trackButton.addEventListener('click', () => this.openTrackingModal());
-    this.trackBtn.addEventListener('click', () => this.trackOrder());
-    
-    document.getElementById('close-track-modal').addEventListener('click', () => {
-      this.trackingModal.classList.add('hidden');
-    });
-
-    this.trackingModal.addEventListener('click', (e) => {
-      if (e.target === this.trackingModal) {
-        this.trackingModal.classList.add('hidden');
-      }
-    });
-  }
-
-  openTrackingModal() {
-    this.trackingModal.classList.remove('hidden');
-    this.trackingResults.classList.add('hidden');
-    this.orderIdInput.value = '';
-  }
-
-  trackOrder() {
-    const orderId = this.orderIdInput.value.trim();
-    if (!orderId) {
-      alert('请输入订单号');
-      return;
-    }
-
-    // 模拟订单状态查询
-    const orderStatus = this.getOrderStatus(orderId);
-    if (orderStatus) {
-      this.displayOrderId.textContent = orderId;
-      this.trackingResults.classList.remove('hidden');
-      
-      // 滚动到结果区域
-      this.trackingResults.scrollIntoView({ behavior: 'smooth' });
-    } else {
-      alert('未找到该订单，请检查订单号是否正确');
-    }
-  }
-
-  getOrderStatus(orderId) {
-    // 模拟订单数据
-    const orders = {
-      'NS-2024-00123': {
-        status: 'processing',
-        product: 'DISCORD NITRO BASIC',
-        amount: 9.00,
-        orderTime: '2024-12-01 15:30',
-        estimatedTime: '2024-12-01 15:45'
-      },
-      'NS-2024-00124': {
-        status: 'completed',
-        product: '100 ROBUX',
-        amount: 2.40,
-        orderTime: '2024-12-01 14:20',
-        estimatedTime: '2024-12-01 14:25'
-      }
-    };
-
-    return orders[orderId] || null;
-  }
-}
-
-// 功能3: 用户登录/注册系统
-class UserAuth {
-  constructor() {
-    this.authModal = document.getElementById('user-auth-modal');
-    this.authButton = document.getElementById('user-auth-button');
-    this.authText = document.getElementById('user-auth-text');
-    this.authModalTitle = document.getElementById('auth-modal-title');
-    this.loginForm = document.getElementById('login-form');
-    this.registerForm = document.getElementById('register-form');
-    this.tabButtons = document.querySelectorAll('.auth-tab-btn');
-    this.init();
-  }
-
-  init() {
-    this.authButton.addEventListener('click', () => this.openAuthModal());
-    document.getElementById('close-auth-modal').addEventListener('click', () => this.closeAuthModal());
-    
-    this.authModal.addEventListener('click', (e) => {
-      if (e.target === this.authModal) {
-        this.closeAuthModal();
-      }
-    });
-
-    this.tabButtons.forEach(button => {
-      button.addEventListener('click', (e) => this.switchTab(e.target.dataset.tab));
-    });
-
-    this.loginForm.addEventListener('submit', (e) => this.handleLogin(e));
-    this.registerForm.addEventListener('submit', (e) => this.handleRegister(e));
-
-    // 检查本地存储中的登录状态
-    this.checkLoginStatus();
-  }
-
-  checkLoginStatus() {
-    const userData = localStorage.getItem('currentUser');
-    if (userData) {
-      currentUser = JSON.parse(userData);
-      this.updateAuthButton();
-    }
-  }
-
-  updateAuthButton() {
-    const t = translations[currentLang];
-    if (currentUser) {
-      this.authText.textContent = currentUser.username || t.welcome;
-      this.authButton.innerHTML = `<i class="fas fa-user-circle mr-2"></i><span class="hidden sm:inline">${currentUser.username || t.welcome}</span>`;
-    } else {
-      this.authText.textContent = t.login;
-      this.authButton.innerHTML = `<i class="fas fa-user mr-2"></i><span class="hidden sm:inline">${t.login}</span>`;
-    }
-  }
-
-  openAuthModal() {
-    if (currentUser) {
-      this.logout();
-      return;
-    }
-    
-    this.authModal.classList.remove('hidden');
-    this.switchTab('login');
-  }
-
-  closeAuthModal() {
-    this.authModal.classList.add('hidden');
-  }
-
-  switchTab(tab) {
-    this.tabButtons.forEach(btn => {
-      btn.classList.remove('active');
-      if (btn.dataset.tab === tab) {
-        btn.classList.add('active');
-      }
-    });
-
-    const t = translations[currentLang];
-    this.authModalTitle.textContent = tab === 'login' ? t.login : t.register;
-
-    document.querySelectorAll('.auth-form').forEach(form => {
-      form.classList.remove('active');
-    });
-
-    if (tab === 'login') {
-      this.loginForm.classList.add('active');
-    } else {
-      this.registerForm.classList.add('active');
-    }
-  }
-
-  async handleLogin(e) {
-    e.preventDefault();
-    const email = this.loginForm.querySelector('input[type="email"]').value;
-    const password = this.loginForm.querySelector('input[type="password"]').value;
-
-    // 模拟登录验证
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const user = users.find(u => u.email === email && u.password === password);
-
-    if (user) {
-      currentUser = user;
-      localStorage.setItem('currentUser', JSON.stringify(user));
-      this.updateAuthButton();
-      this.closeAuthModal();
-      this.showSuccess('登录成功！');
-      
-      // 加载用户的心愿单
-      this.loadUserWishlist();
-    } else {
-      this.showError('邮箱或密码错误');
-    }
-  }
-
-  async handleRegister(e) {
-    e.preventDefault();
-    const username = this.registerForm.querySelector('input[type="text"]').value;
-    const email = this.registerForm.querySelector('input[type="email"]').value;
-    const password = this.registerForm.querySelectorAll('input[type="password"]')[0].value;
-    const confirmPassword = this.registerForm.querySelectorAll('input[type="password"]')[1].value;
-
-    if (password !== confirmPassword) {
-      this.showError('两次输入的密码不一致');
-      return;
-    }
-
-    // 检查邮箱是否已注册
-    let users = JSON.parse(localStorage.getItem('users') || '[]');
-    if (users.some(u => u.email === email)) {
-      this.showError('该邮箱已被注册');
-      return;
-    }
-
-    const newUser = {
-      id: Date.now().toString(),
-      username,
-      email,
-      password,
-      createdAt: new Date().toISOString(),
-      wishlist: []
-    };
-
-    users.push(newUser);
-    localStorage.setItem('users', JSON.stringify(users));
-
-    currentUser = newUser;
-    localStorage.setItem('currentUser', JSON.stringify(newUser));
-
-    this.updateAuthButton();
-    this.closeAuthModal();
-    this.showSuccess('注册成功！已自动登录');
-    this.switchTab('login');
-  }
-
-  logout() {
-    // 保存用户数据
-    if (currentUser) {
-      this.saveUserWishlist();
-    }
-    
-    currentUser = null;
-    localStorage.removeItem('currentUser');
-    this.updateAuthButton();
-    this.showSuccess('已退出登录');
-  }
-
-  saveUserWishlist() {
-    if (currentUser) {
-      currentUser.wishlist = wishlist;
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
-      
-      // 更新用户列表中的用户数据
-      let users = JSON.parse(localStorage.getItem('users') || '[]');
-      users = users.map(user => 
-        user.id === currentUser.id ? currentUser : user
-      );
-      localStorage.setItem('users', JSON.stringify(users));
-    }
-  }
-
-  loadUserWishlist() {
-    if (currentUser && currentUser.wishlist) {
-      wishlist = currentUser.wishlist;
-      updateWishlistCount();
-    }
-  }
-
-  showSuccess(message) {
-    const toast = document.createElement('div');
-    toast.className = 'fixed top-4 right-4 px-6 py-3 rounded-lg bg-green-500 text-white shadow-lg z-50';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-      document.body.removeChild(toast);
-    }, 3000);
-  }
-
-  showError(message) {
-    const toast = document.createElement('div');
-    toast.className = 'fixed top-4 right-4 px-6 py-3 rounded-lg bg-red-500 text-white shadow-lg z-50';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-      document.body.removeChild(toast);
-    }, 3000);
-  }
-}
-
-// 功能6: 实时库存显示
-class StockDisplay {
-  constructor() {
-    this.stockElements = document.querySelectorAll('.stock-count');
-    this.init();
-  }
-
-  init() {
-    this.updateStockDisplay();
-    // 模拟库存变化
-    setInterval(() => this.simulateStockChange(), 30000);
-  }
-
-  updateStockDisplay() {
-    this.stockElements.forEach((element, index) => {
-      const product = products[index];
-      if (product) {
-        let statusClass = '';
-        if (product.stock === 0) {
-          statusClass = 'out-of-stock';
-          element.textContent = translations[currentLang].outOfStock;
-        } else if (product.stock < 5) {
-          statusClass = 'low-stock';
-          element.textContent = `${translations[currentLang].lowStock}: ${product.stock}`;
-        } else {
-          element.textContent = `${translations[currentLang].stock}: ${product.stock}`;
+            .contact-bar {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .logo {
+                font-size: 2.2rem;
+            }
         }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="logo">DMS SERVICES</div>
+        <div class="slogan">我们相信最好的服务才是王道，而不是只是销售产品</div>
+    </div>
+    
+    <div class="contact-bar">
+        <div class="contact-item">
+            <i class="fab fa-discord contact-icon"></i>
+            <a href="https://discord.gg/example" target="_blank" class="contact-link">Discord 客服群</a>
+        </div>
+        <div class="contact-item">
+            <i class="fab fa-kickstarter contact-icon"></i>
+            <a href="https://kook.vip/example" target="_blank" class="contact-link">KOOK 客服群</a>
+        </div>
+        <div class="contact-item">
+            <i class="fas fa-comments contact-icon"></i>
+            <a href="https://t.me/example" target="_blank" class="contact-link">Telegram 通知群</a>
+        </div>
+        <div class="contact-item">
+            <i class="fas fa-robot contact-icon"></i>
+            <span class="contact-link">QQ 群: 123456789</span>
+        </div>
+    </div>
+    
+    <div class="search-bar">
+        <div class="search-title">Q. 搜索商品</div>
+        <input type="text" class="search-box" placeholder="请输入商品关键词（支持模糊搜索）">
+    </div>
+    
+    <div class="currency-selector">
+        <div class="section-title">💰 选择货币</div>
+        <div class="currency-option active">CNY - 人民币</div>
+        <div class="currency-option">USD - 美元</div>
+        <div class="currency-option">EUR - 欧元</div>
+    </div>
+    
+    <div class="categories">
+        <!-- Discord Nitro 分类 -->
+        <div class="category-card">
+            <div class="category-header">
+                <i class="fab fa-discord category-icon discord-color"></i>
+                <div class="category-name discord-color">Discord Nitro</div>
+            </div>
+            <ul class="category-items">
+                <li class="category-item">Nitro Basic - 1个月</li>
+                <li class="category-item">Nitro Basic - 3个月</li>
+                <li class="category-item">Nitro Basic - 12个月</li>
+                <li class="category-item">Nitro Full - 1个月</li>
+                <li class="category-item">Nitro Full - 3个月</li>
+                <li class="category-item">Nitro Full - 12个月</li>
+                <li class="category-item">Nitro 礼品卡</li>
+            </ul>
+        </div>
         
-        // 更新父元素的样式
-        const badge = element.closest('.stock-badge');
-        if (badge) {
-          badge.className = 'stock-badge';
-          if (statusClass === 'out-of-stock') {
-            badge.style.background = 'linear-gradient(135deg, #ff0000, #cc0000)';
-          } else if (statusClass === 'low-stock') {
-            badge.style.background = 'linear-gradient(135deg, #ffa500, #ff8c00)';
-          }
-        }
-      }
-    });
-  }
-
-  simulateStockChange() {
-    // 随机减少一些库存
-    products.forEach(product => {
-      if (product.stock > 0 && Math.random() > 0.7) {
-        product.stock -= Math.floor(Math.random() * 3) + 1;
-        if (product.stock < 0) product.stock = 0;
-      }
-    });
-    this.updateStockDisplay();
-  }
-
-  decreaseStock(productId, quantity = 1) {
-    const product = products.find(p => p.id === productId);
-    if (product && product.stock >= quantity) {
-      product.stock -= quantity;
-      this.updateStockDisplay();
-      return true;
-    }
-    return false;
-  }
-}
-// 功能7: 心愿单功能
-class WishlistManager {
-  constructor() {
-    this.wishlistModal = document.getElementById('wishlist-modal');
-    this.wishlistButton = document.getElementById('wishlist-button');
-    this.wishlistCount = document.getElementById('wishlist-count');
-    this.wishlistItems = document.getElementById('wishlist-items');
-    this.init();
-  }
-
-  init() {
-    this.wishlistButton.addEventListener('click', () => this.openWishlistModal());
-    document.getElementById('close-wishlist-modal').addEventListener('click', () => this.closeWishlistModal());
+        <!-- Roblox Robux 分类 -->
+        <div class="category-card">
+            <div class="category-header">
+                <i class="fas fa-coins category-icon roblox-color"></i>
+                <div class="category-name roblox-color">Roblox Robux</div>
+            </div>
+            <ul class="category-items">
+                <li class="category-item">Robux 400</li>
+                <li class="category-item">Robux 800</li>
+                <li class="category-item">Robux 1700</li>
+                <li class="category-item">Robux 4500</li>
+                <li class="category-item">Robux 10000</li>
+                <li class="category-item">Robux 礼品卡</li>
+                <li class="category-item">Roblox Premium 会员</li>
+            </ul>
+        </div>
+        
+        <!-- 推荐/优惠商品 -->
+        <div class="category-card">
+            <div class="category-header">
+                <i class="fas fa-fire category-icon" style="color:#ff6b6b;"></i>
+                <div class="category-name" style="color:#ff6b6b;">推荐/优惠商品</div>
+            </div>
+            <ul class="category-items">
+                <li class="category-item">Nitro Basic + Robux 400 捆绑包</li>
+                <li class="category-item">Nitro Full 年费 - 限时优惠</li>
+                <li class="category-item">Robux 10000 大额折扣</li>
+                <li class="category-item">新用户首单优惠</li>
+                <li class="category-item">节日特惠礼品卡</li>
+                <li class="category-item">代理/批发优惠</li>
+            </ul>
+        </div>
+        
+        <!-- 自动发货服务 -->
+        <div class="category-card">
+            <div class="category-header">
+                <i class="fas fa-bolt category-icon automatic-color"></i>
+                <div class="category-name automatic-color">自动发货服务</div>
+            </div>
+            <ul class="category-items">
+                <li class="category-item">Discord Nitro 自动发货 | 秒发码</li>
+                <li class="category-item">Robux 自动发货 | 即时到账</li>
+                <li class="category-item">礼品卡自动兑换 | 全球区域</li>
+                <li class="category-item">自动发货系统使用教程</li>
+                <li class="category-item">批量订单自动处理</li>
+            </ul>
+        </div>
+        
+        <!-- 游戏相关商品 -->
+        <div class="category-card">
+            <div class="category-header">
+                <i class="fas fa-gamepad category-icon game-color"></i>
+                <div class="category-name game-color">游戏相关商品</div>
+            </div>
+            <ul class="category-items">
+                <li class="category-item">Steam 钱包码</li>
+                <li class="category-item">Xbox Game Pass</li>
+                <li class="category-item">PlayStation Plus</li>
+                <li class="category-item">Nintendo eShop 点卡</li>
+                <li class="category-item">EA Play 会员</li>
+                <li class="category-item">暴雪战网点数</li>
+            </ul>
+        </div>
+        
+        <!-- DMS 增值服务 -->
+        <div class="category-card">
+            <div class="category-header">
+                <i class="fas fa-headset category-icon service-color"></i>
+                <div class="category-name service-color">DMS 增值服务</div>
+            </div>
+            <ul class="category-items">
+                <li class="category-item">Discord 服务器搭建</li>
+                <li class="category-item">Discord 机器人定制</li>
+                <li class="category-item">Roblox 游戏开发协助</li>
+                <li class="category-item">游戏账号安全咨询</li>
+                <li class="category-item">VIP 客户专属支持</li>
+                <li class="category-item">代理/分销合作</li>
+            </ul>
+        </div>
+    </div>
     
-    this.wishlistModal.addEventListener('click', (e) => {
-      if (e.target === this.wishlistModal) {
-        this.closeWishlistModal();
-      }
-    });
+    <div class="footer">
+        <div class="footer-logo">DMS SERVICES</div>
+        <p>我们相信最好的服务才是王道，而不是只是销售产品</p>
+        <p>© 2023 DMS Services. 所有商品均为正版授权，安全可靠。</p>
+        <p>联系方式: support@dmsservices.com | 客服时间: 9:00-23:00 (UTC+8)</p>
+    </div>
 
-    // 加载心愿单
-    this.loadWishlist();
-  }
-
-  loadWishlist() {
-    const savedWishlist = localStorage.getItem('wishlist');
-    if (savedWishlist) {
-      wishlist = JSON.parse(savedWishlist);
-    }
-    this.updateWishlistCount();
-    this.setupWishlistButtons();
-  }
-
-  saveWishlist() {
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
-    // 如果用户已登录，保存到用户数据
-    if (currentUser) {
-      currentUser.wishlist = wishlist;
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
-    }
-  }
-
-  updateWishlistCount() {
-    this.wishlistCount.textContent = wishlist.length;
-    if (wishlist.length > 0) {
-      this.wishlistCount.classList.remove('hidden');
-    } else {
-      this.wishlistCount.classList.add('hidden');
-    }
-  }
-
-  setupWishlistButtons() {
-    document.querySelectorAll('.wishlist-btn').forEach(button => {
-      const productId = button.dataset.productId;
-      const productName = button.dataset.productName;
-      
-      const isInWishlist = wishlist.some(item => item.id === productId);
-      if (isInWishlist) {
-        button.classList.add('active');
-        button.innerHTML = '<i class="fas fa-heart"></i>';
-      } else {
-        button.classList.remove('active');
-        button.innerHTML = '<i class="far fa-heart"></i>';
-      }
-
-      button.onclick = () => this.toggleWishlist(productId, productName, button);
-    });
-  }
-
-  toggleWishlist(productId, productName, button) {
-    const existingIndex = wishlist.findIndex(item => item.id === productId);
-    
-    if (existingIndex > -1) {
-      // 从心愿单移除
-      wishlist.splice(existingIndex, 1);
-      button.classList.remove('active');
-      button.innerHTML = '<i class="far fa-heart"></i>';
-      this.showToast(`${productName} 已从心愿单移除`);
-    } else {
-      // 添加到心愿单
-      const product = products.find(p => p.id === productId);
-      if (product) {
-        wishlist.push({
-          id: productId,
-          name: productName,
-          price: product.price,
-          addedAt: new Date().toISOString()
+    <script>
+        // 搜索功能
+        document.querySelector('.search-box').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const items = document.querySelectorAll('.category-item');
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm) || searchTerm.length < 2) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         });
-        button.classList.add('active');
-        button.innerHTML = '<i class="fas fa-heart"></i>';
-        this.showToast(`${productName} 已添加到心愿单`);
-      }
-    }
-
-    this.updateWishlistCount();
-    this.saveWishlist();
-  }
-
-  openWishlistModal() {
-    this.renderWishlistItems();
-    this.wishlistModal.classList.remove('hidden');
-  }
-
-  closeWishlistModal() {
-    this.wishlistModal.classList.add('hidden');
-  }
-
-  renderWishlistItems() {
-    if (wishlist.length === 0) {
-      this.wishlistItems.innerHTML = `
-        <div class="text-center py-12">
-          <svg class="mx-auto mb-6" width="80" height="80" viewBox="0 0 100 100" fill="none">
-            <circle cx="50" cy="50" r="50" fill="rgba(255, 20, 147, 0.2)" />
-            <path d="M35 50L45 60L65 40" stroke="#ff1493" stroke-width="4" stroke-linecap="round" />
-            <path d="M50 35L55 45L65 35L55 55L50 65L45 55L35 45L45 35L50 35Z" stroke="#ff1493" stroke-width="3" fill="none" />
-          </svg>
-          <p class="text-gray-400 text-lg">${translations[currentLang].emptyWishlist}</p>
-          <p class="text-gray-500 text-sm mt-2">点击商品上的❤️按钮添加到心愿单</p>
-        </div>
-      `;
-      return;
-    }
-
-    this.wishlistItems.innerHTML = wishlist.map(item => `
-      <div class="flex justify-between items-center p-4 feature-card rounded-xl" data-product-id="${item.id}">
-        <div class="flex-1">
-          <h3 class="font-bold text-white">${item.name}</h3>
-          <p class="text-sm holographic-text font-bold mt-1">RM${item.price}</p>
-          <p class="text-xs text-gray-400 mt-1">添加时间: ${new Date(item.addedAt).toLocaleDateString()}</p>
-        </div>
-        <div class="flex items-center space-x-3">
-          <button class="add-to-cart-from-wishlist px-4 py-2 luxury-button rounded-lg text-sm hover:scale-105 transition-all"
-                  data-product="${item.name}" data-price="${item.price}">
-            加入购物车
-          </button>
-          <button class="remove-from-wishlist px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white text-sm hover:scale-105 transition-all"
-                  data-product-id="${item.id}">
-            <i class="fas fa-trash"></i>
-          </button>
-        </div>
-      </div>
-    `).join('');
-
-    // 添加事件监听器
-    document.querySelectorAll('.add-to-cart-from-wishlist').forEach(button => {
-      button.addEventListener('click', (e) => {
-        const productName = e.target.dataset.product;
-        const price = parseFloat(e.target.dataset.price);
-        this.addToCartFromWishlist(productName, price);
-      });
-    });
-
-    document.querySelectorAll('.remove-from-wishlist').forEach(button => {
-      button.addEventListener('click', (e) => {
-        const productId = e.target.dataset.productId;
-        this.removeFromWishlist(productId);
-      });
-    });
-  }
-
-  addToCartFromWishlist(productName, price) {
-    const fullProductName = `${productName} (登入)`;
-    const existingItem = cart.find(item => item.product === fullProductName);
-    
-    if (existingItem) {
-      existingItem.quantity++;
-    } else {
-      cart.push({ 
-        product: fullProductName, 
-        price: price, 
-        quantity: 1,
-        selectedTime: new Date().toISOString()
-      });
-    }
-    
-    updateCartCount();
-    showSuccessMessage('已添加到购物车！');
-    this.closeWishlistModal();
-  }
-
-  removeFromWishlist(productId) {
-    const index = wishlist.findIndex(item => item.id === productId);
-    if (index > -1) {
-      const productName = wishlist[index].name;
-      wishlist.splice(index, 1);
-      
-      // 更新按钮状态
-      const wishlistBtn = document.querySelector(`.wishlist-btn[data-product-id="${productId}"]`);
-      if (wishlistBtn) {
-        wishlistBtn.classList.remove('active');
-        wishlistBtn.innerHTML = '<i class="far fa-heart"></i>';
-      }
-      
-      this.updateWishlistCount();
-      this.saveWishlist();
-      this.renderWishlistItems();
-      this.showToast(`${productName} 已从心愿单移除`);
-    }
-  }
-
-  showToast(message) {
-    const toast = document.createElement('div');
-    toast.className = 'fixed bottom-4 right-4 px-6 py-3 rounded-lg bg-purple-600 text-white shadow-lg z-50';
-    toast.textContent = message;
-    document.body.appendChild(toast);
-    
-    setTimeout(() => {
-      document.body.removeChild(toast);
-    }, 3000);
-  }
-}
-
-// 功能8: 客服聊天机器人
-class Chatbot {
-  constructor() {
-    this.chatbotToggle = document.getElementById('chatbot-toggle');
-    this.chatbotWindow = document.getElementById('chatbot-window');
-    this.chatbotMessages = document.getElementById('chatbot-messages');
-    this.chatbotInput = document.getElementById('chatbot-input');
-    this.closeChatbot = document.getElementById('close-chatbot');
-    this.chatbotTitle = document.querySelector('.chatbot-title');
-    this.init();
-  }
-
-  init() {
-    this.chatbotToggle.addEventListener('click', () => this.toggleChatbot());
-    this.closeChatbot.addEventListener('click', () => this.closeChatbotWindow());
-    this.chatbotInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        this.handleUserInput();
-      }
-    });
-
-    // 初始消息
-    this.addBotMessage(translations[currentLang].chatbotGreeting);
-    this.addBotMessage(translations[currentLang].chatbotHelp);
-  }
-
-  toggleChatbot() {
-    this.chatbotWindow.classList.toggle('active');
-    if (this.chatbotWindow.classList.contains('active')) {
-      this.chatbotInput.focus();
-    }
-  }
-
-  closeChatbotWindow() {
-    this.chatbotWindow.classList.remove('active');
-  }
-
-  addBotMessage(text) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'chat-message bot-message';
-    messageDiv.textContent = text;
-    this.chatbotMessages.appendChild(messageDiv);
-    this.scrollToBottom();
-  }
-
-  addUserMessage(text) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'chat-message user-message';
-    messageDiv.textContent = text;
-    this.chatbotMessages.appendChild(messageDiv);
-    this.scrollToBottom();
-  }
-
-  scrollToBottom() {
-    this.chatbotMessages.scrollTop = this.chatbotMessages.scrollHeight;
-  }
-
-  async handleUserInput() {
-    const userInput = this.chatbotInput.value.trim();
-    if (!userInput) return;
-
-    this.addUserMessage(userInput);
-    this.chatbotInput.value = '';
-
-    // 模拟AI响应
-    setTimeout(() => {
-      const response = this.generateResponse(userInput);
-      this.addBotMessage(response);
-    }, 1000);
-  }
-
-  generateResponse(userInput) {
-    const input = userInput.toLowerCase();
-    const t = translations[currentLang];
-
-    if (input.includes('价格') || input.includes('price') || input.includes('cost')) {
-      return '我们提供Discord Nitro和Robux充值服务。Discord Nitro Basic价格是RM9，完整版是RM21。Robux 100个价格是RM2.40，1000个是RM24。';
-    } else if (input.includes('付款') || input.includes('payment') || input.includes('pay')) {
-      return '我们支持Touch \'N Go eWallet, Litecoin加密货币和PayPal支付。付款后请上传付款凭证截图。';
-    } else if (input.includes('发货') || input.includes('delivery') || input.includes('ship')) {
-      return '数字商品通常5分钟内到账。购买后请查看您的邮箱或联系客服获取商品。';
-    } else if (input.includes('联系') || input.includes('contact') || input.includes('support')) {
-      return '您可以通过WhatsApp +60 11-6243 0710或加入我们的Discord社区联系我们。';
-    } else if (input.includes('订单') || input.includes('order') || input.includes('track')) {
-      return '您可以在网站顶部的"订单跟踪"按钮中查询订单状态，需要订单号。';
-    } else if (input.includes('退货') || input.includes('refund') || input.includes('return')) {
-      return '数字商品一般不接受退货，但如果遇到问题请联系客服，我们会尽力解决。';
-    } else if (input.includes('折扣') || input.includes('discount') || input.includes('promo')) {
-      return '我们网站上有促销倒计时，经常有限时优惠。请关注网站的促销活动！';
-    } else {
-      return '感谢您的咨询！如果您需要更具体的帮助，请直接联系我们的客服人员。';
-    }
-  }
-}
-
-// 功能9: 多步结账流程
-class CheckoutProcess {
-  constructor() {
-    this.checkoutModal = document.getElementById('checkout-process-modal');
-    this.checkoutSteps = document.querySelectorAll('.checkout-step');
-    this.stepContents = document.querySelectorAll('.checkout-step-content');
-    this.nextStepBtn = document.getElementById('next-step');
-    this.prevStepBtn = document.getElementById('prev-step');
-    this.currentStep = 1;
-    this.init();
-  }
-
-  init() {
-    this.nextStepBtn.addEventListener('click', () => this.nextStep());
-    this.prevStepBtn.addEventListener('click', () => this.prevStep());
-    
-    document.getElementById('close-checkout-modal').addEventListener('click', () => {
-      this.checkoutModal.classList.add('hidden');
-    });
-
-    this.checkoutModal.addEventListener('click', (e) => {
-      if (e.target === this.checkoutModal) {
-        this.checkoutModal.classList.add('hidden');
-      }
-    });
-
-    // 支付选项选择
-    document.querySelectorAll('#checkout-step-3 .payment-option').forEach(option => {
-      option.addEventListener('click', function() {
-        document.querySelectorAll('#checkout-step-3 .payment-option').forEach(opt => {
-          opt.classList.remove('selected');
+        
+        // 货币选择
+        const currencyOptions = document.querySelectorAll('.currency-option');
+        currencyOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                currencyOptions.forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+            });
         });
-        this.classList.add('selected');
-      });
-    });
-  }
-
-  openCheckoutModal() {
-    this.currentStep = 1;
-    this.updateSteps();
-    this.renderCartItems();
-    this.checkoutModal.classList.remove('hidden');
-  }
-
-  updateSteps() {
-    this.checkoutSteps.forEach(step => {
-      const stepNum = parseInt(step.dataset.step);
-      step.classList.remove('active');
-      if (stepNum === this.currentStep) {
-        step.classList.add('active');
-      }
-    });
-
-    this.stepContents.forEach(content => {
-      content.classList.remove('active');
-      if (content.id === `checkout-step-${this.currentStep}`) {
-        content.classList.add('active');
-      }
-    });
-
-    // 更新按钮状态
-    this.prevStepBtn.disabled = this.currentStep === 1;
-    this.nextStepBtn.textContent = this.currentStep === 4 ? 
-      translations[currentLang].confirmOrder : translations[currentLang].nextStep;
-  }
-
-  nextStep() {
-    if (this.currentStep < 4) {
-      // 验证当前步骤
-      if (!this.validateCurrentStep()) {
-        return;
-      }
-      
-      this.currentStep++;
-      this.updateSteps();
-    } else {
-      // 最后一步：确认订单
-      this.completeOrder();
-    }
-  }
-
-  prevStep() {
-    if (this.currentStep > 1) {
-      this.currentStep--;
-      this.updateSteps();
-    }
-  }
-
-  validateCurrentStep() {
-    switch (this.currentStep) {
-      case 1: // 购物车
-        if (cart.length === 0) {
-          alert('购物车为空，请先添加商品');
-          return false;
-        }
-        break;
-      case 2: // 送货信息
-        const inputs = document.querySelectorAll('#checkout-step-2 .form-input');
-        for (let input of inputs) {
-          if (!input.value.trim()) {
-            alert('请填写完整的送货信息');
-            input.focus();
-            return false;
-          }
-        }
-        break;
-      case 3: // 支付方式
-        const selectedPayment = document.querySelector('#checkout-step-3 .payment-option.selected');
-        if (!selectedPayment) {
-          alert('请选择支付方式');
-          return false;
-        }
-        break;
-    }
-    return true;
-  }
-
-  renderCartItems() {
-    const container = document.getElementById('checkout-cart-items');
-    if (cart.length === 0) {
-      container.innerHTML = '<p class="text-gray-400">购物车为空</p>';
-      return;
-    }
-
-    let total = 0;
-    container.innerHTML = cart.map(item => {
-      const itemTotal = item.price * item.quantity;
-      total += itemTotal;
-      return `
-        <div class="flex justify-between items-center p-3 bg-gray-800/30 rounded-lg">
-          <div>
-            <p class="font-bold text-white">${item.product}</p>
-            <p class="text-sm text-gray-400">数量: ${item.quantity}</p>
-          </div>
-          <p class="font-bold holographic-text">RM${itemTotal.toFixed(2)}</p>
-        </div>
-      `;
-    }).join('');
-
-    // 添加总计
-    container.innerHTML += `
-      <div class="flex justify-between items-center p-3 bg-gray-800/50 rounded-lg mt-4">
-        <p class="font-bold text-white">总计</p>
-        <p class="text-2xl font-bold holographic-text">RM${total.toFixed(2)}</p>
-      </div>
-    `;
-  }
-
-  completeOrder() {
-    // 收集订单信息
-    const shippingInfo = {
-      name: document.querySelector('#checkout-step-2 input[placeholder*="姓名"]').value,
-      email: document.querySelector('#checkout-step-2 input[placeholder*="邮箱"]').value,
-      phone: document.querySelector('#checkout-step-2 input[placeholder*="手机"]').value,
-      address: document.querySelector('#checkout-step-2 textarea').value
-    };
-
-    const paymentMethod = document.querySelector('#checkout-step-3 .payment-option.selected').dataset.method;
-    
-    let orderTotal = 0;
-    cart.forEach(item => {
-      orderTotal += item.price * item.quantity;
-    });
-
-    // 生成订单号
-    const orderId = 'NS-' + Date.now().toString().slice(-8);
-
-    // 保存订单信息
-    const order = {
-      id: orderId,
-      date: new Date().toISOString(),
-      items: [...cart],
-      shippingInfo,
-      paymentMethod,
-      total: orderTotal,
-      status: 'pending'
-    };
-
-    // 保存到本地存储
-    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-    orders.push(order);
-    localStorage.setItem('orders', JSON.stringify(orders));
-
-    // 显示成功消息
-    alert(`订单创建成功！\n订单号: ${orderId}\n总金额: RM${orderTotal.toFixed(2)}\n请继续完成付款。`);
-
-    // 关闭模态框并清空购物车
-    this.checkoutModal.classList.add('hidden');
-    cart = [];
-    updateCartCount();
-
-    // 发送Telegram通知
-    this.sendOrderNotification(order);
-  }
-
-  async sendOrderNotification(order) {
-    const orderDetails = order.items.map(item => 
-      `${item.product} × ${item.quantity} = RM${(item.price * item.quantity).toFixed(2)}`
-    ).join('\n');
-
-    const message = `
-🛒 <b>新订单创建</b>
-
-📦 <b>订单号:</b> ${order.id}
-💰 <b>总金额:</b> RM${order.total.toFixed(2)}
-💳 <b>支付方式:</b> ${order.paymentMethod}
-📧 <b>客户邮箱:</b> ${order.shippingInfo.email}
-📞 <b>客户电话:</b> ${order.shippingInfo.phone}
-⏰ <b>下单时间:</b> ${new Date(order.date).toLocaleString('zh-CN')}
-
-🛍️ <b>订单详情:</b>
-${orderDetails}
-
-✅ <b>状态:</b> 待付款
-    `;
-
-    try {
-      await sendToTelegram(message);
-      console.log('✅ 订单通知发送成功');
-    } catch (error) {
-      console.error('❌ 订单通知发送失败:', error);
-    }
-  }
-}
-
-// 功能10: 产品推荐引擎（基于浏览历史）
-class RecommendationEngine {
-  constructor() {
-    this.viewHistory = JSON.parse(localStorage.getItem('viewHistory') || '[]');
-    this.init();
-  }
-
-  init() {
-    // 跟踪产品查看
-    document.querySelectorAll('.product-card').forEach(card => {
-      card.addEventListener('mouseenter', () => {
-        const productName = card.querySelector('.product-name').textContent.trim();
-        this.trackView(productName);
-      });
-    });
-
-    // 显示推荐
-    this.showRecommendations();
-  }
-
-  trackView(productName) {
-    const existingIndex = this.viewHistory.findIndex(item => item.name === productName);
-    
-    if (existingIndex > -1) {
-      this.viewHistory[existingIndex].count++;
-      this.viewHistory[existingIndex].lastViewed = new Date().toISOString();
-    } else {
-      this.viewHistory.push({
-        name: productName,
-        count: 1,
-        firstViewed: new Date().toISOString(),
-        lastViewed: new Date().toISOString()
-      });
-    }
-
-    // 只保留最近20个记录
-    if (this.viewHistory.length > 20) {
-      this.viewHistory = this.viewHistory.slice(-20);
-    }
-
-    localStorage.setItem('viewHistory', JSON.stringify(this.viewHistory));
-  }
-
-  showRecommendations() {
-    if (this.viewHistory.length === 0) return;
-
-    // 获取最常查看的产品
-    const mostViewed = [...this.viewHistory]
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 3);
-
-    if (mostViewed.length > 0) {
-      const recommendationsSection = this.createRecommendationsSection(mostViewed);
-      const main = document.querySelector('main');
-      if (main) {
-        main.insertBefore(recommendationsSection, main.firstChild);
-      }
-    }
-  }
-
-  createRecommendationsSection(recommendations) {
-    const section = document.createElement('div');
-    section.className = 'mb-12 sm:mb-24';
-    section.innerHTML = `
-      <div class="text-center mb-8">
-        <h2 class="text-2xl sm:text-4xl font-bold neon-text luxury-title">为您推荐</h2>
-        <p class="text-gray-300 text-sm sm:text-lg mt-2">基于您的浏览历史</p>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        ${recommendations.map(rec => {
-          const product = products.find(p => p.name === rec.name);
-          if (!product) return '';
-          
-          return `
-            <div class="product-card rounded-2xl overflow-hidden">
-              <div class="p-6 relative" style="background: linear-gradient(135deg, #8a2be2 0%, #00bfff 100%);">
-                <h3 class="text-xl font-bold text-white text-center luxury-title">${product.name}</h3>
-                <p class="text-white text-center mt-2 font-light text-sm">${product.description}</p>
-              </div>
-              <div class="p-6">
-                <ul class="space-y-2 mb-4">
-                  ${product.features.slice(0, 2).map(feature => `
-                    <li class="flex items-center text-gray-300">
-                      <i class="fas fa-check-circle text-green-400 mr-2"></i>
-                      <span class="text-sm">${feature}</span>
-                    </li>
-                  `).join('')}
-                </ul>
-                <div class="flex justify-between items-center">
-                  <span class="text-2xl font-bold holographic-text">RM${product.price}</span>
-                  <button class="px-4 py-2 luxury-button rounded-lg text-sm hover:scale-105 transition-all add-to-cart-rec"
-                          data-product="${product.name}" data-price="${product.price}">
-                    查看详情
-                  </button>
-                </div>
-              </div>
-            </div>
-          `;
-        }).join('')}
-      </div>
-    `;
-
-    // 添加事件监听器
-    section.querySelectorAll('.add-to-cart-rec').forEach(button => {
-      button.addEventListener('click', (e) => {
-        const productName = e.target.dataset.product;
-        // 滚动到对应产品
-        const productCard = document.querySelector(`.product-name:contains("${productName}")`)?.closest('.product-card');
-        if (productCard) {
-          productCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          productCard.classList.add('highlight');
-          setTimeout(() => productCard.classList.remove('highlight'), 2000);
-        }
-      });
-    });
-
-    return section;
-  }
-}
-
-// 功能3（额外）：产品比较功能
-class ProductComparison {
-  constructor() {
-    this.comparisonSection = document.getElementById('product-comparison-section');
-    this.comparisonTable = document.getElementById('comparison-table-container');
-    this.clearComparisonBtn = document.getElementById('clear-comparison');
-    this.compareCheckboxes = document.querySelectorAll('.compare-checkbox');
-    this.init();
-  }
-
-  init() {
-    this.clearComparisonBtn.addEventListener('click', () => this.clearComparison());
-    
-    this.compareCheckboxes.forEach(checkbox => {
-      checkbox.addEventListener('change', (e) => this.toggleComparison(e.target));
-    });
-
-    // 加载保存的比较
-    this.loadComparison();
-  }
-
-  toggleComparison(checkbox) {
-    const productId = checkbox.dataset.productId;
-    const productName = checkbox.dataset.productName;
-    const product = products.find(p => p.id === productId);
-
-    if (checkbox.checked) {
-      if (comparingProducts.length >= 3) {
-        alert('最多可以比较3个产品');
-        checkbox.checked = false;
-        return;
-      }
-      comparingProducts.push({
-        id: productId,
-        name: productName,
-        features: product.features,
-        price: product.price,
-        category: product.category
-      });
-    } else {
-      const index = comparingProducts.findIndex(p => p.id === productId);
-      if (index > -1) {
-        comparingProducts.splice(index, 1);
-      }
-    }
-
-    this.updateComparisonDisplay();
-    this.saveComparison();
-  }
-
-  updateComparisonDisplay() {
-    if (comparingProducts.length === 0) {
-      this.comparisonSection.classList.add('hidden');
-      return;
-    }
-
-    this.comparisonSection.classList.remove('hidden');
-    
-    // 创建比较表格
-    let tableHTML = `
-      <table class="comparison-table">
-        <thead>
-          <tr>
-            <th>功能</th>
-            ${comparingProducts.map(p => `<th>${p.name}</th>`).join('')}
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>价格</td>
-            ${comparingProducts.map(p => `<td class="holographic-text font-bold">RM${p.price}</td>`).join('')}
-          </tr>
-          <tr>
-            <td>类别</td>
-            ${comparingProducts.map(p => `<td>${p.category === 'discord' ? 'Discord' : 'Robux'}</td>`).join('')}
-          </tr>
-    `;
-
-    // 添加所有功能行（合并所有产品的功能）
-    const allFeatures = [...new Set(comparingProducts.flatMap(p => p.features))];
-    allFeatures.forEach(feature => {
-      tableHTML += `
-        <tr>
-          <td>${feature}</td>
-          ${comparingProducts.map(p => `
-            <td>${p.features.includes(feature) ? '✓' : '✗'}</td>
-          `).join('')}
-        </tr>
-      `;
-    });
-
-    tableHTML += `
-        </tbody>
-      </table>
-    `;
-
-    this.comparisonTable.innerHTML = tableHTML;
-  }
-
-  clearComparison() {
-    comparingProducts = [];
-    this.compareCheckboxes.forEach(checkbox => {
-      checkbox.checked = false;
-    });
-    this.updateComparisonDisplay();
-    this.saveComparison();
-  }
-
-  saveComparison() {
-    localStorage.setItem('comparingProducts', JSON.stringify(comparingProducts));
-  }
-
-  loadComparison() {
-    const saved = localStorage.getItem('comparingProducts');
-    if (saved) {
-      comparingProducts = JSON.parse(saved);
-      comparingProducts.forEach(product => {
-        const checkbox = document.querySelector(`.compare-checkbox[data-product-id="${product.id}"]`);
-        if (checkbox) {
-          checkbox.checked = true;
-        }
-      });
-      this.updateComparisonDisplay();
-    }
-  }
-}
-
-// 促销倒计时
-class CountdownTimer {
-  constructor() {
-    this.daysElement = document.getElementById('countdown-days');
-    this.hoursElement = document.getElementById('countdown-hours');
-    this.minutesElement = document.getElementById('countdown-minutes');
-    this.secondsElement = document.getElementById('countdown-seconds');
-    this.endTime = new Date();
-    this.endTime.setDate(this.endTime.getDate() + 3); // 3天后结束
-    this.init();
-  }
-
-  init() {
-    this.updateCountdown();
-    setInterval(() => this.updateCountdown(), 1000);
-  }
-
-  updateCountdown() {
-    const now = new Date().getTime();
-    const distance = this.endTime - now;
-
-    if (distance < 0) {
-      this.daysElement.textContent = '00';
-      this.hoursElement.textContent = '00';
-      this.minutesElement.textContent = '00';
-      this.secondsElement.textContent = '00';
-      return;
-    }
-
-    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-    this.daysElement.textContent = days.toString().padStart(2, '0');
-    this.hoursElement.textContent = hours.toString().padStart(2, '0');
-    this.minutesElement.textContent = minutes.toString().padStart(2, '0');
-    this.secondsElement.textContent = seconds.toString().padStart(2, '0');
-  }
-}
-
-// 初始化所有功能
-document.addEventListener('DOMContentLoaded', () => {
-  // 创建星星背景
-  createStars();
-  
-  // 初始化各个功能
-  const search = new ProductSearch();
-  const orderTracking = new OrderTracking();
-  const userAuth = new UserAuth();
-  const stockDisplay = new StockDisplay();
-  const wishlistManager = new WishlistManager();
-  const chatbot = new Chatbot();
-  const checkoutProcess = new CheckoutProcess();
-  const recommendationEngine = new RecommendationEngine();
-  const productComparison = new ProductComparison();
-  const countdownTimer = new CountdownTimer();
-  
-  // 设置语言切换
-  switchLanguage('zh');
-  
-  console.log('🎮 Nyaaastore 所有功能初始化完成');
-});
-
-// 创建星星背景函数
-function createStars() {
-  const starsContainer = document.getElementById('stars');
-  const starCount = 150;
-  
-  for (let i = 0; i < starCount; i++) {
-    const star = document.createElement('div');
-    star.className = 'star';
-    star.style.left = `${Math.random() * 100}%`;
-    star.style.top = `${Math.random() * 100}%`;
-    star.style.animationDelay = `${Math.random() * 3}s`;
-    starsContainer.appendChild(star);
-  }
-}
-
-// 保持原有的购物车、支付等功能...
-// 这些函数已经在上面的代码中整合
-
-// 简化的原有函数（保持核心功能）
-function updateCartCount() {
-  const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const countBadge = document.getElementById('cart-count');
-  countBadge.textContent = totalItems;
-}
-
-function showSuccessMessage(message = '已添加到购物车！') {
-  const msgElement = document.getElementById('success-msg-text');
-  msgElement.textContent = message;
-  
-  const messageDiv = document.getElementById('success-message');
-  messageDiv.classList.remove('hidden');
-  messageDiv.classList.add('flex');
-  
-  setTimeout(() => {
-    messageDiv.classList.add('hidden');
-    messageDiv.classList.remove('flex');
-  }, 3000);
-}
-
-// 其他原有函数...
-// 由于代码长度限制，这里只展示核心的新增功能
-// 原有的购物车、支付等功能保持原样运行
-</script>
-<script>
-// 原有的核心函数（补充完整）
-
-// 语言切换函数
-function switchLanguage(lang) {
-  currentLang = lang;
-  const t = translations[lang];
-  
-  // 更新文本
-  document.querySelectorAll('[data-zh]').forEach(element => {
-    const zh = element.dataset.zh;
-    const en = element.dataset.en;
-    if (zh && en) {
-      element.textContent = lang === 'zh' ? zh : en;
-    }
-  });
-  
-  // 更新按钮文本
-  document.getElementById('lang-text').textContent = lang === 'zh' ? 'EN' : '中文';
-  document.getElementById('cart-button-text').textContent = t.cartButton;
-  document.getElementById('user-auth-text').textContent = t.login;
-  document.querySelector('.chatbot-title').textContent = t.chatbotTitle;
-  
-  // 更新搜索框占位符
-  const searchInputs = document.querySelectorAll('.search-input');
-  searchInputs.forEach(input => {
-    input.placeholder = t.searchPlaceholder;
-  });
-}
-
-// 货币切换
-document.getElementById('currency-toggle').addEventListener('click', function() {
-  const currencies = ['MYR', 'TWD'];
-  const currentIndex = currencies.indexOf(currentCurrency);
-  const nextIndex = (currentIndex + 1) % currencies.length;
-  currentCurrency = currencies[nextIndex];
-  document.getElementById('currency-text').textContent = `💰 ${currentCurrency}`;
-});
-
-// 语言切换
-document.getElementById('lang-toggle').addEventListener('click', function() {
-  switchLanguage(currentLang === 'zh' ? 'en' : 'zh');
-});
-
-// Telegram发送函数
-async function sendToTelegram(message) {
-  try {
-    const response = await fetch(TELEGRAM_API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: TELEGRAM_CHAT_ID,
-        text: message,
-        parse_mode: 'HTML'
-      })
-    });
-    return await response.json();
-  } catch (error) {
-    console.error('发送到Telegram失败:', error);
-    throw error;
-  }
-}
-
-// 初始化
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('🚀 Nyaaastore 启动成功！');
-  console.log('✨ 已集成7个新功能：');
-  console.log('   1. 产品搜索功能');
-  console.log('   2. 订单跟踪系统');
-  console.log('   3. 用户登录/注册系统');
-  console.log('   6. 实时库存显示');
-  console.log('   7. 心愿单功能');
-  console.log('   8. 客服聊天机器人');
-  console.log('   9. 多步结账流程');
-  console.log('   10. 产品推荐引擎');
-  console.log('   额外: 产品比较功能');
-  console.log('   额外: 促销倒计时');
-});
-
-// 添加CSS动画
-const style = document.createElement('style');
-style.textContent = `
-  .product-card.highlight {
-    animation: highlightPulse 2s ease;
-  }
-  
-  @keyframes highlightPulse {
-    0% { box-shadow: 0 20px 60px rgba(138, 43, 226, 0.4); }
-    50% { box-shadow: 0 20px 60px rgba(138, 43, 226, 0.8); transform: scale(1.02); }
-    100% { box-shadow: 0 20px 60px rgba(138, 43, 226, 0.4); }
-  }
-`;
-document.head.appendChild(style);
-</script>
-
+        
+        // 商品点击效果
+        const categoryItems = document.querySelectorAll('.category-item');
+        categoryItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const itemName = this.textContent;
+                alert(`已选择商品: ${itemName}\n\n请加入客服群完成购买流程。`);
+            });
+        });
+    </script>
 </body>
 </html>
