@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DMS服务 | Discord Nitro & Robux 销售平台</title>
+    <title>Nyaaastore | Discord Nitro & Robux 商店</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -20,219 +20,486 @@
             padding: 20px;
             max-width: 1200px;
             margin: 0 auto;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(114, 137, 218, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 27, 27, 0.1) 0%, transparent 20%);
         }
         
+        /* 页面标题和导航样式 */
         .header {
             text-align: center;
             margin-bottom: 30px;
             padding-bottom: 20px;
-            border-bottom: 1px solid #2a2a4a;
+            border-bottom: 2px solid #ff66cc;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                #ff66cc 0%, 
+                #7289da 50%, 
+                #ff1b1b 100%);
+            animation: shimmer 3s infinite;
+        }
+        
+        @keyframes shimmer {
+            0% { background-position: -1000px 0; }
+            100% { background-position: 1000px 0; }
         }
         
         .logo {
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: #7289da;
+            font-size: 3.2rem;
+            font-weight: 900;
+            color: #ff66cc;
             margin-bottom: 10px;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            text-shadow: 0 0 15px rgba(255, 102, 204, 0.5);
+        }
+        
+        .logo span {
+            color: #7289da;
         }
         
         .slogan {
             font-size: 1.2rem;
             color: #b0b0ff;
             margin-bottom: 20px;
+            font-style: italic;
         }
         
-        .contact-bar {
-            background-color: #1a1a2e;
-            border-radius: 10px;
+        /* 猫咪装饰元素 */
+        .cat-decoration {
+            font-size: 2rem;
+            margin: 0 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        .cat-1 { animation-delay: 0s; color: #ff66cc; }
+        .cat-2 { animation-delay: 0.5s; color: #7289da; }
+        .cat-3 { animation-delay: 1s; color: #ff1b1b; }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+/* 联系栏样式 */
+.contact-bar {
+    background: linear-gradient(135deg, #1a1a2e 0%, #252545 100%);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 25px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    border: 1px solid #3a3a6a;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 20px;
+    background: rgba(40, 40, 70, 0.7);
+    border-radius: 10px;
+    transition: all 0.3s ease;
+    min-width: 200px;
+    backdrop-filter: blur(10px);
+}
+
+.contact-item:hover {
+    background: rgba(50, 50, 90, 0.9);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 5px 15px rgba(114, 137, 218, 0.3);
+}
+
+.contact-icon {
+    color: #ff66cc;
+    font-size: 1.3rem;
+    width: 24px;
+    text-align: center;
+}
+
+.contact-link {
+    color: #e0e0ff;
+    text-decoration: none;
+    font-weight: 500;
+    flex-grow: 1;
+}
+
+.contact-link:hover {
+    color: #ffffff;
+}
+
+/* 搜索框样式 */
+.search-bar {
+    margin-bottom: 30px;
+}
+
+.search-title {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    color: #a0a0ff;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-box {
+    width: 100%;
+    padding: 14px 20px;
+    background: rgba(26, 26, 46, 0.8);
+    border: 2px solid #3a3a6a;
+    border-radius: 10px;
+    color: #e0e0ff;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-box:focus {
+    outline: none;
+    border-color: #ff66cc;
+    box-shadow: 0 0 0 3px rgba(255, 102, 204, 0.2);
+    background: rgba(30, 30, 50, 0.9);
+}
+
+/* 货币和支付方式选择器 */
+.selection-section {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.selector-card {
+    background: rgba(26, 26, 46, 0.8);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #3a3a6a;
+}
+
+.section-title {
+    font-size: 1.3rem;
+    color: #ff66cc;
+    margin-bottom: 15px;
+    padding-left: 10px;
+    border-left: 4px solid #ff66cc;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.option-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.option-btn {
+    padding: 10px 20px;
+    background: rgba(40, 40, 70, 0.7);
+    border-radius: 8px;
+    border: 2px solid #3a3a6a;
+    color: #c0c0ff;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+}
+
+.option-btn:hover {
+    background: rgba(50, 50, 90, 0.9);
+    transform: translateY(-2px);
+}
+
+.option-btn.active {
+    background: linear-gradient(135deg, #ff66cc 0%, #ff1b1b 100%);
+    border-color: #ff66cc;
+    color: white;
+    box-shadow: 0 5px 15px rgba(255, 102, 204, 0.3);
+}
+/* 商品分类网格 */
+.categories {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 25px;
+    margin-bottom: 40px;
+}
+
+.category-card {
+    background: linear-gradient(145deg, #1a1a2e 0%, #252545 100%);
+    border-radius: 15px;
+    padding: 25px;
+    transition: all 0.4s ease;
+    border: 1px solid #3a3a6a;
+    position: relative;
+    overflow: hidden;
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 255, 0.1), 
+        transparent);
+    transition: 0.5s;
+}
+
+.category-card:hover::before {
+    left: 100%;
+}
+
+.category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    border-color: #ff66cc;
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid rgba(255, 102, 204, 0.3);
+}
+
+.category-icon {
+    font-size: 2rem;
+    margin-right: 15px;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+}
+
+.category-name {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.category-items {
+    list-style-type: none;
+}
+
+.category-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid rgba(58, 58, 106, 0.5);
+    color: #c0c0ff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.category-item:last-child {
+    border-bottom: none;
+}
+
+.category-item:hover {
+    background: rgba(255, 102, 204, 0.1);
+    border-radius: 8px;
+    padding-left: 20px;
+    color: #ffffff;
+}
+
+.item-price {
+    font-weight: 600;
+    color: #ffcc00;
+    background: rgba(255, 204, 0, 0.1);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+/* 颜色主题 */
+.discord-color {
+    color: #7289da;
+    background: rgba(114, 137, 218, 0.15);
+}
+
+.roblox-color {
+    color: #ff1b1b;
+    background: rgba(255, 27, 27, 0.15);
+}
+
+.recommend-color {
+    color: #00ffaa;
+    background: rgba(0, 255, 170, 0.15);
+}
+
+.auto-color {
+    color: #9966ff;
+    background: rgba(153, 102, 255, 0.15);
+}
+
+.game-color {
+    color: #00b894;
+    background: rgba(0, 184, 148, 0.15);
+}
+
+.service-color {
+    color: #fdcb6e;
+    background: rgba(253, 203, 110, 0.15);
+}
+
+/* 聊天机器人样式 */
+.chat-bot-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 1000;
+}
+
+.chat-bot-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff66cc 0%, #7289da 100%);
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 5px 20px rgba(255, 102, 204, 0.4);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-bot-btn:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 8px 25px rgba(255, 102, 204, 0.6);
+}
+        .chat-bot-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 350px;
+            height: 500px;
+            background: rgba(20, 20, 35, 0.95);
+            border-radius: 15px;
+            border: 2px solid #ff66cc;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            display: none;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+        }
+        
+        .chat-header {
+            background: linear-gradient(135deg, #ff66cc 0%, #7289da 100%);
             padding: 15px;
-            margin-bottom: 25px;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 15px;
-            background-color: #252545;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-        
-        .contact-item:hover {
-            background-color: #303060;
-            transform: translateY(-2px);
-        }
-        
-        .contact-icon {
-            color: #7289da;
-            font-size: 1.2rem;
-        }
-        
-        .contact-link {
-            color: #e0e0ff;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        
-        .contact-link:hover {
-            color: #ffffff;
-            text-decoration: underline;
-        }
-        
-        .search-bar {
-            margin-bottom: 30px;
-        }
-        
-        .search-title {
-            font-size: 1.1rem;
-            margin-bottom: 8px;
-            color: #a0a0ff;
-        }
-        
-        .search-box {
-            width: 100%;
-            padding: 12px 15px;
-            background-color: #1a1a2e;
-            border: 1px solid #3a3a6a;
-            border-radius: 8px;
-            color: #e0e0ff;
-            font-size: 1rem;
-        }
-        
-        .search-box:focus {
-            outline: none;
-            border-color: #7289da;
-            box-shadow: 0 0 0 2px rgba(114, 137, 218, 0.2);
-        }
-        
-        .currency-selector {
-            margin-bottom: 30px;
-        }
-        
-        .section-title {
-            font-size: 1.3rem;
-            color: #7289da;
-            margin-bottom: 15px;
-            padding-left: 10px;
-            border-left: 4px solid #7289da;
-        }
-        
-        .currency-option {
-            display: inline-block;
-            padding: 8px 20px;
-            background-color: #252545;
-            border-radius: 8px;
-            margin-right: 10px;
-            font-weight: 500;
-            border: 1px solid #3a3a6a;
-        }
-        
-        .currency-option.active {
-            background-color: #303060;
-            border-color: #7289da;
-            color: #ffffff;
-        }
-        
-        .categories {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        
-        .category-card {
-            background-color: #1a1a2e;
-            border-radius: 10px;
-            padding: 20px;
-            transition: all 0.3s ease;
-            border: 1px solid #2a2a4a;
-        }
-        
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-            border-color: #3a3a6a;
-        }
-        
-        .category-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 15px;
-            color: #7289da;
-        }
-        
-        .category-icon {
-            font-size: 1.5rem;
-            margin-right: 10px;
-        }
-        
-        .category-name {
-            font-size: 1.4rem;
+            color: white;
             font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
-        .category-items {
-            list-style-type: none;
+        .chat-messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
         }
         
-        .category-item {
-            padding: 10px 0;
-            border-bottom: 1px solid #2a2a4a;
-            color: #c0c0ff;
+        .message {
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            word-wrap: break-word;
         }
         
-        .category-item:last-child {
-            border-bottom: none;
+        .bot-message {
+            background: rgba(114, 137, 218, 0.2);
+            align-self: flex-start;
+            border-bottom-left-radius: 5px;
         }
         
-        .category-item:hover {
-            color: #ffffff;
-            padding-left: 5px;
+        .user-message {
+            background: rgba(255, 102, 204, 0.2);
+            align-self: flex-end;
+            border-bottom-right-radius: 5px;
         }
         
-        .discord-color {
-            color: #7289da;
+        .chat-input {
+            padding: 15px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #3a3a6a;
         }
         
-        .roblox-color {
-            color: #ff1b1b;
+        .chat-input input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            background: rgba(40, 40, 70, 0.8);
+            border: 1px solid #3a3a6a;
+            border-radius: 8px;
+            color: white;
         }
         
-        .game-color {
-            color: #00b894;
+        .chat-input button {
+            padding: 10px 15px;
+            background: #ff66cc;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
         }
         
-        .service-color {
-            color: #fdcb6e;
-        }
-        
-        .automatic-color {
-            color: #6c5ce7;
-        }
-        
+        /* 页脚样式 */
         .footer {
             text-align: center;
             margin-top: 40px;
             padding-top: 20px;
-            border-top: 1px solid #2a2a4a;
+            border-top: 2px solid rgba(255, 102, 204, 0.3);
             color: #a0a0ff;
             font-size: 0.9rem;
         }
         
         .footer-logo {
-            font-size: 1.8rem;
-            font-weight: 800;
-            color: #7289da;
+            font-size: 2rem;
+            font-weight: 900;
+            color: #ff66cc;
             margin-bottom: 10px;
         }
         
+        .payment-icons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin: 15px 0;
+            font-size: 1.5rem;
+        }
+        
+        .payment-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .payment-icon:hover {
+            transform: scale(1.2);
+        }
+        
+        /* 响应式设计 */
         @media (max-width: 768px) {
             .categories {
                 grid-template-columns: 1fr;
@@ -240,192 +507,878 @@
             
             .contact-bar {
                 flex-direction: column;
-                align-items: center;
-                gap: 10px;
+                align-items: stretch;
+            }
+            
+            .contact-item {
+                min-width: auto;
             }
             
             .logo {
-                font-size: 2.2rem;
+                font-size: 2.5rem;
+            }
+            
+            .selection-section {
+                grid-template-columns: 1fr;
+            }
+            
+            .chat-bot-window {
+                width: 300px;
+                height: 400px;
+                right: -20px;
+            }
+            
+            .cat-decoration {
+                display: none;
             }
         }
     </style>
 </head>
 <body>
+    <!-- 页面标题部分 -->
     <div class="header">
-        <div class="logo">DMS SERVICES</div>
-        <div class="slogan">我们相信最好的服务才是王道，而不是只是销售产品</div>
+        <div class="logo">Nyaaa<span>store</span></div>
+        <div class="slogan">
+            <i class="fas fa-paw cat-decoration cat-1"></i>
+            喵~ 最好的游戏虚拟商品商店
+            <i class="fas fa-paw cat-decoration cat-2"></i>
+        </div>
     </div>
     
+    <!-- 联系栏 -->
     <div class="contact-bar">
         <div class="contact-item">
+            <i class="fab fa-telegram contact-icon"></i>
+            <a href="https://t.me/nyaastore_bot" target="_blank" class="contact-link">Telegram 客服机器人</a>
+        </div>
+        <div class="contact-item">
             <i class="fab fa-discord contact-icon"></i>
-            <a href="https://discord.gg/example" target="_blank" class="contact-link">Discord 客服群</a>
+            <a href="https://discord.gg/nyaastore" target="_blank" class="contact-link">Discord 客服群</a>
         </div>
         <div class="contact-item">
-            <i class="fab fa-kickstarter contact-icon"></i>
-            <a href="https://kook.vip/example" target="_blank" class="contact-link">KOOK 客服群</a>
+            <i class="fas fa-shopping-cart contact-icon"></i>
+            <span class="contact-link">订单查询: @nyaastore_bot</span>
         </div>
         <div class="contact-item">
-            <i class="fas fa-comments contact-icon"></i>
-            <a href="https://t.me/example" target="_blank" class="contact-link">Telegram 通知群</a>
-        </div>
-        <div class="contact-item">
-            <i class="fas fa-robot contact-icon"></i>
-            <span class="contact-link">QQ 群: 123456789</span>
+            <i class="fas fa-headset contact-icon"></i>
+            <span class="contact-link">紧急联系: +XXX-XXXX-XXXX</span>
         </div>
     </div>
-    
-    <div class="search-bar">
-        <div class="search-title">Q. 搜索商品</div>
-        <input type="text" class="search-box" placeholder="请输入商品关键词（支持模糊搜索）">
+<!-- 搜索框 -->
+<div class="search-bar">
+    <div class="search-title">
+        <i class="fas fa-search"></i>
+        Q. 搜索商品（支持模糊搜索，输入"Nitro"或"Robux"）
     </div>
-    
-    <div class="currency-selector">
-        <div class="section-title">💰 选择货币</div>
-        <div class="currency-option active">CNY - 人民币</div>
-        <div class="currency-option">USD - 美元</div>
-        <div class="currency-option">EUR - 欧元</div>
-    </div>
-    
-    <div class="categories">
-        <!-- Discord Nitro 分类 -->
-        <div class="category-card">
-            <div class="category-header">
-                <i class="fab fa-discord category-icon discord-color"></i>
-                <div class="category-name discord-color">Discord Nitro</div>
-            </div>
-            <ul class="category-items">
-                <li class="category-item">Nitro Basic - 1个月</li>
-                <li class="category-item">Nitro Basic - 3个月</li>
-                <li class="category-item">Nitro Basic - 12个月</li>
-                <li class="category-item">Nitro Full - 1个月</li>
-                <li class="category-item">Nitro Full - 3个月</li>
-                <li class="category-item">Nitro Full - 12个月</li>
-                <li class="category-item">Nitro 礼品卡</li>
-            </ul>
-        </div>
-        
-        <!-- Roblox Robux 分类 -->
-        <div class="category-card">
-            <div class="category-header">
-                <i class="fas fa-coins category-icon roblox-color"></i>
-                <div class="category-name roblox-color">Roblox Robux</div>
-            </div>
-            <ul class="category-items">
-                <li class="category-item">Robux 400</li>
-                <li class="category-item">Robux 800</li>
-                <li class="category-item">Robux 1700</li>
-                <li class="category-item">Robux 4500</li>
-                <li class="category-item">Robux 10000</li>
-                <li class="category-item">Robux 礼品卡</li>
-                <li class="category-item">Roblox Premium 会员</li>
-            </ul>
-        </div>
-        
-        <!-- 推荐/优惠商品 -->
-        <div class="category-card">
-            <div class="category-header">
-                <i class="fas fa-fire category-icon" style="color:#ff6b6b;"></i>
-                <div class="category-name" style="color:#ff6b6b;">推荐/优惠商品</div>
-            </div>
-            <ul class="category-items">
-                <li class="category-item">Nitro Basic + Robux 400 捆绑包</li>
-                <li class="category-item">Nitro Full 年费 - 限时优惠</li>
-                <li class="category-item">Robux 10000 大额折扣</li>
-                <li class="category-item">新用户首单优惠</li>
-                <li class="category-item">节日特惠礼品卡</li>
-                <li class="category-item">代理/批发优惠</li>
-            </ul>
-        </div>
-        
-        <!-- 自动发货服务 -->
-        <div class="category-card">
-            <div class="category-header">
-                <i class="fas fa-bolt category-icon automatic-color"></i>
-                <div class="category-name automatic-color">自动发货服务</div>
-            </div>
-            <ul class="category-items">
-                <li class="category-item">Discord Nitro 自动发货 | 秒发码</li>
-                <li class="category-item">Robux 自动发货 | 即时到账</li>
-                <li class="category-item">礼品卡自动兑换 | 全球区域</li>
-                <li class="category-item">自动发货系统使用教程</li>
-                <li class="category-item">批量订单自动处理</li>
-            </ul>
-        </div>
-        
-        <!-- 游戏相关商品 -->
-        <div class="category-card">
-            <div class="category-header">
-                <i class="fas fa-gamepad category-icon game-color"></i>
-                <div class="category-name game-color">游戏相关商品</div>
-            </div>
-            <ul class="category-items">
-                <li class="category-item">Steam 钱包码</li>
-                <li class="category-item">Xbox Game Pass</li>
-                <li class="category-item">PlayStation Plus</li>
-                <li class="category-item">Nintendo eShop 点卡</li>
-                <li class="category-item">EA Play 会员</li>
-                <li class="category-item">暴雪战网点数</li>
-            </ul>
-        </div>
-        
-        <!-- DMS 增值服务 -->
-        <div class="category-card">
-            <div class="category-header">
-                <i class="fas fa-headset category-icon service-color"></i>
-                <div class="category-name service-color">DMS 增值服务</div>
-            </div>
-            <ul class="category-items">
-                <li class="category-item">Discord 服务器搭建</li>
-                <li class="category-item">Discord 机器人定制</li>
-                <li class="category-item">Roblox 游戏开发协助</li>
-                <li class="category-item">游戏账号安全咨询</li>
-                <li class="category-item">VIP 客户专属支持</li>
-                <li class="category-item">代理/分销合作</li>
-            </ul>
-        </div>
-    </div>
-    
-    <div class="footer">
-        <div class="footer-logo">DMS SERVICES</div>
-        <p>我们相信最好的服务才是王道，而不是只是销售产品</p>
-        <p>© 2023 DMS Services. 所有商品均为正版授权，安全可靠。</p>
-        <p>联系方式: support@dmsservices.com | 客服时间: 9:00-23:00 (UTC+8)</p>
-    </div>
+    <input type="text" class="search-box" placeholder="请输入商品关键词...">
+</div>
 
-    <script>
-        // 搜索功能
-        document.querySelector('.search-box').addEventListener('input', function(e) {
-            const searchTerm = e.target.value.toLowerCase();
-            const items = document.querySelectorAll('.category-item');
+<!-- 货币和支付方式选择 -->
+<div class="selection-section">
+    <div class="selector-card">
+        <div class="section-title">
+            <i class="fas fa-money-bill-wave"></i>
+            选择货币
+        </div>
+        <div class="option-container">
+            <div class="option-btn active" data-currency="TWD">TWD - 新台币</div>
+            <div class="option-btn" data-currency="MYR">MYR - 马来西亚令吉</div>
+        </div>
+    </div>
+    
+    <div class="selector-card">
+        <div class="section-title">
+            <i class="fas fa-credit-card"></i>
+            支付方式
+        </div>
+        <div class="option-container">
+            <div class="option-btn active" data-payment="tng">TNG eWallet</div>
+            <div class="option-btn" data-payment="ltc">Litecoin (LTC)</div>
+            <div class="option-btn" data-payment="paypal">PayPal</div>
+        </div>
+    </div>
+</div>
+<!-- 商品分类网格 -->
+<div class="categories">
+    <!-- Discord Nitro 分类 -->
+    <div class="category-card">
+        <div class="category-header">
+            <div class="category-icon discord-color">
+                <i class="fab fa-discord"></i>
+            </div>
+            <div class="category-name discord-color">Discord Nitro</div>
+        </div>
+        <ul class="category-items">
+            <li class="category-item">
+                <span>Nitro Basic - 1个月</span>
+                <span class="item-price" data-twd="NT$ 90" data-myr="RM 12">NT$ 90</span>
+            </li>
+            <li class="category-item">
+                <span>Nitro Basic - 3个月</span>
+                <span class="item-price" data-twd="NT$ 250" data-myr="RM 35">NT$ 250</span>
+            </li>
+            <li class="category-item">
+                <span>Nitro Basic - 12个月</span>
+                <span class="item-price" data-twd="NT$ 900" data-myr="RM 125">NT$ 900</span>
+            </li>
+            <li class="category-item">
+                <span>Nitro Full - 1个月</span>
+                <span class="item-price" data-twd="NT$ 180" data-myr="RM 25">NT$ 180</span>
+            </li>
+            <li class="category-item">
+                <span>Nitro Full - 3个月</span>
+                <span class="item-price" data-twd="NT$ 500" data-myr="RM 70">NT$ 500</span>
+            </li>
+            <li class="category-item">
+                <span>Nitro Full - 12个月</span>
+                <span class="item-price" data-twd="NT$ 1800" data-myr="RM 250">NT$ 1800</span>
+            </li>
+            <li class="category-item">
+                <span>Nitro 礼品卡 (全球)</span>
+                <span class="item-price" data-twd="NT$ 190" data-myr="RM 26">NT$ 190</span>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Roblox Robux 分类 -->
+    <div class="category-card">
+        <div class="category-header">
+            <div class="category-icon roblox-color">
+                <i class="fas fa-coins"></i>
+            </div>
+            <div class="category-name roblox-color">Roblox Robux</div>
+        </div>
+        <ul class="category-items">
+            <li class="category-item">
+                <span>Robux 400</span>
+                <span class="item-price" data-twd="NT$ 50" data-myr="RM 7">NT$ 50</span>
+            </li>
+            <li class="category-item">
+                <span>Robux 800</span>
+                <span class="item-price" data-twd="NT$ 100" data-myr="RM 14">NT$ 100</span>
+            </li>
+            <li class="category-item">
+                <span>Robux 1700</span>
+                <span class="item-price" data-twd="NT$ 200" data-myr="RM 28">NT$ 200</span>
+            </li>
+            <li class="category-item">
+                <span>Robux 4500</span>
+                <span class="item-price" data-twd="NT$ 500" data-myr="RM 70">NT$ 500</span>
+            </li>
+            <li class="category-item">
+                <span>Robux 10000</span>
+                <span class="item-price" data-twd="NT$ 1000" data-myr="RM 140">NT$ 1000</span>
+            </li>
+            <li class="category-item">
+                <span>Robux 礼品卡 (US)</span>
+                <span class="item-price" data-twd="NT$ 320" data-myr="RM 45">NT$ 320</span>
+            </li>
+            <li class="category-item">
+                <span>Roblox Premium 1个月</span>
+                <span class="item-price" data-twd="NT$ 120" data-myr="RM 17">NT$ 120</span>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- 推荐/优惠商品 -->
+    <div class="category-card">
+        <div class="category-header">
+            <div class="category-icon recommend-color">
+                <i class="fas fa-fire"></i>
+            </div>
+            <div class="category-name recommend-color">推荐/优惠商品</div>
+        </div>
+        <ul class="category-items">
+            <li class="category-item">
+                <span>Nitro Basic + Robux 400 捆绑包</span>
+                <span class="item-price" data-twd="NT$ 120" data-myr="RM 17">NT$ 120</span>
+            </li>
+            <li class="category-item">
+                <span>Nitro Full 年费 - 限时优惠</span>
+                <span class="item-price" data-twd="NT$ 1600" data-myr="RM 225">NT$ 1600</span>
+            </li>
+            <li class="category-item">
+                <span>Robux 10000 大额折扣</span>
+                <span class="item-price" data-twd="NT$ 900" data-myr="RM 126">NT$ 900</span>
+            </li>
+            <li class="category-item">
+                <span>新用户首单优惠 (9折)</span>
+                <span class="item-price">使用优惠码: NYAAA10</span>
+            </li>
+            <li class="category-item">
+                <span>节日特惠礼品卡</span>
+                <span class="item-price" data-twd="NT$ 170" data-myr="RM 24">NT$ 170</span>
+            </li>
+            <li class="category-item">
+                <span>代理/批发优惠 (10单以上)</span>
+                <span class="item-price">联系客服获取报价</span>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- 自动发货服务 -->
+    <div class="category-card">
+        <div class="category-header">
+            <div class="category-icon auto-color">
+                <i class="fas fa-bolt"></i>
+            </div>
+            <div class="category-name auto-color">自动发货服务</div>
+        </div>
+        <ul class="category-items">
+            <li class="category-item">
+                <span>Discord Nitro 自动发货 | 秒发码</span>
+                <span class="item-price">即时到货</span>
+            </li>
+            <li class="category-item">
+                <span>Robux 自动发货 | 即时到账</span>
+                <span class="item-price">5分钟内到账</span>
+            </li>
+            <li class="category-item">
+                <span>礼品卡自动兑换 | 全球区域</span>
+                <span class="item-price">支持多区域</span>
+            </li>
+            <li class="category-item">
+                <span>自动发货系统使用教程</span>
+                <span class="item-price">免费指导</span>
+            </li>
+            <li class="category-item">
+                <span>批量订单自动处理</span>
+                <span class="item-price">支持API对接</span>
+            </li>
+            <li class="category-item">
+                <span>24/7 自动客服支持</span>
+                <span class="item-price">全天候服务</span>
+            </li>
+        </ul>
+    </div>
+    <!-- 游戏相关商品 -->
+    <div class="category-card">
+        <div class="category-header">
+            <div class="category-icon game-color">
+                <i class="fas fa-gamepad"></i>
+            </div>
+            <div class="category-name game-color">游戏相关商品</div>
+        </div>
+        <ul class="category-items">
+            <li class="category-item">
+                <span>Steam 钱包码 (USD)</span>
+                <span class="item-price" data-twd="NT$ 320" data-myr="RM 45">NT$ 320</span>
+            </li>
+            <li class="category-item">
+                <span>Xbox Game Pass Ultimate</span>
+                <span class="item-price" data-twd="NT$ 280" data-myr="RM 39">NT$ 280</span>
+            </li>
+            <li class="category-item">
+                <span>PlayStation Plus Essential</span>
+                <span class="item-price" data-twd="NT$ 350" data-myr="RM 49">NT$ 350</span>
+            </li>
+            <li class="category-item">
+                <span>Nintendo eShop 点卡 (USD)</span>
+                <span class="item-price" data-twd="NT$ 310" data-myr="RM 43">NT$ 310</span>
+            </li>
+            <li class="category-item">
+                <span>EA Play 会员 1个月</span>
+                <span class="item-price" data-twd="NT$ 100" data-myr="RM 14">NT$ 100</span>
+            </li>
+            <li class="category-item">
+                <span>暴雪战网点数 (USD)</span>
+                <span class="item-price" data-twd="NT$ 300" data-myr="RM 42">NT$ 300</span>
+            </li>
+        </ul>
+    </div>
+    
+    <!-- Nyaaastore 增值服务 -->
+    <div class="category-card">
+        <div class="category-header">
+            <div class="category-icon service-color">
+                <i class="fas fa-crown"></i>
+            </div>
+            <div class="category-name service-color">Nyaaastore 增值服务</div>
+        </div>
+        <ul class="category-items">
+            <li class="category-item">
+                <span>Discord 服务器搭建与装修</span>
+                <span class="item-price" data-twd="NT$ 500+" data-myr="RM 70+">NT$ 500+</span>
+            </li>
+            <li class="category-item">
+                <span>Discord 机器人定制开发</span>
+                <span class="item-price" data-twd="NT$ 1500+" data-myr="RM 210+">NT$ 1500+</span>
+            </li>
+            <li class="category-item">
+                <span>Roblox 游戏开发协助</span>
+                <span class="item-price" data-twd="NT$ 2000+" data-myr="RM 280+">NT$ 2000+</span>
+            </li>
+            <li class="category-item">
+                <span>游戏账号安全咨询</span>
+                <span class="item-price" data-twd="NT$ 300" data-myr="RM 42">NT$ 300</span>
+            </li>
+            <li class="category-item">
+                <span>VIP 客户专属支持通道</span>
+                <span class="item-price" data-twd="NT$ 1000" data-myr="RM 140">NT$ 1000</span>
+            </li>
+            <li class="category-item">
+                <span>代理/分销合作方案</span>
+                <span class="item-price">联系客服详谈</span>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- 页脚 -->
+<div class="footer">
+    <div class="footer-logo">Nyaaastore</div>
+    <p>喵~ 最好的虚拟商品商店 | 安全可靠 | 快速发货</p>
+    <div class="payment-icons">
+        <i class="fab fa-cc-paypal payment-icon" title="PayPal" style="color:#003087;"></i>
+        <i class="fas fa-wallet payment-icon" title="TNG eWallet" style="color:#00a859;"></i>
+        <i class="fab fa-bitcoin payment-icon" title="Litecoin" style="color:#bebebe;"></i>
+        <i class="fas fa-mobile-alt payment-icon" title="移动支付" style="color:#ff66cc;"></i>
+    </div>
+    <p>© 2023 Nyaaastore. 所有商品均为正版授权，安全可靠。</p>
+    <p>联系方式: @nyaastore_bot (Telegram) | 客服时间: 24/7 全天候</p>
+    <p style="color:#ff66cc; margin-top:10px;">
+        <i class="fas fa-exclamation-circle"></i> 
+        注意: 购买后订单将通过Telegram机器人自动发送给店主
+    </p>
+</div>
+<!-- 聊天机器人 -->
+<div class="chat-bot-container">
+    <button class="chat-bot-btn" id="chatBotBtn">
+        <i class="fas fa-robot"></i>
+    </button>
+    <div class="chat-bot-window" id="chatBotWindow">
+        <div class="chat-header">
+            <span>Nyaaastore 客服助手</span>
+            <button id="closeChat" style="background:none; border:none; color:white; cursor:pointer;">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+                喵~ 你好！我是Nyaaastore客服助手，有什么可以帮你的吗？
+            </div>
+            <div class="message bot-message">
+                我可以帮你：<br>
+                1. 查询商品价格<br>
+                2. 了解支付方式<br>
+                3. 查看购买流程<br>
+                4. 解答常见问题<br>
+                请告诉我你需要什么帮助~
+            </div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="chatInput" placeholder="输入你的问题...">
+            <button id="sendMessage">发送</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Telegram Bot配置
+    const BOT_TOKEN = '8520089781:AAHPSCT8YZf9q6J43VKdDtdGwtRkzmyMoXM';
+    const OWNER_ID = '8313770381';
+    
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        // 初始化货币选择
+        initCurrencySelection();
+        
+        // 初始化支付方式选择
+        initPaymentSelection();
+        
+        // 初始化商品点击事件
+        initProductSelection();
+        
+        // 初始化搜索功能
+        initSearch();
+        
+        // 初始化聊天机器人
+        initChatBot();
+        
+        // 显示当前货币
+        updateAllPrices();
+    });
+    
+    // 货币选择功能
+    function initCurrencySelection() {
+        const currencyButtons = document.querySelectorAll('[data-currency]');
+        currencyButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 移除其他按钮的active类
+                currencyButtons.forEach(b => b.classList.remove('active'));
+                // 给当前按钮添加active类
+                this.classList.add('active');
+                // 更新所有价格显示
+                updateAllPrices();
+            });
+        });
+    }
+    
+    // 支付方式选择功能
+    function initPaymentSelection() {
+        const paymentButtons = document.querySelectorAll('[data-payment]');
+        paymentButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                paymentButtons.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                
+                // 显示支付方式提示
+                const paymentMethod = this.getAttribute('data-payment');
+                let paymentMessage = '';
+                
+                switch(paymentMethod) {
+                    case 'tng':
+                        paymentMessage = '已选择TNG eWallet支付，请使用TNG扫描二维码支付';
+                        break;
+                    case 'ltc':
+                        paymentMessage = '已选择Litecoin支付，请向指定地址转账LTC';
+                        break;
+                    case 'paypal':
+                        paymentMessage = '已选择PayPal支付，将跳转到PayPal支付页面';
+                        break;
+                }
+                
+                // 显示支付方式提示
+                showNotification(paymentMessage);
+            });
+        });
+    }
+    
+    // 更新所有价格显示
+    function updateAllPrices() {
+        const activeCurrency = document.querySelector('[data-currency].active');
+        const currency = activeCurrency ? activeCurrency.getAttribute('data-currency') : 'TWD';
+        
+        const priceElements = document.querySelectorAll('.item-price[data-twd]');
+        priceElements.forEach(element => {
+            if (currency === 'TWD') {
+                element.textContent = element.getAttribute('data-twd');
+            } else if (currency === 'MYR') {
+                element.textContent = element.getAttribute('data-myr');
+            }
+        });
+    }
+// 商品选择功能
+function initProductSelection() {
+    const productItems = document.querySelectorAll('.category-item');
+    productItems.forEach(item => {
+        item.addEventListener('click', function() {
+            const productName = this.querySelector('span:first-child').textContent;
+            const productPrice = this.querySelector('.item-price').textContent;
             
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                if (text.includes(searchTerm) || searchTerm.length < 2) {
-                    item.style.display = 'block';
+            // 获取当前选择的货币和支付方式
+            const activeCurrency = document.querySelector('[data-currency].active');
+            const activePayment = document.querySelector('[data-payment].active');
+            
+            const currency = activeCurrency ? activeCurrency.getAttribute('data-currency') : 'TWD';
+            const payment = activePayment ? activePayment.getAttribute('data-payment') : 'tng';
+            
+            // 创建购买确认对话框
+            const modal = createPurchaseModal(productName, productPrice, currency, payment);
+            document.body.appendChild(modal);
+            
+            // 显示模态框
+            setTimeout(() => {
+                modal.style.display = 'flex';
+                setTimeout(() => {
+                    modal.querySelector('.modal-content').style.transform = 'translateY(0)';
+                    modal.querySelector('.modal-content').style.opacity = '1';
+                }, 10);
+            }, 50);
+        });
+    });
+}
+
+// 创建购买模态框
+function createPurchaseModal(productName, productPrice, currency, payment) {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+        backdrop-filter: blur(5px);
+    `;
+    
+    const modalContent = document.createElement('div');
+    modalContent.className = 'modal-content';
+    modalContent.style.cssText = `
+        background: linear-gradient(135deg, #1a1a2e 0%, #252545 100%);
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 500px;
+        width: 90%;
+        border: 2px solid #ff66cc;
+        transform: translateY(-50px);
+        opacity: 0;
+        transition: all 0.3s ease;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    `;
+    
+    // 支付方式图标映射
+    const paymentIcons = {
+        'tng': 'fas fa-wallet',
+        'ltc': 'fab fa-bitcoin',
+        'paypal': 'fab fa-cc-paypal'
+    };
+    
+    // 支付方式名称映射
+    const paymentNames = {
+        'tng': 'TNG eWallet',
+        'ltc': 'Litecoin (LTC)',
+        'paypal': 'PayPal'
+    };
+    
+    modalContent.innerHTML = `
+        <h2 style="color:#ff66cc; margin-bottom:20px; text-align:center;">
+            <i class="fas fa-shopping-cart"></i> 确认购买
+        </h2>
+        <div style="margin-bottom:20px;">
+            <p><strong>商品名称:</strong> ${productName}</p>
+            <p><strong>价格:</strong> <span style="color:#ffcc00; font-weight:bold;">${productPrice}</span></p>
+            <p><strong>货币:</strong> ${currency}</p>
+            <p><strong>支付方式:</strong> 
+                <i class="${paymentIcons[payment]}" style="margin:0 5px;"></i>
+                ${paymentNames[payment]}
+            </p>
+        </div>
+        <div style="margin-bottom:25px;">
+            <label for="userContact" style="display:block; margin-bottom:8px;">
+                <i class="fas fa-user"></i> 联系方式 (Telegram用户名/ID):
+            </label>
+            <input type="text" id="userContact" placeholder="@username 或 123456789" 
+                   style="width:100%; padding:12px; background:rgba(40,40,70,0.8); 
+                   border:1px solid #3a3a6a; border-radius:8px; color:white;">
+        </div>
+        <div style="display:flex; gap:15px; justify-content:center;">
+            <button id="confirmPurchase" style="padding:12px 30px; background:linear-gradient(135deg, #ff66cc 0%, #7289da 100%); 
+                   border:none; border-radius:10px; color:white; font-weight:bold; cursor:pointer; flex:1;">
+                <i class="fas fa-check"></i> 确认购买
+            </button>
+            <button id="cancelPurchase" style="padding:12px 30px; background:rgba(58,58,106,0.8); 
+                   border:1px solid #3a3a6a; border-radius:10px; color:#c0c0ff; font-weight:bold; cursor:pointer; flex:1;">
+                <i class="fas fa-times"></i> 取消
+            </button>
+        </div>
+        <p style="margin-top:20px; font-size:0.9rem; color:#a0a0ff; text-align:center;">
+            <i class="fas fa-info-circle"></i> 确认后订单将通过Telegram机器人发送给店主
+        </p>
+    `;
+    
+    modal.appendChild(modalContent);
+    
+    // 添加事件监听器
+    modal.querySelector('#confirmPurchase').addEventListener('click', function() {
+        const userContact = document.getElementById('userContact').value.trim();
+        if (!userContact) {
+            alert('请输入联系方式！');
+            return;
+        }
+        
+        sendOrderToTelegram(productName, productPrice, currency, payment, userContact);
+        
+        // 关闭模态框
+        modal.querySelector('.modal-content').style.transform = 'translateY(-50px)';
+        modal.querySelector('.modal-content').style.opacity = '0';
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.body.removeChild(modal);
+            showNotification('订单已发送！店主将通过Telegram联系您。');
+        }, 300);
+    });
+    
+    modal.querySelector('#cancelPurchase').addEventListener('click', function() {
+        modal.querySelector('.modal-content').style.transform = 'translateY(-50px)';
+        modal.querySelector('.modal-content').style.opacity = '0';
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.body.removeChild(modal);
+        }, 300);
+    });
+    
+    // 点击背景关闭
+    modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.querySelector('.modal-content').style.transform = 'translateY(-50px)';
+            modal.querySelector('.modal-content').style.opacity = '0';
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.removeChild(modal);
+            }, 300);
+        }
+    });
+    
+    return modal;
+}
+        // 发送订单到Telegram
+        async function sendOrderToTelegram(productName, price, currency, payment, userContact) {
+            const orderDetails = {
+                product: productName,
+                price: price,
+                currency: currency,
+                payment: payment,
+                contact: userContact,
+                timestamp: new Date().toLocaleString('zh-CN'),
+                store: 'Nyaaastore'
+            };
+            
+            // 创建订单消息
+            const orderMessage = `
+🛒 *新订单通知* 🛒
+
+*店铺:* ${orderDetails.store}
+*商品:* ${orderDetails.product}
+*价格:* ${orderDetails.price}
+*货币:* ${orderDetails.currency}
+*支付方式:* ${orderDetails.payment}
+*客户联系方式:* ${orderDetails.contact}
+*下单时间:* ${orderDetails.timestamp}
+
+请及时处理此订单！
+            `;
+            
+            try {
+                // 发送订单到Telegram Bot
+                const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        chat_id: OWNER_ID,
+                        text: orderMessage,
+                        parse_mode: 'Markdown'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.ok) {
+                    console.log('订单已发送到Telegram');
+                    // 同时发送给客户确认
+                    sendConfirmationToCustomer(userContact, orderDetails);
                 } else {
-                    item.style.display = 'none';
+                    console.error('发送订单失败:', result);
+                    showNotification('订单发送失败，请直接联系店主 @nyaastore_bot');
+                }
+            } catch (error) {
+                console.error('网络错误:', error);
+                showNotification('网络错误，请稍后重试或直接联系店主');
+            }
+        }
+        
+        // 发送确认消息给客户
+        async function sendConfirmationToCustomer(userContact, orderDetails) {
+            // 这里可以添加逻辑通过Bot发送确认消息给客户
+            // 注意: 由于安全限制，需要客户先启动Bot对话
+            console.log(`订单确认信息已记录，客户: ${userContact}`);
+        }
+        
+        // 搜索功能
+        function initSearch() {
+            const searchBox = document.querySelector('.search-box');
+            searchBox.addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase().trim();
+                
+                if (searchTerm.length === 0) {
+                    // 显示所有商品
+                    document.querySelectorAll('.category-item').forEach(item => {
+                        item.style.display = 'flex';
+                    });
+                    return;
+                }
+                
+                // 筛选商品
+                document.querySelectorAll('.category-item').forEach(item => {
+                    const itemText = item.textContent.toLowerCase();
+                    if (itemText.includes(searchTerm)) {
+                        item.style.display = 'flex';
+                        
+                        // 高亮匹配的文本
+                        const firstSpan = item.querySelector('span:first-child');
+                        const originalText = firstSpan.textContent;
+                        const regex = new RegExp(`(${searchTerm})`, 'gi');
+                        firstSpan.innerHTML = originalText.replace(regex, '<mark style="background-color:#ff66cc; color:white;">$1</mark>');
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        }
+        
+        // 聊天机器人功能
+        function initChatBot() {
+            const chatBotBtn = document.getElementById('chatBotBtn');
+            const chatBotWindow = document.getElementById('chatBotWindow');
+            const closeChatBtn = document.getElementById('closeChat');
+            const sendMessageBtn = document.getElementById('sendMessage');
+            const chatInput = document.getElementById('chatInput');
+            const chatMessages = document.getElementById('chatMessages');
+            
+            // 打开/关闭聊天窗口
+            chatBotBtn.addEventListener('click', function() {
+                const isVisible = chatBotWindow.style.display === 'flex';
+                chatBotWindow.style.display = isVisible ? 'none' : 'flex';
+            });
+            
+            closeChatBtn.addEventListener('click', function() {
+                chatBotWindow.style.display = 'none';
+            });
+            
+            // 发送消息
+            function sendMessage() {
+                const message = chatInput.value.trim();
+                if (!message) return;
+                
+                // 添加用户消息
+                addMessage(message, 'user');
+                chatInput.value = '';
+                
+                // 获取机器人回复
+                const botReply = getBotReply(message);
+                
+                // 模拟打字效果
+                setTimeout(() => {
+                    addMessage(botReply, 'bot');
+                }, 500);
+            }
+            
+            sendMessageBtn.addEventListener('click', sendMessage);
+            
+            // 按Enter发送消息
+            chatInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
                 }
             });
-        });
+            
+            // 添加消息到聊天窗口
+            function addMessage(text, sender) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${sender}-message`;
+                messageDiv.textContent = text;
+                chatMessages.appendChild(messageDiv);
+                
+                // 滚动到底部
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        }
         
-        // 货币选择
-        const currencyOptions = document.querySelectorAll('.currency-option');
-        currencyOptions.forEach(option => {
-            option.addEventListener('click', function() {
-                currencyOptions.forEach(opt => opt.classList.remove('active'));
-                this.classList.add('active');
-            });
-        });
+        // 获取机器人回复
+        function getBotReply(message) {
+            const lowerMsg = message.toLowerCase();
+            
+            // 常见问题回复
+            const responses = [
+                {
+                    keywords: ['你好', '嗨', 'hello', 'hi', '您好'],
+                    reply: '喵~ 你好！我是Nyaaastore客服助手，有什么可以帮你的吗？'
+                },
+                {
+                    keywords: ['价格', '多少钱', 'cost', 'price', '价目'],
+                    reply: '商品价格已显示在页面上，你可以选择TWD或MYR货币查看。需要查询特定商品价格吗？'
+                },
+                {
+                    keywords: ['支付', '付款', '怎么付', 'payment', 'pay'],
+                    reply: '我们支持TNG eWallet、Litecoin和PayPal三种支付方式。在页面上方可以选择支付方式。'
+                },
+                {
+                    keywords: ['购买', '怎么买', '下单', 'order', 'buy'],
+                    reply: '购买流程：1. 选择商品 2. 选择货币和支付方式 3. 点击商品 4. 填写联系方式 5. 确认购买。订单会自动发送给店主。'
+                },
+                {
+                    keywords: ['nitro', 'discord', ' nitro'],
+                    reply: '我们提供Discord Nitro Basic和Full版本，有1个月、3个月和12个月选项，价格实惠。'
+                },
+                {
+                    keywords: ['robux', 'roblox', '罗布乐思'],
+                    reply: 'Robux有400、800、1700、4500、10000等不同面值，还有Roblox Premium会员。'
+                },
+                {
+                    keywords: ['发货', '多久', '时间', 'delivery', '发货时间'],
+                    reply: '自动发货商品即时到货，其他商品在付款确认后5-30分钟内发货。'
+                },
+                {
+                    keywords: ['联系', '客服', '人工', 'contact', 'support'],
+                    reply: '你可以通过Telegram机器人 @nyaastore_bot 或Discord客服群联系人工客服。'
+                },
+                {
+                    keywords: ['谢谢', '感谢', 'thx', 'thanks'],
+                    reply: '不客气喵~ 有其他问题随时问我哦！'
+                }
+            ];
+            
+            // 查找匹配的回复
+            for (const response of responses) {
+                for (const keyword of response.keywords) {
+                    if (lowerMsg.includes(keyword)) {
+                        return response.reply;
+                    }
+                }
+            }
+            
+            // 默认回复
+            return '喵~ 我不太明白你的问题。你可以问我关于价格、支付方式、购买流程等问题。或者直接联系人工客服 @nyaastore_bot';
+        }
         
-        // 商品点击效果
-        const categoryItems = document.querySelectorAll('.category-item');
-        categoryItems.forEach(item => {
-            item.addEventListener('click', function() {
-                const itemName = this.textContent;
-                alert(`已选择商品: ${itemName}\n\n请加入客服群完成购买流程。`);
-            });
-        });
+        // 显示通知
+        function showNotification(message) {
+            // 创建通知元素
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: linear-gradient(135deg, #ff66cc 0%, #7289da 100%);
+                color: white;
+                padding: 15px 20px;
+                border-radius: 10px;
+                z-index: 3000;
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+                animation: slideIn 0.3s ease;
+                max-width: 300px;
+            `;
+            
+            // 添加动画样式
+            const styleSheet = document.createElement('style');
+            styleSheet.textContent = `
+                @keyframes slideIn {
+                    from { transform: translateX(100%); opacity: 0; }
+                    to { transform: translateX(0); opacity: 1; }
+                }
+                @keyframes slideOut {
+                    from { transform: translateX(0); opacity: 1; }
+                    to { transform: translateX(100%); opacity: 0; }
+                }
+            `;
+            document.head.appendChild(styleSheet);
+            
+            notification.innerHTML = `
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>${message}</span>
+                </div>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // 3秒后移除通知
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease';
+                setTimeout(() => {
+                    if (notification.parentNode) {
+                        document.body.removeChild(notification);
+                    }
+                }, 300);
+            }, 3000);
+        }
     </script>
 </body>
 </html>
