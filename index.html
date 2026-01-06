@@ -735,11 +735,11 @@
     </div>
   </div>
   
-  <!-- 音频播放器 - 使用无广告音乐源 -->
+  <!-- 音频播放器 - 使用可靠的在线音乐源 -->
   <audio id="background-music" loop>
-    <!-- 使用免版税音乐源，无广告 -->
-    <source src="https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3" type="audio/mpeg">
-    <source src="https://cdn.pixabay.com/audio/2022/03/23/audio_aa8d2a256b.mp3" type="audio/mpeg">
+    <!-- 使用可靠的在线音乐源 -->
+    <source src="https://api.lmsoft.cc/audio/action?type=mp3&id=8" type="audio/mpeg">
+    <source src="https://cdn.jsdelivr.net/gh/2fps/audio-collection@main/ambient/chill-synth.mp3" type="audio/mpeg">
   </audio>
   
   <script>
@@ -758,7 +758,7 @@
       }
     }
 
-    // 音乐控制 - 简化版，移除YouTube相关代码
+    // 音乐控制
     const backgroundMusic = document.getElementById('background-music');
     const musicToggle = document.getElementById('music-toggle');
     const musicIcon = document.getElementById('music-icon');
@@ -775,15 +775,16 @@
       musicToggle.addEventListener('click', function() {
         if (isMusicPlaying) {
           backgroundMusic.pause();
+          isMusicPlaying = false;
         } else {
           // 尝试播放音乐
           backgroundMusic.play().then(() => {
+            console.log('音乐播放成功');
             isMusicPlaying = true;
-            updateMusicIcon();
           }).catch(error => {
             console.log('音乐播放失败:', error);
-            // 显示错误提示
-            showMusicError();
+            // 尝试使用备用音乐源
+            tryPlayBackupMusic();
           });
         }
         updateMusicIcon();
@@ -824,13 +825,43 @@
         updateMusicIcon();
       });
       
-      // 用户交互后尝试播放音乐
-      document.addEventListener('click', function initAudioOnInteraction() {
-        if (!isMusicPlaying) {
-          // 预加载音频
-          backgroundMusic.load();
-        }
-      }, { once: true });
+      // 预加载音频
+      backgroundMusic.load();
+    }
+
+    function tryPlayBackupMusic() {
+      console.log('尝试播放备用音乐...');
+      
+      // 创建一个新的音频元素
+      const backupMusic = new Audio();
+      
+      // 设置多个备用音乐源
+      const backupSources = [
+        'https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3',
+        'https://cdn.pixabay.com/audio/2022/03/23/audio_aa8d2a256b.mp3',
+        'https://freesound.org/data/previews/620/620142_13181073-lq.mp3'
+      ];
+      
+      // 随机选择一个备用源
+      const randomSource = backupSources[Math.floor(Math.random() * backupSources.length)];
+      backupMusic.src = randomSource;
+      backupMusic.volume = 0.3;
+      backupMusic.loop = true;
+      
+      // 尝试播放
+      backupMusic.play().then(() => {
+        console.log('备用音乐播放成功');
+        isMusicPlaying = true;
+        updateMusicIcon();
+        
+        // 替换原来的音乐元素
+        backgroundMusic.parentNode.removeChild(backgroundMusic);
+        backupMusic.id = 'background-music';
+        document.body.appendChild(backupMusic);
+      }).catch(error => {
+        console.log('备用音乐也播放失败:', error);
+        showMusicError();
+      });
     }
 
     function updateMusicIcon() {
@@ -1908,6 +1939,19 @@ ${orderDetails}
     console.log('👤 Telegram Chat ID:', TELEGRAM_CHAT_ID);
     console.log('📱 二维码图片:', QR_CODE_URLS);
     console.log('🎵 音乐系统已初始化');
+    
+    // 用户交互后自动播放音乐
+    document.addEventListener('click', function initAudioOnInteraction() {
+      if (!isMusicPlaying) {
+        backgroundMusic.play().then(() => {
+          isMusicPlaying = true;
+          updateMusicIcon();
+          console.log('🎵 音乐已自动播放');
+        }).catch(error => {
+          console.log('🎵 自动播放失败:', error);
+        });
+      }
+    }, { once: true });
   </script>
 </body>
 </html>
