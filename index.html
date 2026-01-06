@@ -735,17 +735,12 @@
     </div>
   </div>
   
-  <!-- 音频播放器 -->
+  <!-- 音频播放器 - 使用无广告音乐源 -->
   <audio id="background-music" loop>
-    <!-- 使用备用音乐源，YouTube链接需要特殊处理 -->
-    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-    <source src="https://assets.codepen.io/605876/8-bit-music.mp3" type="audio/mpeg">
+    <!-- 使用免版税音乐源，无广告 -->
+    <source src="https://assets.mixkit.co/music/preview/mixkit-tech-house-vibes-130.mp3" type="audio/mpeg">
+    <source src="https://cdn.pixabay.com/audio/2022/03/23/audio_aa8d2a256b.mp3" type="audio/mpeg">
   </audio>
-  
-  <!-- YouTube音乐嵌入（备用方案） -->
-  <div id="youtube-player" style="display: none;">
-    <iframe id="youtube-iframe" width="0" height="0" src="https://www.youtube.com/embed/aHLZrxyFAuk?enablejsapi=1&autoplay=1&loop=1&playlist=aHLZrxyFAuk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-  </div>
   
   <script>
     // 星星背景
@@ -763,16 +758,13 @@
       }
     }
 
-    // 音乐控制
+    // 音乐控制 - 简化版，移除YouTube相关代码
     const backgroundMusic = document.getElementById('background-music');
     const musicToggle = document.getElementById('music-toggle');
     const musicIcon = document.getElementById('music-icon');
     const volumeControl = document.getElementById('volume-control');
     const volumeSlider = document.getElementById('volume-slider');
-    const youtubeIframe = document.getElementById('youtube-iframe');
     let isMusicPlaying = false;
-    let usingYouTube = false;
-    let youtubePlayer = null;
 
     // 初始化音乐
     function initMusic() {
@@ -780,7 +772,22 @@
       backgroundMusic.volume = 0.3;
       
       // 添加音乐切换事件
-      musicToggle.addEventListener('click', toggleMusic);
+      musicToggle.addEventListener('click', function() {
+        if (isMusicPlaying) {
+          backgroundMusic.pause();
+        } else {
+          // 尝试播放音乐
+          backgroundMusic.play().then(() => {
+            isMusicPlaying = true;
+            updateMusicIcon();
+          }).catch(error => {
+            console.log('音乐播放失败:', error);
+            // 显示错误提示
+            showMusicError();
+          });
+        }
+        updateMusicIcon();
+      });
       
       // 添加音量控制事件
       musicToggle.addEventListener('dblclick', function(e) {
@@ -799,129 +806,31 @@
       volumeSlider.addEventListener('input', function() {
         const volume = this.value / 100;
         backgroundMusic.volume = volume;
-        
-        if (usingYouTube && youtubePlayer) {
-          try {
-            youtubePlayer.setVolume(volume * 100);
-          } catch (e) {
-            console.log('YouTube音量设置失败');
-          }
-        }
       });
       
-      // 尝试加载备用音乐源
-      loadAudioSource();
+      // 监听音频播放状态
+      backgroundMusic.addEventListener('play', function() {
+        isMusicPlaying = true;
+        updateMusicIcon();
+      });
       
-      // 初始化YouTube API（备用方案）
-      initYouTubePlayer();
+      backgroundMusic.addEventListener('pause', function() {
+        isMusicPlaying = false;
+        updateMusicIcon();
+      });
+      
+      backgroundMusic.addEventListener('ended', function() {
+        isMusicPlaying = false;
+        updateMusicIcon();
+      });
       
       // 用户交互后尝试播放音乐
       document.addEventListener('click', function initAudioOnInteraction() {
         if (!isMusicPlaying) {
-          playMusic();
+          // 预加载音频
+          backgroundMusic.load();
         }
-        // 只执行一次
-        document.removeEventListener('click', initAudioOnInteraction);
       }, { once: true });
-    }
-
-    // 尝试加载音频源
-    function loadAudioSource() {
-      console.log('尝试加载音频...');
-      
-      // 预加载音频
-      backgroundMusic.load();
-      
-      // 检测音频是否可以播放
-      const canPlay = backgroundMusic.canPlayType('audio/mpeg');
-      console.log('音频支持情况:', canPlay);
-      
-      if (canPlay === 'probably' || canPlay === 'maybe') {
-        console.log('音频可以播放');
-      } else {
-        console.log('音频可能无法播放，将使用YouTube备用方案');
-      }
-    }
-
-    // 初始化YouTube播放器
-    function initYouTubePlayer() {
-      // 加载YouTube API
-      const tag = document.createElement('script');
-      tag.src = "https://www.youtube.com/iframe_api";
-      const firstScriptTag = document.getElementsByTagName('script')[0];
-      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-      
-      // 当YouTube API准备好时
-      window.onYouTubeIframeAPIReady = function() {
-        console.log('YouTube API已加载');
-        
-        youtubePlayer = new YT.Player('youtube-iframe', {
-          events: {
-            'onReady': onYouTubePlayerReady,
-            'onStateChange': onYouTubePlayerStateChange
-          }
-        });
-      };
-    }
-
-    function onYouTubePlayerReady(event) {
-      console.log('YouTube播放器已准备好');
-      // 可以设置默认音量
-      event.target.setVolume(30);
-    }
-
-    function onYouTubePlayerStateChange(event) {
-      if (event.data === YT.PlayerState.PLAYING && !isMusicPlaying) {
-        isMusicPlaying = true;
-        updateMusicIcon();
-      } else if (event.data === YT.PlayerState.PAUSED && isMusicPlaying) {
-        isMusicPlaying = false;
-        updateMusicIcon();
-      }
-    }
-
-    function playMusic() {
-      // 首先尝试本地音频
-      backgroundMusic.play().then(() => {
-        console.log('本地音乐播放成功');
-        isMusicPlaying = true;
-        usingYouTube = false;
-        updateMusicIcon();
-      }).catch(error => {
-        console.log('本地音乐播放失败:', error);
-        
-        // 如果本地音乐失败，尝试YouTube
-        if (youtubePlayer && youtubePlayer.playVideo) {
-          try {
-            youtubePlayer.playVideo();
-            console.log('尝试播放YouTube音乐');
-            usingYouTube = true;
-          } catch (e) {
-            console.log('YouTube播放也失败:', e);
-            showMusicError();
-          }
-        } else {
-          showMusicError();
-        }
-      });
-    }
-
-    function toggleMusic() {
-      if (isMusicPlaying) {
-        pauseMusic();
-      } else {
-        playMusic();
-      }
-    }
-
-    function pauseMusic() {
-      if (usingYouTube && youtubePlayer) {
-        youtubePlayer.pauseVideo();
-      } else {
-        backgroundMusic.pause();
-      }
-      isMusicPlaying = false;
-      updateMusicIcon();
     }
 
     function updateMusicIcon() {
