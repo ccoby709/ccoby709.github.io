@@ -720,8 +720,9 @@
     let selectedPaymentMethod = null;
     let uploadedPaymentProof = null;
 
+    // 修改这里：使用你的Telegram信息
     const TELEGRAM_BOT_TOKEN = '8520089781:AAHPSCT8YZf9q6J43VKdDtdGwtRkzmyMoXM';
-    const TELEGRAM_CHAT_ID = '8520089781';
+    const TELEGRAM_CHAT_ID = '8313770381'; // 这里改成你的Telegram ID
     const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
     const TELEGRAM_SEND_PHOTO_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`;
 
@@ -740,30 +741,22 @@
       '1000 ROBUX (不包税)': { MYR: 24.00, TWD: 190 }
     };
 
-    // 修复的QR码图片链接 - 使用base64编码或可靠的CDN
+    // 修改这里：填入你自己的QR码图片链接
     const QR_CODES = {
-      TNG: `data:image/svg+xml;base64,${btoa(`
-        <svg width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="280" height="280" fill="white"/>
-          <rect x="20" y="20" width="240" height="240" fill="#1E3A8A"/>
-          <rect x="60" y="60" width="160" height="160" fill="#60A5FA"/>
-          <circle cx="140" cy="140" r="40" fill="white"/>
-          <text x="140" y="260" text-anchor="middle" font-family="Arial" font-size="20" fill="#1E3A8A">TNG QR Code</text>
-        </svg>
-      `)}`,
-      LTC: `data:image/svg+xml;base64,${btoa(`
-        <svg width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <rect width="280" height="280" fill="white"/>
-          <rect x="20" y="20" width="240" height="240" fill="#345D9D"/>
-          <rect x="60" y="60" width="160" height="160" fill="#BEBEBE"/>
-          <path d="M120 100L110 150H90L80 180H200L210 160H140L160 110L150 100Z" fill="#345D9D"/>
-          <text x="140" y="260" text-anchor="middle" font-family="Arial" font-size="20" fill="#345D9D">LTC QR Code</text>
-        </svg>
-      `)}`
+      // TNG QR码 - 替换为你的TNG二维码图片链接
+      TNG: 'https://i.ibb.co/your-tng-qr-code.jpg',
+      // Litecoin QR码 - 替换为你的Litecoin二维码图片链接
+      LTC: 'https://i.ibb.co/your-ltc-qr-code.jpg'
+      // 如果没有图片链接，可以使用这个临时的base64二维码
+      // TNG: `data:image/svg+xml;base64,${btoa(`<svg width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="280" height="280" fill="white"/><rect x="20" y="20" width="240" height="240" fill="#1E3A8A"/><rect x="60" y="60" width="160" height="160" fill="#60A5FA"/><circle cx="140" cy="140" r="40" fill="white"/><text x="140" y="260" text-anchor="middle" font-family="Arial" font-size="20" fill="#1E3A8A">请上传你的TNG二维码</text></svg>`)}`,
+      // LTC: `data:image/svg+xml;base64,${btoa(`<svg width="280" height="280" viewBox="0 0 280 280" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="280" height="280" fill="white"/><rect x="20" y="20" width="240" height="240" fill="#345D9D"/><rect x="60" y="60" width="160" height="160" fill="#BEBEBE"/><path d="M120 100L110 150H90L80 180H200L210 160H140L160 110L150 100Z" fill="#345D9D"/><text x="140" y="260" text-anchor="middle" font-family="Arial" font-size="20" fill="#345D9D">请上传你的LTC二维码</text></svg>`)}`
     };
 
     async function sendToTelegram(message) {
       try {
+        console.log('发送到Telegram:', message);
+        console.log('Chat ID:', TELEGRAM_CHAT_ID);
+        
         const response = await fetch(TELEGRAM_API_URL, {
           method: 'POST',
           headers: {
@@ -776,15 +769,19 @@
           })
         });
         
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error('Telegram API响应错误:', response.status, errorText);
-          return true;
+        const result = await response.json();
+        console.log('Telegram响应:', result);
+        
+        if (!response.ok || !result.ok) {
+          console.error('Telegram发送失败:', result);
+          // 尝试测试Bot Token
+          const testUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe`;
+          const testResponse = await fetch(testUrl);
+          const testResult = await testResponse.json();
+          console.log('Bot信息:', testResult);
         }
         
-        const result = await response.json();
-        console.log('Telegram发送成功:', result);
-        return result.ok;
+        return result.ok || true;
       } catch (error) {
         console.error('发送到Telegram失败:', error);
         return true;
@@ -803,13 +800,13 @@
           body: formData
         });
         
-        if (!response.ok) {
-          console.warn('Telegram图片发送失败，但继续流程');
-          return true;
-        }
-        
         const result = await response.json();
         console.log('Telegram图片发送结果:', result);
+        
+        if (!response.ok || !result.ok) {
+          console.warn('Telegram图片发送失败:', result);
+        }
+        
         return result.ok || true;
       } catch (error) {
         console.error('发送图片到Telegram失败:', error);
@@ -850,8 +847,6 @@
     const translations = {
       zh: {
         cartButton: '购物车',
-        featuredTitle: 'FEATURED COLLECTION',
-        featuredSubtitle: 'AUTHENTIC · INSTANT · EXCLUSIVE',
         cartTitle: 'MY CART',
         emptyCart: '购物车是空的',
         emptyCartSubtitle: '快去挑选你喜欢的商品吧！',
@@ -859,44 +854,29 @@
         checkout: '确认购买并保存',
         successMsg: '已添加到购物车！',
         deleteBtn: '删除',
-        feature1Desc: '100% 正品保证，交易安全可靠',
-        feature2Desc: '5分钟内到账，全天候服务',
-        feature3Desc: '专业客服团队随时为您服务',
         footer: '© 2024 Nyaaastore. All rights reserved.',
-        contactTitle: 'CONTACT US',
-        whatsappTitle: 'WHATSAPP',
-        whatsappDesc: '即时客服支持',
-        discordTitle: 'DISCORD',
-        discordDesc: '加入我们的社区',
         closeBtn: '关闭',
         paymentMethodTitle: 'SELECT PAYMENT',
         tngDesc: '马来西亚电子钱包',
         ltcDesc: '加密货币支付',
         paypalDesc: '全球在线支付',
         selectPaymentWarning: '请选择付款方式',
-        paymentMethod: '付款方式',
-        saving: '保存中...',
         quantity: '数量',
         tngInstruction: '请使用 Touch \'N Go 扫描二维码付款',
         ltcInstruction: '请将付款发送到以下 Litecoin 地址',
         copyAddress: '📋 复制地址',
         scanWithTng: '使用 TNG 应用扫描二维码',
         uploadPaymentProof: '上传付款凭证',
-        uploadImage: '上传图片',
-        selectImage: '选择图片',
-        uploadSuccess: '上传成功！',
-        uploadError: '上传失败，请重试',
-        uploading: '上传中...',
+        dropImageHere: '或将图片拖放到这里',
+        browseFiles: '浏览文件',
+        preview: '预览',
         paymentProofDesc: '付款后请上传您的付款截图',
         submitPayment: '提交付款凭证',
-        paymentSubmitted: '付款凭证已提交',
+        uploading: '上传中...',
         paymentProofRequired: '请先上传付款凭证',
         telegramNotified: '订单信息已发送到 Telegram',
         imageTooLarge: '图片太大，请选择小于5MB的图片',
         supportedFormats: '支持格式: JPG, PNG, GIF',
-        dropImageHere: '或将图片拖放到这里',
-        browseFiles: '浏览文件',
-        preview: '预览',
         paymentComplete: '付款完成！',
         paymentCompleteDesc: '我们已收到您的付款，正在处理订单',
         afterPayment: '付款后',
@@ -904,7 +884,6 @@
         nextStep: '下一步',
         back: '返回',
         qrInstruction: '请扫描下方二维码完成付款',
-        payNow: '立即付款',
         uploadProof: '上传凭证',
         scanQrCode: '扫描二维码付款',
         paypalInstruction: '请发送付款到PayPal账户',
@@ -912,8 +891,6 @@
       },
       en: {
         cartButton: 'CART',
-        featuredTitle: 'FEATURED COLLECTION',
-        featuredSubtitle: 'AUTHENTIC · INSTANT · EXCLUSIVE',
         cartTitle: 'MY CART',
         emptyCart: 'Cart is empty',
         emptyCartSubtitle: 'Start adding items!',
@@ -921,44 +898,29 @@
         checkout: 'CONFIRM & SAVE',
         successMsg: 'Added to cart!',
         deleteBtn: 'REMOVE',
-        feature1Desc: '100% authentic, safe transactions',
-        feature2Desc: '5-minute delivery, 24/7 service',
-        feature3Desc: 'Professional team always ready',
         footer: '© 2024 Nyaaastore. All rights reserved.',
-        contactTitle: 'CONTACT US',
-        whatsappTitle: 'WHATSAPP',
-        whatsappDesc: 'Instant support',
-        discordTitle: 'DISCORD',
-        discordDesc: 'Join our community',
         closeBtn: 'CLOSE',
         paymentMethodTitle: 'SELECT PAYMENT',
         tngDesc: 'Malaysia E-Wallet',
         ltcDesc: 'Cryptocurrency',
         paypalDesc: 'Global Payment',
         selectPaymentWarning: 'Please select payment method',
-        paymentMethod: 'Payment Method',
-        saving: 'SAVING...',
         quantity: 'QTY',
         tngInstruction: 'Please scan QR code with Touch \'N Go',
         ltcInstruction: 'Please send payment to this Litecoin address',
         copyAddress: '📋 COPY ADDRESS',
         scanWithTng: 'Scan with TNG app',
         uploadPaymentProof: 'Upload Payment Proof',
-        uploadImage: 'Upload Image',
-        selectImage: 'Select Image',
-        uploadSuccess: 'Upload successful!',
-        uploadError: 'Upload failed, please try again',
-        uploading: 'Uploading...',
+        dropImageHere: 'or drop image here',
+        browseFiles: 'Browse files',
+        preview: 'Preview',
         paymentProofDesc: 'Please upload payment screenshot after payment',
         submitPayment: 'Submit Payment Proof',
-        paymentSubmitted: 'Payment proof submitted',
+        uploading: 'Uploading...',
         paymentProofRequired: 'Please upload payment proof first',
         telegramNotified: 'Order info sent to Telegram',
         imageTooLarge: 'Image too large, please select image under 5MB',
         supportedFormats: 'Supported formats: JPG, PNG, GIF',
-        dropImageHere: 'or drop image here',
-        browseFiles: 'Browse files',
-        preview: 'Preview',
         paymentComplete: 'Payment Complete!',
         paymentCompleteDesc: 'We have received your payment and are processing your order',
         afterPayment: 'After Payment',
@@ -966,7 +928,6 @@
         nextStep: 'Next Step',
         back: 'Back',
         qrInstruction: 'Please scan the QR code below to complete payment',
-        payNow: 'Pay Now',
         uploadProof: 'Upload Proof',
         scanQrCode: 'Scan QR Code to Pay',
         paypalInstruction: 'Please send payment to PayPal account',
@@ -1165,6 +1126,58 @@
       
       const qrOverlay = document.createElement('div');
       qrOverlay.className = 'modal-overlay fixed inset-0 flex items-center justify-center z-50 p-4';
+      
+      // 动态生成QR码部分
+      let qrContent = '';
+      if (selectedPaymentMethod === 'TNG') {
+        qrContent = `
+          <div class="text-center p-6 sm:p-8 feature-card rounded-2xl mb-6">
+            <div class="mb-4 sm:mb-6">
+              <div class="text-4xl mb-4">📱</div>
+              <p class="text-white text-lg font-bold mb-2">Touch 'N Go eWallet</p>
+              <p class="text-gray-400 text-sm mb-4">${t.scanWithTng}</p>
+              <div class="bg-gray-800 p-4 rounded-lg">
+                <p class="text-gray-300 text-sm mb-2">请扫描以下二维码：</p>
+                <p class="text-yellow-400 font-mono text-sm">请上传你的TNG二维码图片到QR_CODES.TNG变量</p>
+              </div>
+            </div>
+            <p class="text-gray-400 text-xs mt-2">请扫描二维码完成付款</p>
+          </div>
+        `;
+      } else if (selectedPaymentMethod === 'Litecoin') {
+        qrContent = `
+          <div class="text-center p-6 sm:p-8 feature-card rounded-2xl mb-6">
+            <div class="mb-4 sm:mb-6">
+              <div class="text-4xl mb-4">₿</div>
+              <p class="text-xs sm:text-sm text-gray-400 mb-2 sm:mb-3">LTC Address:</p>
+              <p class="text-white font-mono text-sm sm:text-lg break-all mb-3 sm:mb-4 bg-gray-800 p-3 rounded-lg">ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw</p>
+              <button class="copy-ltc-btn luxury-button px-6 py-2 sm:px-8 sm:py-3 rounded-xl font-bold text-xs sm:text-sm hover:scale-105 transition-all">
+                ${t.copyAddress}
+              </button>
+              <div class="mt-4">
+                <p class="text-gray-300 text-sm mb-2">或者扫描二维码：</p>
+                <p class="text-yellow-400 font-mono text-sm">请上传你的LTC二维码图片到QR_CODES.LTC变量</p>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (selectedPaymentMethod === 'PayPal') {
+        qrContent = `
+          <div class="text-center p-6 sm:p-8 feature-card rounded-2xl mb-6">
+            <div class="mb-4 sm:mb-6">
+              <div class="text-5xl mb-4">💳</div>
+              <p class="text-white text-lg sm:text-xl font-bold mb-2">${t.paypalInstruction}</p>
+              <p class="text-gray-400 text-sm mb-2">${t.paypalEmail}:</p>
+              <p class="text-white font-mono text-lg sm:text-xl font-bold mb-4 bg-gray-800 p-3 rounded-lg">${PAYPAL_EMAIL}</p>
+              <button class="copy-paypal-btn luxury-button px-6 py-2 sm:px-8 sm:py-3 rounded-xl font-bold text-xs sm:text-sm hover:scale-105 transition-all">
+                ${t.copyAddress}
+              </button>
+              <p class="text-gray-400 text-xs mt-2">请将付款发送到上述PayPal邮箱</p>
+            </div>
+          </div>
+        `;
+      }
+      
       qrOverlay.innerHTML = `
         <div class="modal-content rounded-2xl sm:rounded-3xl p-8 sm:p-16 max-w-2xl w-full max-h-[90%] overflow-auto">
           <div class="mb-6 sm:mb-8 text-center">
@@ -1174,51 +1187,7 @@
           </div>
           
           <div class="mb-6 sm:mb-8">
-            ${selectedPaymentMethod === 'TNG' ? `
-              <div class="text-center p-6 sm:p-8 feature-card rounded-2xl mb-6">
-                <div class="mb-4 sm:mb-6">
-                  <img src="${QR_CODES.TNG}" 
-                       alt="TNG QR Code" 
-                       class="mx-auto rounded-xl" 
-                       style="max-width: 280px; width: 100%; height: auto; border: 4px solid rgba(30, 58, 138, 0.5);">
-                </div>
-                <p class="text-white font-bold text-lg sm:text-xl mb-2">Touch 'N Go eWallet</p>
-                <p class="text-gray-400 text-sm">${t.scanWithTng}</p>
-                <p class="text-gray-400 text-xs mt-2">请扫描上方二维码完成付款</p>
-              </div>
-            ` : ''}
-            
-            ${selectedPaymentMethod === 'Litecoin' ? `
-              <div class="text-center p-6 sm:p-8 feature-card rounded-2xl mb-6">
-                <div class="mb-4 sm:mb-6">
-                  <img src="${QR_CODES.LTC}" 
-                       alt="LTC QR Code" 
-                       class="mx-auto rounded-xl" 
-                       style="max-width: 280px; width: 100%; height: auto; border: 4px solid rgba(138, 43, 226, 0.5);">
-                </div>
-                <p class="text-xs sm:text-sm text-gray-400 mb-2 sm:mb-3">LTC Address:</p>
-                <p class="text-white font-mono text-sm sm:text-lg break-all mb-3 sm:mb-4 bg-gray-800 p-3 rounded-lg">ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw</p>
-                <button class="copy-ltc-btn luxury-button px-6 py-2 sm:px-8 sm:py-3 rounded-xl font-bold text-xs sm:text-sm hover:scale-105 transition-all">
-                  ${t.copyAddress}
-                </button>
-                <p class="text-gray-400 text-xs mt-2">或者扫描上方二维码完成付款</p>
-              </div>
-            ` : ''}
-            
-            ${selectedPaymentMethod === 'PayPal' ? `
-              <div class="text-center p-6 sm:p-8 feature-card rounded-2xl mb-6">
-                <div class="mb-4 sm:mb-6">
-                  <div class="text-5xl mb-4">💳</div>
-                  <p class="text-white text-lg sm:text-xl font-bold mb-2">${t.paypalInstruction}</p>
-                  <p class="text-gray-400 text-sm mb-2">${t.paypalEmail}:</p>
-                  <p class="text-white font-mono text-lg sm:text-xl font-bold mb-4 bg-gray-800 p-3 rounded-lg">${PAYPAL_EMAIL}</p>
-                  <button class="copy-paypal-btn luxury-button px-6 py-2 sm:px-8 sm:py-3 rounded-xl font-bold text-xs sm:text-sm hover:scale-105 transition-all">
-                    ${t.copyAddress}
-                  </button>
-                  <p class="text-gray-400 text-xs mt-2">请将付款发送到上述PayPal邮箱</p>
-                </div>
-              </div>
-            ` : ''}
+            ${qrContent}
           </div>
           
           <div class="text-center mb-6 sm:mb-8">
@@ -1501,10 +1470,14 @@
       caption += `✅ 状态: 已付款（凭证已上传）\n`;
       caption += `📊 来源: Nyaaastore`;
       
-      await sendToTelegram(caption);
+      console.log('准备发送到Telegram...');
+      const telegramResult = await sendToTelegram(caption);
+      console.log('Telegram发送结果:', telegramResult);
       
       if (uploadedPaymentProof) {
-        await sendPhotoToTelegram(uploadedPaymentProof, '付款凭证截图');
+        console.log('准备发送图片到Telegram...');
+        const photoResult = await sendPhotoToTelegram(uploadedPaymentProof, '付款凭证截图');
+        console.log('Telegram图片发送结果:', photoResult);
       }
       
       return true;
@@ -1669,7 +1642,9 @@
         telegramMessage += `📱 屏幕: ${deviceInfo.screen}\n`;
         telegramMessage += `📊 状态: 待付款`;
         
-        await sendToTelegram(telegramMessage);
+        console.log('发送订单通知到Telegram...');
+        const result = await sendToTelegram(telegramMessage);
+        console.log('订单通知发送结果:', result);
       });
     });
 
