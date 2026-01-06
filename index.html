@@ -215,12 +215,15 @@
     <div class="stars" id="stars"></div>
     
     <!-- 音乐控制按钮 -->
-    <div class="fixed bottom-4 right-4 z-50">
+    <div class="fixed bottom-4 right-4 z-50 flex flex-col items-end gap-2">
       <button id="music-toggle" class="luxury-button p-3 sm:p-4 rounded-full flex items-center justify-center hover:scale-110 transition-all">
         <svg id="music-icon" width="24" height="24" viewBox="0 0 24 24" fill="white" class="sm:w-6 sm:h-6">
           <path d="M12 3V19M8 6V16M16 8V18M20 4V20M4 4V20" stroke="white" stroke-width="2" stroke-linecap="round"/>
         </svg>
       </button>
+      <div id="volume-control" class="glass-card rounded-full p-2 hidden">
+        <input type="range" id="volume-slider" min="0" max="100" value="30" class="w-24">
+      </div>
     </div>
     
     <!-- 头部 -->
@@ -734,9 +737,15 @@
   
   <!-- 音频播放器 -->
   <audio id="background-music" loop>
-    <source src="https://www.youtube.com/watch?v=aHLZrxyFAuk" type="audio/mpeg">
-    <source src="https://www.youtube.com/embed/aHLZrxyFAuk?autoplay=1&loop=1&playlist=aHLZrxyFAuk" type="audio/mpeg">
+    <!-- 使用备用音乐源，YouTube链接需要特殊处理 -->
+    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <source src="https://assets.codepen.io/605876/8-bit-music.mp3" type="audio/mpeg">
   </audio>
+  
+  <!-- YouTube音乐嵌入（备用方案） -->
+  <div id="youtube-player" style="display: none;">
+    <iframe id="youtube-iframe" width="0" height="0" src="https://www.youtube.com/embed/aHLZrxyFAuk?enablejsapi=1&autoplay=1&loop=1&playlist=aHLZrxyFAuk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
   
   <script>
     // 星星背景
@@ -758,85 +767,183 @@
     const backgroundMusic = document.getElementById('background-music');
     const musicToggle = document.getElementById('music-toggle');
     const musicIcon = document.getElementById('music-icon');
+    const volumeControl = document.getElementById('volume-control');
+    const volumeSlider = document.getElementById('volume-slider');
+    const youtubeIframe = document.getElementById('youtube-iframe');
     let isMusicPlaying = false;
+    let usingYouTube = false;
+    let youtubePlayer = null;
 
     // 初始化音乐
     function initMusic() {
-      // 直接使用YouTube链接（需要用户交互后播放）
-      const audioUrl = 'https://www.youtube.com/watch?v=aHLZrxyFAuk';
-      
-      // 设置音频源
-      const audioSources = backgroundMusic.querySelectorAll('source');
-      audioSources.forEach(source => {
-        if (source.type === 'audio/mpeg') {
-          source.src = audioUrl;
-        }
-      });
-      
-      // 加载音频
-      backgroundMusic.load();
-      
-      // 设置音量
-      backgroundMusic.volume = 0.3; // 30% 音量
+      // 设置音频音量
+      backgroundMusic.volume = 0.3;
       
       // 添加音乐切换事件
       musicToggle.addEventListener('click', toggleMusic);
       
-      // 尝试自动播放（但浏览器通常需要用户交互）
-      setTimeout(() => {
-        if (!isMusicPlaying) {
-          backgroundMusic.play().then(() => {
-            isMusicPlaying = true;
-            updateMusicIcon();
-            console.log('🎵 音乐自动播放成功');
-          }).catch(error => {
-            console.log('🎵 需要用户交互才能播放音乐:', error);
-            // 显示提示让用户点击按钮
-            musicIcon.innerHTML = '<path d="M12 2L12 22M8 5L8 19M16 8L16 16M20 4L20 20M4 4L4 20" stroke="white" stroke-width="2" stroke-linecap="round"/>';
-          });
+      // 添加音量控制事件
+      musicToggle.addEventListener('dblclick', function(e) {
+        e.stopPropagation();
+        volumeControl.classList.toggle('hidden');
+      });
+      
+      // 点击其他地方关闭音量控制
+      document.addEventListener('click', function(e) {
+        if (!musicToggle.contains(e.target) && !volumeControl.contains(e.target)) {
+          volumeControl.classList.add('hidden');
         }
-      }, 1000);
+      });
+      
+      // 音量滑块事件
+      volumeSlider.addEventListener('input', function() {
+        const volume = this.value / 100;
+        backgroundMusic.volume = volume;
+        
+        if (usingYouTube && youtubePlayer) {
+          try {
+            youtubePlayer.setVolume(volume * 100);
+          } catch (e) {
+            console.log('YouTube音量设置失败');
+          }
+        }
+      });
+      
+      // 尝试加载备用音乐源
+      loadAudioSource();
+      
+      // 初始化YouTube API（备用方案）
+      initYouTubePlayer();
+      
+      // 用户交互后尝试播放音乐
+      document.addEventListener('click', function initAudioOnInteraction() {
+        if (!isMusicPlaying) {
+          playMusic();
+        }
+        // 只执行一次
+        document.removeEventListener('click', initAudioOnInteraction);
+      }, { once: true });
+    }
+
+    // 尝试加载音频源
+    function loadAudioSource() {
+      console.log('尝试加载音频...');
+      
+      // 预加载音频
+      backgroundMusic.load();
+      
+      // 检测音频是否可以播放
+      const canPlay = backgroundMusic.canPlayType('audio/mpeg');
+      console.log('音频支持情况:', canPlay);
+      
+      if (canPlay === 'probably' || canPlay === 'maybe') {
+        console.log('音频可以播放');
+      } else {
+        console.log('音频可能无法播放，将使用YouTube备用方案');
+      }
+    }
+
+    // 初始化YouTube播放器
+    function initYouTubePlayer() {
+      // 加载YouTube API
+      const tag = document.createElement('script');
+      tag.src = "https://www.youtube.com/iframe_api";
+      const firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+      
+      // 当YouTube API准备好时
+      window.onYouTubeIframeAPIReady = function() {
+        console.log('YouTube API已加载');
+        
+        youtubePlayer = new YT.Player('youtube-iframe', {
+          events: {
+            'onReady': onYouTubePlayerReady,
+            'onStateChange': onYouTubePlayerStateChange
+          }
+        });
+      };
+    }
+
+    function onYouTubePlayerReady(event) {
+      console.log('YouTube播放器已准备好');
+      // 可以设置默认音量
+      event.target.setVolume(30);
+    }
+
+    function onYouTubePlayerStateChange(event) {
+      if (event.data === YT.PlayerState.PLAYING && !isMusicPlaying) {
+        isMusicPlaying = true;
+        updateMusicIcon();
+      } else if (event.data === YT.PlayerState.PAUSED && isMusicPlaying) {
+        isMusicPlaying = false;
+        updateMusicIcon();
+      }
+    }
+
+    function playMusic() {
+      // 首先尝试本地音频
+      backgroundMusic.play().then(() => {
+        console.log('本地音乐播放成功');
+        isMusicPlaying = true;
+        usingYouTube = false;
+        updateMusicIcon();
+      }).catch(error => {
+        console.log('本地音乐播放失败:', error);
+        
+        // 如果本地音乐失败，尝试YouTube
+        if (youtubePlayer && youtubePlayer.playVideo) {
+          try {
+            youtubePlayer.playVideo();
+            console.log('尝试播放YouTube音乐');
+            usingYouTube = true;
+          } catch (e) {
+            console.log('YouTube播放也失败:', e);
+            showMusicError();
+          }
+        } else {
+          showMusicError();
+        }
+      });
     }
 
     function toggleMusic() {
       if (isMusicPlaying) {
-        backgroundMusic.pause();
-        isMusicPlaying = false;
+        pauseMusic();
       } else {
-        backgroundMusic.play().then(() => {
-          isMusicPlaying = true;
-        }).catch(error => {
-          console.log('播放失败:', error);
-          // 如果播放失败，提示用户点击其他地方
-          alert('请点击页面任意位置后，再点击音乐按钮播放音乐');
-        });
+        playMusic();
       }
+    }
+
+    function pauseMusic() {
+      if (usingYouTube && youtubePlayer) {
+        youtubePlayer.pauseVideo();
+      } else {
+        backgroundMusic.pause();
+      }
+      isMusicPlaying = false;
       updateMusicIcon();
     }
 
     function updateMusicIcon() {
       if (isMusicPlaying) {
-        // 播放图标
+        // 播放图标（暂停符号）
         musicIcon.innerHTML = '<path d="M6 18L18 6M6 6L18 18" stroke="white" stroke-width="2" stroke-linecap="round"/>';
       } else {
-        // 暂停图标
+        // 暂停图标（音乐符号）
         musicIcon.innerHTML = '<path d="M12 3V19M8 6V16M16 8V18M20 4V20M4 4V20" stroke="white" stroke-width="2" stroke-linecap="round"/>';
       }
     }
 
-    // 用户交互后自动播放音乐
-    document.addEventListener('click', function initAudioOnInteraction() {
-      if (!isMusicPlaying) {
-        backgroundMusic.play().then(() => {
-          isMusicPlaying = true;
+    function showMusicError() {
+      // 如果音乐无法播放，显示提示
+      musicIcon.innerHTML = '<path d="M12 8V12M12 16H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="white" stroke-width="2" stroke-linecap="round"/>';
+      
+      setTimeout(() => {
+        if (!isMusicPlaying) {
           updateMusicIcon();
-          console.log('🎵 用户交互后音乐播放成功');
-        }).catch(error => {
-          console.log('🎵 播放失败:', error);
-        });
-      }
-      document.removeEventListener('click', initAudioOnInteraction);
-    });
+        }
+      }, 3000);
+    }
 
     const defaultConfig = {
       store_name: "Nyaaastore",
@@ -1891,7 +1998,7 @@ ${orderDetails}
     console.log('🤖 Telegram Bot Token:', TELEGRAM_BOT_TOKEN);
     console.log('👤 Telegram Chat ID:', TELEGRAM_CHAT_ID);
     console.log('📱 二维码图片:', QR_CODE_URLS);
-    console.log('🎵 音乐已准备就绪');
+    console.log('🎵 音乐系统已初始化');
   </script>
 </body>
 </html>
