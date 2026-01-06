@@ -4,10 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nyaaastore - Luxury Digital Store</title>
-  <!-- 删除Canva SDK引用 -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* 原有的CSS样式保持不变 */
     body {
       box-sizing: border-box;
     }
@@ -22,41 +20,556 @@
       font-family: 'Playfair Display', serif;
     }
     
-    /* ... 其他CSS样式保持不变 ... */
+    .animated-bg {
+      background: linear-gradient(180deg, #0a0014 0%, #1a0a2e 50%, #000000 100%);
+      position: relative;
+      overflow: hidden;
+    }
     
+    .stars {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      animation: twinkle 3s infinite ease-in-out;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.5); }
+    }
+    
+    .glass-card {
+      background: rgba(15, 15, 35, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 
+        0 8px 32px 0 rgba(138, 43, 226, 0.2),
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.1);
+    }
+    
+    .product-card {
+      background: linear-gradient(135deg, rgba(15, 15, 35, 0.95) 0%, rgba(25, 25, 60, 0.9) 100%);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(138, 43, 226, 0.5);
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+    
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(138, 43, 226, 0.4);
+    }
+    
+    .icon-container {
+      position: relative;
+    }
+    
+    .holographic-text {
+      background: linear-gradient(135deg, #d4af37, #ffd700, #d4af37);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+    }
+    
+    .neon-text {
+      color: #fff;
+      text-shadow: 0 0 10px rgba(138, 43, 226, 0.8);
+    }
+    
+    .luxury-button {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #8a2be2 0%, #00bfff 100%);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 20px rgba(138, 43, 226, 0.4);
+    }
+    
+    .luxury-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 40px rgba(138, 43, 226, 0.7);
+    }
+    
+    .cart-badge {
+      background: linear-gradient(135deg, #ff1493, #ff6347);
+      box-shadow: 0 0 15px rgba(255, 20, 147, 0.6);
+    }
+    
+    .popular-badge {
+      background: linear-gradient(135deg, #ffd700, #ffA500);
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+    }
+
+    .modal-overlay {
+      backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.8);
+    }
+    
+    .modal-content {
+      background: linear-gradient(135deg, rgba(15, 15, 35, 0.95) 0%, rgba(30, 30, 60, 0.95) 100%);
+      border: 2px solid rgba(138, 43, 226, 0.5);
+      box-shadow: 0 20px 60px rgba(138, 43, 226, 0.5);
+    }
+    
+    .success-toast {
+      background: linear-gradient(135deg, #00ff88, #00d4ff);
+      box-shadow: 0 10px 30px rgba(0, 255, 136, 0.5);
+    }
+
+    .payment-option, .delivery-option {
+      transition: all 0.2s ease;
+      cursor: pointer;
+      border: 2px solid rgba(138, 43, 226, 0.3);
+      background: rgba(15, 15, 35, 0.6);
+      backdrop-filter: blur(10px);
+    }
+    
+    .payment-option:hover, .delivery-option:hover {
+      transform: translateY(-3px);
+      border-color: rgba(138, 43, 226, 0.6);
+    }
+    
+    .payment-option.selected {
+      border-color: #8a2be2;
+      background: linear-gradient(135deg, rgba(138, 43, 226, 0.3) 0%, rgba(0, 191, 255, 0.2) 100%);
+      transform: scale(1.03);
+    }
+    
+    .payment-icon {
+      transition: transform 0.2s ease;
+    }
+    
+    .payment-option:hover .payment-icon {
+      transform: scale(1.1);
+    }
+    
+    .feature-card {
+      background: rgba(15, 15, 35, 0.5);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(138, 43, 226, 0.3);
+      transition: all 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(138, 43, 226, 0.6);
+    }
+
+    .loading-spinner {
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    .luxury-header {
+      background: linear-gradient(135deg, rgba(10, 10, 30, 0.98) 0%, rgba(20, 20, 50, 0.95) 100%);
+      backdrop-filter: blur(20px);
+      border-bottom: 2px solid rgba(138, 43, 226, 0.4);
+      box-shadow: 0 5px 30px rgba(138, 43, 226, 0.3);
+    }
+    
+    .premium-glow {
+      text-shadow: 
+        0 0 20px rgba(255, 255, 255, 0.8),
+        0 0 40px rgba(138, 43, 226, 0.6),
+        0 0 60px rgba(0, 191, 255, 0.4);
+    }
+    
+    .gold-accent {
+      color: #d4af37;
+      text-shadow: 0 0 20px rgba(212, 175, 55, 0.6);
+    }
+    
+    @media (max-width: 640px) {
+      .product-card:hover {
+        transform: none;
+      }
+    }
   </style>
   <style>@view-transition { navigation: auto; }</style>
  </head>
  <body class="h-full">
   <div class="w-full h-full overflow-auto animated-bg"><!-- Header -->
    <header class="w-full luxury-header sticky top-0 z-50">
-    <!-- 头部内容保持不变 -->
-   </header><!-- Main Content -->
-   <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-20 relative z-10">
-    <!-- 产品部分保持不变 -->
-    
-    <!-- 删除Order History部分 -->
-    <!-- 
-    <div class="mt-20 sm:mt-40">
-     <h2 class="text-3xl sm:text-6xl font-black neon-text text-center mb-8 sm:mb-16 luxury-title order-history-title tracking-wider">ORDER HISTORY</h2>
-     <div id="order-history" class="space-y-4 sm:space-y-6">
-       <!-- 订单历史记录将被删除 --
+    <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-8 relative">
+     <div class="flex justify-between items-center relative z-10">
+      <div class="flex items-center space-x-2 sm:space-x-6">
+       <div class="relative">
+        <svg width="45" height="45" viewbox="0 0 70 70" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-container sm:w-[70px] sm:h-[70px]"><defs>
+          <lineargradient id="logoGradient" x1="0" y1="0" x2="70" y2="70">
+           <stop offset="0%" style="stop-color:#d4af37" />
+           <stop offset="50%" style="stop-color:#ffd700" />
+           <stop offset="100%" style="stop-color:#d4af37" />
+          </lineargradient>
+          <filter id="glow">
+           <fegaussianblur stddeviation="4" result="coloredBlur" />
+           <femerge>
+            <femergenode in="coloredBlur" />
+            <femergenode in="SourceGraphic" />
+           </femerge>
+          </filter>
+         </defs> <circle cx="35" cy="35" r="32" fill="url(#logoGradient)" filter="url(#glow)" opacity="0.9" /> <circle cx="35" cy="35" r="28" fill="rgba(0, 0, 0, 0.6)" /> <path d="M23 35L31 43L47 25" stroke="url(#logoGradient)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow)" />
+        </svg>
+       </div>
+       <div>
+        <h1 id="store-name" class="text-xl sm:text-5xl font-black text-white luxury-title tracking-wider sm:tracking-widest premium-glow" style="letter-spacing: 0.1em;">Nyaaastore</h1>
+        <p id="store-tagline" class="text-[0.45rem] sm:text-xs font-light gold-accent tracking-wider sm:tracking-widest mt-0.5 sm:mt-2 hidden sm:block" style="letter-spacing: 0.2em; opacity: 0.95;">LUXURY DIGITAL BOUTIQUE</p>
+       </div>
+      </div>
+      <div class="flex items-center space-x-1.5 sm:space-x-4"><button id="currency-toggle" class="px-2 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-base font-semibold transition-all glass-card hover:scale-105 text-white"> <span id="currency-text" class="font-bold">💰 MYR</span> </button> <button id="lang-toggle" class="px-2 sm:px-6 py-2 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-base font-semibold transition-all glass-card hover:scale-105 text-white"> <span id="lang-text" class="font-bold">EN</span> </button> <button id="cart-button" class="relative px-3 sm:px-8 py-2 sm:py-3 rounded-lg sm:rounded-xl text-xs sm:text-base font-semibold luxury-button"> <span class="relative z-10 flex items-center font-bold">
+         <svg width="18" height="18" viewbox="0 0 24 24" fill="none" class="mr-1 sm:mr-2 sm:w-6 sm:h-6"><path d="M9 2L7.17 4H3C1.9 4 1 4.9 1 6V18C1 19.1 1.9 20 3 20H21C22.1 20 23 19.1 23 18V6C23 4.9 22.1 4 21 4H16.83L15 2H9Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+         </svg><span id="cart-button-text" class="hidden sm:inline">购物车</span> </span> <span id="cart-count" class="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 cart-badge text-white text-[0.6rem] sm:text-xs font-bold rounded-full w-5 h-5 sm:w-8 sm:h-8 flex items-center justify-center">0</span> </button>
+      </div>
      </div>
     </div>
-    -->
-    
+   </header><!-- Main Content -->
+   <main class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-8 sm:py-20 relative z-10">
+    <div class="text-center mb-12 sm:mb-24">
+     <h2 id="featured-title" class="text-3xl sm:text-7xl font-black neon-text mb-3 sm:mb-6 luxury-title" style="letter-spacing: 0.1em;">FEATURED COLLECTION</h2>
+     <p id="featured-subtitle" class="text-gray-300 text-sm sm:text-xl font-light tracking-widest gold-accent" style="letter-spacing: 0.2em;">AUTHENTIC · INSTANT · EXCLUSIVE</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-12"><!-- Discord Nitro Basic -->
+     <div class="product-card rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl relative">
+      <div class="p-6 sm:p-10 relative" style="background: linear-gradient(135deg, #5865F2 0%, #3b49df 100%);">
+       <div class="icon-container mx-auto w-20 h-20 sm:w-32 sm:h-32 mb-4 sm:mb-6">
+        <svg width="100%" height="100%" viewbox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="64" cy="64" r="60" fill="rgba(255,255,255,0.2)" /> <path d="M64 24C41.9 24 24 41.9 24 64C24 86.1 41.9 104 64 104C86.1 104 104 86.1 104 86C104 63.9 86.1 46 64 46V24Z" fill="white" /> <circle cx="64" cy="64" r="20" fill="#5865F2" />
+        </svg>
+       </div>
+       <h3 class="product-name text-xl sm:text-3xl font-bold text-white text-center luxury-title">DISCORD NITRO BASIC</h3>
+       <p class="product-desc text-white text-center mt-1 sm:mt-2 font-light text-xs sm:text-sm tracking-wide" data-zh="基础升级订阅" data-en="Basic Upgrade">基础升级订阅</p>
+      </div>
+      <div class="p-4 sm:p-8">
+       <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
+        <div class="flex items-center text-gray-300">
+         <svg width="16" height="16" viewbox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5"><circle cx="10" cy="10" r="10" fill="#5865F2" /> <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
+         </svg><span class="feature-text text-xs sm:text-sm" data-zh="自定义表情符号" data-en="Custom Emojis">自定义表情符号</span>
+        </div>
+        <div class="flex items-center text-gray-300">
+         <svg width="16" height="16" viewbox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5"><circle cx="10" cy="10" r="10" fill="#5865F2" /> <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
+         </svg><span class="feature-text text-xs sm:text-sm" data-zh="50MB 文件上传" data-en="50MB Upload">50MB 文件上传</span>
+        </div>
+        <div class="flex items-center text-gray-300">
+         <svg width="16" height="16" viewbox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5"><circle cx="10" cy="10" r="10" fill="#5865F2" /> <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
+         </svg><span class="feature-text text-xs sm:text-sm" data-zh="高清视频通话" data-en="HD Video">高清视频通话</span>
+        </div>
+       </div><!-- Purchase Options -->
+       <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
+        <div class="delivery-option border-2 border-purple-500 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-purple-900/30" data-type="登入" data-price="9">
+         <div class="flex justify-between items-center">
+          <div><span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="🔐 登入" data-en="🔐 LOGIN">🔐 登入</span>
+           <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="我们代为登录" data-en="We login for you">我们代为登录</p>
+          </div><span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM9</span>
+         </div>
+        </div>
+        <div class="delivery-option border-2 border-purple-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-purple-900/30" data-type="链接" data-price="9">
+         <div class="flex justify-between items-center">
+          <div><span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="🔗 链接" data-en="🔗 LINK">🔗 链接</span>
+           <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="购买链接" data-en="Purchase link">购买链接</p>
+          </div><span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM9</span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- Discord Nitro -->
+     <div class="product-card rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl relative">
+      <div class="popular-badge absolute top-3 right-3 sm:top-4 sm:right-4 px-3 py-1 sm:px-5 sm:py-2 rounded-full text-xs sm:text-sm font-bold z-10" style="color: #333;"><span class="hot-text">⭐ PREMIUM</span>
+      </div>
+      <div class="p-6 sm:p-10 relative" style="background: linear-gradient(135deg, #FF73FA 0%, #5865F2 100%);">
+       <div class="icon-container mx-auto w-20 h-20 sm:w-32 sm:h-32 mb-4 sm:mb-6">
+        <svg width="100%" height="100%" viewbox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="64" cy="64" r="60" fill="rgba(255,255,255,0.2)" /> <path d="M64 20L75 48H105L81 65L91 93L64 75L37 93L47 65L23 48H53L64 20Z" fill="white" /> <circle cx="64" cy="64" r="15" fill="#FF73FA" />
+        </svg>
+       </div>
+       <h3 class="product-name text-xl sm:text-3xl font-bold text-white text-center luxury-title">DISCORD NITRO</h3>
+       <p class="product-desc text-white text-center mt-1 sm:mt-2 font-light text-xs sm:text-sm tracking-wide" data-zh="完整升级体验" data-en="Full Experience">完整升级体验</p>
+      </div>
+      <div class="p-4 sm:p-8">
+       <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
+        <div class="flex items-center text-gray-300">
+         <svg width="16" height="16" viewbox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5"><circle cx="10" cy="10" r="10" fill="#FF73FA" /> <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
+         </svg><span class="feature-text text-xs sm:text-sm" data-zh="所有 Basic 功能" data-en="All Basic Features">所有 Basic 功能</span>
+        </div>
+        <div class="flex items-center text-gray-300">
+         <svg width="16" height="16" viewbox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5"><circle cx="10" cy="10" r="10" fill="#FF73FA" /> <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
+         </svg><span class="feature-text text-xs sm:text-sm" data-zh="2 次服务器加成" data-en="2 Server Boosts">2 次服务器加成</span>
+        </div>
+        <div class="flex items-center text-gray-300">
+         <svg width="16" height="16" viewbox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5"><circle cx="10" cy="10" r="10" fill="#FF73FA" /> <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
+         </svg><span class="feature-text text-xs sm:text-sm" data-zh="500MB 文件上传" data-en="500MB Upload">500MB 文件上传</span>
+        </div>
+       </div><!-- Purchase Options -->
+       <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
+        <div class="delivery-option border-2 border-pink-500 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-pink-900/30" data-type="登入" data-price="21">
+         <div class="flex justify-between items-center">
+          <div><span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="🔐 登入" data-en="🔐 LOGIN">🔐 登入</span>
+           <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="我们代为登录" data-en="We login for you">我们代为登录</p>
+          </div><span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM21</span>
+         </div>
+        </div>
+        <div class="delivery-option border-2 border-pink-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-pink-900/30" data-type="链接" data-price="21">
+         <div class="flex justify-between items-center">
+          <div><span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="🔗 链接" data-en="🔗 LINK">🔗 链接</span>
+           <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="购买链接" data-en="Purchase link">购买链接</p>
+          </div><span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM21</span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div><!-- Robux Products -->
+     <div class="product-card rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl relative">
+      <div class="p-6 sm:p-10 relative" style="background: linear-gradient(135deg, #60A5FA 0%, #3B82F6 100%);">
+       <div class="icon-container mx-auto w-20 h-20 sm:w-32 sm:h-32 mb-4 sm:mb-6">
+        <svg width="100%" height="100%" viewbox="0 0 128 128" fill="none"><rect x="39" y="39" width="50" height="50" rx="8" fill="rgba(255,255,255,0.2)" transform="rotate(45 64 64)" /> <rect x="47" y="47" width="34" height="34" rx="5" fill="white" transform="rotate(45 64 64)" /> <circle cx="64" cy="64" r="10" fill="#60A5FA" />
+        </svg>
+       </div>
+       <h3 class="product-name text-xl sm:text-3xl font-bold text-white text-center luxury-title">100 ROBUX</h3>
+       <p class="product-desc text-white text-center mt-1 sm:mt-2 font-light text-xs sm:text-sm tracking-wide" data-zh="入门级套餐" data-en="Starter Pack">入门级套餐</p>
+      </div>
+      <div class="p-4 sm:p-8">
+       <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
+        <div class="flex items-center text-gray-300">
+         <svg width="16" height="16" viewbox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5"><circle cx="10" cy="10" r="10" fill="#60A5FA" /> <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
+         </svg><span class="feature-text text-xs sm:text-sm" data-zh="100 Robux 到账" data-en="100 Robux">100 Robux 到账</span>
+        </div>
+        <div class="flex items-center text-gray-300">
+         <svg width="16" height="16" viewbox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5"><circle cx="10" cy="10" r="10" fill="#60A5FA" /> <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
+         </svg><span class="feature-text text-xs sm:text-sm" data-zh="5分钟内到账" data-en="5 Min Delivery">5分钟内到账</span>
+        </div>
+       </div><!-- Delivery Options -->
+       <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
+        <div class="delivery-option border-2 border-purple-500 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-purple-900/30" data-type="代送" data-price="2.40">
+         <div class="flex justify-between items-center">
+          <div><span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="🚀 代送" data-en="🚀 DELIVERY">🚀 代送</span>
+           <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="我们代为充值" data-en="We deliver for you">我们代为充值</p>
+          </div><span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM2.40</span>
+         </div>
+        </div>
+        <div class="delivery-option border-2 border-purple-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-purple-900/30" data-type="包税" data-price="2.90">
+         <div class="flex justify-between items-center">
+          <div><span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="✓ 包税" data-en="✓ TAX INCL">✓ 包税</span>
+           <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="含税价格" data-en="Tax included">含税价格</p>
+          </div><span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM2.90</span>
+         </div>
+        </div>
+        <div class="delivery-option border-2 border-purple-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-purple-900/30" data-type="不包税" data-price="2.40">
+         <div class="flex justify-between items-center">
+          <div><span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="✗ 不包税" data-en="✗ NO TAX">✗ 不包税</span>
+           <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="需自付税费" data-en="Tax excluded">需自付税费</p>
+          </div><span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM2.40</span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="product-card rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl relative">
+      <div class="p-6 sm:p-10 relative" style="background: linear-gradient(135deg, #FF6B6B 0%, #CC5555 100%);">
+       <div class="icon-container mx-auto w-20 h-20 sm:w-32 sm:h-32 mb-4 sm:mb-6">
+        <svg width="100%" height="100%" viewbox="0 0 128 128" fill="none"><rect x="29" y="29" width="70" height="70" rx="12" fill="rgba(255,255,255,0.2)" transform="rotate(45 64 64)" /> <rect x="39" y="39" width="50" height="50" rx="8" fill="white" transform="rotate(45 64 64)" /> <circle cx="64" cy="64" r="15" fill="#FF6B6B" />
+        </svg>
+       </div>
+       <h3 class="product-name text-xl sm:text-3xl font-bold text-white text-center luxury-title">1000 ROBUX</h3>
+       <p class="product-desc text-white text-center mt-1 sm:mt-2 font-light text-xs sm:text-sm tracking-wide" data-zh="超值优惠套餐" data-en="Best Value">超值优惠套餐</p>
+      </div>
+      <div class="p-4 sm:p-8">
+       <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
+        <div class="flex items-center text-gray-300">
+         <svg width="16" height="16" viewbox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5"><circle cx="10" cy="10" r="10" fill="#FF6B6B" /> <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
+         </svg><span class="feature-text text-xs sm:text-sm" data-zh="1000 Robux 到账" data-en="1000 Robux">1000 Robux 到账</span>
+        </div>
+        <div class="flex items-center text-gray-300">
+         <svg width="16" height="16" viewbox="0 0 20 20" fill="none" class="mr-2 sm:mr-3 sm:w-5 sm:h-5"><circle cx="10" cy="10" r="10" fill="#FF6B6B" /> <path d="M6 10L9 13L14 7" stroke="white" stroke-width="2" stroke-linecap="round" />
+         </svg><span class="feature-text text-xs sm:text-sm" data-zh="性价比之选" data-en="Best Value">性价比之选</span>
+        </div>
+       </div><!-- Delivery Options -->
+       <div class="mb-4 sm:mb-6 space-y-2 sm:space-y-3">
+        <div class="delivery-option border-2 border-red-500 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-red-900/30" data-type="代送" data-price="24.00">
+         <div class="flex justify-between items-center">
+          <div><span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="🚀 代送" data-en="🚀 DELIVERY">🚀 代送</span>
+           <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="我们代为充值" data-en="We deliver for you">我们代为充值</p>
+          </div><span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM24</span>
+         </div>
+        </div>
+        <div class="delivery-option border-2 border-red-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-red-900/30" data-type="包税" data-price="29.00">
+         <div class="flex justify-between items-center">
+          <div><span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="✓ 包税" data-en="✓ TAX INCL">✓ 包税</span>
+           <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="含税价格" data-en="Tax included">含税价格</p>
+          </div><span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM29</span>
+         </div>
+        </div>
+        <div class="delivery-option border-2 border-red-500/50 rounded-xl p-3 sm:p-4 cursor-pointer transition-all hover:bg-red-900/30" data-type="不包税" data-price="24.00">
+         <div class="flex justify-between items-center">
+          <div><span class="text-white font-bold text-xs sm:text-sm delivery-option-name" data-zh="✗ 不包税" data-en="✗ NO TAX">✗ 不包税</span>
+           <p class="text-[0.65rem] sm:text-xs text-gray-400 mt-1 delivery-option-desc" data-zh="需自付税费" data-en="Tax excluded">需自付税费</p>
+          </div><span class="text-xl sm:text-2xl font-bold holographic-text delivery-price">RM24</span>
+         </div>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- Features Section -->
+    <div class="mt-20 sm:mt-40 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-12">
+     <div class="text-center p-6 sm:p-12 feature-card rounded-2xl sm:rounded-3xl">
+      <svg class="mx-auto mb-4 sm:mb-8" width="60" height="60" viewbox="0 0 90 90" fill="none"><circle cx="45" cy="45" r="45" fill="url(#feature1Gradient)" opacity="0.3" /> <circle cx="45" cy="45" r="35" fill="url(#feature1Gradient)" /> <path d="M28 45L40 57L62 35" stroke="black" stroke-width="5" stroke-linecap="round" /> <defs>
+        <lineargradient id="feature1Gradient" x1="0" y1="0" x2="90" y2="90">
+         <stop offset="0%" style="stop-color:#d4af37" />
+         <stop offset="100%" style="stop-color:#ffd700" />
+        </lineargradient>
+       </defs>
+      </svg>
+      <h3 class="text-xl sm:text-3xl font-bold neon-text mb-2 sm:mb-4 luxury-title feature-1-title">AUTHENTICITY</h3>
+      <p class="text-gray-400 font-light text-sm sm:text-base feature-1-desc" data-zh="100% 正品保证，交易安全可靠" data-en="100% authentic, safe transactions">100% 正品保证，交易安全可靠</p>
+     </div>
+     <div class="text-center p-6 sm:p-12 feature-card rounded-2xl sm:rounded-3xl">
+      <svg class="mx-auto mb-4 sm:mb-8" width="60" height="60" viewbox="0 0 90 90" fill="none"><circle cx="45" cy="45" r="45" fill="url(#feature2Gradient)" opacity="0.3" /> <circle cx="45" cy="45" r="35" fill="url(#feature2Gradient)" /> <path d="M45 23V45L62 62" stroke="black" stroke-width="5" stroke-linecap="round" /> <defs>
+        <lineargradient id="feature2Gradient" x1="0" y1="0" x2="90" y2="90">
+         <stop offset="0%" style="stop-color:#8a2be2" />
+         <stop offset="100%" style="stop-color:#00bfff" />
+        </lineargradient>
+       </defs>
+      </svg>
+      <h3 class="text-xl sm:text-3xl font-bold neon-text mb-2 sm:mb-4 luxury-title feature-2-title">INSTANT</h3>
+      <p class="text-gray-400 font-light text-sm sm:text-base feature-2-desc" data-zh="5分钟内到账，全天候服务" data-en="5-minute delivery, 24/7 service">5分钟内到账，全天候服务</p>
+     </div>
+     <div class="text-center p-6 sm:p-12 feature-card rounded-2xl sm:rounded-3xl">
+      <svg class="mx-auto mb-4 sm:mb-8" width="60" height="60" viewbox="0 0 90 90" fill="none"><circle cx="45" cy="45" r="45" fill="url(#feature3Gradient)" opacity="0.3" /> <circle cx="45" cy="45" r="35" fill="url(#feature3Gradient)" /> <circle cx="45" cy="45" r="6" fill="black" /> <path d="M45 28C33 28 28 33 28 45C28 57 33 62 45 62C57 62 62 57 62 45" stroke="black" stroke-width="5" stroke-linecap="round" /> <defs>
+        <lineargradient id="feature3Gradient" x1="0" y1="0" x2="90" y2="90">
+         <stop offset="0%" style="stop-color:#ff1493" />
+         <stop offset="100%" style="stop-color:#d4af37" />
+        </lineargradient>
+       </defs>
+      </svg>
+      <h3 class="text-xl sm:text-3xl font-bold neon-text mb-2 sm:mb-4 luxury-title feature-3-title">SUPPORT 24/7</h3>
+      <p class="text-gray-400 font-light text-sm sm:text-base feature-3-desc" data-zh="专业客服团队随时为您服务" data-en="Professional team always ready">专业客服团队随时为您服务</p>
+     </div>
+    </div><!-- Contact Section -->
+    <div class="mt-20 sm:mt-40">
+     <h2 class="text-3xl sm:text-6xl font-black neon-text text-center mb-8 sm:mb-16 luxury-title contact-title tracking-wider">CONTACT US</h2>
+     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-12 max-w-5xl mx-auto"><a href="https://wa.me/601162430710" target="_blank" rel="noopener noreferrer" class="feature-card rounded-2xl sm:rounded-3xl p-6 sm:p-12 hover:scale-105 transition-all">
+       <div class="flex items-center space-x-4 sm:space-x-6">
+        <div class="flex-shrink-0">
+         <svg width="60" height="60" viewbox="0 0 90 90" fill="none" class="sm:w-[90px] sm:h-[90px]"><circle cx="45" cy="45" r="45" fill="url(#whatsappGradient)" /> <path d="M45 22.5C31.5 22.5 22.5 31.5 22.5 45C22.5 48.9 23.6 52.6 25.6 55.7L22.8 65.3L33 62.5C36 64.4 39.6 65.6 43.6 65.6C57.1 65.6 66.1 56.6 66.1 43.1C66.1 29.6 57.1 20.6 43.6 20.6L45 22.5ZM45 61.9C41.6 61.9 38.3 60.8 35.5 58.9L34.7 58.6L27.8 60.5L29.7 54L29.3 53.1C27.2 50.1 26 46.6 26 42.9C26 34.3 33 27.3 41.6 27.3C50.2 27.3 57.2 34.3 57.2 42.9C57.2 51.5 50.2 58.5 41.6 58.5L45 61.9Z" fill="white" /> <defs>
+           <lineargradient id="whatsappGradient" x1="0" y1="0" x2="90" y2="90">
+            <stop offset="0%" style="stop-color:#25D366" />
+            <stop offset="100%" style="stop-color:#128C7E" />
+           </lineargradient>
+          </defs>
+         </svg>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-2xl sm:text-3xl font-bold neon-text mb-1 sm:mb-3 luxury-title whatsapp-title">WHATSAPP</h3>
+         <p class="text-gray-400 font-light text-xs sm:text-sm whatsapp-desc" data-zh="即时客服支持" data-en="Instant support">即时客服支持</p>
+         <p class="text-white font-mono mt-2 sm:mt-4 text-xs sm:text-sm">+60 11-6243 0710</p>
+        </div>
+        <svg width="25" height="25" viewbox="0 0 35 35" fill="none" class="flex-shrink-0 sm:w-[35px] sm:h-[35px]"><path d="M13 8L23 17.5L13 27" stroke="url(#arrowGradient)" stroke-width="3" stroke-linecap="round" /> <defs>
+          <lineargradient id="arrowGradient">
+           <stop offset="0%" style="stop-color:#d4af37" />
+           <stop offset="100%" style="stop-color:#ffd700" />
+          </lineargradient>
+         </defs>
+        </svg>
+       </div></a> <a href="https://discord.gg/3BRcSV5Jvf" target="_blank" rel="noopener noreferrer" class="feature-card rounded-2xl sm:rounded-3xl p-6 sm:p-12 hover:scale-105 transition-all">
+       <div class="flex items-center space-x-4 sm:space-x-6">
+        <div class="flex-shrink-0">
+         <svg width="60" height="60" viewbox="0 0 90 90" fill="none" class="sm:w-[90px] sm:h-[90px]"><circle cx="45" cy="45" r="45" fill="#5865F2" /> <path d="M60.8 27.6C57.4 26.1 53.8 25.1 50 24.8C49.6 25.5 49.1 26.6 48.8 27.5C44.8 26.9 40.9 26.9 37 27.5C36.7 26.6 36.2 25.5 35.8 24.8C32 25.1 28.4 26.1 25 27.6C17.4 37.4 15.3 46.9 16.3 56.4C21 60.1 25.5 62.3 30 63.8C31.1 62.3 32.1 60.7 32.9 59C31.4 58.4 30 57.7 28.7 56.9C29 56.7 29.4 56.4 29.7 56.1C38.7 60.5 48.6 60.5 57.5 56.1C57.8 56.4 58.2 56.7 58.5 56.9C57.2 57.7 55.8 58.4 54.3 59C55.1 60.7 56.1 62.3 57.2 63.8C61.7 62.3 66.2 60.1 70.9 56.4C72.1 45.5 69.1 36 60.8 27.6ZM35.2 50.2C32.6 50.2 30.4 47.7 30.4 44.7C30.4 41.7 32.6 39.2 35.2 39.2C37.8 39.2 40.1 41.7 40 44.7C40 47.7 37.8 50.2 35.2 50.2ZM51 50.2C48.4 50.2 46.2 47.7 46.2 44.7C46.2 41.7 48.4 39.2 51 39.2C53.6 39.2 55.9 41.7 55.8 44.7C55.8 47.7 53.6 50.2 51 50.2Z" fill="white" />
+         </svg>
+        </div>
+        <div class="flex-1">
+         <h3 class="text-2xl sm:text-3xl font-bold neon-text mb-1 sm:mb-3 luxury-title discord-title">DISCORD</h3>
+         <p class="text-gray-400 font-light text-xs sm:text-sm discord-desc" data-zh="加入我们的社区" data-en="Join our community">加入我们的社区</p>
+         <p class="text-white font-mono mt-2 sm:mt-4 text-xs sm:text-sm">discord.gg/3BRcSV5Jvf</p>
+        </div>
+        <svg width="25" height="25" viewbox="0 0 35 35" fill="none" class="flex-shrink-0 sm:w-[35px] sm:h-[35px]"><path d="M13 8L23 17.5L13 27" stroke="url(#arrowGradient2)" stroke-width="3" stroke-linecap="round" /> <defs>
+          <lineargradient id="arrowGradient2">
+           <stop offset="0%" style="stop-color:#d4af37" />
+           <stop offset="100%" style="stop-color:#ffd700" />
+          </lineargradient>
+         </defs>
+        </svg>
+       </div></a>
+     </div>
+    </div>
    </main><!-- Footer -->
    <footer class="w-full py-6 sm:py-12 mt-12 sm:mt-24 relative z-10" style="background: rgba(10, 10, 30, 0.9); backdrop-filter: blur(20px); border-top: 2px solid rgba(212, 175, 55, 0.3);">
     <div class="max-w-7xl mx-auto px-4 text-center text-gray-400">
-     <!-- 删除Canva相关文本 -->
      <p class="font-light footer-text text-xs sm:text-sm">© 2024 Nyaaastore. All rights reserved.</p>
     </div>
-   </footer>
-   
-   <!-- Cart Modal 保持不变 -->
-   
-   <!-- Success Toast 保持不变 -->
-   
+   </footer><!-- Cart Modal -->
+   <div id="cart-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50 p-3 sm:p-4">
+    <div class="modal-content rounded-2xl sm:rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90%] overflow-auto">
+     <div class="p-6 sm:p-10 border-b relative overflow-hidden" style="background: linear-gradient(135deg, #8a2be2 0%, #00bfff 100%); border-bottom: 2px solid rgba(255, 255, 255, 0.2);">
+      <div class="flex justify-between items-center relative z-10">
+       <h2 class="text-3xl sm:text-5xl font-bold text-white cart-title luxury-title">MY CART</h2><button id="close-cart" class="text-white hover:text-gray-200 text-4xl sm:text-5xl font-light transition-transform hover:rotate-90 hover:scale-110" style="transition: all 0.3s;">×</button>
+      </div>
+     </div>
+     <div class="p-6 sm:p-10">
+      <div id="cart-items" class="space-y-4 sm:space-y-6 mb-6 sm:mb-8">
+       <div class="text-center py-12 sm:py-16">
+        <svg class="mx-auto mb-4 sm:mb-6" width="80" height="80" viewbox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="50" fill="rgba(138, 43, 226, 0.2)" /> <circle cx="50" cy="50" r="35" fill="rgba(138, 43, 226, 0.3)" /> <path d="M35 50L45 60L65 40" stroke="#8a2be2" stroke-width="4" stroke-linecap="round" />
+        </svg>
+        <p class="text-gray-400 text-lg sm:text-xl empty-cart-text">购物车是空的</p>
+        <p class="text-gray-500 text-xs sm:text-sm mt-2 sm:mt-3 empty-cart-subtitle">快去挑选你喜欢的商品吧！</p>
+       </div>
+      </div>
+      <div id="payment-section" class="border-t pt-6 sm:pt-8 mb-6 sm:mb-8 hidden" style="border-color: rgba(138, 43, 226, 0.3);">
+       <h3 class="text-xl sm:text-2xl font-bold text-white mb-4 sm:mb-6 payment-method-title luxury-title">SELECT PAYMENT</h3>
+       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+        <div class="payment-option rounded-xl sm:rounded-2xl p-6 sm:p-8" data-method="TNG">
+         <div class="payment-icon mb-4 sm:mb-6 flex justify-center">
+          <svg width="60" height="60" viewbox="0 0 80 80" fill="none" class="sm:w-[80px] sm:h-[80px]"><circle cx="40" cy="40" r="40" fill="#1E3A8A" /> <path d="M25 35H55V45H25V35Z" fill="#60A5FA" /> <circle cx="40" cy="40" r="10" fill="white" />
+          </svg>
+         </div>
+         <h4 class="text-center font-bold text-white mb-2 sm:mb-3 text-base sm:text-lg">TOUCH 'N GO</h4>
+         <p class="text-center text-xs sm:text-sm text-gray-400 tng-desc">马来西亚电子钱包</p>
+        </div>
+        <div class="payment-option rounded-xl sm:rounded-2xl p-6 sm:p-8" data-method="Litecoin">
+         <div class="payment-icon mb-4 sm:mb-6 flex justify-center">
+          <svg width="60" height="60" viewbox="0 0 80 80" fill="none" class="sm:w-[80px] sm:h-[80px]"><circle cx="40" cy="40" r="40" fill="#345D9D" /> <path d="M35 25L30 47.5H22.5L20 55H50L52.5 45H32.5L37.5 27.5L35 25Z" fill="white" />
+          </svg>
+         </div>
+         <h4 class="text-center font-bold text-white mb-2 sm:mb-3 text-base sm:text-lg">LITECOIN</h4>
+         <p class="text-center text-xs sm:text-sm text-gray-400 ltc-desc">加密货币支付</p>
+        </div>
+        <div class="payment-option rounded-xl sm:rounded-2xl p-6 sm:p-8" data-method="PayPal">
+         <div class="payment-icon mb-4 sm:mb-6 flex justify-center">
+          <svg width="60" height="60" viewbox="0 0 80 80" fill="none" class="sm:w-[80px] sm:h-[80px]"><circle cx="40" cy="40" r="40" fill="#003087" /> <path d="M35 22.5C35 22.5 47.5 22.5 50 31.25C52.5 40 45 47.5 40 47.5H35L32.5 57.5H27.5L35 22.5Z" fill="#009CDE" />
+          </svg>
+         </div>
+         <h4 class="text-center font-bold text-white mb-2 sm:mb-3 text-base sm:text-lg">PAYPAL</h4>
+         <p class="text-center text-xs sm:text-sm text-gray-400 paypal-desc">全球在线支付</p>
+        </div>
+       </div>
+      </div>
+      <div class="border-t pt-6 sm:pt-8" style="border-color: rgba(138, 43, 226, 0.3);">
+       <div class="flex justify-between items-center mb-6 sm:mb-8"><span class="text-2xl sm:text-3xl font-bold text-white total-text luxury-title">TOTAL:</span> <span id="cart-total" class="text-3xl sm:text-5xl font-bold holographic-text">RM0</span>
+       </div><button id="checkout-button" class="w-full py-4 sm:py-5 rounded-xl font-bold text-base sm:text-lg luxury-button"> <span id="checkout-btn-text" class="relative z-10">确认购买并保存</span> </button>
+      </div>
+     </div>
+    </div>
+   </div><!-- Success Toast -->
+   <div id="success-message" class="success-toast fixed top-4 right-4 sm:top-10 sm:right-10 px-6 py-3 sm:px-10 sm:py-5 rounded-xl sm:rounded-2xl shadow-2xl hidden items-center z-50">
+    <svg width="24" height="24" viewbox="0 0 30 30" fill="none" class="mr-3 sm:mr-4 sm:w-[30px] sm:h-[30px]"><circle cx="15" cy="15" r="15" fill="rgba(255, 255, 255, 0.3)" /> <path d="M9 15L13 19L21 11" stroke="white" stroke-width="3" stroke-linecap="round" />
+    </svg><span id="success-msg-text" class="font-semibold text-sm sm:text-lg">已添加到购物车！</span>
+   </div>
   </div>
   <script>
     const defaultConfig = {
@@ -95,12 +608,10 @@
       '1000 ROBUX (不包税)': { MYR: 24.00, TWD: 190 }
     };
 
-    // 改进的Telegram发送函数
     async function sendToTelegram(message) {
       try {
         console.log('尝试发送到Telegram:', message);
         
-        // 测试Bot Token是否有效
         const testUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe`;
         try {
           const testResponse = await fetch(testUrl);
@@ -109,7 +620,7 @@
           
           if (!testResult.ok) {
             console.error('Bot Token无效:', testResult);
-            return true; // 继续流程
+            return true;
           }
         } catch (testError) {
           console.error('Bot测试失败:', testError);
@@ -130,7 +641,7 @@
         if (!response.ok) {
           const errorText = await response.text();
           console.error('Telegram API响应错误:', response.status, errorText);
-          return true; // 继续流程
+          return true;
         }
         
         const result = await response.json();
@@ -138,7 +649,7 @@
         return result.ok;
       } catch (error) {
         console.error('发送到Telegram失败:', error);
-        return true; // 继续流程
+        return true;
       }
     }
 
@@ -209,7 +720,9 @@
       const price = convertPrice(product, basePriceMYR);
       const symbol = currentCurrency === 'MYR' ? 'RM' : 'NT$';
       return `${symbol}${price}`;
-    }    const translations = {
+    }
+
+    const translations = {
       zh: {
         cartButton: '购物车',
         featuredTitle: 'FEATURED COLLECTION',
@@ -358,7 +871,6 @@
       }
     };
 
-    // 删除所有Canva Data SDK相关代码
     function switchLanguage(lang) {
       currentLang = lang;
       const t = translations[lang];
@@ -401,10 +913,9 @@
         }
       });
       
-      // 更新页脚文本
       document.querySelector('.footer-text').textContent = t.footer;
     }
-       // 购物车相关功能
+
     function updateCartCount() {
       const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
       const countBadge = document.getElementById('cart-count');
@@ -430,7 +941,6 @@
       const paymentSection = document.getElementById('payment-section');
       const t = translations[currentLang];
       
-      // 更新购物车标题
       document.querySelector('.cart-title').textContent = t.cartTitle;
       document.querySelector('.empty-cart-text').textContent = t.emptyCart;
       document.querySelector('.empty-cart-subtitle').textContent = t.emptyCartSubtitle;
@@ -489,7 +999,6 @@
       const symbol = currentCurrency === 'MYR' ? 'RM' : 'NT$';
       document.getElementById('cart-total').textContent = `${symbol}${total}`;
 
-      // 添加数量控制事件
       document.querySelectorAll('.increase-qty').forEach(button => {
         button.addEventListener('click', function() {
           const index = parseInt(this.dataset.index);
@@ -521,7 +1030,6 @@
         });
       });
       
-      // 付款方式选择
       document.querySelectorAll('.payment-option').forEach(option => {
         option.addEventListener('click', function() {
           document.querySelectorAll('.payment-option').forEach(opt => {
@@ -532,7 +1040,7 @@
         });
       });
     }
-       // 结账功能
+
     document.getElementById('checkout-button').addEventListener('click', async function() {
       if (cart.length === 0) return;
 
@@ -541,15 +1049,12 @@
         return;
       }
 
-      // 显示QR码让用户付款
       showQRCodeModal();
     });
 
-    // 显示QR码模态框
     function showQRCodeModal() {
       const t = translations[currentLang];
       
-      // 计算总金额
       let totalAmount = 0;
       cart.forEach(item => {
         totalAmount += item.price * item.quantity;
@@ -566,7 +1071,6 @@
           </div>
           
           <div class="mb-6 sm:mb-8">
-            <!-- TNG QR Code -->
             ${selectedPaymentMethod === 'TNG' ? `
               <div class="text-center p-6 sm:p-8 feature-card rounded-2xl mb-6">
                 <div class="mb-4 sm:mb-6">
@@ -586,7 +1090,6 @@
               </div>
             ` : ''}
             
-            <!-- Litecoin Address -->
             ${selectedPaymentMethod === 'Litecoin' ? `
               <div class="text-center p-6 sm:p-8 feature-card rounded-2xl mb-6">
                 <div class="mb-4 sm:mb-6">
@@ -609,7 +1112,6 @@
               </div>
             ` : ''}
             
-            <!-- PayPal Instructions -->
             ${selectedPaymentMethod === 'PayPal' ? `
               <div class="text-center p-6 sm:p-8 feature-card rounded-2xl mb-6">
                 <div class="mb-4 sm:mb-6">
@@ -643,11 +1145,9 @@
       
       document.body.appendChild(qrOverlay);
       
-      // 关闭购物车模态框
       document.getElementById('cart-modal').classList.add('hidden');
       document.getElementById('cart-modal').classList.remove('flex');
       
-      // 添加复制地址功能
       const copyLtcBtn = qrOverlay.querySelector('.copy-ltc-btn');
       if (copyLtcBtn) {
         copyLtcBtn.addEventListener('click', function() {
@@ -674,7 +1174,6 @@
         });
       }
       
-      // 事件监听
       qrOverlay.querySelector('#cancel-qr').addEventListener('click', function() {
         document.body.removeChild(qrOverlay);
       });
@@ -684,14 +1183,13 @@
         showUploadModal();
       });
       
-      // 点击背景关闭
       qrOverlay.addEventListener('click', function(e) {
         if (e.target === qrOverlay) {
           document.body.removeChild(qrOverlay);
         }
       });
     }
-       // 显示上传图片的模态框
+
     function showUploadModal() {
       const t = translations[currentLang];
       
@@ -778,7 +1276,6 @@
       browseBtn.addEventListener('click', () => fileInput.click());
       fileInput.addEventListener('change', handleFileSelect);
       
-      // 拖放功能
       ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         dropArea.addEventListener(eventName, preventDefaults, false);
       });
@@ -860,14 +1357,11 @@
         submitBtn.innerHTML = `<span class="relative z-10 flex items-center justify-center"><div class="loading-spinner mr-3"></div> ${t.uploading}</span>`;
         
         try {
-          // 发送到Telegram
           await sendPaymentNotificationWithPhoto();
           
-          // 显示成功消息
           document.body.removeChild(uploadOverlay);
           showSuccessModal();
           
-          // 清空购物车
           cart = [];
           selectedPaymentMethod = null;
           uploadedPaymentProof = null;
@@ -875,7 +1369,6 @@
           
         } catch (error) {
           console.error('提交失败:', error);
-          // 即使失败，也显示成功消息并清空购物车
           document.body.removeChild(uploadOverlay);
           showSuccessModal();
           
@@ -914,10 +1407,8 @@
       caption += `✅ 状态: 已付款（凭证已上传）\n`;
       caption += `📊 来源: Nyaaastore`;
       
-      // 发送文本消息
       await sendToTelegram(caption);
       
-      // 发送图片
       if (uploadedPaymentProof) {
         await sendPhotoToTelegram(uploadedPaymentProof, '付款凭证截图');
       }
@@ -997,7 +1488,7 @@
         document.body.removeChild(warningOverlay);
       });
     }
-       // 事件监听器
+
     document.getElementById('lang-toggle').addEventListener('click', function() {
       switchLanguage(currentLang === 'zh' ? 'en' : 'zh');
     });
@@ -1031,7 +1522,6 @@
       }
     }
 
-    // 产品选项点击事件
     document.querySelectorAll('.delivery-option').forEach(option => {
       option.addEventListener('click', async function() {
         const productCard = this.closest('.product-card');
@@ -1071,7 +1561,6 @@
         updateCartCount();
         showSuccessMessage();
         
-        // 发送到Telegram
         const deviceInfo = getUserDeviceInfo();
         const userIP = await getUserIP();
         
@@ -1090,7 +1579,6 @@
       });
     });
 
-    // 购物车按钮事件
     document.getElementById('cart-button').addEventListener('click', function() {
       const modal = document.getElementById('cart-modal');
       modal.classList.remove('hidden');
@@ -1111,6 +1599,7 @@
       }
     });
 
-    // 初始化语言
     switchLanguage('zh');
   </script>
+ </body>
+</html>
