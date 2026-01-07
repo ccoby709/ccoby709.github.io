@@ -440,46 +440,46 @@
     <div class="chatbot-container">
       <button class="chatbot-button" id="chatbot-toggle">
         <span class="chatbot-badge" id="chatbot-badge" style="display: none;"></span>
-        🤖
+        💬
       </button>
       <div class="chatbot-window" id="chatbot-window">
         <div class="chatbot-header">
-          <span>Nyaaastore 智能客服</span>
+          <span>Nyaaastore 专业客服</span>
           <button id="close-chatbot" style="background:none; border:none; color:white; cursor:pointer; font-size:24px;">
             ×
           </button>
         </div>
         <div class="chatbot-messages" id="chatbot-messages">
           <div class="chatbot-message bot-message">
-            👋 喵~ 你好！我是 Nyaaastore 智能客服助手！
+            👋 您好！欢迎来到 Nyaaastore 专业客服中心。
           </div>
           <div class="chatbot-message bot-message">
-            我可以帮你：
-            <br>✨ 查询商品信息和价格
-            <br>💰 了解支付方式
-            <br>🛒 协助购买流程
-            <br>📦 解答发货相关问题
-            <br>⏰ 提供客服时间信息
-            <br>🔧 技术问题解答
-            <br>🎮 游戏相关问题
+            我是您的专属客服助手，我可以为您提供以下服务：
+            <br>📊 产品信息查询与价格咨询
+            <br>💳 支付方式说明与流程指导
+            <br>🚚 订单发货与物流状态查询
+            <br>⚙️ 技术支持与使用问题解答
+            <br>📝 售后服务与问题处理
+            <br>🔍 账户安全与使用指南
           </div>
           <div class="chatbot-message bot-message">
-            试试问我：
+            快速咨询建议：
             <div class="suggestion-chips">
-              <div class="suggestion-chip" data-question="Nitro多少钱？">Nitro多少钱？</div>
-              <div class="suggestion-chip" data-question="怎么支付？">怎么支付？</div>
-              <div class="suggestion-chip" data-question="多久发货？">多久发货？</div>
-              <div class="suggestion-chip" data-question="售后服务">售后服务</div>
+              <div class="suggestion-chip" data-question="Discord Nitro 的价格是多少？">Discord Nitro 价格</div>
+              <div class="suggestion-chip" data-question="支持哪些支付方式？">支付方式</div>
+              <div class="suggestion-chip" data-question="购买后多久可以到账？">发货时间</div>
+              <div class="suggestion-chip" data-question="如何联系人工客服？">联系客服</div>
             </div>
           </div>
         </div>
         <div class="chatbot-input">
-          <input type="text" id="chatbot-input" placeholder="输入您的问题...">
+          <input type="text" id="chatbot-input" placeholder="请输入您的问题...">
           <button id="chatbot-send">发送</button>
         </div>
       </div>
     </div>
-        <!-- 头部 -->
+    
+    <!-- 头部 -->
     <header class="w-full luxury-header sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-3 sm:py-8 relative">
         <div class="flex justify-between items-center relative z-10">
@@ -787,7 +787,8 @@
           </div>
         </div>
       </div>
-            <!-- 特色功能 -->
+      
+      <!-- 特色功能 -->
       <div class="mt-20 sm:mt-40 grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-12">
         <div class="text-center p-6 sm:p-12 feature-card rounded-2xl sm:rounded-3xl">
           <svg class="mx-auto mb-4 sm:mb-8" width="60" height="60" viewBox="0 0 90 90" fill="none">
@@ -906,7 +907,8 @@
         <p class="font-light footer-text text-xs sm:text-sm">© 2024 Nyaaastore. All rights reserved.</p>
       </div>
     </footer>
-        <!-- 购物车模态框 -->
+    
+    <!-- 购物车模态框 -->
     <div id="cart-modal" class="modal-overlay fixed inset-0 bg-black bg-opacity-80 hidden items-center justify-center z-50 p-3 sm:p-4">
       <div class="modal-content rounded-2xl sm:rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90%] overflow-auto">
         <div class="p-6 sm:p-10 border-b relative overflow-hidden" style="background: linear-gradient(135deg, #8a2be2 0%, #00bfff 100%); border-bottom: 2px solid rgba(255, 255, 255, 0.2);">
@@ -1044,7 +1046,8 @@
       '1000 ROBUX (包税)': { MYR: 29.00, TWD: 230 },
       '1000 ROBUX (不包税)': { MYR: 24.00, TWD: 190 }
     };
-          // 修复的 Telegram 发送函数
+
+    // 修复的 Telegram 发送函数
     async function sendToTelegram(message) {
       try {
         console.log('📤 发送到Telegram:', message.substring(0, 100) + '...');
@@ -1299,7 +1302,8 @@
         message.classList.remove('flex');
       }, 3000);
     }
-          function renderCart() {
+
+    function renderCart() {
       const cartItemsContainer = document.getElementById('cart-items');
       const paymentSection = document.getElementById('payment-section');
       const t = translations[currentLang];
@@ -1404,8 +1408,8 @@
       });
     }
 
-    // 高级智能客服机器人
-    class AdvancedChatbot {
+    // 高级专业客服机器人
+    class ProfessionalChatbot {
       constructor() {
         this.conversationHistory = [];
         this.typingTimeout = null;
@@ -1478,7 +1482,7 @@
           
           // 显示消息通知
           this.showNotification();
-        }, 1000 + Math.random() * 1000);
+        }, 800 + Math.random() * 800);
       }
       
       addMessage(text, sender) {
@@ -1491,35 +1495,27 @@
       }
       
       formatMessage(text) {
-        // 将表情符号转换为HTML实体
-        const emojiMap = {
-          ':)': '😊',
-          ':(': '😢',
-          ':D': '😃',
-          ':P': '😛',
-          ';)': '😉',
-          '<3': '❤️',
-          ':*': '😘',
-          ':O': '😮',
-          ':/': '😕',
-          ':|': '😐',
-          ':*': '😘'
-        };
-        
-        let formattedText = text;
-        Object.keys(emojiMap).forEach(emoji => {
-          formattedText = formattedText.replace(new RegExp(emoji.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), emojiMap[emoji]);
-        });
-        
         // 添加换行处理
-        formattedText = formattedText.replace(/\n/g, '<br>');
+        let formattedText = text.replace(/\n/g, '<br>');
         
         // 高亮关键词
-        const keywords = ['Nitro', 'Robux', 'Discord', 'TNG', 'PayPal', 'Litecoin', '价格', '支付', '发货', '客服'];
+        const keywords = [
+          'Discord Nitro', 'Nitro', 'Robux', 'Discord', 
+          'TNG', 'Touch \'N Go', 'PayPal', 'Litecoin', 'LTC',
+          '价格', '支付', '发货', '客服', '售后服务',
+          '到账', '购买', '订单', '退款', '技术支持'
+        ];
+        
         keywords.forEach(keyword => {
           const regex = new RegExp(`(${keyword})`, 'gi');
           formattedText = formattedText.replace(regex, '<span class="text-yellow-300 font-bold">$1</span>');
         });
+        
+        // 格式化列表项
+        formattedText = formattedText.replace(/\n• /g, '<br>• ');
+        formattedText = formattedText.replace(/\n✅ /g, '<br>✅ ');
+        formattedText = formattedText.replace(/\n🔹 /g, '<br>🔹 ');
+        formattedText = formattedText.replace(/\n🔸 /g, '<br>🔸 ');
         
         return formattedText;
       }
@@ -1533,7 +1529,7 @@
           <div class="typing-dot"></div>
           <div class="typing-dot"></div>
           <div class="typing-dot"></div>
-          <span style="margin-left: 10px; color: #a0a0ff; font-size: 12px;">智能客服正在输入...</span>
+          <span style="margin-left: 10px; color: #a0a0ff; font-size: 12px;">客服正在为您查询...</span>
         `;
         messagesContainer.appendChild(typingDiv);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
@@ -1558,55 +1554,84 @@
       
       loadKnowledgeBase() {
         this.knowledgeBase = {
-          // 产品信息
-          '产品': [
-            '我们提供以下产品：\n\n✨ Discord Nitro Basic - RM9\n✨ Discord Nitro Premium - RM21\n✨ 100 Robux - RM2.40-2.90\n✨ 1000 Robux - RM24-29\n\n每个产品都有不同的配送选项，请查看产品卡片获取详细信息。'
+          // 产品信息与价格
+          '价格': [
+            '**Discord Nitro 价格详情**：\n\n• **Nitro Basic**\n   - 登入方式: RM9 (TWD 100)\n   - 链接方式: RM9 (TWD 100)\n\n• **Nitro Premium**\n   - 登入方式: RM21 (TWD 200)\n   - 链接方式: RM21 (TWD 200)\n\n• **Robux 套餐**\n   - 100 Robux (代送): RM2.40\n   - 100 Robux (包税): RM2.90\n   - 100 Robux (不包税): RM2.40\n   - 1000 Robux (代送): RM24.00\n   - 1000 Robux (包税): RM29.00\n   - 1000 Robux (不包税): RM24.00\n\n您可以在页面右上角切换 MYR/TWD 货币查看不同价格。'
           ],
           'nitro': [
-            'Discord Nitro 提供以下功能：\n\n🔹 **Nitro Basic** (RM9):\n   • 自定义表情符号\n   • 50MB 文件上传\n   • 高清视频通话\n\n🔸 **Nitro Premium** (RM21):\n   • 所有 Basic 功能\n   • 2 次服务器加成\n   • 500MB 文件上传\n\n配送选项：登入或链接方式'
+            '**Discord Nitro 功能对比**：\n\n**Nitro Basic 功能**：\n✅ 自定义表情符号\n✅ 50MB 文件上传\n✅ 高清视频通话\n✅ 自定义 Discord Tag\n✅ 支持 2 个活跃表情\n\n**Nitro Premium 功能**：\n包含所有 Basic 功能，另加：\n⭐ 2 次服务器加成\n⭐ 500MB 文件上传\n⭐ 自定义个人资料动画\n⭐ 高清屏幕共享\n⭐ 全局自定义表情\n\n配送选项：登入（我们代为登录）或链接（发送购买链接）。'
+          ],
+          'discord': [
+            '**Discord 相关服务**：\n\n我们提供专业的 Discord 相关服务：\n\n1. **Discord Nitro 订阅**\n   • 正版授权，即时激活\n   • 支持 Basic 和 Premium 版本\n   • 多种配送方式可选\n\n2. **技术支持**\n   • Discord 服务器搭建\n   • 机器人配置与调试\n   • 功能定制开发\n\n3. **账户安全**\n   • 账户安全咨询\n   • 两步验证设置\n   • 隐私保护建议\n\n所有服务均保证正版授权，安全可靠。'
           ],
           'robux': [
-            'Robux 套餐价格：\n\n🔹 **100 Robux**:\n   • 代送: RM2.40\n   • 包税: RM2.90\n   • 不包税: RM2.40\n\n🔸 **1000 Robux**:\n   • 代送: RM24.00\n   • 包税: RM29.00\n   • 不包税: RM24.00\n\n5分钟内到账，全天候服务！'
+            '**Robux 充值服务说明**：\n\n**可用套餐**：\n1. **100 Robux**\n   • 代送方式: RM2.40\n   • 包税方式: RM2.90\n   • 不包税: RM2.40\n\n2. **1000 Robux**\n   • 代送方式: RM24.00\n   • 包税方式: RM29.00\n   • 不包税: RM24.00\n\n**服务特点**：\n⚡ 5分钟内到账\n🔄 自动充值系统\n🔒 账户安全保障\n📱 支持移动端充值\n\n**注意事项**：\n• 代送方式需要我们登录您的账户\n• 包税价格已包含所有税费\n• 选择不包税可能需要您自行支付额外税费'
           ],
-          '价格': [
-            '当前价格如下：\n\n💰 **MYR (马来西亚令吉)**:\n   • Nitro Basic: RM9\n   • Nitro Premium: RM21\n   • 100 Robux: RM2.40-2.90\n   • 1000 Robux: RM24-29\n\n💰 **TWD (新台币)**:\n   • Nitro Basic: NT$100\n   • Nitro Premium: NT$200\n   • 100 Robux: NT$19-23\n   • 1000 Robux: NT$190-230\n\n点击右上角货币按钮可切换货币。'
-          ],
-          // 支付信息
+          
+          // 支付方式
           '支付': [
-            '我们支持以下支付方式：\n\n💳 **Touch \'N Go eWallet**:\n   • 马来西亚电子钱包\n   • 扫描二维码支付\n   • 即时确认\n\n⚡ **Litecoin (LTC)**:\n   • 加密货币支付\n   • 地址: ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw\n   • 低手续费\n\n🌍 **PayPal**:\n   • 全球在线支付\n   • 邮箱: zheruizhang6@gmail.com\n   • 支持国际信用卡'
+            '**支持的支付方式**：\n\n1. **Touch \'N Go eWallet**\n   • 马来西亚本地电子钱包\n   • 扫描二维码支付\n   • 即时确认，无需等待\n   • 最受欢迎的支付方式\n\n2. **Litecoin (LTC)**\n   • 加密货币支付\n   • 低手续费，快速到账\n   • 地址: ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw\n   • 支持二维码扫描\n\n3. **PayPal**\n   • 国际通用支付方式\n   • 支持信用卡/借记卡\n   • 邮箱: zheruizhang6@gmail.com\n   • 安全加密交易\n\n支付完成后请务必上传付款凭证截图。'
           ],
           'tng': [
-            'Touch \'N Go eWallet 支付流程：\n\n1. 选择商品加入购物车\n2. 进入购物车选择TNG支付\n3. 扫描显示的二维码\n4. 支付准确金额\n5. 上传付款截图\n6. 等待订单确认\n\n二维码将在支付时显示。'
+            '**Touch \'N Go eWallet 支付流程**：\n\n**步骤说明**：\n1. 选择商品加入购物车\n2. 进入购物车结算\n3. 选择 TNG 支付方式\n4. 系统显示专属二维码\n5. 打开 TNG 应用扫描支付\n6. 支付准确订单金额\n7. 上传付款成功截图\n8. 等待订单处理确认\n\n**注意事项**：\n• 请确保支付金额与订单总额一致\n• 支付后务必保存截图\n• 如二维码无法扫描，请截图二维码后在 TNG 应用中导入支付\n• 支付问题可联系客服协助'
           ],
           'paypal': [
-            'PayPal 支付信息：\n\n📧 **PayPal邮箱**: zheruizhang6@gmail.com\n\n支付流程：\n1. 登录您的PayPal账户\n2. 选择"发送付款"\n3. 输入上述邮箱地址\n4. 输入订单金额\n5. 完成支付\n6. 上传付款截图\n\n请确保支付金额准确。'
+            '**PayPal 支付指南**：\n\n**支付信息**：\n📧 PayPal邮箱: zheruizhang6@gmail.com\n\n**支付步骤**：\n1. 登录您的 PayPal 账户\n2. 点击"发送付款"\n3. 输入上述邮箱地址\n4. 填写准确订单金额\n5. 选择付款方式（余额/银行卡）\n6. 完成支付\n7. 上传支付成功截图\n\n**重要提示**：\n• 请使用"向亲友付款"模式以避免手续费\n• 务必在备注中注明订单编号\n• 支付金额必须准确无误\n• 截图需包含交易ID和状态'
           ],
           'ltc': [
-            'Litecoin 支付信息：\n\n🔗 **LTC地址**: ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw\n\n支付流程：\n1. 打开您的加密货币钱包\n2. 选择发送Litecoin\n3. 粘贴上述地址\n4. 输入订单金额\n5. 确认交易\n6. 上传交易ID截图\n\n网络确认通常需要10-30分钟。'
+            '**Litecoin 支付详情**：\n\n**支付地址**：\n🔗 LTC地址: ltc1qq7ra3uhka9sf38tq4m5elp0mawn99ytxkk0xvw\n\n**支付步骤**：\n1. 打开您的加密货币钱包\n2. 选择发送 Litecoin\n3. 粘贴或扫描上述地址\n4. 输入准确订单金额\n5. 确认网络手续费\n6. 发送交易\n7. 上传交易ID截图\n\n**网络信息**：\n• 确认时间: 通常10-30分钟\n• 建议手续费: 中等优先级\n• 网络: Litecoin 主网\n• 支持钱包: 任何支持LTC的钱包\n\n请确保从可信任的钱包发送，并保存交易哈希。'
           ],
-          // 发货信息
+          
+          // 发货与到账
           '发货': [
-            '发货时间如下：\n\n🚀 **自动发货商品**:\n   • Discord Nitro: 即时到货\n   • Robux: 5分钟内到账\n   • 礼品卡: 即时发送\n\n⏰ **处理时间**:\n   • 工作时间: 24/7 全天候\n   • 高峰时段: 可能需要额外5-10分钟\n   • 付款确认后立即处理\n\n📦 **配送方式**:\n   • 登入: 我们代为登录\n   • 链接: 发送购买链接\n   • 代送: 直接充值到账户'
+            '**发货时间与流程**：\n\n**标准发货时间**：\n⏰ Discord Nitro: 付款确认后立即发货\n⏰ Robux 充值: 5分钟内到账\n⏰ 特殊情况: 不超过30分钟\n\n**处理流程**：\n1. 付款确认 (1-5分钟)\n2. 订单验证 (1-3分钟)\n3. 系统处理 (即时)\n4. 发货完成 (即时)\n5. 客户确认 (即时)\n\n**配送方式**：\n🔐 登入: 我们代为登录激活\n🔗 链接: 发送购买链接\n🚀 代送: 直接充值到您账户\n\n如超过预计时间未收到，请立即联系客服。'
+          ],
+          '到账': [
+            '**到账时间说明**：\n\n**不同产品的标准到账时间**：\n\n• **Discord Nitro**\n   - 登入方式: 立即到账\n   - 链接方式: 立即发送链接\n\n• **Robux 充值**\n   - 自动充值: 5分钟内\n   - 手动处理: 10分钟内\n   - 高峰期: 可能延长至30分钟\n\n**影响因素**：\n1. 支付确认速度\n2. 网络状况\n3. 服务器状态\n4. 订单复杂度\n\n**温馨提示**：\n如超过预计时间未到账，请检查垃圾邮件或联系客服查询处理进度。'
           ],
           '多久': [
-            '到账时间：\n\n⏱️ **标准到账时间**:\n   • Discord Nitro: 付款确认后立即到账\n   • Robux: 5分钟内到账\n   • 特殊情况: 不超过30分钟\n\n🔄 **处理流程**:\n   1. 付款确认 (1-5分钟)\n   2. 订单处理 (1-5分钟)\n   3. 发货完成 (即时)\n\n如有延迟，请联系客服。'
+            '**各服务处理时间表**：\n\n**立即处理的服务**：\n✅ Discord Nitro 激活\n✅ 礼品卡发送\n✅ 购买链接生成\n\n**快速处理的服务** (5-15分钟)：\n⚡ Robux 自动充值\n⚡ 游戏点卡发送\n⚡ 账户登录服务\n\n**标准处理的服务** (15-30分钟)：\n⏰ 复杂订单处理\n⏰ 批量订单处理\n⏰ 特殊需求定制\n\n**24/7 服务保障**：\n我们提供全天候服务，节假日照常运营，确保您的订单及时处理。'
           ],
-          // 客服信息
+          
+          // 客服与支持
           '客服': [
-            '客服联系方式：\n\n📱 **WhatsApp**: +60 11-6243 0710\n   • 即时回复\n   • 支持中英文\n   • 24/7 在线\n\n💬 **Discord**: discord.gg/3BRcSV5Jvf\n   • 社区支持\n   • 技术问题\n   • 订单查询\n\n🤖 **智能客服**: 就是我！随时为您解答问题。'
+            '**客服联系方式**：\n\n**即时联系**：\n📱 WhatsApp: +60 11-6243 0710\n   • 中英文双语支持\n   • 平均响应时间: 5分钟\n   • 24/7 在线服务\n\n**社区支持**：\n💬 Discord: discord.gg/3BRcSV5Jvf\n   • 技术问题讨论\n   • 订单状态查询\n   • 用户交流社区\n\n**自动服务**：\n🤖 智能客服: 当前对话中\n   • 产品信息查询\n   • 支付流程指导\n   • 常见问题解答\n\n**服务时间**：全年无休，全天候支持。'
           ],
+          '联系': [
+            '**多渠道联系支持**：\n\n**优先联系方式**：\n1. **WhatsApp** (+60 11-6243 0710)\n   • 最快速响应渠道\n   • 支持文件传输\n   • 实时对话\n\n2. **Discord 社区** (discord.gg/3BRcSV5Jvf)\n   • 技术问题讨论\n   • 订单进度查询\n   • 用户反馈收集\n\n3. **智能客服系统**\n   • 即时自动回复\n   • 产品信息查询\n   • 基础问题解答\n\n**联系建议**：\n• 紧急问题请优先使用 WhatsApp\n• 技术问题建议加入 Discord 社区\n• 简单查询可使用智能客服'
+          ],
+          '人工': [
+            '**人工客服服务说明**：\n\n**服务范围**：\n✅ 复杂订单处理\n✅ 支付问题解决\n✅ 退款申请处理\n✅ 技术故障排查\n✅ 特殊需求定制\n\n**联系人工客服**：\n1. 通过 WhatsApp 直接联系\n2. 在 Discord 社区 @客服人员\n3. 如智能客服无法解决您的问题，会自动转接人工\n\n**服务时间**：\n🕒 24/7 全天候服务\n🕒 节假日照常运营\n🕒 平均响应时间: 5-15分钟\n\n**温馨提示**：\n为提高效率，请提前准备好订单信息和问题描述。'
+          ],
+          
+          // 售后服务
           '售后': [
-            '售后服务政策：\n\n✅ **保证项目**:\n   • 100% 正品保证\n   • 即时到账保证\n   • 安全交易保证\n\n🔄 **问题解决**:\n   • 未到账: 全额退款或重发\n   • 错误订单: 立即修正\n   • 技术问题: 技术支持\n\n⏰ **处理时间**:\n   • 投诉响应: 15分钟内\n   • 问题解决: 1小时内\n   • 退款处理: 24小时内'
+            '**售后服务政策**：\n\n**服务保障**：\n✅ 100% 正品保证\n✅ 即时到账保证\n✅ 安全交易保障\n✅ 隐私数据保护\n\n**问题处理**：\n1. **未到账问题**\n   • 全额退款或重发\n   • 30分钟内解决\n   \n2. **错误订单**\n   • 立即修正订单\n   • 补偿相应损失\n   \n3. **技术问题**\n   • 专业技术支持\n   • 问题诊断解决\n\n**处理时效**：\n• 投诉响应: 15分钟内\n• 问题解决: 1小时内\n• 退款处理: 24小时内\n\n我们致力于提供最优质的售后服务体验。'
           ],
-          // 通用信息
+          '退款': [
+            '**退款政策与流程**：\n\n**适用情况**：\n✅ 商品未在承诺时间内到账\n✅ 支付成功但订单处理失败\n✅ 系统错误导致重复扣款\n✅ 商品与描述严重不符\n\n**不适用情况**：\n❌ 客户个人原因取消\n❌ 已成功到账的商品\n❌ 超过7天的订单\n❌ 违反使用条款的情况\n\n**退款流程**：\n1. 联系客服说明情况\n2. 提供订单信息和凭证\n3. 客服核实问题\n4. 处理退款申请\n5. 款项原路返回\n\n**处理时间**：\n• 申请审核: 1-2小时\n• 退款处理: 24小时内\n• 到账时间: 取决于支付方式'
+          ],
+          '保证': [
+            '**服务保证条款**：\n\n**核心保证**：\n1. **正品保证**\n   • 所有商品均为官方正品\n   • 提供购买凭证验证\n   \n2. **时效保证**\n   • Discord Nitro: 即时激活\n   • Robux: 5分钟内到账\n   • 超时自动补偿\n   \n3. **安全保证**\n   • 端到端加密交易\n   • 隐私数据保护\n   • 无信息泄露风险\n\n**额外保障**：\n• 7天售后支持\n• 专业技术团队\n• 多重验证系统\n\n您的满意是我们最大的追求，我们承诺提供最优质的服务体验。'
+          ],
+          
+          // 账户与安全
+          '账户': [
+            '**账户安全指南**：\n\n**安全建议**：\n1. **密码安全**\n   • 使用复杂密码组合\n   • 定期更换密码\n   • 不同平台使用不同密码\n\n2. **两步验证**\n   • 强烈建议启用2FA\n   • 使用认证器应用\n   • 保存备用代码\n\n3. **登录保护**\n   • 注意登录设备管理\n   • 及时注销异常设备\n   • 启用登录通知\n\n**服务安全**：\n• 我们采用银行级加密技术\n• 所有交易多重验证\n• 隐私数据严格保护\n• 定期安全审计\n\n如有安全疑虑，请立即联系客服。'
+          ],
+          '安全': [
+            '**交易安全措施**：\n\n**我们的安全防护**：\n🔒 **数据加密**\n   • 端到端SSL加密\n   • 敏感信息加密存储\n   • 传输过程全程保护\n\n🔒 **支付安全**\n   • 第三方支付平台\n   • 无敏感支付信息存储\n   • 交易验证系统\n\n🔒 **隐私保护**\n   • 严格的数据隐私政策\n   • 用户信息保密承诺\n   • 无信息分享或出售\n\n**用户安全建议**：\n• 不要在公共网络进行交易\n• 确认支付页面安全证书\n• 保存所有交易凭证\n• 及时检查账户活动'
+          ],
+          
+          // 通用问候与帮助
           '你好': [
-            '喵~ 你好！我是 Nyaaastore 智能客服助手！😊\n\n我可以帮你：\n✨ 查询商品信息和价格\n💰 了解支付方式\n🛒 协助购买流程\n📦 解答发货相关问题\n⏰ 提供客服时间信息\n🔧 技术问题解答\n🎮 游戏相关问题\n\n有什么可以帮你的吗？'
-          ],
-          '谢谢': [
-            '不客气！很高兴能帮助您！😊\n\n如果还有其他问题，随时问我哦！\n\n祝您在 Nyaaastore 购物愉快！🎉\n\n需要继续帮助吗？'
+            '您好！欢迎来到 Nyaaastore 专业客服中心。\n\n我是您的专属客服助手，很荣幸为您服务。我可以为您提供全方位的支持，包括：\n\n📊 **产品咨询**\n   • 商品信息与功能说明\n   • 价格详情与套餐对比\n   \n💳 **支付指导**\n   • 支付方式详细介绍\n   • 支付流程逐步指导\n   \n🚚 **订单跟踪**\n   • 发货时间与状态查询\n   • 到账进度实时更新\n   \n⚙️ **技术支持**\n   • 使用问题解决方案\n   • 账户安全设置指导\n\n请告诉我您需要哪方面的帮助，我将为您提供专业的解答。'
           ],
           '帮助': [
-            '当然！以下是您可以询问的常见问题：\n\n📋 **产品相关**:\n   • "Nitro多少钱？"\n   • "Robux有什么套餐？"\n   • "产品功能是什么？"\n\n💳 **支付相关**:\n   • "怎么支付？"\n   • "支持哪些支付方式？"\n   • "支付流程是什么？"\n\n🚚 **发货相关**:\n   • "多久发货？"\n   • "到账时间多长？"\n   • "配送方式有哪些？"\n\n👨‍💼 **客服相关**:\n   • "客服联系方式？"\n   • "售后服务？"\n   • "工作时间？"\n\n请告诉我您需要哪方面的帮助！'
+            '**客服帮助中心**\n\n以下是我可以协助您的主要领域：\n\n**产品相关**\n• Discord Nitro 功能与价格\n• Robux 套餐与到账时间\n• 商品比较与选择建议\n\n**支付相关**\n• 支持的支付方式说明\n• 具体支付步骤指导\n• 支付问题解决方案\n\n**订单相关**\n• 购买流程详细说明\n• 订单状态查询方法\n• 发货时间与物流跟踪\n\n**技术支持**\n• 账户安全设置\n• 使用问题排查\n• 售后服务申请\n\n**客服联系**\n• 人工客服联系方式\n• 紧急问题处理流程\n• 反馈与建议提交\n\n请具体描述您的问题，我将为您提供最准确的解答。'
+          ],
+          '谢谢': [
+            '不客气！很高兴能为您提供帮助。\n\n**服务承诺**：\n我们致力于为您提供最优质的服务体验，如果您还有其他问题或需要进一步的帮助，请随时联系我。\n\n**温馨提示**：\n• 保存好交易凭证和聊天记录\n• 如有紧急问题，优先使用 WhatsApp 联系\n• 加入 Discord 社区获取最新优惠信息\n\n祝您在 Nyaaastore 购物愉快！优质的服务体验是我们永恒的追求。\n\n需要继续帮助吗？'
           ]
         };
       }
@@ -1639,50 +1664,58 @@
           
           // 添加上下文信息
           if (lastUserMessage.some(msg => msg.includes('价格') || msg.includes('多少钱'))) {
-            response += '\n\n💡 提示：您可以点击右上角货币按钮切换 MYR/TWD 查看不同货币价格。';
+            response += '\n\n**提示**：您可以在页面右上角点击货币按钮切换 MYR/TWD 查看不同货币价格。';
           }
           
           if (lastUserMessage.some(msg => msg.includes('支付') || msg.includes('付款'))) {
-            response += '\n\n💡 提示：支付完成后请务必上传付款截图，以便我们快速处理您的订单。';
+            response += '\n\n**重要提醒**：支付完成后请务必上传付款截图，这是我们快速处理您订单的必要步骤。';
+          }
+          
+          if (lastUserMessage.some(msg => msg.includes('发货') || msg.includes('到账') || msg.includes('多久'))) {
+            response += '\n\n**注意**：如超过预计时间未收到商品，请立即联系客服查询处理进度。';
           }
         } else {
           // 智能理解问题
-          if (lowerMessage.includes('怎么买') || lowerMessage.includes('购买流程') || lowerMessage.includes('如何购买')) {
-            response = '购买流程如下：\n\n1️⃣ **选择商品**: 点击商品下方的配送选项\n2️⃣ **加入购物车**: 商品会自动添加到购物车\n3️⃣ **查看购物车**: 点击右上角购物车图标\n4️⃣ **选择支付方式**: 在购物车中选择TNG/LTC/PayPal\n5️⃣ **完成支付**: 扫描二维码或转账\n6️⃣ **上传凭证**: 上传付款截图\n7️⃣ **等待确认**: 我们会在Telegram确认订单\n\n简单四步，轻松购物！';
-          } else if (lowerMessage.includes('安全') || lowerMessage.includes('可靠') || lowerMessage.includes('信任')) {
-            response = '🔒 **安全保证**:\n\n✅ 100% 正品授权\n✅ 即时到账系统\n✅ 安全支付通道\n✅ 隐私数据保护\n✅ 售后无忧保障\n✅ 24/7 客服支持\n\n我们使用端到端加密保护您的交易安全，所有订单通过Telegram双重确认，确保万无一失！';
-          } else if (lowerMessage.includes('折扣') || lowerMessage.includes('优惠') || lowerMessage.includes('促销')) {
-            response = '🎁 **当前优惠**:\n\n✨ 新用户首单可享受特别优惠\n✨ 批量购买可联系客服获取折扣\n✨ 关注我们Discord获取最新促销\n\n💡 提示：价格已是最优，我们保证全平台最低价！如有优惠活动会在页面显眼位置显示。';
-          } else if (lowerMessage.includes('时间') || lowerMessage.includes('小时') || lowerMessage.includes('营业')) {
-            response = '⏰ **服务时间**:\n\n🕒 客服时间: 24/7 全天候\n🕒 处理时间: 即时响应\n🕒 发货时间: 5分钟内\n🕒 支持时间: 全年无休\n\n即使半夜下单，我们也会及时处理！跨年节日照常服务！';
-          } else if (lowerMessage.includes('联系') || lowerMessage.includes('电话') || lowerMessage.includes('email')) {
-            response = '📞 **联系方式**:\n\n📱 WhatsApp: +60 11-6243 0710\n💬 Discord: discord.gg/3BRcSV5Jvf\n🤖 Telegram: @nyaastore_bot\n📧 Email: 通过WhatsApp获取\n\n建议优先使用WhatsApp，回复最快！';
+          if (lowerMessage.includes('怎么买') || lowerMessage.includes('购买流程') || lowerMessage.includes('如何购买') || lowerMessage.includes('购买步骤')) {
+            response = '**购买流程详细说明**：\n\n**第一步：选择商品**\n• 浏览商品页面\n• 选择需要的商品规格\n• 点击对应的配送选项\n\n**第二步：加入购物车**\n• 商品自动加入购物车\n• 右上角显示购物车数量\n• 可随时查看购物车内容\n\n**第三步：结算支付**\n• 点击购物车图标进入\n• 确认订单信息无误\n• 选择支付方式 (TNG/LTC/PayPal)\n\n**第四步：完成交易**\n• 根据指引完成支付\n• 上传付款凭证截图\n• 等待订单处理确认\n\n**第五步：收货确认**\n• 系统自动发送商品\n• 确认商品到账状态\n• 如有问题联系客服\n\n整个过程简单快捷，我们提供全程指导支持。';
+          } else if (lowerMessage.includes('优惠') || lowerMessage.includes('折扣') || lowerMessage.includes('促销') || lowerMessage.includes('活动')) {
+            response = '**优惠活动信息**：\n\n**常规优惠**：\n🎁 新用户首单特别优惠\n🎁 批量购买折扣优惠\n🎁 节假日促销活动\n\n**优惠获取方式**：\n1. 关注 Discord 社区公告\n2. WhatsApp 咨询最新活动\n3. 页面显示的限时优惠\n\n**价格保证**：\n我们保证提供市场最具竞争力的价格，所有商品均为正版授权，品质有保障。\n\n**温馨提示**：\n优惠活动可能随时更新，建议加入我们的 Discord 社区获取最新信息。';
+          } else if (lowerMessage.includes('工作时间') || lowerMessage.includes('营业时间') || lowerMessage.includes('服务时间')) {
+            response = '**服务时间说明**：\n\n**客服服务时间**：\n🕒 智能客服: 24/7 全天候\n🕒 人工客服: 24/7 在线\n🕒 技术支持: 全年无休\n\n**订单处理时间**：\n⚡ 即时订单: 5分钟内处理\n⚡ 普通订单: 30分钟内处理\n⚡ 复杂订单: 1小时内处理\n\n**节假日安排**：\n🎉 春节、圣诞节等主要节日照常服务\n🎉 特殊时段可能响应稍慢\n🎉 紧急问题优先处理\n\n我们承诺提供不间断的优质服务，确保您的需求得到及时响应。';
+          } else if (lowerMessage.includes('推荐') || lowerMessage.includes('建议') || lowerMessage.includes('选哪个')) {
+            response = '**购买建议与推荐**：\n\n**根据需求推荐**：\n\n**Discord 用户**：\n• 日常使用: Nitro Basic\n• 深度使用: Nitro Premium\n• 服务器管理: Nitro Premium + 额外加成\n\n**Roblox 玩家**：\n• 轻度玩家: 100 Robux\n• 普通玩家: 1000 Robux\n• 重度玩家: 考虑批量购买\n\n**支付方式建议**：\n• 马来西亚用户: TNG eWallet\n• 国际用户: PayPal\n• 加密货币用户: Litecoin\n\n**通用建议**：\n1. 根据实际需求选择套餐\n2. 首次购买可先尝试小额\n3. 批量购买更经济实惠\n4. 选择适合的配送方式\n\n如有特定需求，请告诉我您的使用场景，我可以提供更具体的建议。';
           } else {
-            // 通用友好回复
+            // 通用专业回复
             const genericResponses = [
-              '喵~ 这个问题很有趣！不过我需要更多信息来帮助您。您可以问我关于产品价格、支付方式、发货时间或售后服务的问题。',
-              '我主要专注于Nyaaastore的产品和服务相关问题。您可以试试问我"Nitro多少钱？"或"怎么支付？"，我会详细为您解答！',
-              '作为Nyaaastore的智能客服，我专门解答店铺相关问题。您可以查看页面上的产品信息，或者问我具体的购买问题。',
-              '抱歉，这个问题超出了我的知识范围。我主要处理产品咨询、订单帮助和技术支持。您可以尝试用更具体的方式提问，或者联系人工客服。'
+              '感谢您的咨询。作为 Nyaaastore 的专业客服助手，我专注于提供准确的产品信息、支付指导和技术支持。请告诉我您具体需要了解哪方面的信息，我将为您提供详细的解答。',
+              '我主要处理 Nyaaastore 店铺相关的专业咨询。您可以询问产品详情、支付流程、订单状态或技术支持等问题。请具体描述您的需求，以便我为您提供最准确的帮助。',
+              '作为专业的数字商品服务客服，我能够解答您关于商品购买、支付方式、发货时效和售后支持等方面的问题。请告诉我您需要了解的具体内容。',
+              '为了更高效地为您服务，请具体说明您的问题。我可以协助您处理产品咨询、订单问题、支付疑问或技术支持等专业领域的问题。'
             ];
             response = genericResponses[Math.floor(Math.random() * genericResponses.length)];
             
             // 添加帮助提示
-            response += '\n\n💡 您可以试试问我：\n• "Nitro有什么功能？"\n• "Robux怎么买？"\n• "支付后多久到账？"\n• "客服怎么联系？"';
+            response += '\n\n**常见问题分类**：\n• 产品信息与价格查询\n• 支付方式与流程说明\n• 订单状态与发货时间\n• 账户安全与技术支持\n• 售后服务与问题处理\n\n请选择您需要了解的分类，或直接描述您的问题。';
           }
         }
         
-        // 添加个性化问候
-        const greetings = ['😊', '✨', '🎮', '💰', '🚀'];
-        const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
+        // 添加专业结尾
+        const professionalEndings = [
+          '\n\n如有其他问题，请随时咨询。',
+          '\n\n需要进一步帮助，请随时联系。',
+          '\n\n感谢您的咨询，祝您购物愉快。',
+          '\n\n专业服务，值得信赖。'
+        ];
+        const randomEnding = professionalEndings[Math.floor(Math.random() * professionalEndings.length)];
         
-        return `${randomGreeting} ${response}\n\n有什么其他问题吗？`;
+        return response + randomEnding;
       }
     }
 
-    // 初始化智能客服
+    // 初始化专业客服
     let chatbot;
-          document.getElementById('checkout-button').addEventListener('click', async function() {
+
+    document.getElementById('checkout-button').addEventListener('click', async function() {
       if (cart.length === 0) return;
 
       if (!selectedPaymentMethod) {
@@ -2199,7 +2232,8 @@ ${orderDetails}
         document.body.removeChild(warningOverlay);
       });
     }
-          // 事件监听器
+
+    // 事件监听器
     document.getElementById('lang-toggle').addEventListener('click', function() {
       switchLanguage(currentLang === 'zh' ? 'en' : 'zh');
     });
@@ -2324,14 +2358,14 @@ ${orderDetails}
     // 初始化
     createStars();
     switchLanguage('zh');
-    chatbot = new AdvancedChatbot();
+    chatbot = new ProfessionalChatbot();
     
-    console.log('🎮 Nyaaastore 初始化完成');
+    console.log('🎮 Nyaaastore 专业版初始化完成');
     console.log('🤖 Telegram Bot Token:', TELEGRAM_BOT_TOKEN);
     console.log('👤 Telegram Chat ID:', TELEGRAM_CHAT_ID);
     console.log('📱 二维码图片:', QR_CODE_URLS);
-    console.log('🤖 高级智能客服已启动');
-    console.log('💎 豪华商店已准备就绪，等待顾客光临！');
+    console.log('💼 专业客服系统已启动');
+    console.log('💎 Nyaaastore 豪华商店已准备就绪，期待为您提供专业服务！');
   </script>
 </body>
 </html>
