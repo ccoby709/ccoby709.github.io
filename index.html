@@ -6,7 +6,6 @@
   <title>Nyaaastore - Luxury Digital Store</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    /* 所有 CSS 样式保持不变... */
     body {
       box-sizing: border-box;
       font-family: 'Montserrat', sans-serif;
@@ -1353,7 +1352,7 @@
       }, 3000);
     }
 
-    // 修复：改进购物车事件委托
+    // 修复购物车事件委托
     function initCartEventDelegation() {
       const cartItemsContainer = document.getElementById('cart-items');
       
@@ -1457,7 +1456,7 @@
       const symbol = currentCurrency === 'MYR' ? 'RM' : 'NT$';
       document.getElementById('cart-total').textContent = `${symbol}${total.toFixed(2)}`;
 
-      // 添加支付方式选择事件
+      // 重新绑定支付方式选择事件
       document.querySelectorAll('.payment-option').forEach(option => {
         option.addEventListener('click', function() {
           document.querySelectorAll('.payment-option').forEach(opt => {
@@ -1611,7 +1610,6 @@
       
       loadKnowledgeBase() {
         this.knowledgeBase = {
-          // 产品信息与价格
           '价格': [
             '**Discord Nitro 价格详情**：\n\n• **Nitro Basic**\n   - 登入方式: RM9 (TWD 100)\n   - 链接方式: RM9 (TWD 100)\n\n• **Nitro Premium**\n   - 登入方式: RM21 (TWD 200)\n   - 链接方式: RM21 (TWD 200)\n\n• **Robux 套餐**\n   - 100 Robux (代送): RM2.40\n   - 100 Robux (包税): RM2.90\n   - 100 Robux (不包税): RM2.40\n   - 1000 Robux (代送): RM24.00\n   - 1000 Robux (包税): RM29.00\n   - 1000 Robux (不包税): RM24.00\n\n您可以在页面右上角切换 MYR/TWD 货币查看不同价格。'
           ],
@@ -1624,8 +1622,6 @@
           'robux': [
             '**Robux 充值服务说明**：\n\n**可用套餐**：\n1. **100 Robux**\n   • 代送方式: RM2.40\n   • 包税方式: RM2.90\n   • 不包税: RM2.40\n\n2. **1000 Robux**\n   • 代送方式: RM24.00\n   • 包税方式: RM29.00\n   • 不包税: RM24.00\n\n**服务特点**：\n⚡ 5分钟内到账\n🔄 自动充值系统\n🔒 账户安全保障\n📱 支持移动端充值\n\n**注意事项**：\n• 代送方式需要我们登录您的账户\n• 包税价格已包含所有税费\n• 选择不包税可能需要您自行支付额外税费'
           ],
-          
-          // 发货与到账
           '发货': [
             '**发货时间与流程**：\n\n**标准发货时间**：\n⏰ Discord Nitro: 付款确认后立即发货\n⏰ Robux 充值: 5分钟内到账\n⏰ 其他商品: 泥鳅0-2天内发货\n\n**处理流程**：\n1. 付款确认 (1-5分钟)\n2. 订单验证 (1-3分钟)\n3. 系统处理 (即时)\n4. 发货完成 (0-2天)\n5. 客户确认 (即时)\n\n**配送方式**：\n🔐 登入: 我们代为登录激活\n🔗 链接: 发送购买链接\n🚀 代送: 直接充值到您账户\n\n如超过预计时间未收到，请立即联系客服。'
           ],
@@ -1704,7 +1700,6 @@
               <p class="text-white text-lg font-bold mb-2">Touch 'N Go eWallet</p>
               <p class="text-gray-400 text-sm mb-4">${t.scanWithTng}</p>
               
-              <!-- 显示TNG二维码 -->
               <div class="flex justify-center mb-4">
                 <div class="bg-white p-3 rounded-lg shadow-lg">
                   <img 
@@ -1732,7 +1727,6 @@
                 ${t.copyAddress}
               </button>
               
-              <!-- 显示LTC二维码 -->
               <div class="mt-4">
                 <p class="text-gray-300 text-sm mb-2">或者扫描二维码：</p>
                 <div class="flex justify-center mb-4">
@@ -2034,7 +2028,6 @@
         try {
           console.log('🚀 开始发送付款通知和图片...');
           
-          // 先测试 Bot 是否可用
           const botTest = await testTelegramBot();
           if (!botTest) {
             alert('❌ Telegram Bot 不可用，请检查配置');
@@ -2043,11 +2036,9 @@
             return;
           }
           
-          // 发送订单信息
           const messageResult = await sendPaymentNotification();
           console.log('订单信息发送结果:', messageResult);
           
-          // 发送图片
           const photoResult = await sendPhotoToTelegram(uploadedPaymentProof, '付款凭证截图');
           console.log('图片发送结果:', photoResult);
           
@@ -2056,12 +2047,10 @@
           document.body.removeChild(uploadOverlay);
           showSuccessModal();
           
-          // 清空购物车
           cart = [];
           selectedPaymentMethod = null;
           uploadedPaymentProof = null;
           updateCartCount();
-          renderCart(); // 重要：立即重新渲染购物车
           
         } catch (error) {
           console.error('❌ 提交失败:', error);
@@ -2088,7 +2077,6 @@
         return `${item.product} × ${item.quantity} = RM${(item.price * item.quantity).toFixed(2)}`;
       }).join('\n');
       
-      // 修复：移除了 IP 地址信息
       const message = `
 💰 <b>付款完成通知</b>
 
@@ -2189,7 +2177,7 @@ ${orderDetails}
     document.getElementById('clear-cart-btn').addEventListener('click', function() {
       cart = [];
       updateCartCount();
-      renderCart(); // 修复：添加这行代码，立即重新渲染
+      renderCart();
       alert('购物车已清空！');
     });
     
@@ -2284,11 +2272,9 @@ ${orderDetails}
         updateCartCount();
         showSuccessMessage();
         
-        // 发送订单通知到 Telegram
         try {
           console.log('🛒 发送新订单通知到 Telegram...');
           
-          // 先测试 Bot
           const botTest = await testTelegramBot();
           if (!botTest) {
             console.log('❌ Bot 测试失败，跳过通知');
@@ -2297,7 +2283,6 @@ ${orderDetails}
           
           const deviceInfo = getUserDeviceInfo();
           
-          // 修复：移除 IP 地址信息
           const telegramMessage = `
 🛒 <b>新订单通知</b>
 
@@ -2352,7 +2337,6 @@ ${orderDetails}
     console.log('🤖 聊天机器人正常');
     console.log('✅ 所有物品已显示');
     
-    // 页面加载后自动测试 Telegram
     setTimeout(() => {
       console.log('🔧 自动测试 Telegram 连接...');
       testTelegramBot().then(success => {
