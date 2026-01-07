@@ -433,14 +433,6 @@
     <!-- 添加星星背景 -->
     <div class="stars" id="stars"></div>
     
-    <!-- 调试按钮 -->
-    <div id="debug-buttons" style="position: fixed; top: 10px; left: 10px; z-index: 9999; display: flex; gap: 10px;">
-      <button id="test-telegram-btn" class="px-3 py-2 bg-red-500 text-white rounded-lg text-xs">测试 Telegram</button>
-      <button id="clear-cart-btn" class="px-3 py-2 bg-blue-500 text-white rounded-lg text-xs">清空购物车</button>
-      <button id="show-cart-btn" class="px-3 py-2 bg-green-500 text-white rounded-lg text-xs">显示购物车</button>
-      <button id="debug-info" class="px-3 py-2 bg-purple-500 text-white rounded-lg text-xs">调试信息</button>
-    </div>
-    
     <!-- 聊天机器人 -->
     <div class="chatbot-container">
       <button class="chatbot-button" id="chatbot-toggle">
@@ -1156,16 +1148,13 @@
         
         if (result.ok) {
           console.log('✅ Bot 状态正常:', result.result);
-          alert(`✅ Bot 正常: @${result.result.username}`);
           return true;
         } else {
           console.error('❌ Bot 测试失败:', result);
-          alert(`❌ Bot 测试失败: ${result.description}`);
           return false;
         }
       } catch (error) {
         console.error('💥 测试失败:', error);
-        alert(`💥 测试失败: ${error.message}`);
         return false;
       }
     }
@@ -1352,44 +1341,6 @@
       }, 3000);
     }
 
-    // 修复购物车事件委托
-    function initCartEventDelegation() {
-      const cartItemsContainer = document.getElementById('cart-items');
-      
-      cartItemsContainer.addEventListener('click', function(e) {
-        const target = e.target;
-        
-        // 找到最近的 cart-item 容器
-        let cartItem = target.closest('[data-index]');
-        if (!cartItem) return;
-        
-        const index = parseInt(cartItem.dataset.index);
-        
-        // 检查是否是增减数量按钮
-        if (target.classList.contains('increase-qty') || target.closest('.increase-qty')) {
-          if (cart[index]) {
-            cart[index].quantity++;
-            updateCartCount();
-            renderCart();
-          }
-        } 
-        else if (target.classList.contains('decrease-qty') || target.closest('.decrease-qty')) {
-          if (cart[index] && cart[index].quantity > 1) {
-            cart[index].quantity--;
-          } else {
-            cart.splice(index, 1);
-          }
-          updateCartCount();
-          renderCart();
-        }
-        else if (target.classList.contains('remove-item') || target.closest('.remove-item')) {
-          cart.splice(index, 1);
-          updateCartCount();
-          renderCart();
-        }
-      });
-    }
-
     function renderCart() {
       const cartItemsContainer = document.getElementById('cart-items');
       const paymentSection = document.getElementById('payment-section');
@@ -1464,6 +1415,58 @@
           });
           this.classList.add('selected');
           selectedPaymentMethod = this.dataset.method;
+        });
+      });
+      
+      // 重新绑定购物车按钮事件
+      initCartButtons();
+    }
+
+    // 修复购物车按钮事件
+    function initCartButtons() {
+      // 减数量按钮
+      document.querySelectorAll('.decrease-qty').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const cartItem = this.closest('[data-index]');
+          const index = parseInt(cartItem.dataset.index);
+          
+          if (cart[index] && cart[index].quantity > 1) {
+            cart[index].quantity--;
+          } else {
+            cart.splice(index, 1);
+          }
+          
+          updateCartCount();
+          renderCart();
+        });
+      });
+      
+      // 加数量按钮
+      document.querySelectorAll('.increase-qty').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const cartItem = this.closest('[data-index]');
+          const index = parseInt(cartItem.dataset.index);
+          
+          if (cart[index]) {
+            cart[index].quantity++;
+            updateCartCount();
+            renderCart();
+          }
+        });
+      });
+      
+      // 删除按钮
+      document.querySelectorAll('.remove-item').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+          e.stopPropagation();
+          const cartItem = this.closest('[data-index]');
+          const index = parseInt(cartItem.dataset.index);
+          
+          cart.splice(index, 1);
+          updateCartCount();
+          renderCart();
         });
       });
     }
@@ -2036,6 +2039,7 @@
             return;
           }
           
+          // 只在确认购买时发送通知
           const messageResult = await sendPaymentNotification();
           console.log('订单信息发送结果:', messageResult);
           
@@ -2171,29 +2175,6 @@ ${orderDetails}
       });
     }
 
-    // 调试按钮功能
-    document.getElementById('test-telegram-btn').addEventListener('click', testTelegramBot);
-    
-    document.getElementById('clear-cart-btn').addEventListener('click', function() {
-      cart = [];
-      updateCartCount();
-      renderCart();
-      alert('购物车已清空！');
-    });
-    
-    document.getElementById('show-cart-btn').addEventListener('click', function() {
-      document.getElementById('cart-button').click();
-    });
-    
-    document.getElementById('debug-info').addEventListener('click', function() {
-      console.log('🔧 调试信息:');
-      console.log('购物车:', cart);
-      console.log('当前语言:', currentLang);
-      console.log('当前货币:', currentCurrency);
-      console.log('购物车数量:', cart.reduce((sum, item) => sum + item.quantity, 0));
-      alert('调试信息已输出到控制台 (按F12查看)');
-    });
-
     // 事件监听器
     document.getElementById('lang-toggle').addEventListener('click', function() {
       switchLanguage(currentLang === 'zh' ? 'en' : 'zh');
@@ -2271,35 +2252,6 @@ ${orderDetails}
         console.log('购物车内容:', cart);
         updateCartCount();
         showSuccessMessage();
-        
-        try {
-          console.log('🛒 发送新订单通知到 Telegram...');
-          
-          const botTest = await testTelegramBot();
-          if (!botTest) {
-            console.log('❌ Bot 测试失败，跳过通知');
-            return;
-          }
-          
-          const deviceInfo = getUserDeviceInfo();
-          
-          const telegramMessage = `
-🛒 <b>新订单通知</b>
-
-📦 <b>商品:</b> ${fullProductName}
-💰 <b>价格:</b> RM${price}
-📦 <b>数量:</b> ${existingItem ? existingItem.quantity : 1}
-⏰ <b>时间:</b> ${new Date().toLocaleString('zh-CN')}
-💻 <b>设备:</b> ${deviceInfo.platform}
-📱 <b>屏幕:</b> ${deviceInfo.screen}
-📊 <b>状态:</b> 待付款
-          `;
-          
-          await sendToTelegram(telegramMessage);
-          console.log('✅ 订单通知发送成功');
-        } catch (error) {
-          console.error('❌ 订单通知发送失败:', error);
-        }
       });
     });
 
@@ -2326,7 +2278,6 @@ ${orderDetails}
     // 初始化
     createStars();
     switchLanguage('zh');
-    initCartEventDelegation();
     chatbot = new ProfessionalChatbot();
     
     console.log('🎮 Nyaaastore 专业版修复完成');
@@ -2336,17 +2287,6 @@ ${orderDetails}
     console.log('📱 Telegram 通知系统正常');
     console.log('🤖 聊天机器人正常');
     console.log('✅ 所有物品已显示');
-    
-    setTimeout(() => {
-      console.log('🔧 自动测试 Telegram 连接...');
-      testTelegramBot().then(success => {
-        if (success) {
-          console.log('✅ Telegram 连接正常');
-        } else {
-          console.log('⚠️ Telegram 连接有问题，请检查配置');
-        }
-      });
-    }, 2000);
   </script>
 </body>
 </html>
