@@ -1346,15 +1346,31 @@
       const paymentSection = document.getElementById('payment-section');
       const t = translations[currentLang];
       
-      document.querySelector('.cart-title').textContent = t.cartTitle;
-      document.querySelector('.empty-cart-text').textContent = t.emptyCart;
-      document.querySelector('.empty-cart-subtitle').textContent = t.emptyCartSubtitle;
-      document.querySelector('.total-text').textContent = t.total;
-      document.querySelector('.payment-method-title').textContent = t.paymentMethodTitle;
-      document.querySelector('.tng-desc').textContent = t.tngDesc;
-      document.querySelector('.ltc-desc').textContent = t.ltcDesc;
-      document.querySelector('.paypal-desc').textContent = t.paypalDesc;
-      document.getElementById('checkout-btn-text').textContent = t.checkout;
+      // 安全地更新文本内容
+      const safeUpdate = (selector, text) => {
+        const element = document.querySelector(selector);
+        if (element) {
+          element.textContent = text;
+        }
+      };
+      
+      // 更新购物车标题
+      safeUpdate('.cart-title', t.cartTitle);
+      safeUpdate('.empty-cart-text', t.emptyCart);
+      safeUpdate('.empty-cart-subtitle', t.emptyCartSubtitle);
+      safeUpdate('.total-text', t.total);
+      safeUpdate('.payment-method-title', t.paymentMethodTitle);
+      
+      // 更新描述文本
+      const tngDesc = document.querySelector('.tng-desc');
+      const ltcDesc = document.querySelector('.ltc-desc');
+      const paypalDesc = document.querySelector('.paypal-desc');
+      const checkoutBtn = document.getElementById('checkout-btn-text');
+      
+      if (tngDesc) tngDesc.textContent = t.tngDesc;
+      if (ltcDesc) ltcDesc.textContent = t.ltcDesc;
+      if (paypalDesc) paypalDesc.textContent = t.paypalDesc;
+      if (checkoutBtn) checkoutBtn.textContent = t.checkout;
       
       if (cart.length === 0) {
         cartItemsContainer.innerHTML = `
