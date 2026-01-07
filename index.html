@@ -1020,7 +1020,7 @@
     let selectedPaymentMethod = null;
     let uploadedPaymentProof = null;
 
-    // Telegram 配置
+    // Telegram 配置 - 请确认这些值是否正确
     const TELEGRAM_BOT_TOKEN = '8520089781:AAHPSCT8YZf9q6J43VKdDtdGwtRkzmyMoXM';
     const TELEGRAM_CHAT_ID = '8313770381';
     const TELEGRAM_API_URL = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`;
@@ -1034,18 +1034,16 @@
       TNG: 'https://i.ibb.co/WWdJQwRf/IMG-20251215-184553-1.jpg'
     };
 
-    // 修复：简化商品名称翻译 - 只处理配送方式的翻译
+    // 修复：简化商品名称翻译
     function getTranslatedProductName(productName) {
       const t = translations[currentLang];
       
-      // 提取商品名和配送方式
       const parts = productName.split('(');
       if (parts.length < 2) return productName;
       
       const productBase = parts[0].trim();
       const deliveryType = parts[1].replace(')', '').trim();
       
-      // 翻译配送方式
       let translatedDelivery = deliveryType;
       if (currentLang === 'zh') {
         if (deliveryType === 'LOGIN') translatedDelivery = '登入';
@@ -1077,10 +1075,12 @@
       '1000 ROBUX (不包税)': { MYR: 24.00, TWD: 190 }
     };
 
-    // 修复的 Telegram 发送函数
+    // 改进的 Telegram 发送函数，添加详细的调试信息
     async function sendToTelegram(message) {
       try {
-        console.log('📤 发送到Telegram:', message.substring(0, 100) + '...');
+        console.log('📤 开始发送到 Telegram...');
+        console.log('Chat ID:', TELEGRAM_CHAT_ID);
+        console.log('消息前100字符:', message.substring(0, 100) + '...');
         
         const response = await fetch(TELEGRAM_API_URL, {
           method: 'POST',
@@ -1094,19 +1094,24 @@
           })
         });
         
+        console.log('响应状态:', response.status);
         const result = await response.json();
-        console.log('📩 Telegram响应:', result);
+        console.log('Telegram API 完整响应:', result);
         
         if (!response.ok || !result.ok) {
-          console.error('❌ Telegram发送失败:', result.description || '未知错误');
+          console.error('❌ Telegram发送失败:', result.description);
+          // 弹出具体错误信息
+          alert(`Telegram发送失败: ${result.description || '未知错误'}`);
           throw new Error(result.description || 'Telegram发送失败');
         }
         
         console.log('✅ 消息发送成功');
+        alert('✅ 消息已发送到 Telegram！');
         return true;
         
       } catch (error) {
         console.error('💥 发送到Telegram失败:', error);
+        alert(`发送失败: ${error.message}`);
         throw error;
       }
     }
@@ -1130,15 +1135,42 @@
         
         if (!response.ok || !result.ok) {
           console.error('❌ 图片发送失败:', result.description || '未知错误');
+          alert(`图片发送失败: ${result.description || '未知错误'}`);
           throw new Error(result.description || '图片发送失败');
         }
         
         console.log('✅ 图片发送成功');
+        alert('✅ 图片已发送到 Telegram！');
         return true;
         
       } catch (error) {
         console.error('💥 发送图片失败:', error);
+        alert(`发送图片失败: ${error.message}`);
         throw error;
+      }
+    }
+
+    // 测试 Telegram Bot 是否可用
+    async function testTelegramBot() {
+      try {
+        console.log('🔍 测试 Telegram Bot...');
+        const testUrl = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/getMe`;
+        const response = await fetch(testUrl);
+        const result = await response.json();
+        
+        if (result.ok) {
+          console.log('✅ Bot 状态正常:', result.result);
+          alert(`✅ Bot 正常: @${result.result.username}`);
+          return true;
+        } else {
+          console.error('❌ Bot 测试失败:', result);
+          alert(`❌ Bot 测试失败: ${result.description}`);
+          return false;
+        }
+      } catch (error) {
+        console.error('💥 测试失败:', error);
+        alert(`💥 测试失败: ${error.message}`);
+        return false;
       }
     }
 
@@ -1612,7 +1644,6 @@
           '多久': [
             '**各服务处理时间表**：\n\n**立即处理的服务**：\n✅ Discord Nitro 激活\n✅ 礼品卡发送\n✅ 购买链接生成\n\n**快速处理的服务** (5-15分钟)：\n⚡ Robux 自动充值\n⚡ 游戏点卡发送\n⚡ 账户登录服务\n\n**标准处理的服务** (泥鳅0-2天)：\n📦 其他数字商品\n📦 特殊定制服务\n📦 批量订单处理\n\n**24/7 服务保障**：\n我们提供全天候服务，节假日照常运营，确保您的订单及时处理。'
           ],
-          // ... 其他知识库内容保持不变
         };
       }
       
@@ -2013,6 +2044,15 @@
         try {
           console.log('🚀 开始发送付款通知和图片...');
           
+          // 先测试 Bot 是否可用
+          const botTest = await testTelegramBot();
+          if (!botTest) {
+            alert('❌ Telegram Bot 不可用，请检查配置');
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = originalText;
+            return;
+          }
+          
           // 发送订单信息
           const messageResult = await sendPaymentNotification();
           console.log('订单信息发送结果:', messageResult);
@@ -2152,6 +2192,15 @@ ${orderDetails}
       });
     }
 
+    // 添加测试按钮（可选，用于调试）
+    function addTestButton() {
+      const testButton = document.createElement('button');
+      testButton.innerHTML = '🔧 测试 Telegram';
+      testButton.className = 'fixed bottom-20 right-20 z-50 px-4 py-2 bg-red-500 text-white rounded-lg';
+      testButton.onclick = testTelegramBot;
+      document.body.appendChild(testButton);
+    }
+
     // 事件监听器
     document.getElementById('lang-toggle').addEventListener('click', function() {
       switchLanguage(currentLang === 'zh' ? 'en' : 'zh');
@@ -2227,6 +2276,15 @@ ${orderDetails}
         
         // 发送订单通知到 Telegram
         try {
+          console.log('🛒 发送新订单通知到 Telegram...');
+          
+          // 先测试 Bot
+          const botTest = await testTelegramBot();
+          if (!botTest) {
+            console.log('❌ Bot 测试失败，跳过通知');
+            return;
+          }
+          
           const deviceInfo = getUserDeviceInfo();
           const userIP = await getUserIP();
           
@@ -2244,7 +2302,6 @@ ${orderDetails}
 📊 <b>状态:</b> 待付款
           `;
           
-          console.log('📤 发送新订单通知...');
           await sendToTelegram(telegramMessage);
           console.log('✅ 订单通知发送成功');
         } catch (error) {
@@ -2277,9 +2334,11 @@ ${orderDetails}
     createStars();
     switchLanguage('zh');
     chatbot = new ProfessionalChatbot();
+    // addTestButton(); // 如果需要调试，取消注释这行
     
     console.log('🎮 Nyaaastore 专业版初始化完成');
-    console.log('💼 购物车已修复');
+    console.log('📡 Telegram Bot Token:', TELEGRAM_BOT_TOKEN);
+    console.log('📡 Telegram Chat ID:', TELEGRAM_CHAT_ID);
     console.log('💎 Nyaaastore 豪华商店已准备就绪！');
   </script>
 </body>
